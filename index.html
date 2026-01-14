@@ -4,105 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Notebook</title>
-    <style>
+       <style>
         :root {
-            --bg: #fcfaf7;
-            --text: #1a1a1a;
-            --accent: #4a5d4a; /* Muted basil green */
-            --border: rgba(0,0,0,0.1);
+            /* Paper and Ink Palette */
+            --paper: #f4f1ea; 
+            --ink: #2b2b2b;
+            --ink-faded: #6e6e6e;
+            --rule: rgba(43, 43, 43, 0.15);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: "Georgia", serif;
-            line-height: 1.6;
-            overflow-x: hidden;
+            background-color: var(--paper);
+            /* Subtle paper grain effect */
+            background-image: url("https://www.transparenttextures.com/patterns/felt.png");
+            color: var(--ink);
+            font-family: "Hoefler Text", "Baskerville", "Georgia", serif;
             scroll-snap-type: y mandatory;
             height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Spatial Navigation */
+        /* The Editorial Sidebar */
         nav {
             position: fixed;
-            top: 2rem;
-            right: 2rem;
+            left: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
             z-index: 100;
             display: flex;
-            gap: 1.5rem;
-            font-size: 0.9rem;
-            text-transform: lowercase;
-            font-style: italic;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         nav a {
             text-decoration: none;
-            color: var(--text);
-            opacity: 0.5;
-            transition: opacity 0.3s;
+            color: var(--ink-faded);
+            font-style: italic;
+            font-size: 0.85rem;
+            transition: 0.4s;
         }
 
-        nav a:hover, nav a:focus { opacity: 1; outline: none; }
+        nav a:hover { color: var(--ink); padding-left: 5px; }
 
         section {
             height: 100vh;
+            scroll-snap-align: start;
+            padding: 0 10% 0 25%; /* Left margin for nav */
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 10% 15%;
-            scroll-snap-align: start;
-            border-bottom: 1px solid var(--border);
-            position: relative;
+            border-bottom: 1px solid var(--rule);
         }
 
-        /* Typography & Transitions */
-        h1, h2 {
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
             font-weight: 400;
-            font-size: clamp(2rem, 5vw, 4rem);
+            line-height: 1.1;
             margin-bottom: 2rem;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
         }
 
-        .content-reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        p {
+            max-width: 450px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--ink-faded);
         }
 
-        /* Show content when section is in view or focused */
-        section:hover .content-reveal, 
-        section:focus-within .content-reveal {
+        /* Hover Reveal Logic */
+        .reveal {
+            opacity: 0.1;
+            transform: translateX(-10px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        section:hover .reveal, 
+        section:focus-within .reveal {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(0);
         }
 
-        .project-list, .writing-list {
-            list-style: none;
-            margin-top: 2rem;
-        }
+        .list { margin-top: 3rem; width: 100%; max-width: 800px; }
 
-        .item {
+        .entry {
             display: flex;
             justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border);
+            align-items: baseline;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--rule);
             text-decoration: none;
             color: inherit;
-            transition: padding-left 0.3s ease;
         }
 
-        .item:hover {
-            padding-left: 1rem;
-            color: var(--accent);
+        .entry:last-child { border-bottom: 1px solid var(--rule); }
+
+        .entry .title { font-size: 1.5rem; transition: 0.3s; }
+        .entry:hover .title { font-style: italic; }
+        
+        .entry .date { 
+            font-family: monospace; 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em;
         }
 
-        .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
-
-        /* Keyboard Focus Styles */
-        :focus { outline: 1px solid var(--accent); outline-offset: 4px; }
+        /* Accessibility: skip-link for keyboard users */
+        .skip { position: absolute; left: -10000px; }
     </style>
+
 </head>
 <body>
 
@@ -144,6 +155,57 @@
                 <span>title2</span>
                 <span class="meta">date2</span>
             </article>
+        </div>
+    </section>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notebook — Portfolio</title>
+
+</head>
+<body>
+
+    <nav>
+        <a href="#intro">01. Index</a>
+        <a href="#work">02. Selected Projects</a>
+        <a href="#notes">03. Marginalia</a>
+    </nav>
+
+    <section id="intro" tabindex="0">
+        <h1 class="reveal">Intentional <br>by design.</h1>
+        <p class="reveal">A collection of thoughts, code, and spatial interfaces. Built with a focus on pacing and quiet confidence.</p>
+    </section>
+
+    <section id="work" tabindex="0">
+        <h2 class="reveal" style="font-weight: normal; margin-bottom: 1rem; font-style: italic;">Selected Projects</h2>
+        <div class="list reveal">
+            <a href="https://yourname.github.io/project-one" class="entry">
+                <span class="title">Project Alpha</span>
+                <span class="date">2025 // Web</span>
+            </a>
+            <a href="https://yourname.github.io/project-two" class="entry">
+                <span class="title">Project Beta</span>
+                <span class="date">2024 // Design</span>
+            </a>
+        </div>
+    </section>
+
+    <section id="notes" tabindex="0">
+        <h2 class="reveal" style="font-weight: normal; margin-bottom: 1rem; font-style: italic;">Marginalia</h2>
+        <div class="list reveal">
+            <div class="entry">
+                <span class="title">The Art of Minimal Transitions</span>
+                <span class="date">Jan 14</span>
+            </div>
+            <div class="entry">
+                <span class="title">Analog Inspiration</span>
+                <span class="date">Dec 02</span>
+            </div>
         </div>
     </section>
 
