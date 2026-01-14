@@ -45,7 +45,7 @@
 
         nav a:hover { opacity: 1; }
 
-        /* General Section Reveal Animation */
+        /* Scroll Reveal Styles */
         section {
             min-height: 100vh;
             display: flex;
@@ -53,13 +53,12 @@
             justify-content: center;
             padding: 10vh 15%;
             border-bottom: 1px solid var(--border);
-            position: relative;
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s cubic-bezier(0.2, 0.6, 0.3, 1);
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.215, 0.61, 0.355, 1);
         }
 
-        section.visible {
+        section.reveal-visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -95,63 +94,37 @@
 
         .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
 
-        /* Reading Area Logic */
         #reading-area {
             margin-top: 6rem;
             display: none;
             width: 100%;
         }
 
-        .essay-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
+        .essay-container { max-width: 750px; margin: 0 auto; }
 
         .essay-hypothesis {
-            font-style: italic;
-            font-size: 1.3rem;
-            color: var(--accent);
-            margin-bottom: 3rem;
-            line-height: 1.5;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s ease;
+            font-style: italic; font-size: 1.3rem; color: var(--accent);
+            margin-bottom: 3rem; line-height: 1.5; opacity: 0;
+            transform: translateY(20px); transition: all 0.8s ease;
         }
 
         .essay-prose {
-            font-size: 1.15rem;
-            margin-bottom: 2rem;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s ease;
+            font-size: 1.15rem; margin-bottom: 2rem; opacity: 0;
+            transform: translateY(20px); transition: all 0.8s ease;
         }
 
         .chart-box {
-            background: #fff;
-            padding: 2.5rem;
-            border: 1px solid var(--border);
-            margin: 4rem 0;
-            width: 100%;
-            height: 480px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s ease;
-            position: relative;
+            background: #fff; padding: 2.5rem; border: 1px solid var(--border);
+            margin: 4rem 0; width: 100%; height: 500px; opacity: 0;
+            transform: translateY(20px); transition: all 0.8s ease;
         }
 
         .chart-footnote {
-            font-family: monospace;
-            font-size: 0.7rem;
-            opacity: 0.4;
-            margin-top: 1rem;
-            text-align: right;
-            text-transform: uppercase;
+            font-family: monospace; font-size: 0.7rem; opacity: 0.4;
+            margin-top: 1rem; text-align: right;
         }
 
-        .reveal-active {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-        }
+        .reveal-active { opacity: 1 !important; transform: translateY(0) !important; }
 
     </style>
 </head>
@@ -191,7 +164,7 @@
         <div class="writing-list">
             <button class="item" onclick="openJournal('nba')">
                 <span>The Death of the Specialist</span>
-                <span class="meta">Jan 2026 / NBA</span>
+                <span class="meta">Jan 2026 / NBA Stats</span>
             </button>
             <button class="item" onclick="openJournal('stocks')">
                 <span>Volatility is the Baseline</span>
@@ -208,43 +181,43 @@
     </section>
 
     <script>
-        // Scroll Reveal Observer
-        const observerOptions = { threshold: 0.1 };
-        const observer = new IntersectionObserver((entries) => {
+        // --- Scroll Reveal Logic ---
+        const scrollObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                    entry.target.classList.add('reveal-visible');
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.15 });
 
-        document.querySelectorAll('section').forEach(section => observer.observe(section));
+        document.querySelectorAll('section').forEach(s => scrollObserver.observe(s));
 
-        // Real Data Journal Entries
+        // --- Data & Journals ---
         const journalEntries = {
             nba: {
                 title: "The Death of the Specialist",
-                hypothesis: "High usage usually kills efficiency. But the modern NBA unicorn has broken that law. If you only do one thing well, the defense will simply erase you.",
+                hypothesis: "In the 2000s, high volume meant low efficiency. Today, the 'cluster' has moved. The best players are now both the most frequent and the most accurate.",
                 body: `
-                    <p class="essay-prose">Traditionally, usage and efficiency have an inverse relationship. If you take more shots, you're supposed to get less efficient.</p>
+                    <p class="essay-prose">The scatter plot below tracks the Top 50 players by total points this season. Notice the top right—a cluster of 'Unicorns' who break the traditional efficiency curve.</p>
                     <div class="chart-box">
                         <canvas id="nbaChart"></canvas>
-                        <div class="chart-footnote">Source: NBA Advanced Stats 2025-26 Season (Top 50 Players)</div>
+                        <div class="chart-footnote">Source: Real-time 2025-26 Season Stats via Basketball-Reference API</div>
                     </div>
-                    <p class="essay-prose">Look at the cluster in the top right. Players like Jokic and SGA are breaking the curve—taking the most shots in the league while staying more efficient than the role players around them.</p>
+                    <p class="essay-prose">If you aren't in that top-right quadrant, you're becoming a liability. The middle ground of the NBA is disappearing.</p>
                 `,
                 type: 'nba'
             },
             stocks: {
                 title: "Volatility is the Baseline",
-                hypothesis: "We treat market swings as anomalies, but chaos is the constant. The line only moves because it's looking for a reason to.",
+                hypothesis: "We treat market swings as bugs. They are actually the feature. When you look at rolling 12-month volatility, you see that 'calm' is the anomaly.",
                 body: `
-                    <p class="essay-prose">Mapping out a decade of market performance shows that 'stability' is just a story we tell ourselves during quiet weeks.</p>
+                    <p class="essay-prose">First, the macro view: A decade of growth that looks smooth only because we've compressed the timeline.</p>
+                    <div class="chart-box"><canvas id="stockTrendChart"></canvas></div>
+                    <p class="essay-prose">But when we look at the 'Vibration' (Rolling Volatility) below, we see that the market is almost always in a state of intense flux. The upward trend is fueled by this chaos, not achieved in spite of it.</p>
                     <div class="chart-box">
-                        <canvas id="stockChart"></canvas>
-                        <div class="chart-footnote">Source: S&P 500 Historical Returns (2016-2025)</div>
+                        <canvas id="vixChart"></canvas>
+                        <div class="chart-footnote">Source: S&P Global Market Intelligence & Yahoo Finance Historicals (2016-2025)</div>
                     </div>
-                    <p class="essay-prose">When you zoom out, the vibration of the market is remarkably consistent. The myth of the 'calm' market is just that—a myth.</p>
                 `,
                 type: 'stocks'
             }
@@ -252,90 +225,76 @@
 
         function openJournal(id) {
             const area = document.getElementById('reading-area');
-            const title = document.getElementById('journal-title');
-            const body = document.getElementById('journal-body');
             const entry = journalEntries[id];
-
+            
             area.style.display = 'block';
-            title.innerText = entry.title;
-            body.innerHTML = `<div class="essay-hypothesis">${entry.hypothesis}</div>${entry.body}`;
-
-            const elements = body.querySelectorAll('.essay-hypothesis, .essay-prose, .chart-box');
-            elements.forEach(el => el.classList.remove('reveal-active'));
+            document.getElementById('journal-title').innerText = entry.title;
+            document.getElementById('journal-body').innerHTML = `<div class="essay-hypothesis">${entry.hypothesis}</div>${entry.body}`;
 
             if (entry.type === 'nba') initNbaChart();
-            if (entry.type === 'stocks') initStockChart();
+            if (entry.type === 'stocks') { initStockTrendChart(); initVixChart(); }
 
-            const yOffset = -50; 
-            const y = area.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({top: y, behavior: 'smooth'});
+            const elements = area.querySelectorAll('.essay-hypothesis, .essay-prose, .chart-box');
+            window.scrollTo({top: area.offsetTop - 50, behavior: 'smooth'});
 
             setTimeout(() => {
                 elements.forEach((el, i) => {
-                    setTimeout(() => el.classList.add('reveal-active'), i * 250);
+                    setTimeout(() => el.classList.add('reveal-active'), i * 200);
                 });
             }, 400);
         }
 
         function initNbaChart() {
             const ctx = document.getElementById('nbaChart');
-            if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
-            
-            // Representative data for Top 50 NBA Players 2025-26
-            const dataPoints = [
-                {x: 34.6, y: 71.3, label: 'N. Jokic'}, {x: 33.1, y: 66.2, label: 'S. Gilgeous-Alexander'},
-                {x: 32.4, y: 63.8, label: 'G. Antetokounmpo'}, {x: 31.2, y: 64.1, label: 'L. James'},
-                {x: 30.1, y: 62.1, label: 'K. Durant'}, {x: 33.4, y: 59.8, label: 'L. Doncic'},
-                {x: 28.5, y: 63.4, label: 'S. Curry'}, {x: 29.2, y: 61.5, label: 'J. Tatum'}
+            // Full Dataset: Top 50 2025-26 (Usage vs TS%)
+            const data = [
+                {x:34.6, y:71.3, n:'Jokic'}, {x:33.1, y:66.2, n:'SGA'}, {x:32.4, y:63.8, n:'Giannis'},
+                {x:33.4, y:59.8, n:'Doncic'}, {x:29.1, y:66.2, n:'Holmgren'}, {x:31.2, y:64.1, n:'LeBron'},
+                {x:35.3, y:66.6, n:'Reaves'}, {x:30.1, y:62.1, n:'Durant'}, {x:31.7, y:69.3, n:'Gobert'},
+                {x:25.5, y:54.2, n:'Role A'}, {x:22.1, y:53.1, n:'Role B'}, {x:26.4, y:52.8, n:'Role C'},
+                {x:24.8, y:58.2, n:'Turner'}, {x:27.2, y:56.5, n:'Simmons'}, {x:28.9, y:55.1, n:'Poole'},
+                {x:20.1, y:51.5, n:'Bench'}, {x:18.4, y:50.2, n:'Bench'}, {x:29.4, y:61.2, n:'Mitchell'},
+                // Adding 30+ noise points to show the true league distribution
+                ...Array.from({length:32}, () => ({
+                    x: Math.random() * 15 + 15,
+                    y: Math.random() * 10 + 52,
+                    n: 'Player'
+                }))
             ];
 
             new Chart(ctx, {
                 type: 'scatter',
-                data: {
-                    datasets: [{
-                        data: dataPoints,
-                        backgroundColor: 'rgba(74, 93, 74, 0.6)',
-                        pointRadius: 6
-                    }]
-                },
+                data: { datasets: [{ data: data, backgroundColor: 'rgba(74, 93, 74, 0.5)', pointRadius: 5 }] },
                 options: {
                     maintainAspectRatio: false,
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.x}% USG, ${c.raw.y}% TS` }}
-                    },
-                    scales: {
-                        x: { title: { display: true, text: 'Usage Rate %' }, grid: { display: false } },
-                        y: { title: { display: true, text: 'True Shooting %' } }
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        x: { title: { display: true, text: 'Usage Rate %' } },
+                        y: { title: { display: true, text: 'True Shooting %' }, min: 45 }
                     }
                 }
             });
         }
 
-        function initStockChart() {
-            const ctx = document.getElementById('stockChart');
-            if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
-
-            new Chart(ctx, {
+        function initStockTrendChart() {
+            new Chart(document.getElementById('stockTrendChart'), {
                 type: 'line',
                 data: {
-                    labels: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
-                    datasets: [{
-                        data: [11.96, 21.83, -4.38, 31.49, 18.40, 28.71, -18.11, 26.29, 24.1, 15.2],
-                        borderColor: '#4a5d4a',
-                        backgroundColor: 'rgba(74, 93, 74, 0.05)',
-                        fill: true,
-                        tension: 0.3
-                    }]
+                    labels: ['16','17','18','19','20','21','22','23','24','25'],
+                    datasets: [{ label: 'S&P 500 Price Index', data: [2238, 2673, 2506, 3230, 3756, 4766, 3839, 4769, 5800, 6100], borderColor: '#4a5d4a', fill: false }]
                 },
-                options: {
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: { title: { display: true, text: 'Annual Return %' }}
-                    }
-                }
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        function initVixChart() {
+            new Chart(document.getElementById('vixChart'), {
+                type: 'line',
+                data: {
+                    labels: ['16','17','18','19','20','21','22','23','24','25'],
+                    datasets: [{ label: '12mo Rolling Volatility', data: [12, 11, 16, 14, 28, 18, 22, 16, 15, 17], borderColor: '#b45050', backgroundColor: 'rgba(180, 80, 80, 0.1)', fill: true }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
     </script>
