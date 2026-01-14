@@ -255,20 +255,20 @@
     </section>
 
     <section id="interaction">
-        <div class="counter-container">
-            <h2 style="font-size: 2rem;">The Guestbook.</h2>
-            <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is brief.</p>
+    <div class="counter-container">
+        <h2 style="font-size: 2rem;">The Guestbook.</h2>
+        <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is brief.</p>
         
-            <div style="position: relative; display: inline-block;">
-                <button class="mark-button" id="markBtn" onclick="leaveMark(event)">
-                    leave your mark in the collection
-                </button>
-            </div>
-        
-            <span class="count-display">
-                TOTAL ARTIFACTS LEFT: <span id="count">...</span>
-            </span>
+        <div style="position: relative; display: inline-block;">
+            <button class="mark-button" id="mark-button">
+                leave your mark in the collection
+            </button>
         </div>
+        
+        <span class="count-display">
+            TOTAL ARTIFACTS LEFT: <span id="mark-count">...</span>
+        </span>
+    </div>
     </section>
     <style>
     /* Floating +1 Animation */
@@ -304,65 +304,56 @@
         document.querySelectorAll('section').forEach(s => scrollObserver.observe(s));
 
         // --- CounterAPI Configuration ---
-    // Replace 'your-workspace-name' with your actual workspace name
-    // Replace 'your-api-key' with your actual API token
-    const counter = new Counter({ 
-        workspace: 'abhimanyu-khuranas-team-2497', 
-        apiKey: 'ut_oQ0TRe7DYPq2ZbYdKbpByy1ACbggfGPoiWbXFGrY' 
+    document.addEventListener('DOMContentLoaded', function() {
+    // --- 3. Configuration ---
+    const counter = new Counter({
+      workspace: 'abhimanyu-khuranas-team-2497', // REPLACE THIS
+      accessToken: 'ut_oQ0TRe7DYPq2ZbYdKbpByy1ACbggfGPoiWbXFGrY'         // REPLACE THIS (V2 Token)
     });
-    
-    const COUNTER_ID = 'first-counter-2497'; // The name of this specific counter
-    const countEl = document.getElementById('count');
 
-    // Fetch current count on load
-    async function getInitialCount() {
-        try {
-            const result = await counter.get(COUNTER_ID);
-            countEl.innerText = result.value || 0;
-        } catch (error) {
-            console.error('Counter error:', error.message);
-            countEl.innerText = "0";
-        }
-    }
+    const markButton = document.getElementById('mark-button');
+    const markCount = document.getElementById('mark-count');
+    const counterName = 'first-counter-2497';
 
-    // Increment and animate
-    async function leaveMark(event) {
-        const btn = document.getElementById('markBtn');
-        const currentCount = parseInt(countEl.innerText) || 0;
+    // --- 4. Get Initial Count ---
+    counter.get(counterName)
+      .then(result => {
+        markCount.textContent = result.value || 0;
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+        markCount.textContent = "0";
+      });
 
-        // 1. Visual Feedback (+1 Animation)
-        createFloatingPlus(event);
-        
-        // 2. Local Update (Instant feedback)
-        btn.innerText = "mark left.";
-        btn.style.pointerEvents = "none";
-        btn.style.opacity = "0.5";
-        countEl.innerText = currentCount + 1;
+    // --- 5. Add Click Handler ---
+    markButton.addEventListener('click', function(event) {
+      // Immediate UI Feedback (Floating +1)
+      createFloatingPlus(event);
+      
+      // Update Button State
+      markButton.textContent = "mark left.";
+      markButton.style.pointerEvents = "none";
+      markButton.style.opacity = "0.5";
 
-        // 3. Official Library Increment
-        try {
-            const result = await counter.up(COUNTER_ID);
-            countEl.innerText = result.value; // Sync with actual server value
-        } catch (error) {
-            console.error('Increment error:', error.message);
-        }
-    }
+      // Increment in Database
+      counter.up(counterName)
+        .then(result => {
+          markCount.textContent = result.value;
+        })
+        .catch(err => console.error('Update error:', err));
+    });
 
+    // Function for the visual effect
     function createFloatingPlus(event) {
         const plus = document.createElement('div');
         plus.className = 'floating-plus';
         plus.innerText = '+1';
-        
-        // Position at mouse click
         plus.style.left = `${event.clientX}px`;
         plus.style.top = `${event.clientY}px`;
-        
         document.body.appendChild(plus);
         setTimeout(() => plus.remove(), 1200);
     }
-
-    // Initialize
-    getInitialCount();
+  });
         // --- Data & Journals ---
         const journalEntries = {
             nba: {
