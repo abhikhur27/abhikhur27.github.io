@@ -4,116 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Notebook</title>
-       <style>
+    <style>
         :root {
-            /* Paper and Ink Palette */
-            --paper: #f4f1ea; 
-            --ink: #2b2b2b;
-            --ink-faded: #6e6e6e;
-            --rule: rgba(43, 43, 43, 0.15);
+            --bg: #fcfaf7;
+            --text: #1a1a1a;
+            --accent: #4a5d4a; /* Muted basil green */
+            --border: rgba(0,0,0,0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--paper);
-            /* Subtle paper grain effect */
-            background-image: url("https://www.transparenttextures.com/patterns/felt.png");
-            color: var(--ink);
-            font-family: "Hoefler Text", "Baskerville", "Georgia", serif;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: "Georgia", serif;
+            line-height: 1.6;
+            overflow-x: hidden;
             scroll-snap-type: y mandatory;
             height: 100vh;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* The Editorial Sidebar */
+        /* Spatial Navigation */
         nav {
             position: fixed;
-            left: 3rem;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 2rem;
+            right: 2rem;
             z-index: 100;
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            text-transform: lowercase;
+            font-style: italic;
         }
 
         nav a {
             text-decoration: none;
-            color: var(--ink-faded);
-            font-style: italic;
-            font-size: 0.85rem;
-            transition: 0.4s;
+            color: var(--text);
+            opacity: 0.5;
+            transition: opacity 0.3s;
         }
 
-        nav a:hover { color: var(--ink); padding-left: 5px; }
+        nav a:hover, nav a:focus { opacity: 1; outline: none; }
 
         section {
             height: 100vh;
-            scroll-snap-align: start;
-            padding: 0 10% 0 25%; /* Left margin for nav */
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border-bottom: 1px solid var(--rule);
+            padding: 10% 15%;
+            scroll-snap-align: start;
+            border-bottom: 1px solid var(--border);
+            position: relative;
         }
 
-        h1 {
-            font-size: clamp(2.5rem, 6vw, 5rem);
+        /* Typography & Transitions */
+        h1, h2 {
             font-weight: 400;
-            line-height: 1.1;
+            font-size: clamp(2rem, 5vw, 4rem);
             margin-bottom: 2rem;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.02em;
         }
 
-        p {
-            max-width: 450px;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--ink-faded);
+        .content-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        /* Hover Reveal Logic */
-        .reveal {
-            opacity: 0.1;
-            transform: translateX(-10px);
-            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        section:hover .reveal, 
-        section:focus-within .reveal {
+        /* Show content when section is in view or focused */
+        section:hover .content-reveal, 
+        section:focus-within .content-reveal {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
 
-        .list { margin-top: 3rem; width: 100%; max-width: 800px; }
+        .project-list, .writing-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
 
-        .entry {
+        .item {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
-            padding: 1.5rem 0;
-            border-top: 1px solid var(--rule);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
             text-decoration: none;
             color: inherit;
+            transition: padding-left 0.3s ease;
         }
 
-        .entry:last-child { border-bottom: 1px solid var(--rule); }
-
-        .entry .title { font-size: 1.5rem; transition: 0.3s; }
-        .entry:hover .title { font-style: italic; }
-        
-        .entry .date { 
-            font-family: monospace; 
-            font-size: 0.8rem; 
-            text-transform: uppercase; 
-            letter-spacing: 0.1em;
+        .item:hover {
+            padding-left: 1rem;
+            color: var(--accent);
         }
 
-        /* Accessibility: skip-link for keyboard users */
-        .skip { position: absolute; left: -10000px; }
+        .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
+
+        /* Keyboard Focus Styles */
+        :focus { outline: 1px solid var(--accent); outline-offset: 4px; }
     </style>
-
 </head>
 <body>
 
