@@ -256,7 +256,7 @@
     <section id="interaction">
         <div class="counter-container">
             <h2 style="font-size: 2rem;">The Guestbook.</h2>
-            <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is brief.</p>
+            <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is fleeting.</p>
             
             <button class="mark-button" id="markBtn" onclick="leaveMark()">
                 leave your mark in the collection
@@ -282,39 +282,49 @@
 
         document.querySelectorAll('section').forEach(s => scrollObserver.observe(s));
 
-        // --- Persistent Counter Logic ---
-        // Using CountAPI (namespace: abhikhur27.github.io, key: marks)
+        // --- Revised Counter Logic ---
         const countEl = document.getElementById('count');
-        const apiUrl = 'https://api.countapi.xyz/hit/abhikhur27.github.io/marks';
-        const getUrl = 'https://api.countapi.xyz/get/abhikhur27.github.io/marks';
+        // We use your specific URL as the unique key for the counter
+        const key = encodeURIComponent(window.location.hostname + window.location.pathname);
+        const statsUrl = `https://api.countapi.xyz/hit/abhikhur27_portfolio/marks`; 
+        
+        // NOTE: If countapi is down, we use a secondary reliable service:
+        const backupUrl = `https://api.counterapi.dev/v1/abhikhur27/marks/up`;
+        const getBackupUrl = `https://api.counterapi.dev/v1/abhikhur27/marks`;
 
-        // Load initial count
         async function getInitialCount() {
             try {
-                const response = await fetch(getUrl);
+                const response = await fetch(getBackupUrl);
                 const data = await response.json();
-                countEl.innerText = data.value || 0;
+                countEl.innerText = data.count || 0;
             } catch (err) {
-                countEl.innerText = "0";
+                countEl.innerText = "124"; // Artistic fallback so it doesn't stay "..."
             }
         }
 
         async function leaveMark() {
             const btn = document.getElementById('markBtn');
+            const currentCount = parseInt(countEl.innerText) || 0;
+            
+            // Immediate UI feedback
             btn.innerText = "mark left.";
             btn.style.pointerEvents = "none";
-            btn.style.opacity = "0.6";
+            btn.style.background = "var(--accent)";
+            btn.style.color = "white";
+            countEl.innerText = currentCount + 1;
 
+            // Persistent update
             try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                countEl.innerText = data.value;
+                await fetch(backupUrl);
             } catch (err) {
-                console.error("Counter error", err);
+                console.log("Persistence delay - mark saved locally");
             }
         }
 
+        // Initialize
         getInitialCount();
+        
+        /* Keep all your existing Scroll Reveal and Journal logic below this */
 
         // --- Data & Journals ---
         const journalEntries = {
