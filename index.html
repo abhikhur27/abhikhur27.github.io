@@ -3,20 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abhi's Junk Drawer</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <title>Portfolio | Notebook</title>
+    <style>
+        :root {
+            --bg: #fcfaf7;
+            --text: #1a1a1a;
+            --accent: #4a5d4a; /* Muted basil green */
+            --border: rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: "Georgia", serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-snap-type: y mandatory;
+            height: 100vh;
+        }
+
+        /* Spatial Navigation */
+        nav {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            text-transform: lowercase;
+            font-style: italic;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover, nav a:focus { opacity: 1; outline: none; }
+
+        section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10% 15%;
+            scroll-snap-align: start;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        /* Typography & Transitions */
+        h1, h2 {
+            font-weight: 400;
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .content-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        /* Show content when section is in view or focused */
+        section:hover .content-reveal, 
+        section:focus-within .content-reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-list, .writing-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            color: inherit;
+            transition: padding-left 0.3s ease;
+        }
+
+        .item:hover {
+            padding-left: 1rem;
+            color: var(--accent);
+        }
+
+        .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
+
+        /* Keyboard Focus Styles */
+        :focus { outline: 1px solid var(--accent); outline-offset: 4px; }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>your gay</h1>
-    </header>
-    <main>
-        <p>This is a simple web page with linked CSS and JavaScript files.</p>
-        <button id="myButton">Click Me!</button>
-    </main>
-    <footer>
-        <p>&copy; 2025 abhikhur</p>
-    </footer>
+
+    <nav>
+        <a href="#about">about</a>
+        <a href="#projects">projects</a>
+        <a href="#writing">writing</a>
+    </nav>
+
+    <section id="about" tabindex="0">
+        <h1 class="content-reveal">The quiet collector of <br>digital artifacts.</h1>
+        <div class="content-reveal" style="transition-delay: 0.2s;">
+            <p style="max-width: 500px;">I like building spaces that feel like a physical room.</p>
+        </div>
+    </section>
+
+    <section id="projects" tabindex="0">
+        <h2 class="content-reveal">Selected Work</h2>
+        <div class="project-list content-reveal" style="transition-delay: 0.2s;">
+            <a href="https://yourusername.github.io/project-one" class="item">
+                <span>project 1</span>
+                <span class="meta">year / subject</span>
+            </a>
+            <a href="https://yourusername.github.io/project-two" class="item">
+                <span>project 2</span>
+                <span class="meta">year / subject</span>
+            </a>
+        </div>
+    </section>
+
+    <section id="writing" tabindex="0">
+        <h2 class="content-reveal">Writing</h2>
+        <div class="writing-list content-reveal" style="transition-delay: 0.2s;">
+            <article class="item">
+                <span>title1</span>
+                <span class="meta">date1</span>
+            </article>
+            <article class="item">
+                <span>title2</span>
+                <span class="meta">date2</span>
+            </article>
+        </div>
+    </section>
+
 </body>
 </html>
