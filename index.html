@@ -91,6 +91,15 @@
             text-decoration: none;
             color: inherit;
             transition: padding-left 0.3s ease;
+            /* Added for button functionality */
+            background: none;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            width: 100%;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
         }
 
         .item:hover {
@@ -99,6 +108,22 @@
         }
 
         .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
+
+        /* Styles for the new reading area */
+        #reading-area {
+            margin-top: 2rem;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            min-height: 150px;
+            display: none; /* Hidden until a click occurs */
+            background: rgba(255,255,255,0.2);
+        }
+
+        #reading-area h3 {
+            font-style: italic;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
 
         /* Keyboard Focus Styles */
         :focus { outline: 1px solid var(--accent); outline-offset: 4px; }
@@ -122,13 +147,13 @@
     <section id="projects" tabindex="0">
         <h2 class="content-reveal">Selected Work</h2>
         <div class="project-list content-reveal" style="transition-delay: 0.2s;">
-            <a href="https://abhikhur27.github.io/Algorithm-Visualizer/" class="item">
+            <a href="https://abhikhur27.github.io/Algorithm-Visualizer/" class="item" target="_blank">
                 <span>Algorithm Visualizer</span>
                 <span class="meta">2024 / Visualization</span>
             </a>
-            <a href="https://yourusername.github.io/project-two" class="item">
-                <span>project 2</span>
-                <span class="meta">year / subject</span>
+            <a href="#" class="item">
+                <span>Project 2</span>
+                <span class="meta">Year / Subject</span>
             </a>
         </div>
     </section>
@@ -136,16 +161,51 @@
     <section id="writing" tabindex="0">
         <h2 class="content-reveal">Writing</h2>
         <div class="writing-list content-reveal" style="transition-delay: 0.2s;">
-            <article class="item">
-                <span>title1</span>
-                <span class="meta">date1</span>
-            </article>
-            <article class="item">
-                <span>title2</span>
-                <span class="meta">date2</span>
-            </article>
+            <button class="item" onclick="openJournal('one')">
+                <span>entry1</span>
+                <span class="meta">month day</span>
+            </button>
+            <button class="item" onclick="openJournal('two')">
+                <span>entry2</span>
+                <span class="meta">month day</span>
+            </button>
+        </div>
+
+        <div id="reading-area" class="content-reveal">
+            <h3 id="journal-title"></h3>
+            <p id="journal-body"></p>
         </div>
     </section>
+
+    <script>
+        // Your Journal Data
+        const journalEntries = {
+            one: {
+                title: "entry1",
+                body: "hi guys"
+            },
+            two: {
+                title: "entry2",
+                text: "coming soon"
+            }
+        };
+
+        function openJournal(id) {
+            const area = document.getElementById('reading-area');
+            const title = document.getElementById('journal-title');
+            const body = document.getElementById('journal-body');
+
+            // Fill the content
+            title.innerText = journalEntries[id].title;
+            body.innerText = journalEntries[id].body || journalEntries[id].text;
+
+            // Make it visible
+            area.style.display = 'block';
+            
+            // Optional: Smooth scroll into view
+            area.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
 
 </body>
 </html>
