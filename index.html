@@ -65,7 +65,6 @@
 
         nav a:hover { opacity: 1; }
 
-        /* Floating Slide Reveal Animation */
         section {
             min-height: 100vh;
             display: flex;
@@ -74,13 +73,13 @@
             padding: 10vh 15%;
             border-bottom: 1px solid var(--border);
             opacity: 0;
-            transform: translateX(50px); /* Initial state: shifted right */
+            transform: translateX(50px);
             transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         section.reveal-visible {
             opacity: 1;
-            transform: translateX(0); /* Floats back to center */
+            transform: translateX(0);
         }
 
         h1, h2 {
@@ -145,7 +144,6 @@
             margin-top: 1rem; text-align: right;
         }
 
-        /* Glossary Style */
         .glossary {
             background: rgba(0,0,0,0.03);
             padding: 1.5rem;
@@ -158,6 +156,44 @@
         .glossary dd { margin-bottom: 1rem; margin-left: 0; opacity: 0.8; }
 
         .reveal-active { opacity: 1 !important; transform: translateY(0) !important; }
+
+        /* Counter Section Styling */
+        .counter-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .mark-button {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 1rem 2rem;
+            font-family: "Georgia", serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border-radius: 2rem;
+        }
+
+        .mark-button:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .mark-button:active {
+            transform: scale(0.95);
+        }
+
+        .count-display {
+            display: block;
+            margin-top: 1.5rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            letter-spacing: 0.1em;
+        }
     </style>
 </head>
 <body>
@@ -166,6 +202,7 @@
         <a href="#about">about</a>
         <a href="#projects">projects</a>
         <a href="#writing">writing</a>
+        <a href="#interaction">mark</a>
     </nav>
 
     <section id="about">
@@ -216,6 +253,21 @@
         </div>
     </section>
 
+    <section id="interaction">
+        <div class="counter-container">
+            <h2 style="font-size: 2rem;">The Guestbook.</h2>
+            <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is brief.</p>
+            
+            <button class="mark-button" id="markBtn" onclick="leaveMark()">
+                leave your mark in the collection
+            </button>
+            
+            <span class="count-display">
+                TOTAL ARTIFACTS LEFT: <span id="count">...</span>
+            </span>
+        </div>
+    </section>
+
     <script>
         // --- Scroll Reveal Logic ---
         const scrollObserver = new IntersectionObserver((entries) => {
@@ -223,12 +275,46 @@
                 if (entry.isIntersecting) {
                     entry.target.classList.add('reveal-visible');
                 } else {
-                    entry.target.classList.remove('reveal-visible'); // Fade out on leave
+                    entry.target.classList.remove('reveal-visible');
                 }
             });
         }, { threshold: 0.1 });
 
         document.querySelectorAll('section').forEach(s => scrollObserver.observe(s));
+
+        // --- Persistent Counter Logic ---
+        // Using CountAPI (namespace: abhikhur27.github.io, key: marks)
+        const countEl = document.getElementById('count');
+        const apiUrl = 'https://api.countapi.xyz/hit/abhikhur27.github.io/marks';
+        const getUrl = 'https://api.countapi.xyz/get/abhikhur27.github.io/marks';
+
+        // Load initial count
+        async function getInitialCount() {
+            try {
+                const response = await fetch(getUrl);
+                const data = await response.json();
+                countEl.innerText = data.value || 0;
+            } catch (err) {
+                countEl.innerText = "0";
+            }
+        }
+
+        async function leaveMark() {
+            const btn = document.getElementById('markBtn');
+            btn.innerText = "mark left.";
+            btn.style.pointerEvents = "none";
+            btn.style.opacity = "0.6";
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                countEl.innerText = data.value;
+            } catch (err) {
+                console.error("Counter error", err);
+            }
+        }
+
+        getInitialCount();
 
         // --- Data & Journals ---
         const journalEntries = {
@@ -280,7 +366,6 @@
             if (entry.type === 'nba') initNbaChart();
             if (entry.type === 'stocks') { initStockTrendChart(); initVixChart(); }
 
-            // Fixed scrolling: wait for DOM layout, then scroll to section start
             setTimeout(() => {
                 const y = area.getBoundingClientRect().top + window.pageYOffset - 100;
                 window.scrollTo({top: y, behavior: 'smooth'});
