@@ -9,7 +9,7 @@
         :root {
             --bg: #fcfaf7;
             --text: #1a1a1a;
-            --accent: #4a5d4a; /* Muted basil green */
+            --accent: #4a5d4a; 
             --border: rgba(0,0,0,0.1);
         }
 
@@ -21,11 +21,10 @@
             font-family: "Georgia", serif;
             line-height: 1.6;
             overflow-x: hidden;
-            scroll-snap-type: y mandatory;
-            height: 100vh;
+            /* Changed scroll-snap to be less aggressive during long reads */
+            scroll-snap-type: y proximity; 
         }
 
-        /* Spatial Navigation */
         nav {
             position: fixed;
             top: 2rem;
@@ -45,55 +44,46 @@
             transition: opacity 0.3s;
         }
 
-        nav a:hover, nav a:focus { opacity: 1; outline: none; }
+        nav a:hover { opacity: 1; }
 
+        /* FIXED: Changed height to min-height so content can expand */
         section {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 10% 15%;
+            padding: 8rem 15%;
             scroll-snap-align: start;
             border-bottom: 1px solid var(--border);
             position: relative;
         }
 
-        /* Typography & Transitions */
         h1, h2 {
             font-weight: 400;
-            font-size: clamp(2rem, 5vw, 4rem);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             margin-bottom: 2rem;
             letter-spacing: -0.02em;
         }
 
         .content-reveal {
-            opacity: 0;
-            transform: translateY(20px);
+            opacity: 1; /* Set to 1 by default to ensure visibility while scrolling */
             transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-        }
-
-        section:hover .content-reveal, 
-        section:focus-within .content-reveal {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .item {
             display: flex;
             justify-content: space-between;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             border-bottom: 1px solid var(--border);
             text-decoration: none;
             color: inherit;
             transition: padding-left 0.3s ease;
             background: none;
-            border-left: none;
-            border-right: none;
-            border-top: none;
             width: 100%;
             cursor: pointer;
             text-align: left;
             font-family: inherit;
+            border-top: none; border-left: none; border-right: none;
         }
 
         .item:hover {
@@ -103,77 +93,56 @@
 
         .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
 
-        /* Journal Reading Area & Essay Styling */
+        /* Journal Area Logic */
         #reading-area {
             margin-top: 4rem;
             display: none;
-            background: transparent;
+            width: 100%;
         }
 
         .essay-container {
-            max-width: 650px;
+            max-width: 700px;
             margin: 0 auto;
-            padding-bottom: 10vh;
         }
 
         #journal-title {
-            font-size: clamp(2.2rem, 5vw, 3rem);
-            line-height: 1.2;
-            margin-bottom: 1rem;
-            font-weight: 400;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1.5rem;
         }
 
         .essay-hypothesis {
             font-style: italic;
             font-size: 1.2rem;
             color: var(--accent);
-            margin-bottom: 3.5rem;
-            opacity: 0.8;
-            line-height: 1.5;
+            margin-bottom: 3rem;
+            border-left: 1px solid var(--accent);
+            padding-left: 1.5rem;
         }
 
         .essay-prose {
-            font-size: 1.15rem;
-            margin: 2rem 0;
-            line-height: 1.8;
-            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
         }
 
         .chart-box {
             background: #fff;
             padding: 2rem;
             border: 1px solid var(--border);
-            margin: 3.5rem -10%; 
-            border-radius: 2px;
+            margin: 3rem 0;
+            width: 100%;
+            height: 400px;
         }
 
-        @media (max-width: 850px) {
-            .chart-box { margin: 2rem 0; }
-        }
-
-        .essay-conclusion {
-            border-top: 1px solid var(--border);
-            padding-top: 2rem;
-            margin-top: 4rem;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #888;
-        }
-
-        /* Staggered Animation */
         .reveal-beat {
             opacity: 0;
-            transform: translateY(15px);
-            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            transform: translateY(10px);
+            transition: all 0.6s ease-out;
         }
 
         .reveal-beat.active {
             opacity: 1;
             transform: translateY(0);
         }
-
-        :focus { outline: 1px solid var(--accent); outline-offset: 4px; }
     </style>
 </head>
 <body>
@@ -184,16 +153,16 @@
         <a href="#writing">writing</a>
     </nav>
 
-    <section id="about" tabindex="0">
+    <section id="about">
         <h1 class="content-reveal">Abhi's collection of<br>digital artifacts.</h1>
-        <div class="content-reveal" style="transition-delay: 0.2s;">
+        <div class="content-reveal">
             <p style="max-width: 500px;">I like building spaces that feel like a physical room.</p>
         </div>
     </section>
 
-    <section id="projects" tabindex="0">
+    <section id="projects">
         <h2 class="content-reveal">Selected Work</h2>
-        <div class="project-list content-reveal" style="transition-delay: 0.2s;">
+        <div class="project-list content-reveal">
             <a href="https://abhikhur27.github.io/Mini-Game-Hub" class="item">
                 <span>Mini Game Hub</span>
                 <span class="meta">2025 / Release</span>
@@ -209,24 +178,20 @@
         </div>
     </section>
 
-    <section id="writing" tabindex="0">
+    <section id="writing">
         <h2 class="content-reveal">Writing</h2>
-        <div class="writing-list content-reveal" style="transition-delay: 0.2s;">
+        <div class="writing-list content-reveal">
             <button class="item" onclick="openJournal('nba')">
                 <span>The Death of the Specialist</span>
-                <span class="meta">Jan 2026 / NBA Data</span>
+                <span class="meta">Dec 2026 / NBA</span>
             </button>
             <button class="item" onclick="openJournal('stocks')">
                 <span>Volatility is the Baseline</span>
                 <span class="meta">Nov 2025 / Markets</span>
             </button>
-            <button class="item" onclick="openJournal('one')">
-                <span>entry1</span>
-                <span class="meta">month year</span>
-            </button>
         </div>
 
-        <div id="reading-area" class="content-reveal">
+        <div id="reading-area">
             <div class="essay-container">
                 <h3 id="journal-title"></h3>
                 <div id="journal-body"></div>
@@ -238,31 +203,23 @@
         const journalEntries = {
             nba: {
                 title: "The Death of the Specialist",
-                hypothesis: "I have a feeling that being 'just a shooter' doesn't cut it anymore. The data seems to suggest that if you can't create your own look, you're becoming a liability.",
+                hypothesis: "Being 'just a shooter' doesn't cut it anymore. If you can't create your own look, you're becoming a liability.",
                 body: `
-                    <p class="essay-prose reveal-beat">So, I was looking at player efficiency. For years, we celebrated the guys who sat in the corner and hit 40% of their threes. But look at the spread now.</p>
-                    <div class="chart-box reveal-beat"><canvas id="nbaChart" height="400"></canvas></div>
-                    <p class="essay-prose reveal-beat">The dots in the top right? Those aren't specialists. Those are the 'everything' players. The interpretation is pretty simple: Defensive schemes have gotten too smart. If you only do one thing, you're easy to erase.</p>
-                    <div class="essay-conclusion reveal-beat">Conclusion: The game has solved the specialist.</div>
+                    <p class="essay-prose reveal-beat">Traditionally, usage and efficiency have an inverse relationship. But the modern era is breaking that rule.</p>
+                    <div class="chart-box reveal-beat"><canvas id="nbaChart"></canvas></div>
+                    <p class="essay-prose reveal-beat">The top-right cluster is expanding. Players are getting more efficient even as they take on more responsibility. Specialists are being squeezed out.</p>
                 `,
                 type: 'nba'
             },
             stocks: {
                 title: "Volatility is the Baseline",
-                hypothesis: "We talk about 'unprecedented' market swings every other week. If you look at the last decade, 'unprecedented' is actually just how things work now.",
+                hypothesis: "We treat market swings as anomalies, but they are actually the only constant.",
                 body: `
-                    <p class="essay-prose reveal-beat">I plotted the movement of the index vs. the narrative. We remember the big crashes, but the daily noise is where the real story actually lives.</p>
-                    <div class="chart-box reveal-beat"><canvas id="stockChart" height="400"></canvas></div>
-                    <p class="essay-prose reveal-beat">What's wild is that the 'calm' periods are actually the outliers. The line is never really straight, even when we think the economy is stable.</p>
-                    <div class="essay-conclusion reveal-beat">Final Thought: Stability is a myth we tell ourselves in hindsight.</div>
+                    <p class="essay-prose reveal-beat">I looked at the last decade of growth. The narrative is always about 'stability,' but the data shows constant vibration.</p>
+                    <div class="chart-box reveal-beat"><canvas id="stockChart"></canvas></div>
+                    <p class="essay-prose reveal-beat">Conclusion: If you're waiting for things to 'settle down,' you're waiting for something that doesn't exist in the data.</p>
                 `,
                 type: 'stocks'
-            },
-            one: { 
-                title: "entry1", 
-                body: `<p class='essay-prose reveal-beat'>hi guys</p>
-                    <p class='essay-prose reveal-beat'>this is a test</p>
-                `
             }
         };
 
@@ -272,46 +229,46 @@
             const body = document.getElementById('journal-body');
             const entry = journalEntries[id];
 
+            area.style.display = 'block';
             title.innerText = entry.title;
             body.innerHTML = `
-                ${entry.hypothesis ? `<div class="essay-hypothesis">${entry.hypothesis}</div>` : ''}
+                <div class="essay-hypothesis">${entry.hypothesis}</div>
                 ${entry.body}
             `;
 
-            area.style.display = 'block';
-
-            // Animation Logic
             setTimeout(() => {
-                const beats = document.querySelectorAll('.reveal-beat');
-                beats.forEach((el, i) => {
+                document.querySelectorAll('.reveal-beat').forEach((el, i) => {
                     setTimeout(() => el.classList.add('active'), i * 150);
                 });
-                
                 if (entry.type === 'nba') initNbaChart();
                 if (entry.type === 'stocks') initStockChart();
+                
+                // Scroll to the content after it opens
+                window.scrollTo({
+                    top: area.offsetTop - 100,
+                    behavior: 'smooth'
+                });
             }, 50);
-
-            area.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function initNbaChart() {
-            const ctx = document.getElementById('nbaChart').getContext('2d');
-            if (Chart.getChart("nbaChart")) Chart.getChart("nbaChart").destroy();
+            const ctx = document.getElementById('nbaChart');
+            if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
             new Chart(ctx, {
                 type: 'scatter',
                 data: {
                     datasets: [{
-                        data: [{x: 18, y: 52}, {x: 25, y: 58}, {x: 32, y: 64}, {x: 22, y: 54}, {x: 35, y: 62}],
+                        data: [{x: 18, y: 52}, {x: 25, y: 58}, {x: 32, y: 64}, {x: 35, y: 62}],
                         backgroundColor: '#4a5d4a'
                     }]
                 },
-                options: { responsive: true, plugins: { legend: { display: false } } }
+                options: { maintainAspectRatio: false }
             });
         }
 
         function initStockChart() {
-            const ctx = document.getElementById('stockChart').getContext('2d');
-            if (Chart.getChart("stockChart")) Chart.getChart("stockChart").destroy();
+            const ctx = document.getElementById('stockChart');
+            if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -319,11 +276,10 @@
                     datasets: [{
                         data: [100, 85, 140, 190, 230],
                         borderColor: '#4a5d4a',
-                        tension: 0.3,
-                        fill: false
+                        tension: 0.3
                     }]
                 },
-                options: { responsive: true, plugins: { legend: { display: false } } }
+                options: { maintainAspectRatio: false }
             });
         }
     </script>
