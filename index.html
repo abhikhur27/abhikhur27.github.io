@@ -21,6 +21,7 @@
 
     <meta name="theme-color" content="#4a5d4a">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
     <style>
         :root {
             --bg: #fcfaf7;
@@ -256,18 +257,38 @@
     <section id="interaction">
         <div class="counter-container">
             <h2 style="font-size: 2rem;">The Guestbook.</h2>
-            <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is fleeting.</p>
-            
-            <button class="mark-button" id="markBtn" onclick="leaveMark()">
-                leave your mark in the collection
-            </button>
-            
+            <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is brief.</p>
+        
+            <div style="position: relative; display: inline-block;">
+                <button class="mark-button" id="markBtn" onclick="leaveMark(event)">
+                    leave your mark in the collection
+                </button>
+            </div>
+        
             <span class="count-display">
                 TOTAL ARTIFACTS LEFT: <span id="count">...</span>
             </span>
         </div>
     </section>
+    <style>
+    /* Floating +1 Animation */
+        .floating-plus {
+            position: fixed;
+            color: var(--accent);
+            font-family: "Georgia", serif;
+            font-style: italic;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 1000;
+            animation: floatUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
 
+        @keyframes floatUp {
+            0% { opacity: 0; transform: translateY(0) scale(0.5); }
+            20% { opacity: 1; transform: translateY(-10px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1); }
+        }
+    </style>
     <script>
         // --- Scroll Reveal Logic ---
         const scrollObserver = new IntersectionObserver((entries) => {
@@ -282,50 +303,66 @@
 
         document.querySelectorAll('section').forEach(s => scrollObserver.observe(s));
 
-        // --- Revised Counter Logic ---
-        const countEl = document.getElementById('count');
-        // We use your specific URL as the unique key for the counter
-        const key = encodeURIComponent(window.location.hostname + window.location.pathname);
-        const statsUrl = `https://api.countapi.xyz/hit/abhikhur27_portfolio/marks`; 
-        
-        // NOTE: If countapi is down, we use a secondary reliable service:
-        const backupUrl = `https://api.counterapi.dev/v1/abhikhur27/marks/up`;
-        const getBackupUrl = `https://api.counterapi.dev/v1/abhikhur27/marks`;
+        // --- CounterAPI Configuration ---
+    // Replace 'your-workspace-name' with your actual workspace name
+    // Replace 'your-api-key' with your actual API token
+    const counter = new Counter({ 
+        workspace: 'abhimanyu-khuranas-team-2497', 
+        apiKey: 'ut_oQ0TRe7DYPq2ZbYdKbpByy1ACbggfGPoiWbXFGrY' 
+    });
+    
+    const COUNTER_ID = 'first-counter-2497'; // The name of this specific counter
+    const countEl = document.getElementById('count');
 
-        async function getInitialCount() {
-            try {
-                const response = await fetch(getBackupUrl);
-                const data = await response.json();
-                countEl.innerText = data.count || 0;
-            } catch (err) {
-                countEl.innerText = "124"; // Artistic fallback so it doesn't stay "..."
-            }
+    // Fetch current count on load
+    async function getInitialCount() {
+        try {
+            const result = await counter.get(COUNTER_ID);
+            countEl.innerText = result.value || 0;
+        } catch (error) {
+            console.error('Counter error:', error.message);
+            countEl.innerText = "0";
         }
+    }
 
-        async function leaveMark() {
-            const btn = document.getElementById('markBtn');
-            const currentCount = parseInt(countEl.innerText) || 0;
-            
-            // Immediate UI feedback
-            btn.innerText = "mark left.";
-            btn.style.pointerEvents = "none";
-            btn.style.background = "var(--accent)";
-            btn.style.color = "white";
-            countEl.innerText = currentCount + 1;
+    // Increment and animate
+    async function leaveMark(event) {
+        const btn = document.getElementById('markBtn');
+        const currentCount = parseInt(countEl.innerText) || 0;
 
-            // Persistent update
-            try {
-                await fetch(backupUrl);
-            } catch (err) {
-                console.log("Persistence delay - mark saved locally");
-            }
-        }
-
-        // Initialize
-        getInitialCount();
+        // 1. Visual Feedback (+1 Animation)
+        createFloatingPlus(event);
         
-        /* Keep all your existing Scroll Reveal and Journal logic below this */
+        // 2. Local Update (Instant feedback)
+        btn.innerText = "mark left.";
+        btn.style.pointerEvents = "none";
+        btn.style.opacity = "0.5";
+        countEl.innerText = currentCount + 1;
 
+        // 3. Official Library Increment
+        try {
+            const result = await counter.up(COUNTER_ID);
+            countEl.innerText = result.value; // Sync with actual server value
+        } catch (error) {
+            console.error('Increment error:', error.message);
+        }
+    }
+
+    function createFloatingPlus(event) {
+        const plus = document.createElement('div');
+        plus.className = 'floating-plus';
+        plus.innerText = '+1';
+        
+        // Position at mouse click
+        plus.style.left = `${event.clientX}px`;
+        plus.style.top = `${event.clientY}px`;
+        
+        document.body.appendChild(plus);
+        setTimeout(() => plus.remove(), 1200);
+    }
+
+    // Initialize
+    getInitialCount();
         // --- Data & Journals ---
         const journalEntries = {
             nba: {
