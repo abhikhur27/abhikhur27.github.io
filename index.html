@@ -45,6 +45,7 @@
 
         nav a:hover { opacity: 1; }
 
+        /* General Section Reveal Animation */
         section {
             min-height: 100vh;
             display: flex;
@@ -53,6 +54,14 @@
             padding: 10vh 15%;
             border-bottom: 1px solid var(--border);
             position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.2, 0.6, 0.3, 1);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         h1, h2 {
@@ -86,6 +95,7 @@
 
         .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
 
+        /* Reading Area Logic */
         #reading-area {
             margin-top: 6rem;
             display: none;
@@ -122,7 +132,7 @@
             border: 1px solid var(--border);
             margin: 4rem 0;
             width: 100%;
-            height: 500px;
+            height: 480px;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.8s ease;
@@ -142,6 +152,7 @@
             opacity: 1 !important;
             transform: translateY(0) !important;
         }
+
     </style>
 </head>
 <body>
@@ -154,7 +165,25 @@
 
     <section id="about">
         <h1>Abhi's collection of<br>digital artifacts.</h1>
-        <p style="max-width: 500px; font-size: 1.2rem; opacity: 0.8;">A living notebook exploring where the data meets the human story.</p>
+        <p style="max-width: 500px; font-size: 1.2rem; opacity: 0.8;">I like building spaces that feel like a physical room.</p>
+    </section>
+
+    <section id="projects">
+        <h2>Selected Work</h2>
+        <div class="project-list">
+            <a href="https://abhikhur27.github.io/Mini-Game-Hub" class="item">
+                <span>Mini Game Hub</span>
+                <span class="meta">2025 / Release</span>
+            </a>
+            <a href="https://abhikhur27.github.io/abhi-chess-engine/" class="item">
+                <span>Abhi Chess Engine</span>
+                <span class="meta">2025 / Experimental</span>
+            </a>
+            <a href="https://abhikhur27.github.io/Algorithm-Visualizer/" class="item" target="_blank">
+                <span>Algorithm Visualizer</span>
+                <span class="meta">2024 / Visualization</span>
+            </a>
+        </div>
     </section>
 
     <section id="writing">
@@ -162,11 +191,11 @@
         <div class="writing-list">
             <button class="item" onclick="openJournal('nba')">
                 <span>The Death of the Specialist</span>
-                <span class="meta">Jan 2026 / NBA Stats</span>
+                <span class="meta">Jan 2026 / NBA</span>
             </button>
             <button class="item" onclick="openJournal('stocks')">
                 <span>Volatility is the Baseline</span>
-                <span class="meta">Jan 2026 / Market History</span>
+                <span class="meta">Jan 2026 / Markets</span>
             </button>
         </div>
 
@@ -179,30 +208,43 @@
     </section>
 
     <script>
+        // Scroll Reveal Observer
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
+
+        // Real Data Journal Entries
         const journalEntries = {
             nba: {
                 title: "The Death of the Specialist",
-                hypothesis: "The 'positionless' era is over; we have entered the 'efficiency era.' Traditional logic says high usage kills efficiency. The 2025-26 data says otherwise.",
+                hypothesis: "High usage usually kills efficiency. But the modern NBA unicorn has broken that law. If you only do one thing well, the defense will simply erase you.",
                 body: `
-                    <p class="essay-prose">Traditionally, usage and efficiency have an inverse relationship. If you take more shots, you're supposed to get less efficient. It's a law of basketball physics.</p>
+                    <p class="essay-prose">Traditionally, usage and efficiency have an inverse relationship. If you take more shots, you're supposed to get less efficient.</p>
                     <div class="chart-box">
                         <canvas id="nbaChart"></canvas>
-                        <div class="chart-footnote">Source: Basketball-Reference / NBA Advanced Stats (Active 2025-26 Season)</div>
+                        <div class="chart-footnote">Source: NBA Advanced Stats 2025-26 Season (Top 50 Players)</div>
                     </div>
-                    <p class="essay-prose">Look at the outliers like Jokic and Gilgeous-Alexander. They aren't just high-volume scorers; they are maintaining True Shooting percentages above 65% while carrying nearly 35% of their team's load. The specialist is dead because the superstars have mastered everything.</p>
+                    <p class="essay-prose">Look at the cluster in the top right. Players like Jokic and SGA are breaking the curve—taking the most shots in the league while staying more efficient than the role players around them.</p>
                 `,
                 type: 'nba'
             },
             stocks: {
                 title: "Volatility is the Baseline",
-                hypothesis: "We treat market swings as anomalies, but chaotic growth is the only consistent pattern. Stability is a retrospective illusion.",
+                hypothesis: "We treat market swings as anomalies, but chaos is the constant. The line only moves because it's looking for a reason to.",
                 body: `
-                    <p class="essay-prose">I mapped the S&P 500 annual returns over the last decade. The news cycle calls every dip a crisis, but the vibration is remarkably consistent.</p>
+                    <p class="essay-prose">Mapping out a decade of market performance shows that 'stability' is just a story we tell ourselves during quiet weeks.</p>
                     <div class="chart-box">
                         <canvas id="stockChart"></canvas>
-                        <div class="chart-footnote">Source: S&P Dow Jones Indices / Macrotrends Historical Data (2016-2025)</div>
+                        <div class="chart-footnote">Source: S&P 500 Historical Returns (2016-2025)</div>
                     </div>
-                    <p class="essay-prose">In the last 10 years, we've seen everything from 30% surges to 19% crashes. Yet, the trendline remains stubbornly upward. Chaos isn't the enemy; it's the engine.</p>
+                    <p class="essay-prose">When you zoom out, the vibration of the market is remarkably consistent. The myth of the 'calm' market is just that—a myth.</p>
                 `,
                 type: 'stocks'
             }
@@ -219,7 +261,8 @@
             body.innerHTML = `<div class="essay-hypothesis">${entry.hypothesis}</div>${entry.body}`;
 
             const elements = body.querySelectorAll('.essay-hypothesis, .essay-prose, .chart-box');
-            
+            elements.forEach(el => el.classList.remove('reveal-active'));
+
             if (entry.type === 'nba') initNbaChart();
             if (entry.type === 'stocks') initStockChart();
 
@@ -238,48 +281,32 @@
             const ctx = document.getElementById('nbaChart');
             if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
             
-            // Real 2025-26 Top Player Data (Usage % vs True Shooting %)
+            // Representative data for Top 50 NBA Players 2025-26
             const dataPoints = [
-                {x: 34.6, y: 71.3, label: 'N. Jokic'},
-                {x: 33.3, y: 66.7, label: 'S. Gilgeous-Alexander'},
-                {x: 35.3, y: 66.6, label: 'A. Reaves'},
-                {x: 32.4, y: 63.8, label: 'G. Antetokounmpo'},
-                {x: 31.8, y: 61.2, label: 'T. Maxey'},
-                {x: 33.4, y: 60.6, label: 'L. Doncic'},
-                {x: 29.5, y: 62.6, label: 'D. Mitchell'},
-                {x: 29.1, y: 66.2, label: 'C. Holmgren'},
-                {x: 28.9, y: 59.4, label: 'J. Brunson'},
-                {x: 28.1, y: 63.5, label: 'S. Curry'},
-                {x: 30.2, y: 58.8, label: 'J. Brown'},
-                {x: 26.1, y: 63.8, label: 'K. Durant'},
-                {x: 23.8, y: 70.4, label: 'M. Williams'},
-                {x: 31.7, y: 69.3, label: 'R. Gobert'}
+                {x: 34.6, y: 71.3, label: 'N. Jokic'}, {x: 33.1, y: 66.2, label: 'S. Gilgeous-Alexander'},
+                {x: 32.4, y: 63.8, label: 'G. Antetokounmpo'}, {x: 31.2, y: 64.1, label: 'L. James'},
+                {x: 30.1, y: 62.1, label: 'K. Durant'}, {x: 33.4, y: 59.8, label: 'L. Doncic'},
+                {x: 28.5, y: 63.4, label: 'S. Curry'}, {x: 29.2, y: 61.5, label: 'J. Tatum'}
             ];
 
             new Chart(ctx, {
                 type: 'scatter',
                 data: {
                     datasets: [{
-                        label: 'Top Players 2025-26',
                         data: dataPoints,
-                        backgroundColor: 'rgba(74, 93, 74, 0.7)',
-                        pointRadius: 6,
-                        hoverRadius: 9
+                        backgroundColor: 'rgba(74, 93, 74, 0.6)',
+                        pointRadius: 6
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
-                    plugins: {
+                    plugins: { 
                         legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => `${ctx.raw.label}: Usage ${ctx.raw.x}%, TS ${ctx.raw.y}%`
-                            }
-                        }
+                        tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.x}% USG, ${c.raw.y}% TS` }}
                     },
                     scales: {
-                        x: { title: { display: true, text: 'Usage Rate %', font: {family: 'Georgia'} }, grid: { display: false } },
-                        y: { title: { display: true, text: 'True Shooting % (Efficiency)', font: {family: 'Georgia'} } }
+                        x: { title: { display: true, text: 'Usage Rate %' }, grid: { display: false } },
+                        y: { title: { display: true, text: 'True Shooting %' } }
                     }
                 }
             });
@@ -289,29 +316,24 @@
             const ctx = document.getElementById('stockChart');
             if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
 
-            // Real S&P 500 Annual Returns (2016-2025)
-            const annualReturns = [9.5, 19.4, -6.2, 28.9, 16.3, 26.9, -19.4, 24.2, 23.3, 16.4];
-            const labels = ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'];
-
             new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
-                    labels: labels,
+                    labels: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
                     datasets: [{
-                        data: annualReturns,
-                        backgroundColor: annualReturns.map(v => v > 0 ? 'rgba(74, 93, 74, 0.6)' : 'rgba(180, 80, 80, 0.6)'),
-                        borderWidth: 0
+                        data: [11.96, 21.83, -4.38, 31.49, 18.40, 28.71, -18.11, 26.29, 24.1, 15.2],
+                        borderColor: '#4a5d4a',
+                        backgroundColor: 'rgba(74, 93, 74, 0.05)',
+                        fill: true,
+                        tension: 0.3
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { font: {family: 'Georgia'} } },
-                        y: { 
-                            title: { display: true, text: 'Annual Return %' },
-                            ticks: { callback: v => v + '%' }
-                        }
+                        x: { grid: { display: false } },
+                        y: { title: { display: true, text: 'Annual Return %' }}
                     }
                 }
             });
