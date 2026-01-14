@@ -254,10 +254,10 @@
         </div>
     </section>
 
-    <section id="interaction">
-    <div class="counter-container">
+   <section id="interaction">
+    <div class="counter-container" style="text-align: center;">
         <h2 style="font-size: 2rem;">The Guestbook.</h2>
-        <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is brief.</p>
+        <p style="margin-bottom: 3rem; opacity: 0.7;">This room is permanent, but your presence is fleeting.</p>
         
         <div style="position: relative; display: inline-block;">
             <button class="mark-button" id="mark-button">
@@ -269,7 +269,7 @@
             TOTAL ARTIFACTS LEFT: <span id="mark-count">...</span>
         </span>
     </div>
-    </section>
+</section>
     <style>
     /* Floating +1 Animation */
         .floating-plus {
@@ -315,35 +315,37 @@
     const markCount = document.getElementById('mark-count');
     const counterName = 'first-counter-2497';
 
-    // --- 4. Get Initial Count ---
+    // --- 4. Get Initial Count from Server ---
     counter.get(counterName)
       .then(result => {
-        markCount.textContent = result.value || 0;
+        markCount.textContent = result.value;
       })
       .catch(err => {
-        console.error('Fetch error:', err);
-        markCount.textContent = "0";
+        console.error('Initial load failed:', err);
+        markCount.textContent = "0"; 
       });
 
-    // --- 5. Add Click Handler ---
+    // --- 5. Increment on Click ---
     markButton.addEventListener('click', function(event) {
-      // Immediate UI Feedback (Floating +1)
+      // Visual feedback
       createFloatingPlus(event);
       
-      // Update Button State
-      markButton.textContent = "mark left.";
-      markButton.style.pointerEvents = "none";
-      markButton.style.opacity = "0.5";
-
-      // Increment in Database
+      // Hit the API
       counter.up(counterName)
         .then(result => {
+          // Update the UI only with the real server value
           markCount.textContent = result.value;
+          
+          // Style the button to show it was successful
+          markButton.textContent = "mark left.";
+          markButton.style.pointerEvents = "none";
+          markButton.style.opacity = "0.5";
         })
-        .catch(err => console.error('Update error:', err));
+        .catch(err => {
+          console.error('Increment failed:', err);
+        });
     });
 
-    // Function for the visual effect
     function createFloatingPlus(event) {
         const plus = document.createElement('div');
         plus.className = 'floating-plus';
@@ -354,6 +356,10 @@
         setTimeout(() => plus.remove(), 1200);
     }
   });
+
+
+
+    
         // --- Data & Journals ---
         const journalEntries = {
             nba: {
