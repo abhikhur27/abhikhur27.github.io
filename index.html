@@ -103,29 +103,74 @@
 
         .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
 
-        /* Reading Area Adjustments */
+        /* Journal Reading Area & Essay Styling */
         #reading-area {
-            margin-top: 2rem;
-            padding: 3rem;
-            border: 1px solid var(--border);
-            min-height: 150px;
+            margin-top: 4rem;
             display: none;
-            background: rgba(255,255,255,0.4);
-            max-width: 800px;
+            background: transparent;
         }
 
-        .chart-wrapper {
+        .essay-container {
+            max-width: 650px;
+            margin: 0 auto;
+            padding-bottom: 10vh;
+        }
+
+        #journal-title {
+            font-size: clamp(2.2rem, 5vw, 3rem);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .essay-hypothesis {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 3.5rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .essay-prose {
+            font-size: 1.15rem;
             margin: 2rem 0;
-            height: 300px;
-            width: 100%;
+            line-height: 1.8;
+            color: #333;
         }
 
-        .analysis-text {
-            font-size: 1.1rem;
-            color: #444;
-            margin-bottom: 2rem;
-            border-left: 2px solid var(--accent);
-            padding-left: 1.5rem;
+        .chart-box {
+            background: #fff;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            margin: 3.5rem -10%; 
+            border-radius: 2px;
+        }
+
+        @media (max-width: 850px) {
+            .chart-box { margin: 2rem 0; }
+        }
+
+        .essay-conclusion {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            margin-top: 4rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888;
+        }
+
+        /* Staggered Animation */
+        .reveal-beat {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .reveal-beat.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         :focus { outline: 1px solid var(--accent); outline-offset: 4px; }
@@ -168,35 +213,56 @@
         <h2 class="content-reveal">Writing</h2>
         <div class="writing-list content-reveal" style="transition-delay: 0.2s;">
             <button class="item" onclick="openJournal('nba')">
-                <span>NBA Efficiency Exploration</span>
-                <span class="meta">Jan 2025 / Data Essay</span>
+                <span>The Death of the Specialist</span>
+                <span class="meta">Jan 2026 / NBA Data</span>
+            </button>
+            <button class="item" onclick="openJournal('stocks')">
+                <span>Volatility is the Baseline</span>
+                <span class="meta">Nov 2025 / Markets</span>
             </button>
             <button class="item" onclick="openJournal('one')">
                 <span>entry1</span>
-                <span class="meta">Jan 14</span>
+                <span class="meta">month year</span>
             </button>
         </div>
 
         <div id="reading-area" class="content-reveal">
-            <h3 id="journal-title" style="font-size: 2rem; margin-bottom: 1rem; font-style: italic;"></h3>
-            <div id="journal-body"></div>
+            <div class="essay-container">
+                <h3 id="journal-title"></h3>
+                <div id="journal-body"></div>
+            </div>
         </div>
     </section>
 
     <script>
         const journalEntries = {
             nba: {
-                title: "NBA Efficiency Exploration",
+                title: "The Death of the Specialist",
+                hypothesis: "I have a feeling that being 'just a shooter' doesn't cut it anymore. The data seems to suggest that if you can't create your own look, you're becoming a liability.",
                 body: `
-                    <p class="analysis-text">In the modern NBA, the "Efficiency Frontier" represents the balance between high volume and usage and scoring accuracy. Traditionally, as a player's shot volume increases, their efficiency drops. We are currently seeing a historical defiance of this trend.</p>
-                    <div class="chart-wrapper"><canvas id="nbaChart"></canvas></div>
-                    <p class="analysis-text">The chart above visualizes the correlation between Usage Rate (X) and True Shooting % (Y). Note the outliers in the top-right quadrant—these are the players redefining offensive gravity.</p>
+                    <p class="essay-prose reveal-beat">So, I was looking at player efficiency. For years, we celebrated the guys who sat in the corner and hit 40% of their threes. But look at the spread now.</p>
+                    <div class="chart-box reveal-beat"><canvas id="nbaChart" height="400"></canvas></div>
+                    <p class="essay-prose reveal-beat">The dots in the top right? Those aren't specialists. Those are the 'everything' players. The interpretation is pretty simple: Defensive schemes have gotten too smart. If you only do one thing, you're easy to erase.</p>
+                    <div class="essay-conclusion reveal-beat">Conclusion: The game has solved the specialist.</div>
                 `,
-                isData: true
+                type: 'nba'
             },
-            one: {
-                title: "entry1",
-                body: "hi guys coming soon"
+            stocks: {
+                title: "Volatility is the Baseline",
+                hypothesis: "We talk about 'unprecedented' market swings every other week. If you look at the last decade, 'unprecedented' is actually just how things work now.",
+                body: `
+                    <p class="essay-prose reveal-beat">I plotted the movement of the index vs. the narrative. We remember the big crashes, but the daily noise is where the real story actually lives.</p>
+                    <div class="chart-box reveal-beat"><canvas id="stockChart" height="400"></canvas></div>
+                    <p class="essay-prose reveal-beat">What's wild is that the 'calm' periods are actually the outliers. The line is never really straight, even when we think the economy is stable.</p>
+                    <div class="essay-conclusion reveal-beat">Final Thought: Stability is a myth we tell ourselves in hindsight.</div>
+                `,
+                type: 'stocks'
+            },
+            one: { 
+                title: "entry1", 
+                body: `<p class='essay-prose reveal-beat'>hi guys</p>
+                    <p class='essay-prose reveal-beat'>this is a test</p>
+                `
             }
         };
 
@@ -204,45 +270,60 @@
             const area = document.getElementById('reading-area');
             const title = document.getElementById('journal-title');
             const body = document.getElementById('journal-body');
+            const entry = journalEntries[id];
 
-            title.innerText = journalEntries[id].title;
-            body.innerHTML = journalEntries[id].body; // Use innerHTML for charts
+            title.innerText = entry.title;
+            body.innerHTML = `
+                ${entry.hypothesis ? `<div class="essay-hypothesis">${entry.hypothesis}</div>` : ''}
+                ${entry.body}
+            `;
 
             area.style.display = 'block';
-            
-            // If it's the data entry, initialize the chart
-            if (journalEntries[id].isData) {
-                setTimeout(() => initNbaChart(), 100); 
-            }
+
+            // Animation Logic
+            setTimeout(() => {
+                const beats = document.querySelectorAll('.reveal-beat');
+                beats.forEach((el, i) => {
+                    setTimeout(() => el.classList.add('active'), i * 150);
+                });
+                
+                if (entry.type === 'nba') initNbaChart();
+                if (entry.type === 'stocks') initStockChart();
+            }, 50);
 
             area.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function initNbaChart() {
             const ctx = document.getElementById('nbaChart').getContext('2d');
+            if (Chart.getChart("nbaChart")) Chart.getChart("nbaChart").destroy();
             new Chart(ctx, {
                 type: 'scatter',
                 data: {
                     datasets: [{
-                        label: 'NBA Players',
-                        data: [
-                            {x: 22, y: 58}, {x: 28, y: 62}, {x: 32, y: 65}, 
-                            {x: 18, y: 52}, {x: 25, y: 55}, {x: 35, y: 59}
-                        ],
+                        data: [{x: 18, y: 52}, {x: 25, y: 58}, {x: 32, y: 64}, {x: 22, y: 54}, {x: 35, y: 62}],
                         backgroundColor: '#4a5d4a'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { title: { display: true, text: 'Usage %' } },
-                        y: { title: { display: true, text: 'True Shooting %' } }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
+                options: { responsive: true, plugins: { legend: { display: false } } }
+            });
+        }
+
+        function initStockChart() {
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            if (Chart.getChart("stockChart")) Chart.getChart("stockChart").destroy();
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2018', '2020', '2022', '2024', '2026'],
+                    datasets: [{
+                        data: [100, 85, 140, 190, 230],
+                        borderColor: '#4a5d4a',
+                        tension: 0.3,
+                        fill: false
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } } }
             });
         }
     </script>
