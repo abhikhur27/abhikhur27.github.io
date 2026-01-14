@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Notebook</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bg: #fcfaf7;
@@ -71,16 +72,10 @@
             transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        /* Show content when section is in view or focused */
         section:hover .content-reveal, 
         section:focus-within .content-reveal {
             opacity: 1;
             transform: translateY(0);
-        }
-
-        .project-list, .writing-list {
-            list-style: none;
-            margin-top: 2rem;
         }
 
         .item {
@@ -91,7 +86,6 @@
             text-decoration: none;
             color: inherit;
             transition: padding-left 0.3s ease;
-            /* Added for button functionality */
             background: none;
             border-left: none;
             border-right: none;
@@ -109,23 +103,31 @@
 
         .meta { font-family: monospace; font-size: 0.8rem; opacity: 0.6; }
 
-        /* Styles for the new reading area */
+        /* Reading Area Adjustments */
         #reading-area {
             margin-top: 2rem;
-            padding: 2rem;
+            padding: 3rem;
             border: 1px solid var(--border);
             min-height: 150px;
-            display: none; /* Hidden until a click occurs */
-            background: rgba(255,255,255,0.2);
+            display: none;
+            background: rgba(255,255,255,0.4);
+            max-width: 800px;
         }
 
-        #reading-area h3 {
-            font-style: italic;
-            margin-bottom: 1rem;
-            font-weight: 400;
+        .chart-wrapper {
+            margin: 2rem 0;
+            height: 300px;
+            width: 100%;
         }
 
-        /* Keyboard Focus Styles */
+        .analysis-text {
+            font-size: 1.1rem;
+            color: #444;
+            margin-bottom: 2rem;
+            border-left: 2px solid var(--accent);
+            padding-left: 1.5rem;
+        }
+
         :focus { outline: 1px solid var(--accent); outline-offset: 4px; }
     </style>
 </head>
@@ -159,39 +161,42 @@
                 <span>Algorithm Visualizer</span>
                 <span class="meta">2024 / Visualization</span>
             </a>
-            
         </div>
     </section>
 
     <section id="writing" tabindex="0">
         <h2 class="content-reveal">Writing</h2>
         <div class="writing-list content-reveal" style="transition-delay: 0.2s;">
+            <button class="item" onclick="openJournal('nba')">
+                <span>NBA Efficiency Exploration</span>
+                <span class="meta">Jan 2025 / Data Essay</span>
+            </button>
             <button class="item" onclick="openJournal('one')">
                 <span>entry1</span>
-                <span class="meta">month day</span>
-            </button>
-            <button class="item" onclick="openJournal('two')">
-                <span>entry2</span>
-                <span class="meta">month day</span>
+                <span class="meta">Jan 14</span>
             </button>
         </div>
 
         <div id="reading-area" class="content-reveal">
-            <h3 id="journal-title"></h3>
-            <p id="journal-body"></p>
+            <h3 id="journal-title" style="font-size: 2rem; margin-bottom: 1rem; font-style: italic;"></h3>
+            <div id="journal-body"></div>
         </div>
     </section>
 
     <script>
-        // Your Journal Data
         const journalEntries = {
+            nba: {
+                title: "NBA Efficiency Exploration",
+                body: `
+                    <p class="analysis-text">In the modern NBA, the "Efficiency Frontier" represents the balance between high volume and usage and scoring accuracy. Traditionally, as a player's shot volume increases, their efficiency drops. We are currently seeing a historical defiance of this trend.</p>
+                    <div class="chart-wrapper"><canvas id="nbaChart"></canvas></div>
+                    <p class="analysis-text">The chart above visualizes the correlation between Usage Rate (X) and True Shooting % (Y). Note the outliers in the top-right quadrant—these are the players redefining offensive gravity.</p>
+                `,
+                isData: true
+            },
             one: {
                 title: "entry1",
-                body: "hi guys"
-            },
-            two: {
-                title: "entry2",
-                text: "coming soon"
+                body: "hi guys coming soon"
             }
         };
 
@@ -200,17 +205,46 @@
             const title = document.getElementById('journal-title');
             const body = document.getElementById('journal-body');
 
-            // Fill the content
             title.innerText = journalEntries[id].title;
-            body.innerText = journalEntries[id].body || journalEntries[id].text;
+            body.innerHTML = journalEntries[id].body; // Use innerHTML for charts
 
-            // Make it visible
             area.style.display = 'block';
             
-            // Optional: Smooth scroll into view
-            area.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // If it's the data entry, initialize the chart
+            if (journalEntries[id].isData) {
+                setTimeout(() => initNbaChart(), 100); 
+            }
+
+            area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function initNbaChart() {
+            const ctx = document.getElementById('nbaChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'NBA Players',
+                        data: [
+                            {x: 22, y: 58}, {x: 28, y: 62}, {x: 32, y: 65}, 
+                            {x: 18, y: 52}, {x: 25, y: 55}, {x: 35, y: 59}
+                        ],
+                        backgroundColor: '#4a5d4a'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: 'Usage %' } },
+                        y: { title: { display: true, text: 'True Shooting %' } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
         }
     </script>
-
 </body>
 </html>
