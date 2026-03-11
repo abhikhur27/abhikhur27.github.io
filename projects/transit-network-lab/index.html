@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transit Network Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <h1>Transit Network Lab</h1>
+    <p>Interactive shortest-path routing model for urban rail networks.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel controls">
+      <h2>Route Planner</h2>
+      <label>
+        Start Station
+        <select id="start-station"></select>
+      </label>
+
+      <label>
+        End Station
+        <select id="end-station"></select>
+      </label>
+
+      <button id="run-route" class="primary" type="button">Compute Fastest Route</button>
+      <p id="status" class="status" aria-live="polite"></p>
+
+      <div class="metrics">
+        <article>
+          <h3>Total Minutes</h3>
+          <p id="metric-minutes">-</p>
+        </article>
+        <article>
+          <h3>Stops</h3>
+          <p id="metric-stops">-</p>
+        </article>
+        <article>
+          <h3>Transfers</h3>
+          <p id="metric-transfers">-</p>
+        </article>
+      </div>
+
+      <h3>Route Steps</h3>
+      <ol id="route-steps" class="steps"></ol>
+    </section>
+
+    <section class="panel map-panel">
+      <h2>Network Map</h2>
+      <svg id="network" class="network" viewBox="0 0 760 460" aria-label="Transit network"></svg>
+      <div class="legend">
+        <span><i style="background:#2563eb"></i>Blue Line</span>
+        <span><i style="background:#dc2626"></i>Red Line</span>
+        <span><i style="background:#16a34a"></i>Green Line</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

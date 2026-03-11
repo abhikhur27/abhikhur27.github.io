@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Analytics Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <h1>Sports Analytics Explorer</h1>
+    <p>Interactive model for rating basketball offenses with customizable factor weights.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel controls">
+      <h2>Model Weights</h2>
+      <p>Adjust how each factor contributes to the custom score.</p>
+
+      <label>
+        Effective FG% Weight: <span id="w-efg-label">40</span>
+        <input id="w-efg" type="range" min="0" max="100" value="40" step="5">
+      </label>
+
+      <label>
+        Turnover% Penalty: <span id="w-tov-label">25</span>
+        <input id="w-tov" type="range" min="0" max="100" value="25" step="5">
+      </label>
+
+      <label>
+        Offensive Rebound% Weight: <span id="w-orb-label">20</span>
+        <input id="w-orb" type="range" min="0" max="100" value="20" step="5">
+      </label>
+
+      <label>
+        Free Throw Rate Weight: <span id="w-ftr-label">15</span>
+        <input id="w-ftr" type="range" min="0" max="100" value="15" step="5">
+      </label>
+
+      <button id="reset" type="button">Reset Weights</button>
+      <p id="status" class="status" aria-live="polite"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Pace vs Offense</h2>
+      <canvas id="chart" width="760" height="320" aria-label="Scatter plot"></canvas>
+      <p class="small">Bubble size scales with the computed custom score.</p>
+    </section>
+
+    <section class="panel wide">
+      <h2>Team Rankings</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Team</th>
+              <th>Custom Score</th>
+              <th>eFG%</th>
+              <th>TOV%</th>
+              <th>ORB%</th>
+              <th>FTr</th>
+              <th>OffRtg</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
