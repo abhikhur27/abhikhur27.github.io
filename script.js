@@ -1,17 +1,8 @@
-const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+﻿const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
 const cards = Array.from(document.querySelectorAll('.project-card'));
 const revealItems = Array.from(document.querySelectorAll('.reveal'));
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
-const lastUpdated = document.getElementById('last-updated');
-
-if (lastUpdated) {
-  lastUpdated.textContent = new Date().toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
 
 filterButtons.forEach((button) => {
   button.addEventListener('click', () => {

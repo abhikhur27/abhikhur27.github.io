@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transit Network Lab</title>
+  <title>Transit Network Lab | Route Editor + Optimization Mode</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -13,52 +13,79 @@
   <header class="container header">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
     <h1>Transit Network Lab</h1>
-    <p>Interactive shortest-path routing model for urban rail networks.</p>
+    <p>Drag stops, edit lines, and optimize transfer-aware routes in real time.</p>
   </header>
 
   <main class="container layout">
-    <section class="panel controls">
-      <h2>Route Planner</h2>
-      <label>
-        Start Station
-        <select id="start-station"></select>
-      </label>
+    <section class="panel stack">
+      <article class="block">
+        <h2>Route Planner</h2>
+        <label>
+          Start
+          <select id="start-station"></select>
+        </label>
+        <label>
+          Destination
+          <select id="end-station"></select>
+        </label>
+        <button id="run-route" class="primary" type="button">Compute Route</button>
+        <p id="status" class="status" aria-live="polite"></p>
 
-      <label>
-        End Station
-        <select id="end-station"></select>
-      </label>
+        <div class="metrics">
+          <article><h3>Total</h3><p id="metric-minutes">-</p></article>
+          <article><h3>Stops</h3><p id="metric-stops">-</p></article>
+          <article><h3>Transfers</h3><p id="metric-transfers">-</p></article>
+        </div>
 
-      <button id="run-route" class="primary" type="button">Compute Fastest Route</button>
-      <p id="status" class="status" aria-live="polite"></p>
+        <ol id="route-steps" class="steps"></ol>
+      </article>
 
-      <div class="metrics">
-        <article>
-          <h3>Total Minutes</h3>
-          <p id="metric-minutes">-</p>
-        </article>
-        <article>
-          <h3>Stops</h3>
-          <p id="metric-stops">-</p>
-        </article>
-        <article>
-          <h3>Transfers</h3>
-          <p id="metric-transfers">-</p>
-        </article>
-      </div>
+      <article class="block">
+        <h2>Network Editor</h2>
+        <label>
+          New Stop Name
+          <input id="new-stop-name" type="text" placeholder="e.g. Midtown West">
+        </label>
+        <button id="add-stop" type="button">Add Stop</button>
 
-      <h3>Route Steps</h3>
-      <ol id="route-steps" class="steps"></ol>
+        <div class="line-editor">
+          <label>
+            From
+            <select id="line-from"></select>
+          </label>
+          <label>
+            To
+            <select id="line-to"></select>
+          </label>
+          <label>
+            Line Name
+            <input id="line-name" type="text" value="indigo">
+          </label>
+          <label>
+            Line Color
+            <input id="line-color" type="color" value="#7c3aed">
+          </label>
+          <label>
+            Speed (px/min)
+            <input id="line-speed" type="number" min="8" max="60" value="24">
+          </label>
+        </div>
+        <button id="add-line" type="button">Add Line Segment</button>
+        <p id="editor-status" class="status"></p>
+      </article>
+
+      <article class="block">
+        <h2>Optimization Mode</h2>
+        <p id="challenge-text">Press "New Challenge" to generate an optimization goal.</p>
+        <button id="new-challenge" type="button">New Challenge</button>
+        <p class="score">Challenges solved: <span id="challenge-score">0</span></p>
+      </article>
     </section>
 
     <section class="panel map-panel">
-      <h2>Network Map</h2>
-      <svg id="network" class="network" viewBox="0 0 760 460" aria-label="Transit network"></svg>
-      <div class="legend">
-        <span><i style="background:#2563eb"></i>Blue Line</span>
-        <span><i style="background:#dc2626"></i>Red Line</span>
-        <span><i style="background:#16a34a"></i>Green Line</span>
-      </div>
+      <h2>Interactive Map (drag any stop)</h2>
+      <svg id="network" class="network" viewBox="0 0 840 520" aria-label="Transit network editor"></svg>
+      <div id="line-legend" class="legend"></div>
     </section>
   </main>
 

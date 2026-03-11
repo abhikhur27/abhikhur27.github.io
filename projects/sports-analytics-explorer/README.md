@@ -1,4 +1,4 @@
-# Sports Analytics Explorer
+# NBA Offensive Identity Model (2024-25)
 
 Interactive basketball offense modeling dashboard with adjustable factor weights.
 

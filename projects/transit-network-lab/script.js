@@ -1,244 +1,486 @@
-const stations = [
-  { id: 'UN', name: 'Union', x: 78, y: 230 },
-  { id: 'MU', name: 'Museum', x: 186, y: 118 },
-  { id: 'CE', name: 'Central', x: 330, y: 230 },
-  { id: 'HA', name: 'Harbor', x: 480, y: 332 },
-  { id: 'AP', name: 'Airport', x: 650, y: 230 },
-  { id: 'TE', name: 'Tech Park', x: 330, y: 78 },
-  { id: 'ST', name: 'Stadium', x: 330, y: 392 },
-  { id: 'RI', name: 'Riverfront', x: 480, y: 126 },
-];
-
-const edges = [
-  { from: 'UN', to: 'CE', line: 'blue', time: 6 },
-  { from: 'CE', to: 'AP', line: 'blue', time: 7 },
-  { from: 'AP', to: 'RI', line: 'blue', time: 4 },
-  { from: 'MU', to: 'CE', line: 'red', time: 5 },
-  { from: 'CE', to: 'HA', line: 'red', time: 6 },
-  { from: 'MU', to: 'RI', line: 'red', time: 6 },
-  { from: 'TE', to: 'CE', line: 'green', time: 4 },
-  { from: 'CE', to: 'ST', line: 'green', time: 5 },
-  { from: 'ST', to: 'HA', line: 'green', time: 4 },
-  { from: 'TE', to: 'MU', line: 'green', time: 4 },
-];
-
-const lineColors = {
-  blue: '#2563eb',
-  red: '#dc2626',
-  green: '#16a34a',
-};
-
-const transferPenalty = 2;
-const adjacency = new Map();
-
-const startSelect = document.getElementById('start-station');
+﻿const startSelect = document.getElementById('start-station');
 const endSelect = document.getElementById('end-station');
 const runButton = document.getElementById('run-route');
 const statusEl = document.getElementById('status');
-const stepsEl = document.getElementById('route-steps');
+
 const minutesEl = document.getElementById('metric-minutes');
 const stopsEl = document.getElementById('metric-stops');
 const transfersEl = document.getElementById('metric-transfers');
+const stepsEl = document.getElementById('route-steps');
+
+const newStopInput = document.getElementById('new-stop-name');
+const addStopButton = document.getElementById('add-stop');
+const lineFromSelect = document.getElementById('line-from');
+const lineToSelect = document.getElementById('line-to');
+const lineNameInput = document.getElementById('line-name');
+const lineColorInput = document.getElementById('line-color');
+const lineSpeedInput = document.getElementById('line-speed');
+const addLineButton = document.getElementById('add-line');
+const editorStatusEl = document.getElementById('editor-status');
+
+const newChallengeButton = document.getElementById('new-challenge');
+const challengeTextEl = document.getElementById('challenge-text');
+const challengeScoreEl = document.getElementById('challenge-score');
+
 const networkSvg = document.getElementById('network');
+const legendEl = document.getElementById('line-legend');
 
-stations.forEach((station) => {
-  adjacency.set(station.id, []);
-});
+let stationCounter = 0;
+let segmentCounter = 0;
 
-edges.forEach((edge) => {
-  adjacency.get(edge.from).push(edge);
-  adjacency.get(edge.to).push({ ...edge, from: edge.to, to: edge.from });
-});
+const transferPenaltyMinutes = 2;
+
+const stations = [
+  { id: 'UN', name: 'Union', x: 90, y: 260 },
+  { id: 'MU', name: 'Museum', x: 220, y: 150 },
+  { id: 'CE', name: 'Central', x: 390, y: 260 },
+  { id: 'HA', name: 'Harbor', x: 560, y: 360 },
+  { id: 'AP', name: 'Airport', x: 740, y: 250 },
+  { id: 'TE', name: 'Tech Park', x: 390, y: 90 },
+  { id: 'ST', name: 'Stadium', x: 390, y: 430 },
+  { id: 'RI', name: 'Riverfront', x: 560, y: 150 },
+];
+
+const lineCatalog = {
+  blue: { color: '#2563eb', speed: 24 },
+  red: { color: '#dc2626', speed: 21 },
+  green: { color: '#16a34a', speed: 22 },
+};
+
+const segments = [
+  { id: nextSegmentId(), from: 'UN', to: 'CE', line: 'blue' },
+  { id: nextSegmentId(), from: 'CE', to: 'AP', line: 'blue' },
+  { id: nextSegmentId(), from: 'AP', to: 'RI', line: 'blue' },
+  { id: nextSegmentId(), from: 'MU', to: 'CE', line: 'red' },
+  { id: nextSegmentId(), from: 'CE', to: 'HA', line: 'red' },
+  { id: nextSegmentId(), from: 'MU', to: 'RI', line: 'red' },
+  { id: nextSegmentId(), from: 'TE', to: 'CE', line: 'green' },
+  { id: nextSegmentId(), from: 'CE', to: 'ST', line: 'green' },
+  { id: nextSegmentId(), from: 'ST', to: 'HA', line: 'green' },
+  { id: nextSegmentId(), from: 'TE', to: 'MU', line: 'green' },
+];
+
+let currentRoute = null;
+let draggingStationId = null;
+let challenge = null;
+let challengeScore = Number(localStorage.getItem('transit_lab_score') || '0');
+
+challengeScoreEl.textContent = String(challengeScore);
+
+function nextSegmentId() {
+  segmentCounter += 1;
+  return `seg-${segmentCounter}`;
+}
 
 function stationById(id) {
   return stations.find((station) => station.id === id);
 }
 
-function populateSelects() {
-  stations.forEach((station, index) => {
-    const optionStart = document.createElement('option');
-    optionStart.value = station.id;
-    optionStart.textContent = station.name;
-
-    const optionEnd = document.createElement('option');
-    optionEnd.value = station.id;
-    optionEnd.textContent = station.name;
-
-    startSelect.appendChild(optionStart);
-    endSelect.appendChild(optionEnd);
-
-    if (index === 0) startSelect.value = station.id;
-    if (index === stations.length - 1) endSelect.value = station.id;
-  });
+function makeStationId(name) {
+  const letters = name
+    .toUpperCase()
+    .replace(/[^A-Z]/g, '')
+    .slice(0, 2)
+    .padEnd(2, 'X');
+  stationCounter += 1;
+  return `${letters}${stationCounter}`;
 }
 
-function keyFor(stationId, line) {
+function segmentDistance(segment) {
+  const from = stationById(segment.from);
+  const to = stationById(segment.to);
+  if (!from || !to) return 0;
+  const dx = from.x - to.x;
+  const dy = from.y - to.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function segmentMinutes(segment) {
+  const lineInfo = lineCatalog[segment.line] || { speed: 20 };
+  const distance = segmentDistance(segment);
+  return Math.max(1, Math.round(distance / lineInfo.speed + 1));
+}
+
+function populateSelect(selectElement) {
+  const previous = selectElement.value;
+  selectElement.innerHTML = '';
+
+  stations.forEach((station) => {
+    const option = document.createElement('option');
+    option.value = station.id;
+    option.textContent = station.name;
+    selectElement.appendChild(option);
+  });
+
+  if (previous && stations.some((station) => station.id === previous)) {
+    selectElement.value = previous;
+  }
+}
+
+function syncAllSelects() {
+  [startSelect, endSelect, lineFromSelect, lineToSelect].forEach(populateSelect);
+
+  if (!startSelect.value && stations[0]) {
+    startSelect.value = stations[0].id;
+  }
+
+  if (!endSelect.value && stations[1]) {
+    endSelect.value = stations[1].id;
+  }
+}
+
+function lineBadge(lineName) {
+  const line = lineCatalog[lineName];
+  if (!line) return '';
+  return `<span><i style="background:${line.color}"></i>${lineName.toUpperCase()} (${line.speed}px/min)</span>`;
+}
+
+function renderLegend() {
+  legendEl.innerHTML = Object.keys(lineCatalog)
+    .sort()
+    .map(lineBadge)
+    .join('');
+}
+
+function buildAdjacency() {
+  const adjacency = new Map();
+  stations.forEach((station) => {
+    adjacency.set(station.id, []);
+  });
+
+  segments.forEach((segment) => {
+    const time = segmentMinutes(segment);
+    adjacency.get(segment.from).push({ ...segment, to: segment.to, minutes: time });
+    adjacency.get(segment.to).push({ ...segment, from: segment.to, to: segment.from, minutes: time });
+  });
+
+  return adjacency;
+}
+
+function stateKey(stationId, line) {
   return `${stationId}|${line || 'none'}`;
 }
 
-function dijkstra(startId, endId) {
-  const startKey = keyFor(startId, null);
-  const dist = new Map([[startKey, 0]]);
+function computeRoute(startId, endId) {
+  if (!startId || !endId || startId === endId) return null;
+
+  const adjacency = buildAdjacency();
+  const startKey = stateKey(startId, null);
+
+  const distances = new Map([[startKey, 0]]);
   const previous = new Map();
   const queue = [{ key: startKey, stationId: startId, line: null, cost: 0 }];
-
-  let bestEnd = null;
+  let bestEndState = null;
 
   while (queue.length) {
     queue.sort((a, b) => a.cost - b.cost);
     const current = queue.shift();
 
-    const currentBest = dist.get(current.key);
-    if (current.cost > currentBest) continue;
+    if (current.cost > distances.get(current.key)) continue;
 
     if (current.stationId === endId) {
-      bestEnd = current;
+      bestEndState = current;
       break;
     }
 
     const neighbors = adjacency.get(current.stationId) || [];
     neighbors.forEach((edge) => {
-      const transferCost = current.line && current.line !== edge.line ? transferPenalty : 0;
-      const nextCost = current.cost + edge.time + transferCost;
-      const nextKey = keyFor(edge.to, edge.line);
+      const transferCost = current.line && current.line !== edge.line ? transferPenaltyMinutes : 0;
+      const newCost = current.cost + edge.minutes + transferCost;
+      const nextKey = stateKey(edge.to, edge.line);
 
-      if (!dist.has(nextKey) || nextCost < dist.get(nextKey)) {
-        dist.set(nextKey, nextCost);
+      if (!distances.has(nextKey) || newCost < distances.get(nextKey)) {
+        distances.set(nextKey, newCost);
         previous.set(nextKey, {
           prevKey: current.key,
           from: edge.from,
           to: edge.to,
           line: edge.line,
-          time: edge.time,
+          minutes: edge.minutes,
           transferCost,
         });
 
-        queue.push({
-          key: nextKey,
-          stationId: edge.to,
-          line: edge.line,
-          cost: nextCost,
-        });
+        queue.push({ key: nextKey, stationId: edge.to, line: edge.line, cost: newCost });
       }
     });
   }
 
-  if (!bestEnd) {
-    return null;
-  }
+  if (!bestEndState) return null;
 
-  const segments = [];
-  let cursorKey = bestEnd.key;
+  const routeSegments = [];
+  let cursor = bestEndState.key;
 
-  while (cursorKey !== startKey) {
-    const step = previous.get(cursorKey);
+  while (cursor !== startKey) {
+    const step = previous.get(cursor);
     if (!step) break;
-    segments.push(step);
-    cursorKey = step.prevKey;
+    routeSegments.push(step);
+    cursor = step.prevKey;
   }
 
-  segments.reverse();
+  routeSegments.reverse();
 
-  const transfers = segments.reduce((count, segment) => count + (segment.transferCost > 0 ? 1 : 0), 0);
-  const stationPath = [startId, ...segments.map((segment) => segment.to)];
+  const stationPath = [startId, ...routeSegments.map((segment) => segment.to)];
+  const transferCount = routeSegments.reduce((count, segment) => count + (segment.transferCost > 0 ? 1 : 0), 0);
 
   return {
-    totalMinutes: bestEnd.cost,
-    transfers,
+    startId,
+    endId,
+    totalMinutes: bestEndState.cost,
+    transferCount,
     stationPath,
-    segments,
+    segments: routeSegments,
   };
 }
 
-function renderNetwork(route = null) {
-  const activeStationSet = new Set(route ? route.stationPath : []);
-  const activeEdgeSet = new Set();
-
-  if (route) {
-    route.segments.forEach((segment) => {
-      activeEdgeSet.add([segment.from, segment.to, segment.line].sort().join('|'));
-    });
+function renderMetrics(route) {
+  if (!route) {
+    minutesEl.textContent = '-';
+    stopsEl.textContent = '-';
+    transfersEl.textContent = '-';
+    stepsEl.innerHTML = '';
+    return;
   }
 
-  const edgeSvg = edges
-    .map((edge) => {
-      const from = stationById(edge.from);
-      const to = stationById(edge.to);
-      const edgeKey = [edge.from, edge.to, edge.line].sort().join('|');
-      const activeClass = activeEdgeSet.has(edgeKey) ? 'active' : '';
+  minutesEl.textContent = `${route.totalMinutes}m`;
+  stopsEl.textContent = String(route.stationPath.length - 1);
+  transfersEl.textContent = String(route.transferCount);
 
-      return `<line class="edge ${activeClass}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${lineColors[edge.line]}" />`;
+  stepsEl.innerHTML = route.segments
+    .map((segment, index) => {
+      const fromName = stationById(segment.from)?.name || segment.from;
+      const toName = stationById(segment.to)?.name || segment.to;
+      const transferText = segment.transferCost > 0 ? ` +${segment.transferCost}m transfer` : '';
+      return `<li>${index + 1}. ${fromName} -> ${toName} via ${segment.line.toUpperCase()} (${segment.minutes}m${transferText})</li>`;
+    })
+    .join('');
+}
+
+function activeEdgeSet(route) {
+  const set = new Set();
+  if (!route) return set;
+
+  route.segments.forEach((segment) => {
+    const edgeKey = [segment.from, segment.to, segment.line].sort().join('|');
+    set.add(edgeKey);
+  });
+
+  return set;
+}
+
+function renderMap(route) {
+  const activeStations = new Set(route ? route.stationPath : []);
+  const activeEdges = activeEdgeSet(route);
+
+  const edgeMarkup = segments
+    .map((segment) => {
+      const from = stationById(segment.from);
+      const to = stationById(segment.to);
+      if (!from || !to) return '';
+
+      const line = lineCatalog[segment.line] || { color: '#6b7280' };
+      const key = [segment.from, segment.to, segment.line].sort().join('|');
+      const activeClass = activeEdges.has(key) ? 'active' : '';
+
+      return `<line class="edge ${activeClass}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${line.color}" data-segment-id="${segment.id}" />`;
     })
     .join('');
 
-  const stationSvg = stations
+  const stationMarkup = stations
     .map((station) => {
-      const activeClass = activeStationSet.has(station.id) ? 'active' : '';
+      const activeClass = activeStations.has(station.id) ? 'active' : '';
+      const draggingClass = draggingStationId === station.id ? 'dragging' : '';
       return `
         <g>
-          <circle class="station ${activeClass}" cx="${station.x}" cy="${station.y}" r="12"></circle>
-          <text class="station-label" x="${station.x + 15}" y="${station.y + 4}">${station.name}</text>
+          <circle class="station ${activeClass} ${draggingClass}" cx="${station.x}" cy="${station.y}" r="13" data-station-id="${station.id}"></circle>
+          <text class="station-label" x="${station.x + 16}" y="${station.y + 4}">${station.name}</text>
         </g>
       `;
     })
     .join('');
 
-  networkSvg.innerHTML = `${edgeSvg}${stationSvg}`;
-}
+  networkSvg.innerHTML = `${edgeMarkup}${stationMarkup}`;
 
-function renderRouteDetails(route) {
-  minutesEl.textContent = `${route.totalMinutes}m`;
-  stopsEl.textContent = String(route.stationPath.length - 1);
-  transfersEl.textContent = String(route.transfers);
-
-  stepsEl.innerHTML = '';
-  route.segments.forEach((segment, index) => {
-    const fromName = stationById(segment.from).name;
-    const toName = stationById(segment.to).name;
-
-    const step = document.createElement('li');
-    const transferText = segment.transferCost > 0 ? ` +${segment.transferCost}m transfer` : '';
-    step.textContent = `${index + 1}. ${fromName} -> ${toName} via ${segment.line.toUpperCase()} (${segment.time}m${transferText})`;
-    stepsEl.appendChild(step);
+  Array.from(networkSvg.querySelectorAll('[data-station-id]')).forEach((circle) => {
+    circle.addEventListener('pointerdown', (event) => {
+      draggingStationId = circle.dataset.stationId;
+      circle.setPointerCapture(event.pointerId);
+    });
   });
 }
 
-function clearRouteDetails() {
-  minutesEl.textContent = '-';
-  stopsEl.textContent = '-';
-  transfersEl.textContent = '-';
-  stepsEl.innerHTML = '';
+function svgCoordinates(event) {
+  const point = networkSvg.createSVGPoint();
+  point.x = event.clientX;
+  point.y = event.clientY;
+  return point.matrixTransform(networkSvg.getScreenCTM().inverse());
 }
 
-function runRoute() {
+function rerouteAndRender(autoMode) {
   const startId = startSelect.value;
   const endId = endSelect.value;
 
-  if (startId === endId) {
-    statusEl.textContent = 'Start and destination must be different stations.';
-    clearRouteDetails();
-    renderNetwork();
-    return;
+  currentRoute = computeRoute(startId, endId);
+  renderMetrics(currentRoute);
+  renderMap(currentRoute);
+
+  if (!currentRoute) {
+    statusEl.textContent = 'No valid route for current network.';
+  } else if (!autoMode) {
+    const startName = stationById(startId)?.name || startId;
+    const endName = stationById(endId)?.name || endId;
+    statusEl.textContent = `Fastest route from ${startName} to ${endName}.`;
   }
 
-  const result = dijkstra(startId, endId);
-  if (!result) {
-    statusEl.textContent = 'No route found.';
-    clearRouteDetails();
-    renderNetwork();
-    return;
-  }
-
-  const startName = stationById(startId).name;
-  const endName = stationById(endId).name;
-
-  statusEl.textContent = `Fastest route from ${startName} to ${endName}.`;
-  renderRouteDetails(result);
-  renderNetwork(result);
+  evaluateChallenge(currentRoute);
 }
 
-runButton.addEventListener('click', runRoute);
+function addStop() {
+  const rawName = newStopInput.value.trim();
+  if (!rawName) {
+    editorStatusEl.textContent = 'Type a stop name first.';
+    return;
+  }
 
-populateSelects();
-renderNetwork();
-statusEl.textContent = 'Select two stations and compute a route.';
+  const id = makeStationId(rawName);
+  stations.push({
+    id,
+    name: rawName,
+    x: 400 + Math.random() * 90 - 45,
+    y: 260 + Math.random() * 90 - 45,
+  });
+
+  syncAllSelects();
+  newStopInput.value = '';
+  editorStatusEl.textContent = `Added stop: ${rawName}.`;
+  rerouteAndRender(true);
+}
+
+function addLineSegment() {
+  const from = lineFromSelect.value;
+  const to = lineToSelect.value;
+  const lineName = lineNameInput.value.trim().toLowerCase();
+  const color = lineColorInput.value;
+  const speed = Number(lineSpeedInput.value);
+
+  if (!from || !to || from === to) {
+    editorStatusEl.textContent = 'Select two different stops for a line segment.';
+    return;
+  }
+
+  if (!lineName) {
+    editorStatusEl.textContent = 'Provide a line name.';
+    return;
+  }
+
+  if (!Number.isFinite(speed) || speed <= 0) {
+    editorStatusEl.textContent = 'Line speed must be a positive number.';
+    return;
+  }
+
+  const duplicate = segments.some((segment) => {
+    const sameDirection = segment.from === from && segment.to === to;
+    const reverseDirection = segment.from === to && segment.to === from;
+    return (sameDirection || reverseDirection) && segment.line === lineName;
+  });
+
+  if (duplicate) {
+    editorStatusEl.textContent = 'That segment already exists for this line.';
+    return;
+  }
+
+  lineCatalog[lineName] = { color, speed };
+  segments.push({ id: nextSegmentId(), from, to, line: lineName });
+
+  editorStatusEl.textContent = `Added ${lineName.toUpperCase()} segment.`;
+  renderLegend();
+  rerouteAndRender(true);
+}
+
+function randomPair() {
+  if (stations.length < 2) return null;
+  const first = Math.floor(Math.random() * stations.length);
+  let second = Math.floor(Math.random() * stations.length);
+  while (second === first) {
+    second = Math.floor(Math.random() * stations.length);
+  }
+  return [stations[first].id, stations[second].id];
+}
+
+function newChallenge() {
+  const pair = randomPair();
+  if (!pair) return;
+
+  const [startId, endId] = pair;
+  startSelect.value = startId;
+  endSelect.value = endId;
+
+  const baseline = computeRoute(startId, endId);
+  if (!baseline) {
+    challengeTextEl.textContent = 'Challenge generation failed (no route). Edit the network and retry.';
+    return;
+  }
+
+  challenge = {
+    startId,
+    endId,
+    targetMinutes: Math.max(4, baseline.totalMinutes - (2 + Math.floor(Math.random() * 4))),
+    maxTransfers: baseline.transferCount,
+    completed: false,
+  };
+
+  challengeTextEl.textContent = `Challenge: ${stationById(startId).name} -> ${stationById(endId).name}. Keep total <= ${
+    challenge.targetMinutes
+  }m and transfers <= ${challenge.maxTransfers}.`;
+
+  rerouteAndRender(true);
+}
+
+function evaluateChallenge(route) {
+  if (!challenge || challenge.completed || !route) return;
+
+  if (route.startId !== challenge.startId || route.endId !== challenge.endId) return;
+
+  if (route.totalMinutes <= challenge.targetMinutes && route.transferCount <= challenge.maxTransfers) {
+    challenge.completed = true;
+    challengeScore += 1;
+    localStorage.setItem('transit_lab_score', String(challengeScore));
+    challengeScoreEl.textContent = String(challengeScore);
+
+    challengeTextEl.textContent = `Solved: ${route.totalMinutes}m, ${route.transferCount} transfers. Nice optimization.`;
+  }
+}
+
+runButton.addEventListener('click', () => rerouteAndRender(false));
+addStopButton.addEventListener('click', addStop);
+addLineButton.addEventListener('click', addLineSegment);
+newChallengeButton.addEventListener('click', newChallenge);
+startSelect.addEventListener('change', () => rerouteAndRender(true));
+endSelect.addEventListener('change', () => rerouteAndRender(true));
+
+networkSvg.addEventListener('pointermove', (event) => {
+  if (!draggingStationId) return;
+
+  const station = stationById(draggingStationId);
+  if (!station) return;
+
+  const point = svgCoordinates(event);
+  station.x = Math.max(24, Math.min(816, point.x));
+  station.y = Math.max(24, Math.min(496, point.y));
+
+  rerouteAndRender(true);
+});
+
+networkSvg.addEventListener('pointerup', () => {
+  draggingStationId = null;
+  rerouteAndRender(true);
+});
+
+networkSvg.addEventListener('pointerleave', () => {
+  draggingStationId = null;
+});
+
+syncAllSelects();
+renderLegend();
+rerouteAndRender(true);
+statusEl.textContent = 'Drag any stop to live-update route time and transfers.';
+challengeTextEl.textContent = 'Press "New Challenge" to generate an optimization goal.';

@@ -1,43 +1,20 @@
-# Transit Network Lab
+﻿# Transit Network Lab
 
-Interactive urban rail routing simulator using shortest-path computation with transfer penalties.
+Interactive transit systems editor and optimization playground.
 
 ## Features
 
-- Choose start and destination stations.
-- Compute fastest route using Dijkstra-based search.
-- Includes transfer penalty modeling.
-- Visual route highlighting on network map.
-- Route metrics:
-  - Total travel minutes
-  - Stops traversed
-  - Number of transfers
+- Drag-and-drop stop positions with live route recomputation.
+- Dynamic transfer-aware shortest-path routing.
+- Add new stops.
+- Add custom line segments with configurable color and speed.
+- Route metrics (time, stops, transfers) update in real time.
+- Optimization mode with challenge goals and persistent score.
 
-## Technical Design
-
-- `index.html`: controls, metrics, and map containers.
-- `styles.css`: responsive layout and route-highlight styling.
-- `script.js`: graph modeling, weighted routing, and SVG rendering.
-
-```mermaid
-flowchart TD
-  A[Start + End Stations] --> B[Graph Search]
-  B --> C[Shortest Route with Transfer Cost]
-  C --> D[Metrics Panel]
-  C --> E[Map Highlighting]
-  C --> F[Route Step List]
-```
-
-## Local Run
+## Local run
 
 ```bash
 python -m http.server 8000
 ```
 
 Open `projects/transit-network-lab/index.html`.
-
-## Future Improvements
-
-- Time-of-day schedules and headway modeling.
-- Accessibility weighting (stairs/escalator penalties).
-- Delay simulation and rerouting under disruptions.

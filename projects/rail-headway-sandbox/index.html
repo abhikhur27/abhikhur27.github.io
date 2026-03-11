@@ -1,0 +1,79 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rail Headway Sandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <h1>Rail Headway Sandbox</h1>
+    <p>Explore how fleet size, dwell time, and line speed shape waiting time and corridor throughput.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel controls">
+      <h2>Inputs</h2>
+
+      <label>
+        Line Length (km): <span id="length-label">18</span>
+        <input id="length" type="range" min="6" max="40" value="18" step="1">
+      </label>
+
+      <label>
+        Trains in Service: <span id="trains-label">14</span>
+        <input id="trains" type="range" min="4" max="36" value="14" step="1">
+      </label>
+
+      <label>
+        Average Speed (km/h): <span id="speed-label">35</span>
+        <input id="speed" type="range" min="18" max="65" value="35" step="1">
+      </label>
+
+      <label>
+        Dwell Time per Stop (seconds): <span id="dwell-label">28</span>
+        <input id="dwell" type="range" min="10" max="60" value="28" step="1">
+      </label>
+
+      <p id="challenge" class="challenge"></p>
+      <button id="new-challenge" type="button">New Challenge</button>
+    </section>
+
+    <section class="panel output">
+      <h2>Service Metrics</h2>
+      <div class="metrics">
+        <article>
+          <h3>Round Trip Time</h3>
+          <p id="roundtrip">-</p>
+        </article>
+        <article>
+          <h3>Headway</h3>
+          <p id="headway">-</p>
+        </article>
+        <article>
+          <h3>Expected Wait</h3>
+          <p id="wait">-</p>
+        </article>
+        <article>
+          <h3>Trains / Hour / Direction</h3>
+          <p id="tph">-</p>
+        </article>
+        <article>
+          <h3>Passengers / Hour / Direction</h3>
+          <p id="pph">-</p>
+        </article>
+      </div>
+
+      <h2>Interpretation</h2>
+      <p id="insight" class="insight"></p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
