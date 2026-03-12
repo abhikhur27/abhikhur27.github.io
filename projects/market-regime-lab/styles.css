@@ -172,6 +172,16 @@ canvas {
   gap: 0.35rem;
 }
 
+.legend-actions {
+  margin-top: 0.45rem;
+}
+
+.legend-actions button {
+  margin-top: 0;
+  padding: 0.38rem 0.62rem;
+  font-size: 0.84rem;
+}
+
 .legend-line {
   width: 22px;
   height: 2px;

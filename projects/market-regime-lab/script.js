@@ -25,6 +25,7 @@ const labels = {
 
 const runBtn = document.getElementById('run');
 const rerollBtn = document.getElementById('reroll');
+const togglePathsBtn = document.getElementById('toggle-paths');
 const statusEl = document.getElementById('status');
 const insightEl = document.getElementById('insight');
 const distributionEl = document.getElementById('distribution');
@@ -59,9 +60,11 @@ let chartState = {
   p10: [100],
   p50: [100],
   p90: [100],
+  sampledPaths: [],
   minY: 90,
   maxY: 110,
   progress: 1,
+  showAllPaths: false,
   animationFrame: null,
 };
 
@@ -270,10 +273,11 @@ function drawGrid(width, height, margin, minY, maxY) {
   ctx.setLineDash([]);
 }
 
-function drawLine(series, color, width, progress, bounds) {
+function drawLine(series, color, width, progress, bounds, alpha = 1) {
   const { margin, innerWidth, innerHeight, minY, maxY } = bounds;
   const visibleCount = Math.max(2, Math.floor(series.length * progress));
 
+  ctx.globalAlpha = alpha;
   ctx.strokeStyle = color;
   ctx.lineWidth = width;
   ctx.beginPath();
@@ -291,6 +295,30 @@ function drawLine(series, color, width, progress, bounds) {
   }
 
   ctx.stroke();
+  ctx.globalAlpha = 1;
+}
+
+function drawSamplePaths(progress, bounds) {
+  if (!chartState.showAllPaths || !chartState.sampledPaths.length) return;
+
+  chartState.sampledPaths.forEach((series, index) => {
+    const hue = (index * 29) % 360;
+    const color = `hsl(${hue} 70% 64%)`;
+    drawLine(series, color, 1.1, progress, bounds, 0.18);
+  });
+}
+
+function samplePaths(paths, maxCount) {
+  if (paths.length <= maxCount) {
+    return paths.map((item) => item.path);
+  }
+
+  const output = [];
+  const step = paths.length / maxCount;
+  for (let i = 0; i < maxCount; i += 1) {
+    output.push(paths[Math.floor(i * step)].path);
+  }
+  return output;
 }
 
 function drawChart() {
@@ -310,6 +338,7 @@ function drawChart() {
     maxY: chartState.maxY,
   };
 
+  drawSamplePaths(chartState.progress, bounds);
   drawLine(chartState.p10, '#4562a1', 2, chartState.progress, bounds);
   drawLine(chartState.p50, '#d7defe', 2.5, chartState.progress, bounds);
   drawLine(chartState.p90, '#a4f2d0', 2, chartState.progress, bounds);
@@ -409,6 +438,7 @@ function runSimulation() {
     chartState = {
       ...chartState,
       ...envelope,
+      sampledPaths: samplePaths(paths, 120),
       progress: 0,
     };
 
@@ -484,6 +514,11 @@ presetButtons.forEach((button) => {
 
 runBtn.addEventListener('click', runSimulation);
 rerollBtn.addEventListener('click', randomizeInputs);
+togglePathsBtn.addEventListener('click', () => {
+  chartState.showAllPaths = !chartState.showAllPaths;
+  togglePathsBtn.textContent = chartState.showAllPaths ? 'Hide All Paths' : 'Show All Paths';
+  drawChart();
+});
 
 writeConfigToControls(loadSavedConfig());
 runSimulation();

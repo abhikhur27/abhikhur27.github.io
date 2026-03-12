@@ -209,6 +209,10 @@ button.primary {
   margin-top: 0.28rem;
 }
 
+.selection-card label {
+  margin-top: 0.5rem;
+}
+
 .selection-actions {
   margin-top: 0.48rem;
   display: grid;
@@ -220,6 +224,17 @@ button.primary {
   margin-top: 0;
   padding: 0.38rem 0.45rem;
   font-size: 0.83rem;
+}
+
+.terrain-actions {
+  margin-top: 0.6rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.terrain-actions button {
+  margin-top: 0;
 }
 
 .score {
@@ -267,6 +282,25 @@ button.primary {
   touch-action: none;
 }
 
+.terrain-lake {
+  fill: rgba(49, 130, 206, 0.32);
+  stroke: rgba(49, 130, 206, 0.7);
+  stroke-width: 2;
+}
+
+.terrain-obstacle {
+  fill: rgba(185, 100, 68, 0.28);
+  stroke: rgba(185, 100, 68, 0.7);
+  stroke-width: 2;
+}
+
+.terrain-river {
+  fill: none;
+  stroke: rgba(58, 138, 219, 0.62);
+  stroke-width: 18;
+  stroke-linecap: round;
+}
+
 .edge {
   stroke-width: 8;
   stroke-linecap: round;
@@ -282,6 +316,11 @@ button.primary {
   stroke-width: 12;
   opacity: 1;
   filter: drop-shadow(0 0 4px rgba(215, 222, 254, 0.65));
+}
+
+.edge.blocked {
+  stroke: rgba(148, 163, 184, 0.55) !important;
+  stroke-dasharray: 9 8;
 }
 
 .station {
@@ -346,7 +385,8 @@ button.primary {
   }
 
   .mode-row,
-  .selection-actions {
+  .selection-actions,
+  .terrain-actions {
     grid-template-columns: 1fr;
   }
 }

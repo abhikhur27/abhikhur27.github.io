@@ -23,6 +23,13 @@ const selectedStopLabel = document.getElementById('selected-stop-label');
 const selectedSegmentLabel = document.getElementById('selected-segment-label');
 const deleteSelectedStopButton = document.getElementById('delete-selected-stop');
 const deleteSelectedSegmentButton = document.getElementById('delete-selected-segment');
+const segmentCurveInput = document.getElementById('segment-curve');
+
+const addObstacleButton = document.getElementById('add-obstacle');
+const addLakeButton = document.getElementById('add-lake');
+const addRiverButton = document.getElementById('add-river');
+const clearTerrainButton = document.getElementById('clear-terrain');
+const randomCityButton = document.getElementById('random-city');
 
 const newChallengeButton = document.getElementById('new-challenge');
 const challengeTextEl = document.getElementById('challenge-text');
@@ -37,11 +44,13 @@ const networkSvg = document.getElementById('network');
 const legendEl = document.getElementById('line-legend');
 
 const transferPenaltyMinutes = 2;
+const riverPenaltyMinutes = 3;
 const SCORE_KEY = 'transit_lab_score';
 const STREAK_KEY = 'transit_lab_streak';
 
 let stationCounter = 0;
 let segmentCounter = 0;
+let terrainCounter = 0;
 
 const stations = [
   { id: 'UN', name: 'Union', x: 90, y: 260 },
@@ -59,6 +68,8 @@ const lineCatalog = {
   red: { color: '#dc2626', speed: 21 },
   green: { color: '#16a34a', speed: 22 },
 };
+
+const terrain = [];
 
 const segments = [
   { id: nextSegmentId(), from: 'UN', to: 'CE', line: 'blue' },
@@ -102,6 +113,14 @@ function segmentById(id) {
   return segments.find((segment) => segment.id === id);
 }
 
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function randomBetween(min, max) {
+  return min + Math.random() * (max - min);
+}
+
 function makeStationId(name) {
   const letters = name
     .toUpperCase()
@@ -112,20 +131,122 @@ function makeStationId(name) {
   return `${letters}${stationCounter}`;
 }
 
-function segmentDistance(segment) {
+function nextTerrainId() {
+  terrainCounter += 1;
+  return `terrain-${terrainCounter}`;
+}
+
+function segmentControlPoint(segment) {
   const from = stationById(segment.from);
   const to = stationById(segment.to);
-  if (!from || !to) return 0;
+  if (!from || !to) return null;
 
-  const dx = from.x - to.x;
-  const dy = from.y - to.y;
+  const midX = (from.x + to.x) / 2;
+  const midY = (from.y + to.y) / 2;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const length = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+  const nx = -dy / length;
+  const ny = dx / length;
+  const curve = segment.curve || 0;
+  return { x: midX + nx * curve, y: midY + ny * curve };
+}
+
+function segmentPathD(segment) {
+  const from = stationById(segment.from);
+  const to = stationById(segment.to);
+  const control = segmentControlPoint(segment);
+  if (!from || !to || !control) return '';
+  return `M ${from.x} ${from.y} Q ${control.x} ${control.y} ${to.x} ${to.y}`;
+}
+
+function sampleSegmentPoints(segment, count = 24) {
+  const from = stationById(segment.from);
+  const to = stationById(segment.to);
+  const control = segmentControlPoint(segment);
+  if (!from || !to || !control) return [];
+
+  const output = [];
+  for (let i = 0; i <= count; i += 1) {
+    const t = i / count;
+    const inv = 1 - t;
+    const x = inv * inv * from.x + 2 * inv * t * control.x + t * t * to.x;
+    const y = inv * inv * from.y + 2 * inv * t * control.y + t * t * to.y;
+    output.push({ x, y });
+  }
+  return output;
+}
+
+function pointInsideEllipse(point, shape) {
+  const rx = Math.max(1, shape.rx);
+  const ry = Math.max(1, shape.ry);
+  const dx = (point.x - shape.x) / rx;
+  const dy = (point.y - shape.y) / ry;
+  return dx * dx + dy * dy <= 1;
+}
+
+function distanceToLine(point, a, b) {
+  const vx = b.x - a.x;
+  const vy = b.y - a.y;
+  const wx = point.x - a.x;
+  const wy = point.y - a.y;
+  const len2 = vx * vx + vy * vy;
+  if (len2 === 0) return Math.sqrt(wx * wx + wy * wy);
+
+  const t = clamp((wx * vx + wy * vy) / len2, 0, 1);
+  const px = a.x + vx * t;
+  const py = a.y + vy * t;
+  const dx = point.x - px;
+  const dy = point.y - py;
   return Math.sqrt(dx * dx + dy * dy);
+}
+
+function pointNearRiver(point, shape) {
+  const dist = distanceToLine(point, { x: shape.x1, y: shape.y1 }, { x: shape.x2, y: shape.y2 });
+  return dist <= (shape.width || 18) / 2;
+}
+
+function segmentTerrainInfo(segment) {
+  const points = sampleSegmentPoints(segment, 24);
+  if (!points.length) return { blocked: false, riverHits: 0 };
+
+  let blocked = false;
+  let riverHits = 0;
+
+  terrain.forEach((shape) => {
+    if (shape.type === 'obstacle' || shape.type === 'lake') {
+      if (points.some((point) => pointInsideEllipse(point, shape))) {
+        blocked = true;
+      }
+      return;
+    }
+
+    if (shape.type === 'river' && points.some((point) => pointNearRiver(point, shape))) {
+      riverHits += 1;
+    }
+  });
+
+  return { blocked, riverHits };
+}
+
+function segmentDistance(segment) {
+  const points = sampleSegmentPoints(segment, 24);
+  if (!points.length) return 0;
+
+  let total = 0;
+  for (let i = 1; i < points.length; i += 1) {
+    const dx = points[i].x - points[i - 1].x;
+    const dy = points[i].y - points[i - 1].y;
+    total += Math.sqrt(dx * dx + dy * dy);
+  }
+  return total;
 }
 
 function segmentMinutes(segment) {
   const lineInfo = lineCatalog[segment.line] || { speed: 20 };
   const distance = segmentDistance(segment);
-  return Math.max(1, Math.round(distance / lineInfo.speed + 1));
+  const terrainInfo = segmentTerrainInfo(segment);
+  return Math.max(1, Math.round(distance / lineInfo.speed + 1)) + terrainInfo.riverHits * riverPenaltyMinutes;
 }
 
 function formatDistance(distance) {
@@ -171,10 +292,13 @@ function lineBadge(lineName) {
 }
 
 function renderLegend() {
-  legendEl.innerHTML = Object.keys(lineCatalog)
+  const entries = Object.keys(lineCatalog)
     .sort()
-    .map(lineBadge)
-    .join('');
+    .map(lineBadge);
+
+  entries.push('<span><i style="background:rgba(185,100,68,0.65)"></i>Obstacle</span>');
+  entries.push('<span><i style="background:rgba(49,130,206,0.65)"></i>Water</span>');
+  legendEl.innerHTML = entries.join('');
 }
 
 function buildAdjacency() {
@@ -184,11 +308,31 @@ function buildAdjacency() {
   });
 
   segments.forEach((segment) => {
+    const terrainInfo = segmentTerrainInfo(segment);
+    if (terrainInfo.blocked) {
+      return;
+    }
+
     const time = segmentMinutes(segment);
     const distance = segmentDistance(segment);
 
-    adjacency.get(segment.from).push({ ...segment, to: segment.to, minutes: time, distance });
-    adjacency.get(segment.to).push({ ...segment, from: segment.to, to: segment.from, minutes: time, distance });
+    adjacency.get(segment.from).push({
+      ...segment,
+      id: segment.id,
+      to: segment.to,
+      minutes: time,
+      distance,
+      terrainPenalty: terrainInfo.riverHits * riverPenaltyMinutes,
+    });
+    adjacency.get(segment.to).push({
+      ...segment,
+      id: segment.id,
+      from: segment.to,
+      to: segment.from,
+      minutes: time,
+      distance,
+      terrainPenalty: terrainInfo.riverHits * riverPenaltyMinutes,
+    });
   });
 
   return adjacency;
@@ -230,12 +374,14 @@ function computeRoute(startId, endId) {
         distances.set(nextKey, newCost);
         previous.set(nextKey, {
           prevKey: current.key,
+          id: edge.id,
           from: edge.from,
           to: edge.to,
           line: edge.line,
           minutes: edge.minutes,
           distance: edge.distance,
           transferCost,
+          terrainPenalty: edge.terrainPenalty || 0,
         });
 
         queue.push({ key: nextKey, stationId: edge.to, line: edge.line, cost: newCost });
@@ -292,9 +438,10 @@ function renderMetrics(route) {
       const fromName = stationById(segment.from)?.name || segment.from;
       const toName = stationById(segment.to)?.name || segment.to;
       const transferText = segment.transferCost > 0 ? ` +${segment.transferCost}m transfer` : '';
+      const terrainText = segment.terrainPenalty > 0 ? ` +${segment.terrainPenalty}m water` : '';
       return `<li>${fromName} -> ${toName} via ${segment.line.toUpperCase()} (${segment.minutes}m, ${formatDistance(
         segment.distance
-      )}${transferText})</li>`;
+      )}${transferText}${terrainText})</li>`;
     })
     .join('');
 }
@@ -303,55 +450,60 @@ function activeEdgeSet(route) {
   const set = new Set();
   if (!route) return set;
 
-  route.segments.forEach((segment) => {
-    const edgeKey = [segment.from, segment.to, segment.line].sort().join('|');
-    set.add(edgeKey);
-  });
+  route.segments.forEach((segment) => set.add(segment.id));
 
   return set;
-}
-
-function selectedSegmentKey() {
-  const segment = segmentById(selectedSegmentId);
-  if (!segment) return null;
-  return [segment.from, segment.to, segment.line].sort().join('|');
 }
 
 function updateSelectionLabels() {
   selectedStopLabel.textContent = selectedStopId ? stationById(selectedStopId)?.name || selectedStopId : 'None';
 
-  if (!selectedSegmentId) {
+  if (!selectedSegmentId || !segmentById(selectedSegmentId)) {
     selectedSegmentLabel.textContent = 'None';
+    segmentCurveInput.value = '0';
+    segmentCurveInput.disabled = true;
   } else {
     const segment = segmentById(selectedSegmentId);
-    if (segment) {
-      const fromName = stationById(segment.from)?.name || segment.from;
-      const toName = stationById(segment.to)?.name || segment.to;
-      selectedSegmentLabel.textContent = `${segment.line.toUpperCase()} ${fromName} -> ${toName}`;
-    } else {
-      selectedSegmentLabel.textContent = 'None';
-    }
+    const fromName = stationById(segment.from)?.name || segment.from;
+    const toName = stationById(segment.to)?.name || segment.to;
+    const terrainInfo = segmentTerrainInfo(segment);
+    selectedSegmentLabel.textContent = `${segment.line.toUpperCase()} ${fromName} -> ${toName}${
+      terrainInfo.blocked ? ' (blocked)' : ''
+    }`;
+    segmentCurveInput.disabled = false;
+    segmentCurveInput.value = String(Math.round(segment.curve || 0));
   }
 }
 
 function renderMap(route) {
   const activeStations = new Set(route ? route.stationPath : []);
   const activeEdges = activeEdgeSet(route);
-  const selectedEdgeKey = selectedSegmentKey();
+  const terrainMarkup = terrain
+    .map((shape) => {
+      if (shape.type === 'obstacle') {
+        return `<ellipse class="terrain-obstacle" cx="${shape.x}" cy="${shape.y}" rx="${shape.rx}" ry="${shape.ry}"></ellipse>`;
+      }
+      if (shape.type === 'lake') {
+        return `<ellipse class="terrain-lake" cx="${shape.x}" cy="${shape.y}" rx="${shape.rx}" ry="${shape.ry}"></ellipse>`;
+      }
+      if (shape.type === 'river') {
+        const controlX = (shape.x1 + shape.x2) / 2 + shape.curve;
+        const controlY = (shape.y1 + shape.y2) / 2 - shape.curve * 0.2;
+        return `<path class="terrain-river" d="M ${shape.x1} ${shape.y1} Q ${controlX} ${controlY} ${shape.x2} ${shape.y2}" style="stroke-width:${shape.width}"></path>`;
+      }
+      return '';
+    })
+    .join('');
 
   const edgeMarkup = segments
     .map((segment) => {
-      const from = stationById(segment.from);
-      const to = stationById(segment.to);
-      if (!from || !to) return '';
-
       const line = lineCatalog[segment.line] || { color: '#6b7280' };
-      const key = [segment.from, segment.to, segment.line].sort().join('|');
       const classes = ['edge'];
-      if (activeEdges.has(key)) classes.push('active');
-      if (selectedEdgeKey === key) classes.push('selected');
+      if (activeEdges.has(segment.id)) classes.push('active');
+      if (selectedSegmentId === segment.id) classes.push('selected');
+      if (segmentTerrainInfo(segment).blocked) classes.push('blocked');
 
-      return `<line class="${classes.join(' ')}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${line.color}" data-segment-id="${segment.id}" />`;
+      return `<path class="${classes.join(' ')}" d="${segmentPathD(segment)}" stroke="${line.color}" data-segment-id="${segment.id}" />`;
     })
     .join('');
 
@@ -371,7 +523,7 @@ function renderMap(route) {
     })
     .join('');
 
-  networkSvg.innerHTML = `${edgeMarkup}${stationMarkup}`;
+  networkSvg.innerHTML = `${terrainMarkup}${edgeMarkup}${stationMarkup}`;
 
   Array.from(networkSvg.querySelectorAll('[data-segment-id]')).forEach((line) => {
     line.addEventListener('pointerdown', (event) => {
@@ -638,6 +790,165 @@ function addStop() {
   rerouteAndRender(true);
 }
 
+function addObstacle() {
+  terrain.push({
+    id: nextTerrainId(),
+    type: 'obstacle',
+    x: randomBetween(120, 780),
+    y: randomBetween(100, 460),
+    rx: randomBetween(35, 70),
+    ry: randomBetween(25, 60),
+  });
+  registerEdit('Added obstacle');
+  rerouteAndRender(true);
+}
+
+function addLake() {
+  terrain.push({
+    id: nextTerrainId(),
+    type: 'lake',
+    x: randomBetween(120, 780),
+    y: randomBetween(100, 460),
+    rx: randomBetween(45, 90),
+    ry: randomBetween(30, 74),
+  });
+  registerEdit('Added lake');
+  rerouteAndRender(true);
+}
+
+function addRiver() {
+  terrain.push({
+    id: nextTerrainId(),
+    type: 'river',
+    x1: randomBetween(70, 210),
+    y1: randomBetween(70, 500),
+    x2: randomBetween(640, 840),
+    y2: randomBetween(70, 500),
+    curve: randomBetween(-130, 130),
+    width: randomBetween(14, 24),
+  });
+  registerEdit('Added river');
+  rerouteAndRender(true);
+}
+
+function clearTerrain() {
+  terrain.length = 0;
+  registerEdit('Cleared terrain');
+  rerouteAndRender(true);
+}
+
+function randomLineName() {
+  const names = Object.keys(lineCatalog);
+  return names[Math.floor(Math.random() * names.length)];
+}
+
+function randomCity() {
+  clearChallengeTimer();
+  challenge = null;
+  stations.length = 0;
+  segments.length = 0;
+  terrain.length = 0;
+
+  const palette = {
+    blue: { color: '#2563eb', speed: 24 },
+    red: { color: '#dc2626', speed: 21 },
+    green: { color: '#16a34a', speed: 22 },
+    amber: { color: '#d97706', speed: 20 },
+  };
+  Object.keys(lineCatalog).forEach((line) => delete lineCatalog[line]);
+  Object.assign(lineCatalog, palette);
+
+  const count = 8 + Math.floor(Math.random() * 5);
+  for (let i = 0; i < count; i += 1) {
+    stations.push({
+      id: `S${i + 1}`,
+      name: `Stop ${i + 1}`,
+      x: randomBetween(88, 812),
+      y: randomBetween(86, 492),
+    });
+  }
+
+  const obstacleCount = 2 + Math.floor(Math.random() * 3);
+  const lakeCount = 1 + Math.floor(Math.random() * 2);
+  const riverCount = 1 + Math.floor(Math.random() * 2);
+
+  for (let i = 0; i < obstacleCount; i += 1) {
+    terrain.push({
+      id: nextTerrainId(),
+      type: 'obstacle',
+      x: randomBetween(120, 780),
+      y: randomBetween(100, 460),
+      rx: randomBetween(35, 70),
+      ry: randomBetween(25, 60),
+    });
+  }
+  for (let i = 0; i < lakeCount; i += 1) {
+    terrain.push({
+      id: nextTerrainId(),
+      type: 'lake',
+      x: randomBetween(120, 780),
+      y: randomBetween(100, 460),
+      rx: randomBetween(45, 90),
+      ry: randomBetween(30, 74),
+    });
+  }
+  for (let i = 0; i < riverCount; i += 1) {
+    terrain.push({
+      id: nextTerrainId(),
+      type: 'river',
+      x1: randomBetween(70, 210),
+      y1: randomBetween(70, 500),
+      x2: randomBetween(640, 840),
+      y2: randomBetween(70, 500),
+      curve: randomBetween(-130, 130),
+      width: randomBetween(14, 24),
+    });
+  }
+
+  const sortedStations = [...stations].sort((a, b) => a.x - b.x);
+  for (let i = 1; i < sortedStations.length; i += 1) {
+    segments.push({
+      id: nextSegmentId(),
+      from: sortedStations[i - 1].id,
+      to: sortedStations[i].id,
+      line: randomLineName(),
+      curve: randomBetween(-45, 45),
+    });
+  }
+
+  for (let i = 0; i < stations.length * 2; i += 1) {
+    const a = stations[Math.floor(Math.random() * stations.length)];
+    const b = stations[Math.floor(Math.random() * stations.length)];
+    if (!a || !b || a.id === b.id) continue;
+
+    const duplicate = segments.some((segment) => {
+      const same = segment.from === a.id && segment.to === b.id;
+      const reverse = segment.from === b.id && segment.to === a.id;
+      return same || reverse;
+    });
+    if (duplicate) continue;
+
+    segments.push({
+      id: nextSegmentId(),
+      from: a.id,
+      to: b.id,
+      line: randomLineName(),
+      curve: randomBetween(-60, 60),
+    });
+  }
+
+  selectedStopId = null;
+  selectedSegmentId = null;
+  connectAnchorId = null;
+
+  syncRouteSelects();
+  renderLegend();
+  rerouteAndRender(true);
+  editorStatusEl.textContent = 'Generated random city with terrain and curved routes.';
+  challengeTextEl.textContent = 'Random city generated. Press "New Challenge" for a fresh optimization goal.';
+  setChallengePanel(currentRoute);
+}
+
 function createRouteSegment(from, to) {
   const lineName = lineNameInput.value.trim().toLowerCase();
   const color = lineColorInput.value;
@@ -670,7 +981,7 @@ function createRouteSegment(from, to) {
   }
 
   lineCatalog[lineName] = { color, speed };
-  const newSegment = { id: nextSegmentId(), from, to, line: lineName };
+  const newSegment = { id: nextSegmentId(), from, to, line: lineName, curve: randomBetween(-32, 32) };
   segments.push(newSegment);
   selectedSegmentId = newSegment.id;
 
@@ -812,6 +1123,11 @@ function generateChallenge() {
 runButton.addEventListener('click', () => rerouteAndRender(false));
 addStopButton.addEventListener('click', addStop);
 newChallengeButton.addEventListener('click', generateChallenge);
+addObstacleButton.addEventListener('click', addObstacle);
+addLakeButton.addEventListener('click', addLake);
+addRiverButton.addEventListener('click', addRiver);
+clearTerrainButton.addEventListener('click', clearTerrain);
+randomCityButton.addEventListener('click', randomCity);
 
 modeDragButton.addEventListener('click', () => setMode('drag'));
 modeConnectButton.addEventListener('click', () => setMode('connect'));
@@ -828,6 +1144,15 @@ deleteSelectedSegmentButton.addEventListener('click', () => {
 
 startSelect.addEventListener('change', () => rerouteAndRender(true));
 endSelect.addEventListener('change', () => rerouteAndRender(true));
+
+segmentCurveInput.addEventListener('input', () => {
+  if (!selectedSegmentId) return;
+  const segment = segmentById(selectedSegmentId);
+  if (!segment) return;
+  segment.curve = Number(segmentCurveInput.value);
+  registerEdit('Adjusted connection curvature');
+  rerouteAndRender(true);
+});
 
 networkSvg.addEventListener('pointermove', (event) => {
   if (!draggingStationId || editMode !== 'drag') return;
@@ -865,6 +1190,6 @@ renderLegend();
 setMode('drag');
 rerouteAndRender(true);
 statusEl.textContent = 'Drag stops to live-update distance, travel time, and transfers.';
-challengeTextEl.textContent = 'Press "New Challenge" to generate an optimization goal.';
+challengeTextEl.textContent = 'Press "New Challenge" to generate a terrain-aware optimization goal.';
 setChallengePanel(currentRoute);
 updateSelectionLabels();
