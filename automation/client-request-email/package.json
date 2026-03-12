@@ -1,0 +1,15 @@
+{
+  "name": "client-request-email-automation",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Spark-safe client request email automation for the portfolio workspace",
+  "scripts": {
+    "check": "node --check send-client-update-emails.mjs && node --check lib/email-template.mjs && node --check web/update-client-request.js",
+    "send": "node send-client-update-emails.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "nodemailer": "^6.9.15"
+  }
+}

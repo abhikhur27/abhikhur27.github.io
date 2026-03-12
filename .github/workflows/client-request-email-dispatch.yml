@@ -1,0 +1,67 @@
+name: Client Request Email Dispatch
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check required secrets
+        id: envcheck
+        shell: bash
+        run: |
+          required=(FIREBASE_SERVICE_ACCOUNT_B64 SMTP_HOST SMTP_PORT SMTP_USER SMTP_PASS EMAIL_FROM)
+          missing=()
+          for key in "${required[@]}"; do
+            value="$(printenv "$key")"
+            if [ -z "$value" ]; then
+              missing+=("$key")
+            fi
+          done
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Missing secrets: ${missing[*]}"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          FIREBASE_SERVICE_ACCOUNT_B64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_B64 }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+
+      - name: Setup Node
+        if: steps.envcheck.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        if: steps.envcheck.outputs.ready == 'true'
+        run: npm ci --prefix automation/client-request-email
+
+      - name: Run email dispatcher
+        if: steps.envcheck.outputs.ready == 'true'
+        run: node automation/client-request-email/send-client-update-emails.mjs
+        env:
+          FIREBASE_SERVICE_ACCOUNT_B64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_B64 }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_REPLY_TO: ${{ secrets.EMAIL_REPLY_TO }}
+
+      - name: Skip until configured
+        if: steps.envcheck.outputs.ready != 'true'
+        run: echo "Skipping dispatch run because required secrets are missing."
