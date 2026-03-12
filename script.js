@@ -59,13 +59,102 @@ function formatShortDate(date) {
   return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
+function buildDailyBuckets() {
+  const now = new Date();
+  const buckets = [];
+
+  for (let offset = 6; offset >= 0; offset -= 1) {
+    const dayStart = new Date(now);
+    dayStart.setHours(0, 0, 0, 0);
+    dayStart.setDate(dayStart.getDate() - offset);
+
+    const dayEnd = new Date(dayStart);
+    dayEnd.setDate(dayEnd.getDate() + 1);
+
+    buckets.push({
+      label: formatShortDate(dayStart),
+      count: 0,
+      start: dayStart.getTime(),
+      end: dayEnd.getTime(),
+    });
+  }
+
+  return buckets;
+}
+
+function buildPulsePayloadFromCommitItems(items) {
+  const dailyCommits = buildDailyBuckets();
+  const repoSet = new Set();
+  let commitCount = 0;
+  let mostRecentTs = 0;
+
+  items.forEach((item) => {
+    const dateRaw = item?.commit?.committer?.date || item?.commit?.author?.date;
+    if (!dateRaw) return;
+
+    const timestamp = new Date(dateRaw).getTime();
+    if (!Number.isFinite(timestamp)) return;
+
+    const bucket = dailyCommits.find((entry) => timestamp >= entry.start && timestamp < entry.end);
+    if (!bucket) return;
+
+    bucket.count += 1;
+    commitCount += 1;
+    mostRecentTs = Math.max(mostRecentTs, timestamp);
+
+    const repoName = item?.repository?.full_name;
+    if (repoName) {
+      repoSet.add(repoName);
+    }
+  });
+
+  return {
+    commitCount,
+    repoCount: repoSet.size,
+    dailyCommits: dailyCommits.map((entry) => ({ label: entry.label, count: entry.count })),
+    mostRecent: mostRecentTs ? new Date(mostRecentTs).toISOString() : null,
+    source: 'search',
+  };
+}
+
+function buildPulsePayloadFromEvents(events) {
+  const now = new Date();
+  const msInDay = 1000 * 60 * 60 * 24;
+  const startWindow = new Date(now.getTime() - msInDay * 7);
+  const pushEvents = events.filter((event) => event.type === 'PushEvent');
+  const recent = pushEvents.filter((event) => new Date(event.created_at) >= startWindow);
+  const dailyCommits = buildDailyBuckets().map((entry) => ({ ...entry }));
+
+  let commitCount = 0;
+  recent.forEach((event) => {
+    const timestamp = new Date(event.created_at).getTime();
+    const bucket = dailyCommits.find((entry) => timestamp >= entry.start && timestamp < entry.end);
+    const pushed = Number(event.payload?.size) || 0;
+    if (bucket) {
+      bucket.count += pushed;
+    }
+    commitCount += pushed;
+  });
+
+  const repoCount = new Set(recent.map((event) => event.repo?.name).filter(Boolean)).size;
+  const mostRecent = recent[0]?.created_at ? new Date(recent[0].created_at).toISOString() : null;
+
+  return {
+    commitCount,
+    repoCount,
+    dailyCommits: dailyCommits.map((entry) => ({ label: entry.label, count: entry.count })),
+    mostRecent,
+    source: 'events',
+  };
+}
+
 async function loadGithubPulse() {
   if (!commitCountEl || !commitCaptionEl || !commitMetaEl || !commitSparklineEl) {
     return;
   }
 
   const username = 'abhikhur27';
-  const cacheKey = 'portfolio_github_pulse_v1';
+  const cacheKey = 'portfolio_github_pulse_v2';
   const cacheAgeMs = 1000 * 60 * 25;
   const now = Date.now();
 
@@ -80,18 +169,60 @@ async function loadGithubPulse() {
   }
 
   try {
-    const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=100`, {
-      headers: {
-        Accept: 'application/vnd.github+json',
-      },
-    });
+    const since = new Date();
+    since.setHours(0, 0, 0, 0);
+    since.setDate(since.getDate() - 6);
+    const sinceIso = since.toISOString();
+    const encodedQuery = encodeURIComponent(`author:${username} committer-date:>=${sinceIso}`);
+    const baseUrl = `https://api.github.com/search/commits?q=${encodedQuery}&sort=committer-date&order=desc&per_page=100`;
 
-    if (!response.ok) {
-      throw new Error(`GitHub API status ${response.status}`);
+    const firstResponse = await fetch(`${baseUrl}&page=1`, {
+      headers: { Accept: 'application/vnd.github+json' },
+    });
+    if (!firstResponse.ok) {
+      throw new Error(`GitHub search status ${firstResponse.status}`);
     }
 
-    const events = await response.json();
-    const payload = buildPulsePayload(events);
+    const firstPage = await firstResponse.json();
+    const totalCount = Number(firstPage.total_count) || 0;
+    const maxPages = Math.min(5, Math.ceil(Math.min(totalCount, 500) / 100));
+    let items = Array.isArray(firstPage.items) ? firstPage.items : [];
+
+    if (maxPages > 1) {
+      const pageRequests = [];
+      for (let page = 2; page <= maxPages; page += 1) {
+        pageRequests.push(
+          fetch(`${baseUrl}&page=${page}`, { headers: { Accept: 'application/vnd.github+json' } }).then((response) => {
+            if (!response.ok) throw new Error(`GitHub search status ${response.status}`);
+            return response.json();
+          })
+        );
+      }
+
+      const pages = await Promise.all(pageRequests);
+      pages.forEach((page) => {
+        items = items.concat(Array.isArray(page.items) ? page.items : []);
+      });
+    }
+
+    const payload = buildPulsePayloadFromCommitItems(items);
+    sessionStorage.setItem(cacheKey, JSON.stringify({ fetchedAt: now, payload }));
+    renderGithubPulse(payload);
+    return;
+  } catch (searchError) {
+    // Fall back to push events if commit search is rate-limited.
+  }
+
+  try {
+    const eventsResponse = await fetch(`https://api.github.com/users/${username}/events/public?per_page=100`, {
+      headers: { Accept: 'application/vnd.github+json' },
+    });
+    if (!eventsResponse.ok) {
+      throw new Error(`GitHub events status ${eventsResponse.status}`);
+    }
+
+    const events = await eventsResponse.json();
+    const payload = buildPulsePayloadFromEvents(events);
     sessionStorage.setItem(cacheKey, JSON.stringify({ fetchedAt: now, payload }));
     renderGithubPulse(payload);
   } catch (error) {
@@ -102,53 +233,14 @@ async function loadGithubPulse() {
   }
 }
 
-function buildPulsePayload(events) {
-  const now = new Date();
-  const msInDay = 1000 * 60 * 60 * 24;
-  const startWindow = new Date(now.getTime() - msInDay * 7);
-  const pushEvents = events.filter((event) => event.type === 'PushEvent');
-
-  const recent = pushEvents.filter((event) => new Date(event.created_at) >= startWindow);
-  const commitCount = recent.reduce((sum, event) => sum + (Number(event.payload?.size) || 0), 0);
-  const repoCount = new Set(recent.map((event) => event.repo?.name).filter(Boolean)).size;
-
-  const dailyCommits = [];
-  for (let offset = 6; offset >= 0; offset -= 1) {
-    const dayStart = new Date(now.getTime() - offset * msInDay);
-    dayStart.setHours(0, 0, 0, 0);
-    const dayEnd = new Date(dayStart.getTime() + msInDay);
-
-    const count = recent.reduce((sum, event) => {
-      const created = new Date(event.created_at);
-      if (created >= dayStart && created < dayEnd) {
-        return sum + (Number(event.payload?.size) || 0);
-      }
-      return sum;
-    }, 0);
-
-    dailyCommits.push({
-      label: formatShortDate(dayStart),
-      count,
-    });
-  }
-
-  const mostRecent = recent[0]?.created_at ? new Date(recent[0].created_at) : null;
-
-  return {
-    commitCount,
-    repoCount,
-    dailyCommits,
-    mostRecent: mostRecent ? mostRecent.toISOString() : null,
-  };
-}
-
 function renderGithubPulse(payload) {
   commitCountEl.textContent = String(payload.commitCount);
-  commitCaptionEl.textContent = 'Commits in last 7 days';
+  commitCaptionEl.textContent =
+    payload.source === 'events' ? 'Push-estimated commits in last 7 days' : 'Commits in last 7 days';
 
   const latestText = payload.mostRecent
-    ? `Last push ${formatShortDate(new Date(payload.mostRecent))}`
-    : 'No push events in the last 7 days';
+    ? `Last commit ${formatShortDate(new Date(payload.mostRecent))}`
+    : 'No commits in the last 7 days';
   commitMetaEl.textContent = `${payload.repoCount} repos touched. ${latestText}.`;
 
   const maxCount = Math.max(1, ...payload.dailyCommits.map((item) => item.count));

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NBA Offensive Identity Model (2024-25)</title>
+  <title>NBA Offensive Identity Model</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -12,8 +12,8 @@
 <body>
   <header class="container header">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
-    <h1>NBA Offensive Identity Model (2024-25)</h1>
-    <p>Real 2024-25 team data with customizable factor weighting, profile presets, and matchup differentials.</p>
+    <h1>NBA Offensive Identity Model</h1>
+    <p>Real 2021-22 through 2024-25 team data with customizable factor weighting, profile presets, and matchup differentials.</p>
     <p id="source-note" class="source-note"></p>
   </header>
 
@@ -63,73 +63,80 @@
         <button id="export" type="button">Export Ranking CSV</button>
       </div>
 
-      <h2>Team Compare</h2>
-      <div class="compare-row">
-        <label>
-          Team A
-          <select id="compare-a"></select>
-        </label>
-        <label>
-          Team B
-          <select id="compare-b"></select>
-        </label>
-      </div>
-
-      <div id="compare-breakdown" class="breakdown"></div>
-      <div id="season-trend" class="breakdown"></div>
-
       <p id="status" class="status" aria-live="polite"></p>
     </section>
 
-    <section class="panel">
-      <h2>Pace vs Offensive Rating</h2>
-      <canvas id="chart" width="860" height="360" aria-label="Scatter plot"></canvas>
-      <p class="small">Bubble size scales with custom score. Hover points for details.</p>
+    <section class="content-col">
+      <section class="panel">
+        <h2>Pace vs Offensive Rating</h2>
+        <canvas id="chart" width="860" height="360" aria-label="Scatter plot"></canvas>
+        <p class="small">Bubble size scales with custom score. Hover points for details.</p>
 
-      <div class="metric-row">
-        <article>
-          <h3>Top Custom Score</h3>
-          <p id="top-custom">-</p>
-        </article>
-        <article>
-          <h3>Best OffRtg</h3>
-          <p id="top-offrtg">-</p>
-        </article>
-        <article>
-          <h3>Fastest Pace</h3>
-          <p id="top-pace">-</p>
-        </article>
-      </div>
-    </section>
+        <div class="metric-row">
+          <article>
+            <h3>Top Custom Score</h3>
+            <p id="top-custom">-</p>
+          </article>
+          <article>
+            <h3>Best OffRtg</h3>
+            <p id="top-offrtg">-</p>
+          </article>
+          <article>
+            <h3>Fastest Pace</h3>
+            <p id="top-pace">-</p>
+          </article>
+          <article>
+            <h3>Best TS%</h3>
+            <p id="top-ts">-</p>
+          </article>
+        </div>
+      </section>
 
-    <section class="panel wide">
-      <h2>Contribution View</h2>
-      <p class="small">Factor contribution bars for the currently top-ranked team in your model.</p>
-      <div id="factor-bars" class="factor-bars"></div>
-    </section>
+      <section class="panel compare-panel">
+        <h2>Team Compare + Multi-Season Trend</h2>
+        <div class="compare-row">
+          <label>
+            Team A
+            <select id="compare-a"></select>
+          </label>
+          <label>
+            Team B
+            <select id="compare-b"></select>
+          </label>
+        </div>
+        <div id="compare-breakdown" class="breakdown"></div>
+        <div id="season-trend" class="breakdown trend-grid"></div>
+      </section>
 
-    <section class="panel wide">
-      <h2>Team Rankings</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Team</th>
-              <th>Custom Score</th>
-              <th>eFG%</th>
-              <th>TOV%</th>
-              <th>ORB%</th>
-              <th>FTr</th>
-              <th>TS%</th>
-              <th>3PA/FGA</th>
-              <th>Pace</th>
-              <th>OffRtg</th>
-            </tr>
-          </thead>
-          <tbody id="table-body"></tbody>
-        </table>
-      </div>
+      <section class="panel">
+        <h2>Contribution View</h2>
+        <p class="small">Factor contribution bars for the currently top-ranked team in your model.</p>
+        <div id="factor-bars" class="factor-bars"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Team Rankings</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>Custom Score</th>
+                <th>eFG%</th>
+                <th>TOV%</th>
+                <th>ORB%</th>
+                <th>FTr</th>
+                <th>TS%</th>
+                <th>3PA/FGA</th>
+                <th>Pace</th>
+                <th>OffRtg</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </section>
     </section>
   </main>
 

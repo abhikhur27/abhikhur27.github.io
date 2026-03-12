@@ -44,7 +44,7 @@ h1 {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+  grid-template-columns: minmax(300px, 350px) minmax(0, 1fr);
   gap: 1rem;
   padding-bottom: 2rem;
   align-items: start;
@@ -338,7 +338,7 @@ button.primary {
   display: inline-block;
 }
 
-@media (max-width: 1060px) {
+@media (max-width: 1220px) {
   .layout { grid-template-columns: 1fr; }
 
   .line-editor {

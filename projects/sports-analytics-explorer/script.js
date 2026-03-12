@@ -22,6 +22,7 @@ const factorBarsEl = document.getElementById('factor-bars');
 const topCustomEl = document.getElementById('top-custom');
 const topOffRtgEl = document.getElementById('top-offrtg');
 const topPaceEl = document.getElementById('top-pace');
+const topTsEl = document.getElementById('top-ts');
 
 const presetButtons = Array.from(document.querySelectorAll('.preset'));
 
@@ -392,10 +393,12 @@ function updateSummaryCards(ranked) {
   const topCustom = ranked[0];
   const topOff = [...ranked].sort((a, b) => b.offrtg - a.offrtg)[0];
   const topPace = [...ranked].sort((a, b) => b.pace - a.pace)[0];
+  const topTS = [...ranked].sort((a, b) => b.ts - a.ts)[0];
 
   topCustomEl.textContent = `${topCustom.team} (${topCustom.score.toFixed(2)})`;
   topOffRtgEl.textContent = `${topOff.team} (${topOff.offrtg.toFixed(1)})`;
   topPaceEl.textContent = `${topPace.team} (${topPace.pace.toFixed(2)})`;
+  topTsEl.textContent = `${topTS.team} (${topTS.ts.toFixed(1)}%)`;
 }
 
 function renderSourceNote() {
