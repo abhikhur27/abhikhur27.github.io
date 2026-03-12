@@ -22,6 +22,11 @@
       <h2>Model Weights</h2>
       <p>Control how each offensive factor contributes to the score.</p>
 
+      <label>
+        Season
+        <select id="season-select"></select>
+      </label>
+
       <div class="preset-row" role="group" aria-label="Weight presets">
         <button type="button" class="preset" data-preset="balanced">Balanced</button>
         <button type="button" class="preset" data-preset="shotmaking">Shot Making</button>
@@ -71,6 +76,7 @@
       </div>
 
       <div id="compare-breakdown" class="breakdown"></div>
+      <div id="season-trend" class="breakdown"></div>
 
       <p id="status" class="status" aria-live="polite"></p>
     </section>
@@ -115,6 +121,8 @@
               <th>TOV%</th>
               <th>ORB%</th>
               <th>FTr</th>
+              <th>TS%</th>
+              <th>3PA/FGA</th>
               <th>Pace</th>
               <th>OffRtg</th>
             </tr>

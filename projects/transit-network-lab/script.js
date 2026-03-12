@@ -11,18 +11,18 @@ const stepsEl = document.getElementById('route-steps');
 
 const newStopInput = document.getElementById('new-stop-name');
 const addStopButton = document.getElementById('add-stop');
-const deleteStopSelect = document.getElementById('delete-stop');
-const removeStopButton = document.getElementById('remove-stop');
-
-const lineFromSelect = document.getElementById('line-from');
-const lineToSelect = document.getElementById('line-to');
 const lineNameInput = document.getElementById('line-name');
 const lineColorInput = document.getElementById('line-color');
 const lineSpeedInput = document.getElementById('line-speed');
-const addLineButton = document.getElementById('add-line');
-const removeSegmentSelect = document.getElementById('remove-segment');
-const removeLineButton = document.getElementById('remove-line');
 const editorStatusEl = document.getElementById('editor-status');
+
+const modeDragButton = document.getElementById('mode-drag');
+const modeConnectButton = document.getElementById('mode-connect');
+const modeDeleteButton = document.getElementById('mode-delete');
+const selectedStopLabel = document.getElementById('selected-stop-label');
+const selectedSegmentLabel = document.getElementById('selected-segment-label');
+const deleteSelectedStopButton = document.getElementById('delete-selected-stop');
+const deleteSelectedSegmentButton = document.getElementById('delete-selected-segment');
 
 const newChallengeButton = document.getElementById('new-challenge');
 const challengeTextEl = document.getElementById('challenge-text');
@@ -74,13 +74,16 @@ const segments = [
 ];
 
 let currentRoute = null;
+let selectedStopId = null;
+let selectedSegmentId = null;
+let connectAnchorId = null;
 let draggingStationId = null;
 let dragMoved = false;
+let editMode = 'drag';
 let challengeTimerId = null;
 
 let challengeScore = Number(localStorage.getItem(SCORE_KEY) || '0');
 let challengeStreak = Number(localStorage.getItem(STREAK_KEY) || '0');
-
 let challenge = null;
 
 challengeScoreEl.textContent = String(challengeScore);
@@ -93,6 +96,10 @@ function nextSegmentId() {
 
 function stationById(id) {
   return stations.find((station) => station.id === id);
+}
+
+function segmentById(id) {
+  return segments.find((segment) => segment.id === id);
 }
 
 function makeStationId(name) {
@@ -125,31 +132,21 @@ function formatDistance(distance) {
   return `${Math.round(distance)} px`;
 }
 
-function populateSelect(selectElement, options) {
-  const previous = selectElement.value;
-  selectElement.innerHTML = '';
+function syncRouteSelects() {
+  const previousStart = startSelect.value;
+  const previousEnd = endSelect.value;
 
-  options.forEach((optionData) => {
-    const option = document.createElement('option');
-    option.value = optionData.value;
-    option.textContent = optionData.label;
-    selectElement.appendChild(option);
-  });
+  const options = stations.map((station) => `<option value="${station.id}">${station.name}</option>`).join('');
+  startSelect.innerHTML = options;
+  endSelect.innerHTML = options;
 
-  if (previous && options.some((option) => option.value === previous)) {
-    selectElement.value = previous;
+  if (stations.some((station) => station.id === previousStart)) {
+    startSelect.value = previousStart;
   }
-}
 
-function stationOptions() {
-  return stations.map((station) => ({ value: station.id, label: station.name }));
-}
-
-function syncStationSelects() {
-  const options = stationOptions();
-  [startSelect, endSelect, lineFromSelect, lineToSelect, deleteStopSelect].forEach((selectElement) => {
-    populateSelect(selectElement, options);
-  });
+  if (stations.some((station) => station.id === previousEnd)) {
+    endSelect.value = previousEnd;
+  }
 
   if (!startSelect.value && stations[0]) {
     startSelect.value = stations[0].id;
@@ -161,27 +158,10 @@ function syncStationSelects() {
 
   if (startSelect.value === endSelect.value && stations.length > 1) {
     const fallback = stations.find((station) => station.id !== startSelect.value);
-    if (fallback) endSelect.value = fallback.id;
+    if (fallback) {
+      endSelect.value = fallback.id;
+    }
   }
-}
-
-function segmentLabel(segment) {
-  const fromName = stationById(segment.from)?.name || segment.from;
-  const toName = stationById(segment.to)?.name || segment.to;
-  return `${segment.line.toUpperCase()} - ${fromName} -> ${toName}`;
-}
-
-function syncSegmentSelect() {
-  const options = segments.map((segment) => ({ value: segment.id, label: segmentLabel(segment) }));
-
-  if (!options.length) {
-    removeSegmentSelect.innerHTML = '<option value="">No segments available</option>';
-    removeLineButton.disabled = true;
-    return;
-  }
-
-  removeLineButton.disabled = false;
-  populateSelect(removeSegmentSelect, options);
 }
 
 function lineBadge(lineName) {
@@ -308,11 +288,11 @@ function renderMetrics(route) {
   distanceEl.textContent = formatDistance(route.totalDistance);
 
   stepsEl.innerHTML = route.segments
-    .map((segment, index) => {
+    .map((segment) => {
       const fromName = stationById(segment.from)?.name || segment.from;
       const toName = stationById(segment.to)?.name || segment.to;
       const transferText = segment.transferCost > 0 ? ` +${segment.transferCost}m transfer` : '';
-      return `<li>${index + 1}. ${fromName} -> ${toName} via ${segment.line.toUpperCase()} (${segment.minutes}m, ${formatDistance(
+      return `<li>${fromName} -> ${toName} via ${segment.line.toUpperCase()} (${segment.minutes}m, ${formatDistance(
         segment.distance
       )}${transferText})</li>`;
     })
@@ -331,9 +311,33 @@ function activeEdgeSet(route) {
   return set;
 }
 
+function selectedSegmentKey() {
+  const segment = segmentById(selectedSegmentId);
+  if (!segment) return null;
+  return [segment.from, segment.to, segment.line].sort().join('|');
+}
+
+function updateSelectionLabels() {
+  selectedStopLabel.textContent = selectedStopId ? stationById(selectedStopId)?.name || selectedStopId : 'None';
+
+  if (!selectedSegmentId) {
+    selectedSegmentLabel.textContent = 'None';
+  } else {
+    const segment = segmentById(selectedSegmentId);
+    if (segment) {
+      const fromName = stationById(segment.from)?.name || segment.from;
+      const toName = stationById(segment.to)?.name || segment.to;
+      selectedSegmentLabel.textContent = `${segment.line.toUpperCase()} ${fromName} -> ${toName}`;
+    } else {
+      selectedSegmentLabel.textContent = 'None';
+    }
+  }
+}
+
 function renderMap(route) {
   const activeStations = new Set(route ? route.stationPath : []);
   const activeEdges = activeEdgeSet(route);
+  const selectedEdgeKey = selectedSegmentKey();
 
   const edgeMarkup = segments
     .map((segment) => {
@@ -343,19 +347,24 @@ function renderMap(route) {
 
       const line = lineCatalog[segment.line] || { color: '#6b7280' };
       const key = [segment.from, segment.to, segment.line].sort().join('|');
-      const activeClass = activeEdges.has(key) ? 'active' : '';
+      const classes = ['edge'];
+      if (activeEdges.has(key)) classes.push('active');
+      if (selectedEdgeKey === key) classes.push('selected');
 
-      return `<line class="edge ${activeClass}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${line.color}" data-segment-id="${segment.id}" />`;
+      return `<line class="${classes.join(' ')}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${line.color}" data-segment-id="${segment.id}" />`;
     })
     .join('');
 
   const stationMarkup = stations
     .map((station) => {
-      const activeClass = activeStations.has(station.id) ? 'active' : '';
-      const draggingClass = draggingStationId === station.id ? 'dragging' : '';
+      const classes = ['station'];
+      if (activeStations.has(station.id)) classes.push('active');
+      if (draggingStationId === station.id) classes.push('dragging');
+      if (selectedStopId === station.id) classes.push('selected');
+
       return `
         <g>
-          <circle class="station ${activeClass} ${draggingClass}" cx="${station.x}" cy="${station.y}" r="13" data-station-id="${station.id}"></circle>
+          <circle class="${classes.join(' ')}" cx="${station.x}" cy="${station.y}" r="13" data-station-id="${station.id}"></circle>
           <text class="station-label" x="${station.x + 16}" y="${station.y + 4}">${station.name}</text>
         </g>
       `;
@@ -364,11 +373,17 @@ function renderMap(route) {
 
   networkSvg.innerHTML = `${edgeMarkup}${stationMarkup}`;
 
+  Array.from(networkSvg.querySelectorAll('[data-segment-id]')).forEach((line) => {
+    line.addEventListener('pointerdown', (event) => {
+      event.stopPropagation();
+      handleSegmentInteraction(line.dataset.segmentId);
+    });
+  });
+
   Array.from(networkSvg.querySelectorAll('[data-station-id]')).forEach((circle) => {
     circle.addEventListener('pointerdown', (event) => {
-      draggingStationId = circle.dataset.stationId;
-      dragMoved = false;
-      circle.setPointerCapture(event.pointerId);
+      event.stopPropagation();
+      handleStationInteraction(circle.dataset.stationId, event.pointerId, circle);
     });
   });
 }
@@ -484,6 +499,25 @@ function registerEdit(editLabel) {
   }
 }
 
+function setMode(mode) {
+  editMode = mode;
+  connectAnchorId = null;
+
+  modeDragButton.classList.toggle('active', mode === 'drag');
+  modeConnectButton.classList.toggle('active', mode === 'connect');
+  modeDeleteButton.classList.toggle('active', mode === 'delete');
+
+  if (mode === 'drag') {
+    editorStatusEl.textContent = 'Drag mode active: drag stops directly on the map.';
+  } else if (mode === 'connect') {
+    editorStatusEl.textContent = 'Connect mode active: click two stops to create a new segment.';
+  } else {
+    editorStatusEl.textContent = 'Delete mode active: click a line to remove that connection.';
+  }
+
+  renderMap(currentRoute);
+}
+
 function rerouteAndRender(autoMode) {
   const startId = startSelect.value;
   const endId = endSelect.value;
@@ -492,6 +526,7 @@ function rerouteAndRender(autoMode) {
   renderMetrics(currentRoute);
   renderMap(currentRoute);
   setChallengePanel(currentRoute);
+  updateSelectionLabels();
 
   if (!currentRoute) {
     statusEl.textContent = 'No valid route for current network.';
@@ -515,6 +550,70 @@ function cleanupUnusedLines() {
   });
 }
 
+function removeRouteSegmentById(segmentId, fromDeleteMode = false) {
+  const index = segments.findIndex((segment) => segment.id === segmentId);
+  if (index === -1) return false;
+
+  const removed = segments[index];
+  segments.splice(index, 1);
+
+  if (selectedSegmentId === segmentId) {
+    selectedSegmentId = null;
+  }
+
+  cleanupUnusedLines();
+  renderLegend();
+  registerEdit('Removed route connection');
+  rerouteAndRender(true);
+
+  editorStatusEl.textContent = fromDeleteMode
+    ? `Deleted ${removed.line.toUpperCase()} connection from map.`
+    : `Removed ${removed.line.toUpperCase()} selected connection.`;
+
+  return true;
+}
+
+function removeSelectedStop() {
+  if (!selectedStopId) {
+    editorStatusEl.textContent = 'Select a stop on the map first.';
+    return;
+  }
+
+  if (stations.length <= 2) {
+    editorStatusEl.textContent = 'Keep at least two stops in the network.';
+    return;
+  }
+
+  const stopId = selectedStopId;
+  const stationIndex = stations.findIndex((station) => station.id === stopId);
+  if (stationIndex === -1) return;
+
+  const removedName = stations[stationIndex].name;
+  stations.splice(stationIndex, 1);
+
+  for (let i = segments.length - 1; i >= 0; i -= 1) {
+    if (segments[i].from === stopId || segments[i].to === stopId) {
+      segments.splice(i, 1);
+    }
+  }
+
+  cleanupUnusedLines();
+  syncRouteSelects();
+  renderLegend();
+
+  if (challenge && (challenge.startId === stopId || challenge.endId === stopId)) {
+    markChallengeFailed('a challenge stop was deleted');
+  }
+
+  selectedStopId = null;
+  selectedSegmentId = null;
+  connectAnchorId = null;
+
+  editorStatusEl.textContent = `Deleted stop: ${removedName}.`;
+  registerEdit('Deleted stop');
+  rerouteAndRender(true);
+}
+
 function addStop() {
   const rawName = newStopInput.value.trim();
   if (!rawName) {
@@ -530,8 +629,8 @@ function addStop() {
     y: 260 + Math.random() * 80 - 40,
   });
 
-  syncStationSelects();
-  syncSegmentSelect();
+  selectedStopId = id;
+  syncRouteSelects();
   newStopInput.value = '';
   editorStatusEl.textContent = `Added stop: ${rawName}.`;
 
@@ -539,65 +638,24 @@ function addStop() {
   rerouteAndRender(true);
 }
 
-function removeStop() {
-  const stopId = deleteStopSelect.value;
-  if (!stopId) {
-    editorStatusEl.textContent = 'Select a stop to delete.';
-    return;
-  }
-
-  if (stations.length <= 2) {
-    editorStatusEl.textContent = 'Keep at least two stops in the network.';
-    return;
-  }
-
-  const stationIndex = stations.findIndex((station) => station.id === stopId);
-  if (stationIndex === -1) return;
-
-  const removedName = stations[stationIndex].name;
-  stations.splice(stationIndex, 1);
-
-  for (let i = segments.length - 1; i >= 0; i -= 1) {
-    if (segments[i].from === stopId || segments[i].to === stopId) {
-      segments.splice(i, 1);
-    }
-  }
-
-  cleanupUnusedLines();
-
-  if (challenge && (challenge.startId === stopId || challenge.endId === stopId)) {
-    markChallengeFailed('a challenge stop was deleted');
-  }
-
-  syncStationSelects();
-  syncSegmentSelect();
-  renderLegend();
-
-  editorStatusEl.textContent = `Deleted stop: ${removedName}.`;
-  registerEdit('Deleted stop');
-  rerouteAndRender(true);
-}
-
-function addRouteSegment() {
-  const from = lineFromSelect.value;
-  const to = lineToSelect.value;
+function createRouteSegment(from, to) {
   const lineName = lineNameInput.value.trim().toLowerCase();
   const color = lineColorInput.value;
   const speed = Number(lineSpeedInput.value);
 
   if (!from || !to || from === to) {
-    editorStatusEl.textContent = 'Select two different stops for a route segment.';
-    return;
+    editorStatusEl.textContent = 'Choose two different stops.';
+    return false;
   }
 
   if (!lineName) {
     editorStatusEl.textContent = 'Provide a line name.';
-    return;
+    return false;
   }
 
   if (!Number.isFinite(speed) || speed <= 0) {
     editorStatusEl.textContent = 'Line speed must be a positive number.';
-    return;
+    return false;
   }
 
   const duplicate = segments.some((segment) => {
@@ -607,40 +665,74 @@ function addRouteSegment() {
   });
 
   if (duplicate) {
-    editorStatusEl.textContent = 'That route segment already exists for this line.';
-    return;
+    editorStatusEl.textContent = 'That connection already exists on this line.';
+    return false;
   }
 
   lineCatalog[lineName] = { color, speed };
-  segments.push({ id: nextSegmentId(), from, to, line: lineName });
+  const newSegment = { id: nextSegmentId(), from, to, line: lineName };
+  segments.push(newSegment);
+  selectedSegmentId = newSegment.id;
 
-  syncSegmentSelect();
   renderLegend();
-
-  editorStatusEl.textContent = `Added ${lineName.toUpperCase()} route segment.`;
-  registerEdit('Added route segment');
+  registerEdit('Added route connection');
   rerouteAndRender(true);
+
+  editorStatusEl.textContent = `Connected ${stationById(from)?.name} and ${stationById(to)?.name} on ${lineName.toUpperCase()}.`;
+  return true;
 }
 
-function removeRouteSegment() {
-  const segmentId = removeSegmentSelect.value;
-  const index = segments.findIndex((segment) => segment.id === segmentId);
+function handleStationInteraction(stationId, pointerId, element) {
+  selectedStopId = stationId;
+  selectedSegmentId = null;
+  updateSelectionLabels();
 
-  if (index === -1) {
-    editorStatusEl.textContent = 'Select a valid segment to remove.';
+  if (editMode === 'drag') {
+    draggingStationId = stationId;
+    dragMoved = false;
+    element.setPointerCapture(pointerId);
+    renderMap(currentRoute);
     return;
   }
 
-  const removed = segments[index];
-  segments.splice(index, 1);
+  if (editMode === 'connect') {
+    if (!connectAnchorId) {
+      connectAnchorId = stationId;
+      editorStatusEl.textContent = `Connect mode: anchor set to ${stationById(stationId)?.name}. Select a second stop.`;
+    } else if (connectAnchorId === stationId) {
+      connectAnchorId = null;
+      editorStatusEl.textContent = 'Connect mode: anchor cleared. Select a first stop.';
+    } else {
+      const added = createRouteSegment(connectAnchorId, stationId);
+      connectAnchorId = null;
+      if (!added) {
+        renderMap(currentRoute);
+      }
+    }
+    return;
+  }
 
-  cleanupUnusedLines();
-  syncSegmentSelect();
-  renderLegend();
+  if (editMode === 'delete') {
+    editorStatusEl.textContent = `Delete mode: selected stop ${stationById(stationId)?.name}. Use "Delete Selected Stop" to remove it.`;
+    renderMap(currentRoute);
+    return;
+  }
 
-  editorStatusEl.textContent = `Removed ${removed.line.toUpperCase()} segment.`;
-  registerEdit('Removed route segment');
-  rerouteAndRender(true);
+  renderMap(currentRoute);
+}
+
+function handleSegmentInteraction(segmentId) {
+  selectedSegmentId = segmentId;
+  selectedStopId = null;
+  updateSelectionLabels();
+
+  if (editMode === 'delete') {
+    removeRouteSegmentById(segmentId, true);
+    return;
+  }
+
+  editorStatusEl.textContent = 'Connection selected. Use Delete Selected Link to remove it.';
+  renderMap(currentRoute);
 }
 
 function randomPair() {
@@ -685,9 +777,9 @@ function generateChallenge() {
     baselineMinutes: baseline.totalMinutes,
     targetMinutes: Math.max(4, baseline.totalMinutes - improvementTarget),
     maxTransfers: Math.max(0, baseline.transferCount),
-    editBudget: 3 + Math.floor(Math.random() * 5),
+    editBudget: 4 + Math.floor(Math.random() * 5),
     editsUsed: 0,
-    timeLimitSec: 70 + Math.floor(Math.random() * 55),
+    timeLimitSec: 80 + Math.floor(Math.random() * 55),
     startedAt: Date.now(),
     completed: false,
     failed: false,
@@ -712,23 +804,33 @@ function generateChallenge() {
     }
 
     setChallengePanel(currentRoute);
-  }, 300);
+  }, 320);
 
   rerouteAndRender(true);
 }
 
 runButton.addEventListener('click', () => rerouteAndRender(false));
 addStopButton.addEventListener('click', addStop);
-removeStopButton.addEventListener('click', removeStop);
-addLineButton.addEventListener('click', addRouteSegment);
-removeLineButton.addEventListener('click', removeRouteSegment);
 newChallengeButton.addEventListener('click', generateChallenge);
+
+modeDragButton.addEventListener('click', () => setMode('drag'));
+modeConnectButton.addEventListener('click', () => setMode('connect'));
+modeDeleteButton.addEventListener('click', () => setMode('delete'));
+
+deleteSelectedStopButton.addEventListener('click', removeSelectedStop);
+deleteSelectedSegmentButton.addEventListener('click', () => {
+  if (!selectedSegmentId) {
+    editorStatusEl.textContent = 'Select a connection on the map first.';
+    return;
+  }
+  removeRouteSegmentById(selectedSegmentId, false);
+});
 
 startSelect.addEventListener('change', () => rerouteAndRender(true));
 endSelect.addEventListener('change', () => rerouteAndRender(true));
 
 networkSvg.addEventListener('pointermove', (event) => {
-  if (!draggingStationId) return;
+  if (!draggingStationId || editMode !== 'drag') return;
 
   const station = stationById(draggingStationId);
   if (!station) return;
@@ -758,10 +860,11 @@ networkSvg.addEventListener('pointerleave', () => {
 
 window.addEventListener('beforeunload', clearChallengeTimer);
 
-syncStationSelects();
-syncSegmentSelect();
+syncRouteSelects();
 renderLegend();
+setMode('drag');
 rerouteAndRender(true);
 statusEl.textContent = 'Drag stops to live-update distance, travel time, and transfers.';
 challengeTextEl.textContent = 'Press "New Challenge" to generate an optimization goal.';
 setChallengePanel(currentRoute);
+updateSelectionLabels();

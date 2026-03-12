@@ -73,6 +73,10 @@
       <canvas id="corridor-canvas" width="760" height="230" aria-label="Rail corridor simulation"></canvas>
       <div class="sim-row">
         <p>Live train spacing estimate: <span id="sim-spacing" class="mono">-</span></p>
+        <label class="sim-speed-label">
+          Time Compression x<span id="sim-speed-label">40</span>
+          <input id="sim-speed" type="range" min="10" max="80" value="40" step="5">
+        </label>
         <button id="toggle-animation" type="button">Pause Animation</button>
       </div>
 

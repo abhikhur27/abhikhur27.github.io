@@ -60,6 +60,7 @@ h1 {
   padding: 0.85rem;
   display: grid;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .block {
@@ -67,6 +68,8 @@ h1 {
   border-radius: 12px;
   background: var(--surface-alt);
   padding: 0.75rem;
+  width: 100%;
+  overflow: hidden;
 }
 
 label {
@@ -118,7 +121,7 @@ button.primary {
 .metrics {
   margin-top: 0.65rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.4rem;
 }
 
@@ -151,15 +154,73 @@ button.primary {
 .steps li {
   margin-bottom: 0.3rem;
   font-size: 0.88rem;
+  word-break: break-word;
 }
 
 .line-editor {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.45rem;
 }
 
 .line-editor label { margin-top: 0.5rem; }
+
+.mode-row {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.mode-btn {
+  margin-top: 0;
+  padding: 0.38rem 0.45rem;
+  font-size: 0.86rem;
+}
+
+.mode-btn.active {
+  background: var(--accent);
+  border-color: transparent;
+  color: #0f1420;
+  font-weight: 700;
+}
+
+.helper-note {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.selection-card {
+  margin-top: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #171e2d;
+  padding: 0.5rem;
+}
+
+.selection-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.selection-card p + p {
+  margin-top: 0.28rem;
+}
+
+.selection-actions {
+  margin-top: 0.48rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+
+.selection-actions button {
+  margin-top: 0;
+  padding: 0.38rem 0.45rem;
+  font-size: 0.83rem;
+}
 
 .score {
   margin: 0.55rem 0 0;
@@ -217,6 +278,12 @@ button.primary {
   opacity: 1;
 }
 
+.edge.selected {
+  stroke-width: 12;
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(215, 222, 254, 0.65));
+}
+
 .station {
   fill: #f8fafc;
   stroke: #0f172a;
@@ -227,6 +294,12 @@ button.primary {
 .station.active {
   fill: #dbeafe;
   stroke: #1d4ed8;
+}
+
+.station.selected {
+  fill: #d7defe;
+  stroke: #0f172a;
+  stroke-width: 3;
 }
 
 .station.dragging {
@@ -269,6 +342,11 @@ button.primary {
   .layout { grid-template-columns: 1fr; }
 
   .line-editor {
+    grid-template-columns: 1fr;
+  }
+
+  .mode-row,
+  .selection-actions {
     grid-template-columns: 1fr;
   }
 }

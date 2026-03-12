@@ -48,21 +48,16 @@
           <input id="new-stop-name" type="text" placeholder="e.g. Midtown West">
         </label>
         <button id="add-stop" type="button">Add Stop</button>
-        <label>
-          Delete Stop
-          <select id="delete-stop"></select>
-        </label>
-        <button id="remove-stop" type="button">Delete Stop</button>
+
+        <div class="mode-row">
+          <button id="mode-drag" class="mode-btn active" type="button">Drag Stops</button>
+          <button id="mode-connect" class="mode-btn" type="button">Connect Stops</button>
+          <button id="mode-delete" class="mode-btn" type="button">Delete Link</button>
+        </div>
+
+        <p class="helper-note">Connect mode: click one stop, then another to create a segment. Delete mode: click a line on the map.</p>
 
         <div class="line-editor">
-          <label>
-            From
-            <select id="line-from"></select>
-          </label>
-          <label>
-            To
-            <select id="line-to"></select>
-          </label>
           <label>
             Line Name
             <input id="line-name" type="text" value="indigo">
@@ -76,12 +71,16 @@
             <input id="line-speed" type="number" min="8" max="60" value="24">
           </label>
         </div>
-        <button id="add-line" type="button">Add Route Segment</button>
-        <label>
-          Remove Route Segment
-          <select id="remove-segment"></select>
-        </label>
-        <button id="remove-line" type="button">Remove Selected Segment</button>
+
+        <div class="selection-card">
+          <p>Selected stop: <span id="selected-stop-label">None</span></p>
+          <p>Selected connection: <span id="selected-segment-label">None</span></p>
+          <div class="selection-actions">
+            <button id="delete-selected-stop" type="button">Delete Selected Stop</button>
+            <button id="delete-selected-segment" type="button">Delete Selected Link</button>
+          </div>
+        </div>
+
         <p id="editor-status" class="status"></p>
       </article>
 

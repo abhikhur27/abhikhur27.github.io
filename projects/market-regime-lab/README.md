@@ -1,6 +1,6 @@
-﻿# Market Regime Lab
+﻿# Market Regime Monte Carlo Lab
 
-Market Regime Lab is a static, browser-based Monte Carlo simulator for testing portfolio behavior under bull/bear regime switching.
+Market Regime Monte Carlo Lab is a static, browser-based simulator for testing portfolio behavior under bull/bear regime switching.
 
 ## What It Demonstrates
 
@@ -45,3 +45,4 @@ Then open `http://localhost:8000/projects/market-regime-lab/`.
 - Add transaction-cost and slippage modeling.
 - Add downloadable CSV for run summaries.
 - Add multi-asset correlation matrix support.
+

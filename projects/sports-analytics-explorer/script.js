@@ -1,5 +1,5 @@
-﻿const payload = window.NBA_OFFENSE_DATA_2025;
-const teams = Array.isArray(payload?.teams) ? payload.teams : [];
+﻿const payload = window.NBA_OFFENSE_DATA;
+const seasonSelect = document.getElementById('season-select');
 
 const weightKeys = ['w-efg', 'w-tov', 'w-orb', 'w-ftr'];
 const sliders = Object.fromEntries(weightKeys.map((key) => [key, document.getElementById(key)]));
@@ -14,6 +14,7 @@ const useZEl = document.getElementById('use-z');
 const compareA = document.getElementById('compare-a');
 const compareB = document.getElementById('compare-b');
 const compareBreakdownEl = document.getElementById('compare-breakdown');
+const seasonTrendEl = document.getElementById('season-trend');
 
 const tableBody = document.getElementById('table-body');
 const factorBarsEl = document.getElementById('factor-bars');
@@ -27,12 +28,12 @@ const presetButtons = Array.from(document.querySelectorAll('.preset'));
 const canvas = document.getElementById('chart');
 const ctx = canvas.getContext('2d');
 
+const seasons = Object.keys(payload?.seasons || {}).sort((a, b) => Number(b.slice(0, 4)) - Number(a.slice(0, 4)));
+let activeSeason = seasons[0] || null;
+
 let chartPoints = [];
 let latestRanked = [];
-
-if (!teams.length) {
-  statusEl.textContent = 'Data source failed to load.';
-}
+let seasonStats = null;
 
 function clamp01(value) {
   if (value < 0) return 0;
@@ -50,36 +51,52 @@ function std(values) {
   return Math.sqrt(variance);
 }
 
-function minMax(metric) {
-  const values = teams.map((team) => team[metric]);
-  return { min: Math.min(...values), max: Math.max(...values) };
-}
-
-const bounds = {
-  efg: minMax('efg'),
-  tov: minMax('tov'),
-  orb: minMax('orb'),
-  ftr: minMax('ftr'),
-  pace: minMax('pace'),
-  offrtg: minMax('offrtg'),
-};
-
-const zStats = {
-  efg: { mean: mean(teams.map((team) => team.efg)), std: std(teams.map((team) => team.efg)) },
-  tov: { mean: mean(teams.map((team) => team.tov)), std: std(teams.map((team) => team.tov)) },
-  orb: { mean: mean(teams.map((team) => team.orb)), std: std(teams.map((team) => team.orb)) },
-  ftr: { mean: mean(teams.map((team) => team.ftr)), std: std(teams.map((team) => team.ftr)) },
-};
-
 function normalizeMinMax(value, min, max) {
   if (max === min) return 0.5;
   return clamp01((value - min) / (max - min));
 }
 
 function normalizeZ(value, metric) {
-  const stats = zStats[metric];
+  const stats = seasonStats.zStats[metric];
   const z = (value - stats.mean) / Math.max(0.0001, stats.std);
   return clamp01(0.5 + z / 6);
+}
+
+function currentTeams() {
+  return payload?.seasons?.[activeSeason] || [];
+}
+
+function buildSeasonStats(teams) {
+  function minMax(metric) {
+    const values = teams.map((team) => team[metric]);
+    return { min: Math.min(...values), max: Math.max(...values) };
+  }
+
+  return {
+    bounds: {
+      efg: minMax('efg'),
+      tov: minMax('tov'),
+      orb: minMax('orb'),
+      ftr: minMax('ftr'),
+      pace: minMax('pace'),
+      offrtg: minMax('offrtg'),
+    },
+    zStats: {
+      efg: { mean: mean(teams.map((team) => team.efg)), std: std(teams.map((team) => team.efg)) },
+      tov: { mean: mean(teams.map((team) => team.tov)), std: std(teams.map((team) => team.tov)) },
+      orb: { mean: mean(teams.map((team) => team.orb)), std: std(teams.map((team) => team.orb)) },
+      ftr: { mean: mean(teams.map((team) => team.ftr)), std: std(teams.map((team) => team.ftr)) },
+    },
+  };
+}
+
+function metricNorm(team, metric, useZMode) {
+  if (useZMode) {
+    return normalizeZ(team[metric], metric);
+  }
+
+  const { min, max } = seasonStats.bounds[metric];
+  return normalizeMinMax(team[metric], min, max);
 }
 
 function currentWeights() {
@@ -101,15 +118,7 @@ function currentWeights() {
   };
 }
 
-function metricNorm(team, metric, useZMode) {
-  if (useZMode) {
-    return normalizeZ(team[metric], metric);
-  }
-
-  return normalizeMinMax(team[metric], bounds[metric].min, bounds[metric].max);
-}
-
-function scoreTeams() {
+function scoreTeams(teams) {
   const weights = currentWeights();
   const useZMode = useZEl.checked;
 
@@ -186,8 +195,8 @@ function drawChart(ranked) {
   ctx.restore();
 
   chartPoints = ranked.map((team) => {
-    const xNorm = normalizeMinMax(team.pace, bounds.pace.min, bounds.pace.max);
-    const yNorm = normalizeMinMax(team.offrtg, bounds.offrtg.min, bounds.offrtg.max);
+    const xNorm = normalizeMinMax(team.pace, seasonStats.bounds.pace.min, seasonStats.bounds.pace.max);
+    const yNorm = normalizeMinMax(team.offrtg, seasonStats.bounds.offrtg.min, seasonStats.bounds.offrtg.max);
 
     const x = margin.left + xNorm * innerWidth;
     const y = margin.top + (1 - yNorm) * innerHeight;
@@ -220,6 +229,8 @@ function renderTable(ranked) {
           <td>${team.tov.toFixed(1)}</td>
           <td>${team.orb.toFixed(1)}</td>
           <td>${team.ftr.toFixed(2)}</td>
+          <td>${team.ts.toFixed(1)}</td>
+          <td>${team.threepar.toFixed(2)}</td>
           <td>${team.pace.toFixed(2)}</td>
           <td>${team.offrtg.toFixed(1)}</td>
         </tr>
@@ -264,7 +275,16 @@ function updateLabels(rawWeights) {
   labels['w-ftr-label'].textContent = String(rawWeights.ftr);
 }
 
+function populateSeasonSelect() {
+  seasonSelect.innerHTML = seasons.map((season) => `<option value="${season}">${season}</option>`).join('');
+  seasonSelect.value = activeSeason;
+}
+
 function populateCompareTeams() {
+  const teams = currentTeams();
+  const prevA = compareA.value;
+  const prevB = compareB.value;
+
   compareA.innerHTML = '';
   compareB.innerHTML = '';
 
@@ -279,9 +299,16 @@ function populateCompareTeams() {
     optionB.textContent = team.team;
     compareB.appendChild(optionB);
 
-    if (index === 0) compareA.value = team.team;
-    if (index === 1) compareB.value = team.team;
+    if (index === 0 && !prevA) compareA.value = team.team;
+    if (index === 1 && !prevB) compareB.value = team.team;
   });
+
+  if (teams.some((team) => team.team === prevA)) compareA.value = prevA;
+  if (teams.some((team) => team.team === prevB)) compareB.value = prevB;
+
+  if (compareA.value === compareB.value && teams.length > 1) {
+    compareB.value = teams[1].team;
+  }
 }
 
 function renderCompare() {
@@ -297,6 +324,8 @@ function renderCompare() {
     { label: 'TOV% (lower better)', delta: b.tov - a.tov },
     { label: 'ORB%', delta: a.orb - b.orb },
     { label: 'FTr', delta: a.ftr - b.ftr },
+    { label: 'TS%', delta: a.ts - b.ts },
+    { label: '3PA/FGA', delta: a.threepar - b.threepar },
     { label: 'OffRtg', delta: a.offrtg - b.offrtg },
     { label: 'Pace', delta: a.pace - b.pace },
   ];
@@ -311,6 +340,51 @@ function renderCompare() {
         </article>
       `;
     })
+    .join('');
+
+  renderSeasonTrend(a.team);
+}
+
+function renderSeasonTrend(teamName) {
+  const weights = currentWeights();
+  const useZMode = useZEl.checked;
+
+  const cards = seasons
+    .map((season) => {
+      const teams = payload.seasons[season] || [];
+      const stats = buildSeasonStats(teams);
+      const team = teams.find((entry) => entry.team === teamName);
+      if (!team) return null;
+
+      const efgNorm = useZMode
+        ? clamp01(0.5 + ((team.efg - stats.zStats.efg.mean) / Math.max(stats.zStats.efg.std, 0.0001)) / 6)
+        : normalizeMinMax(team.efg, stats.bounds.efg.min, stats.bounds.efg.max);
+      const tovNorm = useZMode
+        ? clamp01(0.5 + ((team.tov - stats.zStats.tov.mean) / Math.max(stats.zStats.tov.std, 0.0001)) / 6)
+        : normalizeMinMax(team.tov, stats.bounds.tov.min, stats.bounds.tov.max);
+      const orbNorm = useZMode
+        ? clamp01(0.5 + ((team.orb - stats.zStats.orb.mean) / Math.max(stats.zStats.orb.std, 0.0001)) / 6)
+        : normalizeMinMax(team.orb, stats.bounds.orb.min, stats.bounds.orb.max);
+      const ftrNorm = useZMode
+        ? clamp01(0.5 + ((team.ftr - stats.zStats.ftr.mean) / Math.max(stats.zStats.ftr.std, 0.0001)) / 6)
+        : normalizeMinMax(team.ftr, stats.bounds.ftr.min, stats.bounds.ftr.max);
+
+      const score =
+        100 * (weights.efg * efgNorm + weights.tov * (1 - tovNorm) + weights.orb * orbNorm + weights.ftr * ftrNorm);
+
+      return { season, score };
+    })
+    .filter(Boolean);
+
+  seasonTrendEl.innerHTML = cards
+    .map(
+      (card) => `
+        <article>
+          <h3>${teamName} | ${card.season}</h3>
+          <p>Model score: ${card.score.toFixed(2)}</p>
+        </article>
+      `
+    )
     .join('');
 }
 
@@ -327,11 +401,18 @@ function updateSummaryCards(ranked) {
 function renderSourceNote() {
   const sourceName = payload?.source || 'StatMuse';
   const retrievedAt = payload?.retrieved_at || 'unknown date';
-  sourceNoteEl.textContent = `Data source: ${sourceName}, season ${payload?.season || '2024-25'}, retrieved ${retrievedAt}.`;
+  sourceNoteEl.textContent = `Data source: ${sourceName}. Seasons loaded: ${seasons.join(', ')}. Retrieved ${retrievedAt}.`;
 }
 
 function render() {
-  const { ranked, weights } = scoreTeams();
+  const teams = currentTeams();
+  if (!teams.length) {
+    statusEl.textContent = 'No season data loaded.';
+    return;
+  }
+
+  seasonStats = buildSeasonStats(teams);
+  const { ranked, weights } = scoreTeams(teams);
   latestRanked = ranked;
 
   updateLabels(weights.raw);
@@ -341,9 +422,12 @@ function render() {
   updateSummaryCards(ranked);
   renderCompare();
 
-  statusEl.textContent = `Top offense by current model: ${ranked[0].team} (${ranked[0].score.toFixed(2)}). Mode: ${
-    useZEl.checked ? 'z-score' : 'min-max'
-  }.`;
+  const leagueAvgTS = mean(teams.map((team) => team.ts)).toFixed(2);
+  const leagueAvg3PAr = mean(teams.map((team) => team.threepar)).toFixed(2);
+
+  statusEl.textContent = `Season ${activeSeason}: top model team ${ranked[0].team} (${ranked[0].score.toFixed(
+    2
+  )}). League TS% ${leagueAvgTS}, league 3PA/FGA ${leagueAvg3PAr}. Mode: ${useZEl.checked ? 'z-score' : 'min-max'}.`;
 }
 
 function setWeights(efg, tov, orb, ftr) {
@@ -372,9 +456,10 @@ function exportCsv() {
   if (!latestRanked.length) return;
 
   const rows = [
-    ['Rank', 'Team', 'CustomScore', 'eFG', 'TOV', 'ORB', 'FTr', 'Pace', 'OffRtg'].join(','),
+    ['Season', 'Rank', 'Team', 'CustomScore', 'eFG', 'TOV', 'ORB', 'FTr', 'TS', '3PA/FGA', 'Pace', 'OffRtg'].join(','),
     ...latestRanked.map((team, index) =>
       [
+        activeSeason,
         index + 1,
         team.team,
         team.score.toFixed(2),
@@ -382,6 +467,8 @@ function exportCsv() {
         team.tov.toFixed(1),
         team.orb.toFixed(1),
         team.ftr.toFixed(2),
+        team.ts.toFixed(1),
+        team.threepar.toFixed(2),
         team.pace.toFixed(2),
         team.offrtg.toFixed(1),
       ].join(',')
@@ -392,13 +479,19 @@ function exportCsv() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'nba-offense-model-2024-25.csv';
+  a.download = `nba-offense-model-${activeSeason}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
 
 weightKeys.forEach((key) => {
   sliders[key].addEventListener('input', render);
+});
+
+seasonSelect.addEventListener('change', () => {
+  activeSeason = seasonSelect.value;
+  populateCompareTeams();
+  render();
 });
 
 useZEl.addEventListener('change', render);
@@ -425,14 +518,15 @@ canvas.addEventListener('mousemove', (event) => {
   });
 
   if (hit) {
-    statusEl.textContent = `${hit.team}: score ${hit.score.toFixed(2)}, pace ${hit.pace.toFixed(2)}, OffRtg ${hit.offrtg.toFixed(
-      1
-    )}, eFG ${hit.efg.toFixed(1)}%, TOV ${hit.tov.toFixed(1)}%.`;
+    statusEl.textContent = `${activeSeason} ${hit.team}: score ${hit.score.toFixed(2)}, pace ${hit.pace.toFixed(
+      2
+    )}, OffRtg ${hit.offrtg.toFixed(1)}, TS ${hit.ts.toFixed(1)}%, 3PA/FGA ${hit.threepar.toFixed(2)}.`;
   }
 });
 
 canvas.addEventListener('mouseleave', render);
 
+populateSeasonSelect();
 populateCompareTeams();
 renderSourceNote();
 render();

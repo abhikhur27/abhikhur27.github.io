@@ -25,6 +25,8 @@ const canvas = document.getElementById('corridor-canvas');
 const ctx = canvas.getContext('2d');
 const spacingEl = document.getElementById('sim-spacing');
 const toggleAnimationBtn = document.getElementById('toggle-animation');
+const simSpeedInput = document.getElementById('sim-speed');
+const simSpeedLabel = document.getElementById('sim-speed-label');
 
 let challenge = null;
 const carCapacity = 180;
@@ -176,6 +178,8 @@ function drawSimulation(input, metrics) {
 
   const secondsPerLoop = metrics.roundTripMin * 60;
   const pxPerSecond = (2 * lineLengthPx) / Math.max(1, secondsPerLoop);
+  const speedFactor = Number(simSpeedInput.value);
+  const effectivePxPerSecond = pxPerSecond * speedFactor;
 
   spacingEl.textContent = `${(metrics.headwayMin * 60).toFixed(0)}s headway | ${Math.round(lineLengthPx / input.trains)}px average spacing`;
 
@@ -199,7 +203,7 @@ function drawSimulation(input, metrics) {
   ctx.fillStyle = '#7d8ba9';
   ctx.font = '11px JetBrains Mono';
   ctx.fillText(`Round trip ${metrics.roundTripMin.toFixed(1)} min`, 12, 16);
-  ctx.fillText(`Animation speed ~ ${(pxPerSecond * 1.8).toFixed(1)} px/s`, width - 214, 16);
+  ctx.fillText(`Animation speed ~ ${effectivePxPerSecond.toFixed(1)} px/s`, width - 214, 16);
 }
 
 function render() {
@@ -230,7 +234,8 @@ function animate(now) {
   if (animationRunning && latestMetrics) {
     const loopPx = (canvas.width - 100) * 2;
     const loopSeconds = latestMetrics.metrics.roundTripMin * 60;
-    const pxPerMs = loopPx / Math.max(1000, loopSeconds * 1000);
+    const speedFactor = Number(simSpeedInput.value);
+    const pxPerMs = (loopPx / Math.max(1000, loopSeconds * 1000)) * speedFactor;
     animationPhase = (animationPhase + delta * pxPerMs) % loopPx;
 
     drawSimulation(latestMetrics.input, latestMetrics.metrics);
@@ -257,6 +262,11 @@ Object.values(controls).forEach((control) => {
   control.addEventListener('input', render);
 });
 
+simSpeedInput.addEventListener('input', () => {
+  simSpeedLabel.textContent = simSpeedInput.value;
+  render();
+});
+
 toggleAnimationBtn.addEventListener('click', () => {
   animationRunning = !animationRunning;
   toggleAnimationBtn.textContent = animationRunning ? 'Pause Animation' : 'Resume Animation';
@@ -268,5 +278,6 @@ toggleAnimationBtn.addEventListener('click', () => {
 newChallengeBtn.addEventListener('click', newChallenge);
 
 newChallenge();
+simSpeedLabel.textContent = simSpeedInput.value;
 render();
 requestAnimationFrame(animate);

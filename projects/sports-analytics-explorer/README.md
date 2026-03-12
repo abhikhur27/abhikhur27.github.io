@@ -1,14 +1,18 @@
 ﻿# NBA Offensive Identity Model (2024-25)
 
-Interactive offense profiling dashboard built on real 2024-25 team data.
+Interactive offense profiling dashboard built on real multi-season NBA team data.
 
 ## Features
 
+- Season switcher for **2021-22 through 2024-25**.
 - Weight-adjusted offensive model using:
   - Effective FG%
   - Turnover%
   - Offensive Rebound%
   - Free Throw Attempt Rate (FTA/FGA)
+- Additional advanced fields for insight:
+  - True Shooting % (TS%)
+  - 3PA/FGA (shot profile)
 - Preset scoring modes (`Balanced`, `Shot Making`, `Physicality`).
 - Optional z-score normalization mode for scale-robust comparisons.
 - Team-vs-team differential breakdown panel.
@@ -18,9 +22,9 @@ Interactive offense profiling dashboard built on real 2024-25 team data.
 
 ## Data Source and Validation
 
-- Season: **2024-25 regular season**.
+- Seasons: **2021-22, 2022-23, 2023-24, 2024-25** regular seasons.
 - Source: **StatMuse NBA team query endpoints**.
-- Data retrieval script generated `data-2024-25.js` from paired `best`/`worst` queries per metric to capture all 30 teams.
+- Data retrieval script generated `data-2024-25.js` from paired `best`/`worst` queries per metric and season to capture all 30 teams.
 
 ## Technical Design
 
