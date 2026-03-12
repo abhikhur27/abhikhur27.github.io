@@ -1,5 +1,6 @@
-﻿const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
 const cards = Array.from(document.querySelectorAll('.project-card'));
+const projectSearchInput = document.getElementById('project-search-input');
 const revealItems = Array.from(document.querySelectorAll('.reveal'));
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
@@ -8,24 +9,32 @@ const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
 const commitSparklineEl = document.getElementById('commit-sparkline');
 
+let activeFilter = 'all';
+
+function applyProjectFilters() {
+  const query = (projectSearchInput?.value || '').trim().toLowerCase();
+
+  cards.forEach((card) => {
+    const categories = (card.dataset.category || '').split(' ');
+    const categoryMatch = activeFilter === 'all' || categories.includes(activeFilter);
+    const textMatch = !query || (card.textContent || '').toLowerCase().includes(query);
+    card.classList.toggle('hidden', !(categoryMatch && textMatch));
+  });
+}
+
 filterButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    const filter = button.dataset.filter;
+    activeFilter = button.dataset.filter || 'all';
 
     filterButtons.forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
-
-    cards.forEach((card) => {
-      if (filter === 'all') {
-        card.classList.remove('hidden');
-        return;
-      }
-
-      const categories = (card.dataset.category || '').split(' ');
-      card.classList.toggle('hidden', !categories.includes(filter));
-    });
+    applyProjectFilters();
   });
 });
+
+if (projectSearchInput) {
+  projectSearchInput.addEventListener('input', applyProjectFilters);
+}
 
 const observer = new IntersectionObserver(
   (entries) => {
@@ -252,4 +261,9 @@ function renderGithubPulse(payload) {
     .join('');
 }
 
+applyProjectFilters();
 loadGithubPulse();
+
+
+
+

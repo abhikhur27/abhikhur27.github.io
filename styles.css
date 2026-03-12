@@ -250,6 +250,24 @@ section {
   gap: 0.5rem;
 }
 
+.project-search {
+  margin-top: 0.85rem;
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.project-search input {
+  width: min(420px, 100%);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.45rem 0.6rem;
+  font: inherit;
+}
+
 .filter-btn {
   border: 1px solid var(--border);
   background: var(--surface);
