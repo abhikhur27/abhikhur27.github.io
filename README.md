@@ -18,6 +18,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/transit-network-lab`
 - `projects/sports-analytics-explorer`
 - `projects/rail-headway-sandbox`
+- `projects/market-regime-lab`
 
 ## Technical design
 

@@ -1,0 +1,127 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Regime Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <h1>Market Regime Lab</h1>
+    <p>Stress-test position sizing under bull/bear regime shifts with Monte Carlo simulation and drawdown analytics.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel controls">
+      <h2>Simulation Setup</h2>
+      <div class="preset-row" role="group" aria-label="Scenario presets">
+        <button type="button" class="preset" data-preset="balanced">Balanced</button>
+        <button type="button" class="preset" data-preset="trend">Trend Following</button>
+        <button type="button" class="preset" data-preset="stress">Stress Regime</button>
+      </div>
+
+      <label>
+        Simulations: <span id="simulations-label">350</span>
+        <input id="simulations" type="range" min="80" max="900" step="10" value="350">
+      </label>
+
+      <label>
+        Horizon (trading days): <span id="horizon-label">252</span>
+        <input id="horizon" type="range" min="60" max="756" step="21" value="252">
+      </label>
+
+      <label>
+        Bull drift (%/day): <span id="bull-drift-label">0.07</span>
+        <input id="bull-drift" type="range" min="0.01" max="0.16" step="0.01" value="0.07">
+      </label>
+
+      <label>
+        Bear drift (%/day): <span id="bear-drift-label">-0.10</span>
+        <input id="bear-drift" type="range" min="-0.28" max="0.01" step="0.01" value="-0.10">
+      </label>
+
+      <label>
+        Bull volatility (%/day): <span id="bull-vol-label">0.9</span>
+        <input id="bull-vol" type="range" min="0.4" max="2.8" step="0.1" value="0.9">
+      </label>
+
+      <label>
+        Bear volatility (%/day): <span id="bear-vol-label">1.9</span>
+        <input id="bear-vol" type="range" min="0.8" max="5" step="0.1" value="1.9">
+      </label>
+
+      <label>
+        P(Bull stays Bull): <span id="p-bull-label">92</span>%
+        <input id="p-bull" type="range" min="70" max="99" step="1" value="92">
+      </label>
+
+      <label>
+        P(Bear stays Bear): <span id="p-bear-label">82</span>%
+        <input id="p-bear" type="range" min="55" max="97" step="1" value="82">
+      </label>
+
+      <label>
+        Sizing policy
+        <select id="sizing-policy">
+          <option value="fixed">Fixed fraction</option>
+          <option value="vol_target">Volatility target</option>
+          <option value="drawdown">Drawdown-aware sizing</option>
+        </select>
+      </label>
+
+      <label>
+        Baseline exposure (%): <span id="exposure-label">100</span>
+        <input id="exposure" type="range" min="35" max="190" step="5" value="100">
+      </label>
+
+      <div class="button-row">
+        <button id="run" class="primary" type="button">Run Simulation</button>
+        <button id="reroll" type="button">Randomize Inputs</button>
+      </div>
+      <p id="status" class="status" aria-live="polite">Ready.</p>
+    </section>
+
+    <section class="panel output">
+      <h2>Path Envelope</h2>
+      <canvas id="path-chart" width="900" height="420" aria-label="Monte Carlo equity chart"></canvas>
+      <div class="legend">
+        <span><i class="legend-line line-p10"></i>10th percentile</span>
+        <span><i class="legend-line line-p50"></i>Median</span>
+        <span><i class="legend-line line-p90"></i>90th percentile</span>
+      </div>
+
+      <div class="metrics" role="list" aria-label="Simulation metrics">
+        <article role="listitem">
+          <h3>Median CAGR</h3>
+          <p id="metric-cagr">-</p>
+        </article>
+        <article role="listitem">
+          <h3>Worst Drawdown</h3>
+          <p id="metric-drawdown">-</p>
+        </article>
+        <article role="listitem">
+          <h3>Loss Probability</h3>
+          <p id="metric-loss">-</p>
+        </article>
+        <article role="listitem">
+          <h3>Avg Regime Switches</h3>
+          <p id="metric-switches">-</p>
+        </article>
+      </div>
+
+      <h2>Distribution Snapshot</h2>
+      <div id="distribution" class="distribution" aria-label="Final return distribution"></div>
+
+      <h2>Interpretation</h2>
+      <p id="insight" class="insight"></p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

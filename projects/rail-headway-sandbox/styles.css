@@ -111,6 +111,29 @@ button {
   color: var(--muted);
 }
 
+canvas {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0f1420;
+  margin-top: 0.6rem;
+}
+
+.sim-row {
+  margin-top: 0.55rem;
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sim-row p {
+  margin: 0;
+  color: var(--muted);
+}
+
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
 }

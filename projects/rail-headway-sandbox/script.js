@@ -21,9 +21,19 @@ const insightEl = document.getElementById('insight');
 const challengeEl = document.getElementById('challenge');
 const newChallengeBtn = document.getElementById('new-challenge');
 
+const canvas = document.getElementById('corridor-canvas');
+const ctx = canvas.getContext('2d');
+const spacingEl = document.getElementById('sim-spacing');
+const toggleAnimationBtn = document.getElementById('toggle-animation');
+
 let challenge = null;
 const carCapacity = 180;
 const carsPerTrain = 6;
+
+let latestMetrics = null;
+let animationRunning = true;
+let animationPhase = 0;
+let lastFrameTime = performance.now();
 
 function fmt(num, unit = '') {
   return `${num.toFixed(1)}${unit}`;
@@ -56,23 +66,24 @@ function computeMetrics({ lengthKm, trains, speedKmh, dwellSec }) {
     expectedWaitMin,
     tphPerDirection,
     pphpd,
+    stopsPerDirection,
   };
 }
 
 function buildInsight(metrics) {
   if (metrics.expectedWaitMin <= 3 && metrics.pphpd >= 14000) {
-    return 'This service pattern is competitive: short waits and high corridor throughput.';
+    return 'High-frequency and high-capacity profile. This behaves like a premium rapid corridor.';
   }
 
   if (metrics.expectedWaitMin > 6) {
-    return 'Waiting time is dominating rider experience. Add trains or reduce round-trip time.';
+    return 'Waiting time is dominating the user experience. Add trains or reduce cycle time.';
   }
 
   if (metrics.pphpd < 9000) {
-    return 'Capacity is constrained. Consider larger trains or tighter headways.';
+    return 'Throughput is constrained. Consider larger consists or tighter dispatch intervals.';
   }
 
-  return 'Balanced profile. You can push further by trimming dwell times or increasing speed.';
+  return 'Balanced profile. Next leverage point is dwell-time discipline at busy stations.';
 }
 
 function evaluateChallenge(metrics) {
@@ -86,9 +97,115 @@ function evaluateChallenge(metrics) {
   }
 }
 
+function drawBackground(width, height, lineY) {
+  ctx.fillStyle = '#0f1420';
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.strokeStyle = '#263049';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(36, lineY);
+  ctx.lineTo(width - 36, lineY);
+  ctx.stroke();
+
+  ctx.strokeStyle = '#1f283d';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(36, lineY - 20);
+  ctx.lineTo(width - 36, lineY - 20);
+  ctx.moveTo(36, lineY + 20);
+  ctx.lineTo(width - 36, lineY + 20);
+  ctx.stroke();
+}
+
+function drawStations(width, lineY, stationCount) {
+  const startX = 50;
+  const endX = width - 50;
+  const span = endX - startX;
+
+  for (let i = 0; i < stationCount; i += 1) {
+    const ratio = i / Math.max(1, stationCount - 1);
+    const x = startX + span * ratio;
+
+    ctx.fillStyle = '#9aa7c7';
+    ctx.beginPath();
+    ctx.arc(x, lineY, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (i % 2 === 0) {
+      ctx.fillStyle = '#6f7e9f';
+      ctx.font = '10px JetBrains Mono';
+      ctx.fillText(String(i + 1), x - 3, lineY + 18);
+    }
+  }
+}
+
+function loopPosition(trainIndex, trainCount, phase, lineLengthPx) {
+  const offset = (trainIndex / trainCount) * 2 * lineLengthPx;
+  return (phase + offset) % (2 * lineLengthPx);
+}
+
+function drawTrain(x, y, direction) {
+  ctx.save();
+  ctx.translate(x, y);
+
+  if (direction === -1) {
+    ctx.scale(-1, 1);
+  }
+
+  ctx.fillStyle = '#d7defe';
+  ctx.fillRect(-11, -6, 22, 12);
+  ctx.fillStyle = '#7f93c4';
+  ctx.fillRect(-7, -4, 4, 8);
+  ctx.fillRect(-1, -4, 4, 8);
+  ctx.fillRect(5, -4, 4, 8);
+
+  ctx.restore();
+}
+
+function drawSimulation(input, metrics) {
+  const width = canvas.width;
+  const height = canvas.height;
+  const lineY = Math.floor(height / 2);
+  const startX = 50;
+  const endX = width - 50;
+  const lineLengthPx = endX - startX;
+
+  drawBackground(width, height, lineY);
+  drawStations(width, lineY, metrics.stopsPerDirection);
+
+  const secondsPerLoop = metrics.roundTripMin * 60;
+  const pxPerSecond = (2 * lineLengthPx) / Math.max(1, secondsPerLoop);
+
+  spacingEl.textContent = `${(metrics.headwayMin * 60).toFixed(0)}s headway | ${Math.round(lineLengthPx / input.trains)}px average spacing`;
+
+  for (let i = 0; i < input.trains; i += 1) {
+    const distance = loopPosition(i, input.trains, animationPhase, lineLengthPx);
+    let x;
+    let direction;
+
+    if (distance <= lineLengthPx) {
+      x = startX + distance;
+      direction = 1;
+    } else {
+      x = endX - (distance - lineLengthPx);
+      direction = -1;
+    }
+
+    const sway = Math.sin((animationPhase + i * 28) / 40) * 1.6;
+    drawTrain(x, lineY + sway, direction);
+  }
+
+  ctx.fillStyle = '#7d8ba9';
+  ctx.font = '11px JetBrains Mono';
+  ctx.fillText(`Round trip ${metrics.roundTripMin.toFixed(1)} min`, 12, 16);
+  ctx.fillText(`Animation speed ~ ${(pxPerSecond * 1.8).toFixed(1)} px/s`, width - 214, 16);
+}
+
 function render() {
   const input = currentInput();
   const metrics = computeMetrics(input);
+  latestMetrics = { input, metrics };
 
   labels.length.textContent = String(input.lengthKm);
   labels.trains.textContent = String(input.trains);
@@ -103,6 +220,23 @@ function render() {
 
   insightEl.textContent = buildInsight(metrics);
   evaluateChallenge(metrics);
+  drawSimulation(input, metrics);
+}
+
+function animate(now) {
+  const delta = now - lastFrameTime;
+  lastFrameTime = now;
+
+  if (animationRunning && latestMetrics) {
+    const loopPx = (canvas.width - 100) * 2;
+    const loopSeconds = latestMetrics.metrics.roundTripMin * 60;
+    const pxPerMs = loopPx / Math.max(1000, loopSeconds * 1000);
+    animationPhase = (animationPhase + delta * pxPerMs) % loopPx;
+
+    drawSimulation(latestMetrics.input, latestMetrics.metrics);
+  }
+
+  requestAnimationFrame(animate);
 }
 
 function newChallenge() {
@@ -123,7 +257,16 @@ Object.values(controls).forEach((control) => {
   control.addEventListener('input', render);
 });
 
+toggleAnimationBtn.addEventListener('click', () => {
+  animationRunning = !animationRunning;
+  toggleAnimationBtn.textContent = animationRunning ? 'Pause Animation' : 'Resume Animation';
+  if (animationRunning && latestMetrics) {
+    drawSimulation(latestMetrics.input, latestMetrics.metrics);
+  }
+});
+
 newChallengeBtn.addEventListener('click', newChallenge);
 
 newChallenge();
 render();
+requestAnimationFrame(animate);

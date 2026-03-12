@@ -35,6 +35,7 @@
           <article><h3>Total</h3><p id="metric-minutes">-</p></article>
           <article><h3>Stops</h3><p id="metric-stops">-</p></article>
           <article><h3>Transfers</h3><p id="metric-transfers">-</p></article>
+          <article><h3>Distance</h3><p id="metric-distance">-</p></article>
         </div>
 
         <ol id="route-steps" class="steps"></ol>
@@ -47,6 +48,11 @@
           <input id="new-stop-name" type="text" placeholder="e.g. Midtown West">
         </label>
         <button id="add-stop" type="button">Add Stop</button>
+        <label>
+          Delete Stop
+          <select id="delete-stop"></select>
+        </label>
+        <button id="remove-stop" type="button">Delete Stop</button>
 
         <div class="line-editor">
           <label>
@@ -70,7 +76,12 @@
             <input id="line-speed" type="number" min="8" max="60" value="24">
           </label>
         </div>
-        <button id="add-line" type="button">Add Line Segment</button>
+        <button id="add-line" type="button">Add Route Segment</button>
+        <label>
+          Remove Route Segment
+          <select id="remove-segment"></select>
+        </label>
+        <button id="remove-line" type="button">Remove Selected Segment</button>
         <p id="editor-status" class="status"></p>
       </article>
 
@@ -78,7 +89,13 @@
         <h2>Optimization Mode</h2>
         <p id="challenge-text">Press "New Challenge" to generate an optimization goal.</p>
         <button id="new-challenge" type="button">New Challenge</button>
-        <p class="score">Challenges solved: <span id="challenge-score">0</span></p>
+        <div class="challenge-metrics">
+          <article><h3>Target</h3><p id="challenge-target">-</p></article>
+          <article><h3>Current</h3><p id="challenge-current">-</p></article>
+          <article><h3>Edits Left</h3><p id="challenge-edits">-</p></article>
+          <article><h3>Timer</h3><p id="challenge-timer">-</p></article>
+        </div>
+        <p class="score">Solved: <span id="challenge-score">0</span> | Streak: <span id="challenge-streak">0</span></p>
       </article>
     </section>
 

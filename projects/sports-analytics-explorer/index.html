@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -13,13 +13,20 @@
   <header class="container header">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
     <h1>NBA Offensive Identity Model (2024-25)</h1>
-    <p>Interactive model for rating team offense profiles with adjustable factor weights.</p>
+    <p>Real 2024-25 team data with customizable factor weighting, profile presets, and matchup differentials.</p>
+    <p id="source-note" class="source-note"></p>
   </header>
 
   <main class="container layout">
     <section class="panel controls">
       <h2>Model Weights</h2>
-      <p>Adjust how each factor contributes to the custom score.</p>
+      <p>Control how each offensive factor contributes to the score.</p>
+
+      <div class="preset-row" role="group" aria-label="Weight presets">
+        <button type="button" class="preset" data-preset="balanced">Balanced</button>
+        <button type="button" class="preset" data-preset="shotmaking">Shot Making</button>
+        <button type="button" class="preset" data-preset="physicality">Physicality</button>
+      </div>
 
       <label>
         Effective FG% Weight: <span id="w-efg-label">40</span>
@@ -41,14 +48,58 @@
         <input id="w-ftr" type="range" min="0" max="100" value="15" step="5">
       </label>
 
-      <button id="reset" type="button">Reset Weights</button>
+      <label class="toggle">
+        <input id="use-z" type="checkbox">
+        Use z-score mode (better for comparing very different scales)
+      </label>
+
+      <div class="button-row">
+        <button id="reset" type="button">Reset Weights</button>
+        <button id="export" type="button">Export Ranking CSV</button>
+      </div>
+
+      <h2>Team Compare</h2>
+      <div class="compare-row">
+        <label>
+          Team A
+          <select id="compare-a"></select>
+        </label>
+        <label>
+          Team B
+          <select id="compare-b"></select>
+        </label>
+      </div>
+
+      <div id="compare-breakdown" class="breakdown"></div>
+
       <p id="status" class="status" aria-live="polite"></p>
     </section>
 
     <section class="panel">
       <h2>Pace vs Offensive Rating</h2>
-      <canvas id="chart" width="760" height="320" aria-label="Scatter plot"></canvas>
-      <p class="small">Bubble size scales with the computed custom score.</p>
+      <canvas id="chart" width="860" height="360" aria-label="Scatter plot"></canvas>
+      <p class="small">Bubble size scales with custom score. Hover points for details.</p>
+
+      <div class="metric-row">
+        <article>
+          <h3>Top Custom Score</h3>
+          <p id="top-custom">-</p>
+        </article>
+        <article>
+          <h3>Best OffRtg</h3>
+          <p id="top-offrtg">-</p>
+        </article>
+        <article>
+          <h3>Fastest Pace</h3>
+          <p id="top-pace">-</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel wide">
+      <h2>Contribution View</h2>
+      <p class="small">Factor contribution bars for the currently top-ranked team in your model.</p>
+      <div id="factor-bars" class="factor-bars"></div>
     </section>
 
     <section class="panel wide">
@@ -64,6 +115,7 @@
               <th>TOV%</th>
               <th>ORB%</th>
               <th>FTr</th>
+              <th>Pace</th>
               <th>OffRtg</th>
             </tr>
           </thead>
@@ -73,6 +125,7 @@
     </section>
   </main>
 
+  <script src="data-2024-25.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
