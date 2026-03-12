@@ -49,22 +49,6 @@ python -m http.server 8000
 
 Then open `http://localhost:8000`.
 
-## Client request email automation
-
-A Spark-safe Firebase email pipeline is included at:
-
-- `automation/client-request-email`
-
-It provides:
-
-- A Firestore batch-update helper that queues emails whenever a client request is updated.
-- A scheduled GitHub Action worker that sends queued emails via SMTP.
-- A polished HTML email template with plain-text fallback.
-
-Setup docs and exact env variables are in:
-
-- `automation/client-request-email/README.md`
-
 ## Future improvements
 
 - Add CI for link checks and HTML validation.
