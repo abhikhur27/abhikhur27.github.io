@@ -26,6 +26,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `index.html`: semantic structure for hero, projects, and blog sections.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, writing shelf controls, and mobile nav behavior.
+- `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid
 flowchart TD

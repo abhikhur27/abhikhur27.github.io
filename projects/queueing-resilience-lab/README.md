@@ -1,18 +1,18 @@
-# Queueing Resilience Lab
+# Midnight Dispatch Desk
 
-Static queueing-systems explainer and simulator for portfolio use.
+Static decision game about triage under cascading operational risk.
 
 ## What It Does
 
-- Models a simple single-server system using arrival rate, service rate, burst multiplier, and staffing slack.
-- Shows utilization, expected wait, queue length, and a qualitative risk band.
-- Includes a 12-step demand curve so visitors can see when a system crosses from healthy to unstable.
+- Puts the user in charge of an overnight dispatch desk across transit, power, and medical incidents.
+- Forces tradeoffs between immediate severity, hidden cascade risk, crew specialization, and fatigue.
+- Produces a distinct playthrough each shift instead of just visualizing a parameter sweep.
 
-## Why It Fits The Portfolio
+## Why This Version Is Better
 
-- Turns operations-research concepts into an interactive browser lab.
-- Stays fully static and GitHub Pages compatible.
-- Pairs well with the scheduling, transit, and systems-simulation projects already in this portfolio.
+- The interaction has a real mechanic: you choose what to save and what to defer.
+- The insight is not “high utilization is bad”; it is that the wrong local choice can create tomorrow’s outage.
+- It feels closer to a toy system or small product than a chart lab.
 
 ## Local Run
 

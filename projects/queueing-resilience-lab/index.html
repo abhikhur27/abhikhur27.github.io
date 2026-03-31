@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Queueing Resilience Lab</title>
+  <title>Midnight Dispatch Desk</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
@@ -12,50 +12,59 @@
 <body>
   <header class="container header">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
-    <h1>Queueing Resilience Lab</h1>
-    <p>Stress-test a single-server system and watch how utilization drives wait time and instability.</p>
+    <h1>Midnight Dispatch Desk</h1>
+    <p>
+      You run the overnight city desk. Every turn, new incidents arrive, crews get tired,
+      and the wrong choice can trigger a cascade somewhere else.
+    </p>
   </header>
 
   <main class="container layout">
-    <section class="panel">
-      <h2>Scenario Controls</h2>
-
-      <label>Arrival Rate per Hour <span id="arrival-value">12</span>
-        <input id="arrival-rate" type="range" min="4" max="30" value="12">
-      </label>
-
-      <label>Service Rate per Hour <span id="service-value">18</span>
-        <input id="service-rate" type="range" min="6" max="36" value="18">
-      </label>
-
-      <label>Burst Multiplier <span id="burst-value">1.2x</span>
-        <input id="burst-factor" type="range" min="1" max="2.5" value="1.2" step="0.1">
-      </label>
-
-      <label>Slack Capacity <span id="slack-value">10%</span>
-        <input id="slack-factor" type="range" min="0" max="40" value="10" step="5">
-      </label>
+    <section class="panel panel-narrow">
+      <h2>Shift Controls</h2>
+      <div class="metric-stack">
+        <article><h3>Turn</h3><p id="turn-count">1 / 8</p></article>
+        <article><h3>Public Trust</h3><p id="trust-score">100</p></article>
+        <article><h3>Crew Fatigue</h3><p id="fatigue-score">0</p></article>
+        <article><h3>Open Incidents</h3><p id="backlog-score">0</p></article>
+      </div>
 
       <div class="button-row">
-        <button id="preset-balanced" type="button">Balanced</button>
-        <button id="preset-peak" type="button">Peak Stress</button>
-        <button id="preset-failure" type="button">Failure Mode</button>
+        <button id="next-turn" type="button">Resolve Turn</button>
+        <button id="surge-button" type="button">Activate Surge Protocol</button>
+        <button id="reset-button" type="button">Restart Shift</button>
       </div>
+
+      <p class="help-copy">
+        Each turn you can assign up to one incident to each crew. Unassigned incidents age and may cascade.
+        Surge Protocol gives one extra response this turn, but raises future fatigue.
+      </p>
+
+      <h2>Crews</h2>
+      <div id="crew-board" class="crew-board"></div>
     </section>
 
-    <section class="panel">
-      <h2>System Readout</h2>
-      <div class="metrics">
-        <article><h3>Utilization</h3><p id="utilization">-</p></article>
-        <article><h3>Expected Wait</h3><p id="wait-time">-</p></article>
-        <article><h3>Queue Length</h3><p id="queue-length">-</p></article>
-        <article><h3>Risk Band</h3><p id="risk-band">-</p></article>
+    <section class="panel panel-wide">
+      <div class="panel-head">
+        <div>
+          <h2>Incident Queue</h2>
+          <p class="section-copy">Prioritize by urgency, cascade risk, and crew fit. Highest severity is not always the best first move.</p>
+        </div>
       </div>
 
-      <div id="narrative" class="narrative"></div>
+      <div id="incident-board" class="incident-board"></div>
 
-      <h2>Demand Curve</h2>
-      <div id="demand-bars" class="bars" aria-label="Demand curve"></div>
+      <div class="bottom-grid">
+        <section class="subpanel">
+          <h2>Shift Log</h2>
+          <ul id="shift-log" class="log-list"></ul>
+        </section>
+
+        <section class="subpanel">
+          <h2>Why This Turn Is Hard</h2>
+          <div id="turn-brief" class="brief"></div>
+        </section>
+      </div>
     </section>
   </main>
 
