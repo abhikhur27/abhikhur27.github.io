@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Grid Blackout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header container">
+    <a class="back-link" href="../../index.html" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <p class="eyebrow">Infrastructure Systems Simulation</p>
+    <h1>Campus Grid Blackout</h1>
+    <p class="lead">Run a strained campus microgrid through a six-shift blackout. Every allocation choice trades off student trust, lab uptime, and cascading outage risk.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel crisis-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Shift Control</p>
+          <h2 id="shift-label">Shift 1 of 6</h2>
+        </div>
+        <button id="reset-btn" type="button">Reset Scenario</button>
+      </div>
+      <p id="incident-copy" class="incident-copy"></p>
+
+      <div class="resource-grid">
+        <article>
+          <h3>Repair Crews</h3>
+          <p id="crew-count">2</p>
+        </article>
+        <article>
+          <h3>Battery Reserve</h3>
+          <p id="battery-count">3</p>
+        </article>
+        <article>
+          <h3>Public Messages</h3>
+          <p id="message-count">1</p>
+        </article>
+      </div>
+
+      <div id="district-grid" class="district-grid"></div>
+      <p id="status-text" class="status" aria-live="polite">Stabilize the first outage wave.</p>
+
+      <div class="button-row">
+        <button id="resolve-btn" class="primary" type="button">Resolve Shift</button>
+      </div>
+    </section>
+
+    <section class="panel summary-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Portfolio Lens</p>
+          <h2>System Outcomes</h2>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <article>
+          <h3>Campus Trust</h3>
+          <p id="trust-value">72</p>
+        </article>
+        <article>
+          <h3>Research Uptime</h3>
+          <p id="uptime-value">76</p>
+        </article>
+        <article>
+          <h3>Cascade Risk</h3>
+          <p id="risk-value">28</p>
+        </article>
+      </div>
+
+      <div class="bar-group" aria-label="System meters">
+        <div>
+          <div class="bar-label"><span>Trust</span><span id="trust-meter-label">72%</span></div>
+          <div class="meter"><span id="trust-meter"></span></div>
+        </div>
+        <div>
+          <div class="bar-label"><span>Uptime</span><span id="uptime-meter-label">76%</span></div>
+          <div class="meter"><span id="uptime-meter"></span></div>
+        </div>
+        <div>
+          <div class="bar-label"><span>Risk</span><span id="risk-meter-label">28%</span></div>
+          <div class="meter danger"><span id="risk-meter"></span></div>
+        </div>
+      </div>
+
+      <div class="timeline-shell">
+        <h3>Decision Log</h3>
+        <ul id="timeline" class="timeline"></ul>
+      </div>
+
+      <div id="ending-card" class="ending-card hidden"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

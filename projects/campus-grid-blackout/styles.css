@@ -1,0 +1,259 @@
+:root {
+  --bg: #081016;
+  --surface: #101b23;
+  --surface-alt: #152632;
+  --text: #eef6fb;
+  --muted: #9eb3c0;
+  --border: #284250;
+  --accent: #7ce1c7;
+  --accent-strong: #d8fff4;
+  --warn: #f5ae5f;
+  --danger: #f06b7f;
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(124, 225, 199, 0.12), transparent 30%),
+    linear-gradient(180deg, #071016 0%, #0b141b 100%);
+  line-height: 1.6;
+}
+
+.container {
+  width: min(1150px, 92vw);
+  margin: 0 auto;
+}
+
+.header {
+  padding: clamp(2.8rem, 6vw, 5rem) 0 1.4rem;
+}
+
+.back-link {
+  display: inline-flex;
+  margin-bottom: 0.85rem;
+  color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+  color: #8fcbb9;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: "Sora", "Space Grotesk", sans-serif;
+  line-height: 1.15;
+}
+
+h1 {
+  margin-top: 0.8rem;
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  max-width: 12ch;
+}
+
+.lead {
+  max-width: 62ch;
+  color: var(--muted);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(16, 27, 35, 0.92);
+  padding: 1rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+.section-head,
+.button-row,
+.resource-grid,
+.metric-grid,
+.bar-group {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.section-head {
+  grid-template-columns: 1fr auto;
+  align-items: start;
+}
+
+button {
+  font: inherit;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--text);
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  color: #092217;
+  border-color: transparent;
+  font-weight: 700;
+}
+
+.incident-copy,
+.status {
+  color: var(--muted);
+}
+
+.resource-grid,
+.metric-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.resource-grid article,
+.metric-grid article {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(21, 38, 50, 0.85);
+  padding: 0.8rem;
+}
+
+.resource-grid p,
+.metric-grid p {
+  margin: 0.2rem 0 0;
+  font-size: 1.5rem;
+  color: var(--accent-strong);
+}
+
+.district-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.district-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(21, 38, 50, 0.85);
+  padding: 0.9rem;
+}
+
+.district-card header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+}
+
+.district-meta,
+.allocation-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+  background: rgba(124, 225, 199, 0.12);
+  color: var(--accent-strong);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+}
+
+.allocation-row {
+  margin-top: 0.7rem;
+}
+
+.allocation-row button.active {
+  background: rgba(124, 225, 199, 0.18);
+  border-color: rgba(124, 225, 199, 0.46);
+}
+
+.meter {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7ce1c7 0%, #c6fff0 100%);
+}
+
+.meter.danger span {
+  background: linear-gradient(90deg, #f5ae5f 0%, #f06b7f 100%);
+}
+
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.86rem;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0.8rem 0 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.timeline li,
+.ending-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(21, 38, 50, 0.85);
+  padding: 0.75rem 0.85rem;
+}
+
+.timeline time {
+  display: block;
+  color: #8fcbb9;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ending-card {
+  margin-top: 0.9rem;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-grid,
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-head {
+    grid-template-columns: 1fr;
+  }
+}

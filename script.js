@@ -3,12 +3,18 @@ const cards = Array.from(document.querySelectorAll('.project-card'));
 const projectSearchInput = document.getElementById('project-search-input');
 const projectResultsMeta = document.getElementById('project-results-meta');
 const projectEmptyState = document.getElementById('project-empty-state');
+const surpriseProjectBtn = document.getElementById('surprise-project-btn');
+const spotlightTitle = document.getElementById('spotlight-title');
+const spotlightDescription = document.getElementById('spotlight-description');
+const spotlightActions = document.getElementById('spotlight-actions');
 const revealItems = Array.from(document.querySelectorAll('.reveal'));
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
 const expandWritingBtn = document.getElementById('expand-writing');
 const collapseWritingBtn = document.getElementById('collapse-writing');
 const writingEntries = Array.from(document.querySelectorAll('.entry-row'));
+const writingSearchInput = document.getElementById('writing-search-input');
+const writingResultsMeta = document.getElementById('writing-results-meta');
 const commitCountEl = document.getElementById('commit-count');
 const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
@@ -19,13 +25,17 @@ let activeFilter = 'all';
 function applyProjectFilters() {
   const query = (projectSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
+  let firstVisible = null;
 
   cards.forEach((card) => {
     const categories = (card.dataset.category || '').split(' ');
     const categoryMatch = activeFilter === 'all' || categories.includes(activeFilter);
     const textMatch = !query || (card.textContent || '').toLowerCase().includes(query);
     const visible = categoryMatch && textMatch;
-    if (visible) visibleCount += 1;
+    if (visible) {
+      visibleCount += 1;
+      if (!firstVisible) firstVisible = card;
+    }
     card.classList.toggle('hidden', !visible);
   });
 
@@ -36,6 +46,8 @@ function applyProjectFilters() {
   if (projectEmptyState) {
     projectEmptyState.classList.toggle('hidden', visibleCount > 0);
   }
+
+  updateSpotlight(firstVisible);
 }
 
 filterButtons.forEach((button) => {
@@ -52,6 +64,39 @@ if (projectSearchInput) {
   projectSearchInput.addEventListener('input', applyProjectFilters);
 }
 
+function updateSpotlight(card) {
+  cards.forEach((item) => item.classList.toggle('spotlighted', item === card));
+
+  if (!spotlightTitle || !spotlightDescription || !spotlightActions) {
+    return;
+  }
+
+  if (!card) {
+    spotlightTitle.textContent = 'No projects match the current filter.';
+    spotlightDescription.textContent = 'Broaden the search or switch categories to bring a project back into focus.';
+    spotlightActions.innerHTML = '';
+    return;
+  }
+
+  spotlightTitle.textContent = card.querySelector('h3')?.textContent || 'Project spotlight';
+  spotlightDescription.textContent = card.querySelector('p:not(.stack)')?.textContent || '';
+  spotlightActions.innerHTML = Array.from(card.querySelectorAll('.card-actions a'))
+    .map((link) => `<a href="${link.getAttribute('href')}" target="_blank" rel="noreferrer">${link.textContent}</a>`)
+    .join('');
+}
+
+surpriseProjectBtn?.addEventListener('click', () => {
+  const visibleCards = cards.filter((card) => !card.classList.contains('hidden'));
+  if (!visibleCards.length) {
+    updateSpotlight(null);
+    return;
+  }
+
+  const randomCard = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+  updateSpotlight(randomCard);
+  randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
 function setWritingExpansion(expanded) {
   writingEntries.forEach((entry) => {
     entry.open = expanded;
@@ -62,6 +107,26 @@ function setWritingExpansion(expanded) {
 
 expandWritingBtn?.addEventListener('click', () => setWritingExpansion(true));
 collapseWritingBtn?.addEventListener('click', () => setWritingExpansion(false));
+
+function applyWritingFilters() {
+  const query = (writingSearchInput?.value || '').trim().toLowerCase();
+  let visibleCount = 0;
+
+  writingEntries.forEach((entry) => {
+    const visible = !query || (entry.textContent || '').toLowerCase().includes(query);
+    entry.classList.toggle('hidden', !visible);
+    if (visible) visibleCount += 1;
+  });
+
+  if (writingResultsMeta) {
+    writingResultsMeta.textContent =
+      visibleCount === writingEntries.length
+        ? 'Showing all draft notes.'
+        : `Showing ${visibleCount} matching draft${visibleCount === 1 ? '' : 's'}.`;
+  }
+}
+
+writingSearchInput?.addEventListener('input', applyWritingFilters);
 
 const observer = new IntersectionObserver(
   (entries) => {
@@ -289,6 +354,7 @@ function renderGithubPulse(payload) {
 }
 
 applyProjectFilters();
+applyWritingFilters();
 loadGithubPulse();
 
 

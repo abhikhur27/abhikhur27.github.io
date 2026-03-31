@@ -72,6 +72,7 @@
         <button class="filter-btn" data-filter="visualization">Visualization</button>
         <button class="filter-btn" data-filter="tools">Developer Tools</button>
         <button class="filter-btn" data-filter="games">Interactive Apps</button>
+        <button id="surprise-project-btn" class="filter-btn" type="button">Surprise Me</button>
       </div>
 
       <label class="project-search" for="project-search-input">
@@ -79,6 +80,16 @@
         <input id="project-search-input" type="search" placeholder="Filter by name, stack, or description">
       </label>
       <p id="project-results-meta" class="results-meta" aria-live="polite">Showing all projects.</p>
+      <section class="project-spotlight" aria-live="polite">
+        <p class="eyebrow">Spotlight</p>
+        <div class="spotlight-shell">
+          <div>
+            <h3 id="spotlight-title">Pick a project lane and the site will surface a build.</h3>
+            <p id="spotlight-description" class="section-copy">Use the filters, search, or the surprise button to highlight something worth opening next.</p>
+          </div>
+          <div id="spotlight-actions" class="card-actions spotlight-actions"></div>
+        </div>
+      </section>
 
       <div class="project-grid">
         <article class="project-card" data-category="systems tools">
@@ -249,6 +260,19 @@
             <a href="./projects/queueing-resilience-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
+
+        <article class="project-card" data-category="systems visualization tools">
+          <header>
+            <p class="tag">Infrastructure Systems</p>
+            <h3>Campus Grid Blackout</h3>
+          </header>
+          <p>Operate a campus microgrid through a cascading blackout by assigning crews, battery reserves, and public communication under stress.</p>
+          <p class="stack">HTML, CSS, JavaScript, Systems Simulation</p>
+          <div class="card-actions">
+            <a href="./projects/campus-grid-blackout/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/campus-grid-blackout/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
       </div>
       <p id="project-empty-state" class="results-meta hidden">No projects match the current filter. Try another tag or a broader search.</p>
     </section>
@@ -265,6 +289,11 @@
         <button id="expand-writing" class="filter-btn active" type="button">Expand All</button>
         <button id="collapse-writing" class="filter-btn" type="button">Collapse All</button>
       </div>
+      <label class="project-search writing-search" for="writing-search-input">
+        Search draft shelf
+        <input id="writing-search-input" type="search" placeholder="Filter by topic, source set, or technical angle">
+      </label>
+      <p id="writing-results-meta" class="results-meta" aria-live="polite">Showing all draft notes.</p>
 
       <div class="entry-list">
         <details class="entry-row" open>

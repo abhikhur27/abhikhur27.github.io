@@ -264,6 +264,37 @@ section {
   font-size: 0.86rem;
 }
 
+.project-spotlight {
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(184, 196, 255, 0.1), rgba(17, 19, 23, 0.96)),
+    var(--surface);
+  padding: 0.95rem;
+}
+
+.spotlight-shell {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.9rem;
+  align-items: end;
+}
+
+.spotlight-shell h3 {
+  font-size: 1.4rem;
+}
+
+.spotlight-actions {
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.writing-search input {
+  width: min(520px, 100%);
+}
+
 .project-search input {
   width: min(420px, 100%);
   border: 1px solid var(--border);
@@ -323,6 +354,11 @@ section {
 
 .project-card.hidden {
   display: none;
+}
+
+.project-card.spotlighted {
+  border-color: rgba(184, 196, 255, 0.65);
+  box-shadow: 0 0 0 1px rgba(184, 196, 255, 0.22);
 }
 
 .hidden {
@@ -457,6 +493,10 @@ section {
   }
 
   .hero-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .spotlight-shell {
     grid-template-columns: 1fr;
   }
 
