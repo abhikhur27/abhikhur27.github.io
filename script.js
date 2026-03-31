@@ -1,9 +1,14 @@
 const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
 const cards = Array.from(document.querySelectorAll('.project-card'));
 const projectSearchInput = document.getElementById('project-search-input');
+const projectResultsMeta = document.getElementById('project-results-meta');
+const projectEmptyState = document.getElementById('project-empty-state');
 const revealItems = Array.from(document.querySelectorAll('.reveal'));
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
+const expandWritingBtn = document.getElementById('expand-writing');
+const collapseWritingBtn = document.getElementById('collapse-writing');
+const writingEntries = Array.from(document.querySelectorAll('.entry-row'));
 const commitCountEl = document.getElementById('commit-count');
 const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
@@ -13,13 +18,24 @@ let activeFilter = 'all';
 
 function applyProjectFilters() {
   const query = (projectSearchInput?.value || '').trim().toLowerCase();
+  let visibleCount = 0;
 
   cards.forEach((card) => {
     const categories = (card.dataset.category || '').split(' ');
     const categoryMatch = activeFilter === 'all' || categories.includes(activeFilter);
     const textMatch = !query || (card.textContent || '').toLowerCase().includes(query);
-    card.classList.toggle('hidden', !(categoryMatch && textMatch));
+    const visible = categoryMatch && textMatch;
+    if (visible) visibleCount += 1;
+    card.classList.toggle('hidden', !visible);
   });
+
+  if (projectResultsMeta) {
+    projectResultsMeta.textContent = visibleCount === cards.length ? 'Showing all projects.' : `Showing ${visibleCount} matching project${visibleCount === 1 ? '' : 's'}.`;
+  }
+
+  if (projectEmptyState) {
+    projectEmptyState.classList.toggle('hidden', visibleCount > 0);
+  }
 }
 
 filterButtons.forEach((button) => {
@@ -35,6 +51,17 @@ filterButtons.forEach((button) => {
 if (projectSearchInput) {
   projectSearchInput.addEventListener('input', applyProjectFilters);
 }
+
+function setWritingExpansion(expanded) {
+  writingEntries.forEach((entry) => {
+    entry.open = expanded;
+  });
+  expandWritingBtn?.classList.toggle('active', expanded);
+  collapseWritingBtn?.classList.toggle('active', !expanded);
+}
+
+expandWritingBtn?.addEventListener('click', () => setWritingExpansion(true));
+collapseWritingBtn?.addEventListener('click', () => setWritingExpansion(false));
 
 const observer = new IntersectionObserver(
   (entries) => {

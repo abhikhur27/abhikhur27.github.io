@@ -1,0 +1,81 @@
+:root {
+  --bg: #081019;
+  --surface: #101b29;
+  --border: #243548;
+  --text: #eef4ff;
+  --muted: #a8b9cd;
+  --accent: #89f0c7;
+  --danger: #ff8f70;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  background: radial-gradient(circle at top, #12243a, #081019 58%);
+  color: var(--text);
+}
+.container { width: min(1100px, 92vw); margin: 0 auto; }
+.header { padding: 1.6rem 0 1rem; }
+.back-link { color: var(--accent); text-decoration: none; font-weight: 700; }
+h1, h2, h3 { margin: 0; font-family: "Sora", sans-serif; }
+.header p { color: var(--muted); max-width: 60ch; }
+.layout { display: grid; grid-template-columns: 320px 1fr; gap: 1rem; padding-bottom: 2rem; }
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(16, 27, 41, 0.92);
+  padding: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+}
+label { display: grid; gap: 0.35rem; margin-top: 0.8rem; color: var(--muted); }
+input[type="range"] { width: 100%; }
+.button-row { margin-top: 0.9rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+button {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #152436;
+  color: var(--text);
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+.metrics article {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.75rem;
+  background: #122132;
+}
+.metrics p { margin: 0.3rem 0 0; font-size: 1.1rem; color: var(--accent); }
+.narrative {
+  margin-top: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.8rem;
+  color: var(--muted);
+  background: #0d1724;
+}
+.bars {
+  margin-top: 0.75rem;
+  min-height: 190px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.35rem;
+  align-items: end;
+}
+.bars span {
+  display: block;
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(180deg, var(--accent), #4d83ff);
+  min-height: 12px;
+}
+.bars span.overload {
+  background: linear-gradient(180deg, var(--danger), #ffb36b);
+}
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+}

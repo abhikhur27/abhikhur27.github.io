@@ -78,6 +78,7 @@
         Search projects
         <input id="project-search-input" type="search" placeholder="Filter by name, stack, or description">
       </label>
+      <p id="project-results-meta" class="results-meta" aria-live="polite">Showing all projects.</p>
 
       <div class="project-grid">
         <article class="project-card" data-category="systems tools">
@@ -235,7 +236,21 @@
             <a href="./projects/signal-flow-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
+
+        <article class="project-card" data-category="systems visualization tools">
+          <header>
+            <p class="tag">Operations Research</p>
+            <h3>Queueing Resilience Lab</h3>
+          </header>
+          <p>Static M/M/1-style lab for tuning arrivals, service rates, and burst pressure to see utilization and delay breakpoints.</p>
+          <p class="stack">HTML, CSS, JavaScript, Queueing Theory</p>
+          <div class="card-actions">
+            <a href="./projects/queueing-resilience-lab/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/queueing-resilience-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
       </div>
+      <p id="project-empty-state" class="results-meta hidden">No projects match the current filter. Try another tag or a broader search.</p>
     </section>
 
     <section id="writing" class="container reveal">
@@ -246,6 +261,10 @@
       <p class="section-copy">
         These are working drafts, not final posts. Each row expands into the thinking scaffold I plan to write from.
       </p>
+      <div class="filter-group" role="group" aria-label="Draft controls">
+        <button id="expand-writing" class="filter-btn active" type="button">Expand All</button>
+        <button id="collapse-writing" class="filter-btn" type="button">Collapse All</button>
+      </div>
 
       <div class="entry-list">
         <details class="entry-row" open>

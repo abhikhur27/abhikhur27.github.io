@@ -19,12 +19,13 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/sports-analytics-explorer`
 - `projects/rail-headway-sandbox`
 - `projects/market-regime-lab`
+- `projects/queueing-resilience-lab`
 
 ## Technical design
 
 - `index.html`: semantic structure for hero, projects, and blog sections.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, reveal-on-scroll, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, writing shelf controls, and mobile nav behavior.
 
 ```mermaid
 flowchart TD

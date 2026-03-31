@@ -258,6 +258,12 @@ section {
   font-size: 0.86rem;
 }
 
+.results-meta {
+  margin: 0.65rem 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
 .project-search input {
   width: min(420px, 100%);
   border: 1px solid var(--border);
@@ -316,6 +322,10 @@ section {
 }
 
 .project-card.hidden {
+  display: none;
+}
+
+.hidden {
   display: none;
 }
 

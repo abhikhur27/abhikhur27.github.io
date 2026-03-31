@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queueing Resilience Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <h1>Queueing Resilience Lab</h1>
+    <p>Stress-test a single-server system and watch how utilization drives wait time and instability.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel">
+      <h2>Scenario Controls</h2>
+
+      <label>Arrival Rate per Hour <span id="arrival-value">12</span>
+        <input id="arrival-rate" type="range" min="4" max="30" value="12">
+      </label>
+
+      <label>Service Rate per Hour <span id="service-value">18</span>
+        <input id="service-rate" type="range" min="6" max="36" value="18">
+      </label>
+
+      <label>Burst Multiplier <span id="burst-value">1.2x</span>
+        <input id="burst-factor" type="range" min="1" max="2.5" value="1.2" step="0.1">
+      </label>
+
+      <label>Slack Capacity <span id="slack-value">10%</span>
+        <input id="slack-factor" type="range" min="0" max="40" value="10" step="5">
+      </label>
+
+      <div class="button-row">
+        <button id="preset-balanced" type="button">Balanced</button>
+        <button id="preset-peak" type="button">Peak Stress</button>
+        <button id="preset-failure" type="button">Failure Mode</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>System Readout</h2>
+      <div class="metrics">
+        <article><h3>Utilization</h3><p id="utilization">-</p></article>
+        <article><h3>Expected Wait</h3><p id="wait-time">-</p></article>
+        <article><h3>Queue Length</h3><p id="queue-length">-</p></article>
+        <article><h3>Risk Band</h3><p id="risk-band">-</p></article>
+      </div>
+
+      <div id="narrative" class="narrative"></div>
+
+      <h2>Demand Curve</h2>
+      <div id="demand-bars" class="bars" aria-label="Demand curve"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
