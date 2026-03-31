@@ -1,4 +1,4 @@
-const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+const projectFilterButtons = Array.from(document.querySelectorAll('#projects .filter-btn[data-filter]'));
 const cards = Array.from(document.querySelectorAll('.project-card'));
 const projectSearchInput = document.getElementById('project-search-input');
 const projectResultsMeta = document.getElementById('project-results-meta');
@@ -13,6 +13,7 @@ const nav = document.getElementById('site-nav');
 const expandWritingBtn = document.getElementById('expand-writing');
 const collapseWritingBtn = document.getElementById('collapse-writing');
 const writingEntries = Array.from(document.querySelectorAll('.entry-row'));
+const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filter-btn'));
 const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
 const commitCountEl = document.getElementById('commit-count');
@@ -21,6 +22,7 @@ const commitMetaEl = document.getElementById('commit-meta');
 const commitSparklineEl = document.getElementById('commit-sparkline');
 
 let activeFilter = 'all';
+let activeWritingTopic = 'all';
 
 function applyProjectFilters() {
   const query = (projectSearchInput?.value || '').trim().toLowerCase();
@@ -50,11 +52,11 @@ function applyProjectFilters() {
   updateSpotlight(firstVisible);
 }
 
-filterButtons.forEach((button) => {
+projectFilterButtons.forEach((button) => {
   button.addEventListener('click', () => {
     activeFilter = button.dataset.filter || 'all';
 
-    filterButtons.forEach((item) => item.classList.remove('active'));
+    projectFilterButtons.forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
     applyProjectFilters();
   });
@@ -113,7 +115,9 @@ function applyWritingFilters() {
   let visibleCount = 0;
 
   writingEntries.forEach((entry) => {
-    const visible = !query || (entry.textContent || '').toLowerCase().includes(query);
+    const topic = entry.dataset.topic || 'all';
+    const topicMatch = activeWritingTopic === 'all' || topic === activeWritingTopic;
+    const visible = topicMatch && (!query || (entry.textContent || '').toLowerCase().includes(query));
     entry.classList.toggle('hidden', !visible);
     if (visible) visibleCount += 1;
   });
@@ -127,6 +131,14 @@ function applyWritingFilters() {
 }
 
 writingSearchInput?.addEventListener('input', applyWritingFilters);
+writingFilterButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    activeWritingTopic = button.dataset.topic || 'all';
+    writingFilterButtons.forEach((item) => item.classList.remove('active'));
+    button.classList.add('active');
+    applyWritingFilters();
+  });
+});
 
 const observer = new IntersectionObserver(
   (entries) => {

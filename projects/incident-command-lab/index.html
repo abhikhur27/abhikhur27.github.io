@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incident Command Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a111a;
+      --surface: #111b28;
+      --surface-alt: #172434;
+      --text: #edf3fb;
+      --muted: #a5b3c6;
+      --border: #253449;
+      --accent: #90f0c6;
+      --warning: #fbbf24;
+      --danger: #fb7185;
+      --mono: "IBM Plex Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(144, 240, 198, 0.12), transparent 28%),
+        linear-gradient(180deg, #0a111a, #0f1620 45%, #0a111a);
+      color: var(--text);
+      font-family: "Manrope", sans-serif;
+    }
+    .container {
+      width: min(1180px, 92vw);
+      margin: 0 auto;
+    }
+    .header {
+      padding: 1.6rem 0 1rem;
+    }
+    .back-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    h1, h2, h3 { margin: 0; }
+    h1 {
+      margin-top: 0.65rem;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      max-width: 12ch;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .hero-copy p, .panel p, .choice-card p, .debrief p {
+      color: var(--muted);
+    }
+    .lead {
+      max-width: 58ch;
+      font-size: 1.02rem;
+    }
+    .eyebrow {
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1rem;
+      padding: 1.2rem 0 2rem;
+    }
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(17, 27, 40, 0.92);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      padding: 1rem;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.85rem;
+    }
+    .metric h2 {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .metric strong {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 1.5rem;
+    }
+    .scenario {
+      min-height: 148px;
+      display: grid;
+      gap: 0.65rem;
+      align-content: start;
+    }
+    .button-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    button {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-alt);
+      color: var(--text);
+      padding: 0.58rem 0.95rem;
+      font: inherit;
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--accent);
+      color: #09201a;
+      border-color: transparent;
+      font-weight: 800;
+    }
+    .choices {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .choice-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.95rem;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .choice-meta {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+    .pill {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.2rem 0.5rem;
+    }
+    .log-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.45rem;
+      max-height: 320px;
+      overflow: auto;
+    }
+    .log-list li {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.6rem 0.7rem;
+      background: rgba(255, 255, 255, 0.03);
+      font-size: 0.9rem;
+    }
+    .status-good { color: var(--accent); }
+    .status-warn { color: var(--warning); }
+    .status-bad { color: var(--danger); }
+    .debrief {
+      margin-top: 1rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    .legend {
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .legend strong {
+      color: var(--text);
+      font-family: var(--mono);
+    }
+    @media (max-width: 920px) {
+      .hero, .layout {
+        grid-template-columns: 1fr;
+      }
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Decision Lab</p>
+        <h1>Incident Command Lab</h1>
+        <p class="lead">A campus network outage is unfolding. You do not get to optimize a chart. You have to choose where scarce people, time, and attention go while the system keeps surprising you.</p>
+      </div>
+      <section class="panel legend">
+        <div><strong>Goal</strong>: keep enough service online to finish four outage phases.</div>
+        <div><strong>Constraint</strong>: every aggressive fix burns fatigue or trust somewhere else.</div>
+        <div><strong>Failure mode</strong>: uptime hits zero, the team burns out, or communications collapse.</div>
+      </section>
+    </section>
+  </header>
+
+  <main class="container layout">
+    <section class="panel">
+      <div class="metrics" aria-live="polite">
+        <article class="metric">
+          <h2>Turn</h2>
+          <strong id="turn-count">1 / 4</strong>
+        </article>
+        <article class="metric">
+          <h2>Uptime</h2>
+          <strong id="uptime-metric">68%</strong>
+        </article>
+        <article class="metric">
+          <h2>Trust</h2>
+          <strong id="trust-metric">72</strong>
+        </article>
+        <article class="metric">
+          <h2>Fatigue</h2>
+          <strong id="fatigue-metric">18</strong>
+        </article>
+      </div>
+
+      <section class="panel" style="margin-top:1rem;">
+        <p class="eyebrow">Current Situation</p>
+        <div id="scenario-panel" class="scenario"></div>
+      </section>
+
+      <section>
+        <div class="button-row">
+          <button id="start-btn" class="primary" type="button">Start Drill</button>
+          <button id="restart-btn" type="button">Restart Scenario</button>
+        </div>
+        <div id="choices" class="choices"></div>
+        <div id="debrief" class="debrief"></div>
+      </section>
+    </section>
+
+    <aside class="panel">
+      <p class="eyebrow">Command Log</p>
+      <ul id="event-log" class="log-list"></ul>
+    </aside>
+  </main>
+
+  <script>
+    const scenarios = [
+      {
+        title: 'Core routers are flapping across three residence halls.',
+        body: 'Students are awake, classes start in ninety minutes, and the help desk has already escalated packet-loss complaints.',
+        options: [
+          {
+            label: 'Send the whole network team to stabilize routing immediately',
+            effect: { uptime: 16, trust: 4, fatigue: 20 },
+            log: 'Rapid response restores the backbone, but the team starts the day tired.',
+          },
+          {
+            label: 'Throttle traffic and publish a blunt outage notice first',
+            effect: { uptime: 8, trust: 12, fatigue: 8 },
+            log: 'Service improves more slowly, but people believe the updates and panic stays lower.',
+          },
+          {
+            label: 'Protect research labs first and leave dorm traffic degraded',
+            effect: { uptime: 11, trust: -8, fatigue: 10 },
+            log: 'High-value systems stay online, but students feel deprioritized.',
+          },
+        ],
+      },
+      {
+        title: 'The identity provider is timing out and faculty cannot access course tools.',
+        body: 'You can cut corners to get sign-ins back fast, or preserve clean rollback paths.',
+        options: [
+          {
+            label: 'Roll emergency config and accept a messy rollback later',
+            effect: { uptime: 18, trust: -3, fatigue: 14 },
+            log: 'Logins return quickly, but the team inherits technical debt.',
+          },
+          {
+            label: 'Stand up a temporary read-only fallback and keep the config clean',
+            effect: { uptime: 10, trust: 9, fatigue: 9 },
+            log: 'The campus can function again, even if some edit paths stay frozen.',
+          },
+          {
+            label: 'Wait for vendor guidance before touching authentication',
+            effect: { uptime: -10, trust: -12, fatigue: 2 },
+            log: 'You preserve staff energy but lose the room while the outage drags on.',
+          },
+        ],
+      },
+      {
+        title: 'Anxious leadership wants an ETA while your telemetry still contradicts itself.',
+        body: 'This turn is about communications discipline as much as infrastructure.',
+        options: [
+          {
+            label: 'Give a confident short ETA and hope the fix holds',
+            effect: { uptime: 4, trust: -14, fatigue: 5 },
+            log: 'The estimate misses. The technical state barely changed, but confidence did.',
+          },
+          {
+            label: 'Publish uncertainty bands and explain what is known vs unknown',
+            effect: { uptime: 3, trust: 13, fatigue: 4 },
+            log: 'The message is less flashy, but it buys patience and cleaner escalation.',
+          },
+          {
+            label: 'Keep comms quiet until the graph looks perfect',
+            effect: { uptime: 6, trust: -9, fatigue: 1 },
+            log: 'Silence protects you from a bad ETA, but people assume the team has lost control.',
+          },
+        ],
+      },
+      {
+        title: 'You have enough capacity for one final push before the next shift comes in.',
+        body: 'Do you stabilize the remaining weak points, hand off cleanly, or chase a full green dashboard?',
+        options: [
+          {
+            label: 'Use the last energy buffer to drive toward full restoration',
+            effect: { uptime: 14, trust: 3, fatigue: 18 },
+            log: 'The network looks strong by the end of shift, but the team is nearly spent.',
+          },
+          {
+            label: 'Stabilize only the riskiest edges and hand off a clean incident brief',
+            effect: { uptime: 9, trust: 11, fatigue: 6 },
+            log: 'You leave some scars in place, but the next shift inherits a coherent system.',
+          },
+          {
+            label: 'Pause major changes and preserve staff for tomorrow',
+            effect: { uptime: -6, trust: -7, fatigue: -4 },
+            log: 'Burnout drops, but unresolved instability keeps hurting the campus.',
+          },
+        ],
+      },
+    ];
+
+    const state = {
+      turn: 0,
+      uptime: 68,
+      trust: 72,
+      fatigue: 18,
+      running: false,
+      log: ['Drill loaded. No decisions taken yet.'],
+    };
+
+    const turnCount = document.getElementById('turn-count');
+    const uptimeMetric = document.getElementById('uptime-metric');
+    const trustMetric = document.getElementById('trust-metric');
+    const fatigueMetric = document.getElementById('fatigue-metric');
+    const scenarioPanel = document.getElementById('scenario-panel');
+    const choicesEl = document.getElementById('choices');
+    const eventLog = document.getElementById('event-log');
+    const debriefEl = document.getElementById('debrief');
+    const startBtn = document.getElementById('start-btn');
+    const restartBtn = document.getElementById('restart-btn');
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function statusClass(value, good, bad) {
+      if (value >= good) return 'status-good';
+      if (value <= bad) return 'status-bad';
+      return 'status-warn';
+    }
+
+    function renderLog() {
+      eventLog.innerHTML = state.log
+        .slice()
+        .reverse()
+        .map((entry) => `<li>${entry}</li>`)
+        .join('');
+    }
+
+    function renderMetrics() {
+      turnCount.textContent = `${Math.min(state.turn + 1, scenarios.length)} / ${scenarios.length}`;
+      uptimeMetric.textContent = `${state.uptime}%`;
+      uptimeMetric.className = statusClass(state.uptime, 70, 34);
+      trustMetric.textContent = String(state.trust);
+      trustMetric.className = statusClass(state.trust, 68, 35);
+      fatigueMetric.textContent = String(state.fatigue);
+      fatigueMetric.className = statusClass(100 - state.fatigue, 62, 30);
+    }
+
+    function renderScenario() {
+      if (!state.running) {
+        scenarioPanel.innerHTML = '<h2>Briefing locked.</h2><p>Start the drill to get your first outage phase and choice set.</p>';
+        choicesEl.innerHTML = '';
+        return;
+      }
+
+      const scenario = scenarios[state.turn];
+      if (!scenario) {
+        scenarioPanel.innerHTML = '<h2>Incident complete.</h2><p>The live phase is over. Read the debrief and restart if you want another run.</p>';
+        choicesEl.innerHTML = '';
+        return;
+      }
+
+      scenarioPanel.innerHTML = `<h2>${scenario.title}</h2><p>${scenario.body}</p>`;
+      choicesEl.innerHTML = scenario.options
+        .map(
+          (option, index) => `
+            <article class="choice-card">
+              <div>
+                <h3>${option.label}</h3>
+                <p>${option.log}</p>
+              </div>
+              <div class="choice-meta">
+                <span class="pill">Uptime ${option.effect.uptime > 0 ? '+' : ''}${option.effect.uptime}</span>
+                <span class="pill">Trust ${option.effect.trust > 0 ? '+' : ''}${option.effect.trust}</span>
+                <span class="pill">Fatigue ${option.effect.fatigue > 0 ? '+' : ''}${option.effect.fatigue}</span>
+              </div>
+              <button type="button" data-choice="${index}">Commit to this move</button>
+            </article>
+          `
+        )
+        .join('');
+
+      choicesEl.querySelectorAll('button').forEach((button) => {
+        button.addEventListener('click', () => applyChoice(Number(button.dataset.choice)));
+      });
+    }
+
+    function finishDrill(reason) {
+      state.running = false;
+      const score = state.uptime + state.trust - state.fatigue;
+      const outcome =
+        state.uptime <= 0 || state.trust <= 0
+          ? 'The outage became a credibility collapse.'
+          : state.fatigue >= 100
+            ? 'The team restored pieces of service, but burned itself out.'
+            : score >= 120
+              ? 'You kept the campus online without losing the room.'
+              : 'You survived the incident, but not cleanly.';
+
+      debriefEl.innerHTML = `
+        <p class="eyebrow">Debrief</p>
+        <h2>${reason}</h2>
+        <p>${outcome}</p>
+        <p>Final score = uptime (${state.uptime}) + trust (${state.trust}) - fatigue (${state.fatigue}) = <strong>${score}</strong>.</p>
+      `;
+
+      renderScenario();
+      renderMetrics();
+      renderLog();
+    }
+
+    function applyChoice(index) {
+      const scenario = scenarios[state.turn];
+      const choice = scenario?.options[index];
+      if (!choice) return;
+
+      state.uptime = clamp(state.uptime + choice.effect.uptime, 0, 100);
+      state.trust = clamp(state.trust + choice.effect.trust, 0, 100);
+      state.fatigue = clamp(state.fatigue + choice.effect.fatigue, 0, 100);
+      state.log.push(`Turn ${state.turn + 1}: ${choice.log}`);
+
+      if (state.uptime <= 0 || state.trust <= 0 || state.fatigue >= 100) {
+        finishDrill('Incident lost before handoff.');
+        return;
+      }
+
+      state.turn += 1;
+      if (state.turn >= scenarios.length) {
+        finishDrill('Shift handoff complete.');
+        return;
+      }
+
+      renderMetrics();
+      renderScenario();
+      renderLog();
+    }
+
+    function resetState() {
+      state.turn = 0;
+      state.uptime = 68;
+      state.trust = 72;
+      state.fatigue = 18;
+      state.running = false;
+      state.log = ['Drill loaded. No decisions taken yet.'];
+      debriefEl.innerHTML = '<p class="eyebrow">Debrief</p><p>No outcome yet. Start the drill to enter the outage.</p>';
+      renderMetrics();
+      renderScenario();
+      renderLog();
+    }
+
+    startBtn.addEventListener('click', () => {
+      if (!state.running) {
+        state.running = true;
+        state.log.push('Incident activated. Command decisions are now live.');
+        debriefEl.innerHTML = '<p class="eyebrow">Debrief</p><p>Scenario in progress. Every action changes the next phase.</p>';
+        renderMetrics();
+        renderScenario();
+        renderLog();
+      }
+    });
+
+    restartBtn.addEventListener('click', resetState);
+    resetState();
+  </script>
+</body>
+</html>

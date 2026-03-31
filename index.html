@@ -44,7 +44,7 @@
       </div>
       <div class="hero-metrics" role="list" aria-label="Portfolio metrics">
         <article role="listitem">
-          <h2>15+</h2>
+          <h2>16+</h2>
           <p>Projects in this ecosystem</p>
         </article>
         <article role="listitem">
@@ -154,6 +154,19 @@
           <div class="card-actions">
             <a href="https://abhikhur27.github.io/Mini-Game-Hub/" target="_blank" rel="noreferrer">Live</a>
             <a href="https://github.com/abhikhur27/Mini-Game-Hub" target="_blank" rel="noreferrer">Code</a>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="systems games">
+          <header>
+            <p class="tag">Decision Lab</p>
+            <h3>Incident Command Lab</h3>
+          </header>
+          <p>Hold a university network outage together by rationing crews, confidence, and communication under pressure.</p>
+          <p class="stack">HTML, CSS, JavaScript, Scenario Simulation</p>
+          <div class="card-actions">
+            <a href="./projects/incident-command-lab/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/incident-command-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
@@ -289,6 +302,14 @@
         <button id="expand-writing" class="filter-btn active" type="button">Expand All</button>
         <button id="collapse-writing" class="filter-btn" type="button">Collapse All</button>
       </div>
+      <div class="filter-group writing-topics" role="group" aria-label="Draft topic filters">
+        <button class="filter-btn writing-filter-btn active" data-topic="all" type="button">All Topics</button>
+        <button class="filter-btn writing-filter-btn" data-topic="systems" type="button">Systems</button>
+        <button class="filter-btn writing-filter-btn" data-topic="science" type="button">Science</button>
+        <button class="filter-btn writing-filter-btn" data-topic="language" type="button">Language</button>
+        <button class="filter-btn writing-filter-btn" data-topic="sports" type="button">Sports</button>
+        <button class="filter-btn writing-filter-btn" data-topic="markets" type="button">Markets</button>
+      </div>
       <label class="project-search writing-search" for="writing-search-input">
         Search draft shelf
         <input id="writing-search-input" type="search" placeholder="Filter by topic, source set, or technical angle">
@@ -296,7 +317,7 @@
       <p id="writing-results-meta" class="results-meta" aria-live="polite">Showing all draft notes.</p>
 
       <div class="entry-list">
-        <details class="entry-row" open>
+        <details class="entry-row" data-topic="systems" open>
           <summary>
             <span class="entry-title">Transfer Penalties Decide More Than Peak Speed in Urban Transit</span>
             <span class="entry-meta">Public transportation systems</span>
@@ -306,7 +327,7 @@
           <p><strong>Technical angle:</strong> shortest path with line-switch penalties and on-time variance weighting.</p>
         </details>
 
-        <details class="entry-row">
+        <details class="entry-row" data-topic="systems">
           <summary>
             <span class="entry-title">Dispatching Passenger + Freight on Shared Rail Corridors</span>
             <span class="entry-meta">Trains and rail infrastructure</span>
@@ -316,7 +337,7 @@
           <p><strong>Technical angle:</strong> discrete-event simulation with block occupancy constraints.</p>
         </details>
 
-        <details class="entry-row">
+        <details class="entry-row" data-topic="science">
           <summary>
             <span class="entry-title">What Bonebeds Hide: Reading Dinosaur Populations Through Bias</span>
             <span class="entry-meta">Dinosaurs and paleontology</span>
@@ -326,7 +347,7 @@
           <p><strong>Technical angle:</strong> Bayesian posterior updates under sparse, biased observations.</p>
         </details>
 
-        <details class="entry-row">
+        <details class="entry-row" data-topic="language">
           <summary>
             <span class="entry-title">Sound Shifts as a Migration Map</span>
             <span class="entry-meta">Etymology and language history</span>
@@ -336,7 +357,7 @@
           <p><strong>Technical angle:</strong> graph lineage estimation with edit-distance clustering.</p>
         </details>
 
-        <details class="entry-row">
+        <details class="entry-row" data-topic="sports">
           <summary>
             <span class="entry-title">Shot Quality vs Shot Making: Where Team Offense Actually Lives</span>
             <span class="entry-meta">Sports data analytics</span>
@@ -346,7 +367,7 @@
           <p><strong>Technical angle:</strong> logistic shot models with uncertainty bands at possession level.</p>
         </details>
 
-        <details class="entry-row">
+        <details class="entry-row" data-topic="markets">
           <summary>
             <span class="entry-title">Volatility Regimes and Why Position Sizing Breaks First</span>
             <span class="entry-meta">Trading and financial modeling</span>
