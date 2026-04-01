@@ -1,87 +1,194 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rail Headway Sandbox</title>
+  <title>Rail Headway Operations Studio</title>
+  <meta name="description" content="Design rail service patterns with interactive dispatch timelines, route editing, disruption modeling, and live performance analytics.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="container header">
+  <header class="container page-head">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
-    <h1>Rail Headway Sandbox</h1>
-    <p>Explore how fleet size, dwell time, and line speed shape waiting time and corridor throughput.</p>
+    <h1>Rail Headway Operations Studio</h1>
+    <p>Build a corridor, shape dispatch patterns on a timeline, inject disruptions, and evaluate reliability with system-level metrics.</p>
   </header>
 
   <main class="container layout">
-    <section class="panel controls">
-      <h2>Inputs</h2>
+    <section class="panel config-panel" aria-label="Configuration">
+      <h2>Service Setup</h2>
 
-      <label>
-        Line Length (km): <span id="length-label">18</span>
-        <input id="length" type="range" min="6" max="40" value="18" step="1">
-      </label>
+      <div class="inline-grid">
+        <label>
+          Base Cruise Speed
+          <select id="speed-preset">
+            <option value="30">30 km/h | mixed traffic</option>
+            <option value="34">34 km/h | baseline</option>
+            <option value="38" selected>38 km/h | signal priority</option>
+            <option value="42">42 km/h | limited-stop bias</option>
+          </select>
+        </label>
 
-      <label>
-        Trains in Service: <span id="trains-label">14</span>
-        <input id="trains" type="range" min="4" max="36" value="14" step="1">
-      </label>
+        <label>
+          Turnback Time
+          <input id="turnback" type="number" min="2" max="12" step="0.5" value="3.5">
+        </label>
 
-      <label>
-        Average Speed (km/h): <span id="speed-label">35</span>
-        <input id="speed" type="range" min="18" max="65" value="35" step="1">
-      </label>
+        <label>
+          Trainset Capacity
+          <select id="capacity-preset">
+            <option value="920">4-car light metro (920)</option>
+            <option value="1080" selected>6-car metro (1,080)</option>
+            <option value="1360">8-car metro (1,360)</option>
+          </select>
+        </label>
+      </div>
 
-      <label>
-        Dwell Time per Stop (seconds): <span id="dwell-label">28</span>
-        <input id="dwell" type="range" min="10" max="60" value="28" step="1">
-      </label>
+      <h3>Route Builder</h3>
+      <p class="hint">Edit station spacing and dwell profile directly. Demand weight influences corridor load estimates.</p>
+      <div class="table-shell">
+        <table class="station-table" id="station-table">
+          <thead>
+            <tr>
+              <th>Station</th>
+              <th>Spacing (km)</th>
+              <th>Dwell (s)</th>
+              <th>Demand Weight</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="btn-row">
+        <button id="add-station" type="button">Add Station</button>
+        <button id="remove-station" type="button" class="ghost">Remove Last</button>
+        <button id="reset-route" type="button" class="ghost">Reset Template</button>
+      </div>
 
-      <p id="challenge" class="challenge"></p>
-      <button id="new-challenge" type="button">New Challenge</button>
+      <h3>Dispatch Designer</h3>
+      <p class="hint">Click timeline to add departures. Drag markers to retime. Double-click marker to remove.</p>
+      <canvas id="dispatch-canvas" width="740" height="132" aria-label="Dispatch timeline editor"></canvas>
+      <div class="btn-row">
+        <label>
+          Auto Pattern
+          <select id="headway-template">
+            <option value="2.5">Every 2.5 min</option>
+            <option value="3">Every 3 min</option>
+            <option value="4" selected>Every 4 min</option>
+            <option value="5">Every 5 min</option>
+            <option value="6">Every 6 min</option>
+          </select>
+        </label>
+        <button id="apply-template" type="button">Apply Pattern</button>
+        <button id="clear-dispatch" type="button" class="ghost">Clear Departures</button>
+      </div>
+      <p id="dispatch-summary" class="mono"></p>
+
+      <h3>Disruption Lab</h3>
+      <p class="hint">Inject incidents to test schedule resilience. Impacts apply network-wide for the interval.</p>
+      <div class="inline-grid disruption-grid">
+        <label>
+          Start Minute
+          <input id="incident-start" type="number" min="0" max="59" value="15">
+        </label>
+        <label>
+          Duration (min)
+          <input id="incident-duration" type="number" min="2" max="30" value="8">
+        </label>
+        <label>
+          Speed Factor
+          <input id="incident-speed" type="number" min="0.4" max="1.2" step="0.05" value="0.75">
+        </label>
+        <label>
+          Dwell Penalty (s)
+          <input id="incident-dwell" type="number" min="0" max="80" value="18">
+        </label>
+      </div>
+      <div class="btn-row">
+        <button id="add-incident" type="button">Add Incident</button>
+        <button id="add-random-incident" type="button" class="ghost">Random Incident</button>
+        <button id="clear-incidents" type="button" class="ghost">Clear Incidents</button>
+      </div>
+      <ul id="incident-list" class="incident-list" aria-live="polite"></ul>
     </section>
 
-    <section class="panel output">
-      <h2>Service Metrics</h2>
-      <div class="metrics">
+    <section class="panel output-panel" aria-label="Outputs">
+      <div class="panel-head">
+        <h2>Performance Readout</h2>
+        <div class="btn-row compact">
+          <button id="save-snapshot" type="button">Save Snapshot</button>
+          <button id="toggle-sim" type="button" class="ghost">Pause Animation</button>
+        </div>
+      </div>
+
+      <div class="metrics" id="metric-grid">
         <article>
           <h3>Round Trip Time</h3>
-          <p id="roundtrip">-</p>
+          <p id="metric-roundtrip">-</p>
         </article>
         <article>
-          <h3>Headway</h3>
-          <p id="headway">-</p>
+          <h3>Median Headway</h3>
+          <p id="metric-headway">-</p>
+        </article>
+        <article>
+          <h3>P95 Headway</h3>
+          <p id="metric-p95">-</p>
         </article>
         <article>
           <h3>Expected Wait</h3>
-          <p id="wait">-</p>
+          <p id="metric-wait">-</p>
         </article>
         <article>
-          <h3>Trains / Hour / Direction</h3>
-          <p id="tph">-</p>
+          <h3>On-Time Arrivals</h3>
+          <p id="metric-otp">-</p>
         </article>
         <article>
-          <h3>Passengers / Hour / Direction</h3>
-          <p id="pph">-</p>
+          <h3>Corridor Capacity</h3>
+          <p id="metric-capacity">-</p>
+        </article>
+        <article>
+          <h3>Demand Utilization</h3>
+          <p id="metric-utilization">-</p>
+        </article>
+        <article>
+          <h3>Bunching Alerts</h3>
+          <p id="metric-bunching">-</p>
         </article>
       </div>
 
-      <h2>Corridor Simulation</h2>
-      <canvas id="corridor-canvas" width="760" height="230" aria-label="Rail corridor simulation"></canvas>
-      <div class="sim-row">
-        <p>Live train spacing estimate: <span id="sim-spacing" class="mono">-</span></p>
-        <label class="sim-speed-label">
-          Time Compression x<span id="sim-speed-label">40</span>
-          <input id="sim-speed" type="range" min="10" max="80" value="40" step="5">
-        </label>
-        <button id="toggle-animation" type="button">Pause Animation</button>
-      </div>
+      <h3>Live Corridor Simulation</h3>
+      <canvas id="corridor-canvas" width="760" height="236" aria-label="Animated corridor simulation"></canvas>
 
-      <h2>Interpretation</h2>
+      <h3>Station Arrival Heatstrip</h3>
+      <canvas id="heatstrip-canvas" width="760" height="260" aria-label="Station arrival consistency heatstrip"></canvas>
+
+      <h3>Insights</h3>
       <p id="insight" class="insight"></p>
+
+      <h3>Scenario Snapshots</h3>
+      <p class="hint">Save strong patterns and compare quickly while tuning dispatch and disruptions.</p>
+      <div class="table-shell">
+        <table class="snapshot-table" id="snapshot-table">
+          <thead>
+            <tr>
+              <th>Label</th>
+              <th>Headway</th>
+              <th>P95</th>
+              <th>Wait</th>
+              <th>OTP</th>
+              <th>Capacity</th>
+              <th>Utilization</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="7" class="empty">No snapshots saved yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
