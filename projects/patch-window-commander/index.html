@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patch Window Commander</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <p class="eyebrow">Operations Decision Lab</p>
+    <h1>Patch Window Commander</h1>
+    <p class="lead">You own a campus patch night with four shrinking maintenance windows. Each decision trades security exposure against outages, operator fatigue, and stakeholder trust.</p>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Ops Board</p>
+          <h2>System pressure</h2>
+        </div>
+        <button id="restart-btn" type="button">Restart Run</button>
+      </div>
+
+      <div class="metrics" aria-label="Scenario metrics">
+        <article>
+          <span>Security Risk</span>
+          <strong id="security-risk">58</strong>
+        </article>
+        <article>
+          <span>User Trust</span>
+          <strong id="user-trust">64</strong>
+        </article>
+        <article>
+          <span>Crew Fatigue</span>
+          <strong id="crew-fatigue">32</strong>
+        </article>
+        <article>
+          <span>Patch Backlog</span>
+          <strong id="patch-backlog">71</strong>
+        </article>
+      </div>
+
+      <div class="phase-card">
+        <p id="round-label" class="eyebrow">Window 1 of 4</p>
+        <h3 id="scenario-title">Loading scenario...</h3>
+        <p id="scenario-copy" class="scenario-copy">Loading scenario...</p>
+        <p id="scenario-context" class="context-copy"></p>
+      </div>
+
+      <div id="choices" class="choices" aria-live="polite"></div>
+      <p id="status-text" class="status" aria-live="polite">Choose an action to begin the patch night.</p>
+    </section>
+
+    <section class="panel">
+      <p class="eyebrow">Run Analysis</p>
+      <h2>Decision log</h2>
+      <ol id="decision-log" class="decision-log"></ol>
+
+      <div class="summary-card">
+        <h3>Command brief</h3>
+        <p id="summary-text">Your final readout will appear here after the fourth window.</p>
+      </div>
+
+      <div class="score-bands">
+        <article>
+          <strong>Strong run</strong>
+          <p>Risk and backlog trend down without burning trust or the crew.</p>
+        </article>
+        <article>
+          <strong>Fragile run</strong>
+          <p>You buy short-term stability but leave the next incident more dangerous.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

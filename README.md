@@ -21,12 +21,13 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/market-regime-lab`
 - `projects/queueing-resilience-lab`
 - `projects/incident-command-lab`
+- `projects/patch-window-commander`
 
 ## Technical design
 
 - `index.html`: semantic structure for hero, projects, blog sections, and topic filters.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, writing shelf controls, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, writing shelf spotlight controls, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid

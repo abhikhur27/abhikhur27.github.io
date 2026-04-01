@@ -12,10 +12,15 @@ const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
 const expandWritingBtn = document.getElementById('expand-writing');
 const collapseWritingBtn = document.getElementById('collapse-writing');
+const surpriseWritingBtn = document.getElementById('surprise-writing-btn');
 const writingEntries = Array.from(document.querySelectorAll('.entry-row'));
 const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filter-btn'));
 const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
+const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
+const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
+const writingSpotlightMeta = document.getElementById('writing-spotlight-meta');
+const writingSpotlightOpen = document.getElementById('writing-spotlight-open');
 const commitCountEl = document.getElementById('commit-count');
 const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
@@ -23,6 +28,7 @@ const commitSparklineEl = document.getElementById('commit-sparkline');
 
 let activeFilter = 'all';
 let activeWritingTopic = 'all';
+let currentWritingSpotlightEntry = null;
 
 function applyProjectFilters() {
   const query = (projectSearchInput?.value || '').trim().toLowerCase();
@@ -110,16 +116,48 @@ function setWritingExpansion(expanded) {
 expandWritingBtn?.addEventListener('click', () => setWritingExpansion(true));
 collapseWritingBtn?.addEventListener('click', () => setWritingExpansion(false));
 
+writingEntries.forEach((entry, index) => {
+  if (!entry.id) {
+    entry.id = `draft-note-${index + 1}`;
+  }
+});
+
+function updateWritingSpotlight(entry) {
+  currentWritingSpotlightEntry = entry || null;
+
+  if (!writingSpotlightTitle || !writingSpotlightDescription || !writingSpotlightMeta || !writingSpotlightOpen) {
+    return;
+  }
+
+  if (!entry) {
+    writingSpotlightTitle.textContent = 'No drafts match the current filter.';
+    writingSpotlightDescription.textContent = 'Broaden the search or switch topics to bring a draft back into focus.';
+    writingSpotlightMeta.textContent = 'The draft shelf is empty under the current filters.';
+    writingSpotlightOpen.disabled = true;
+    return;
+  }
+
+  writingSpotlightTitle.textContent = entry.querySelector('.entry-title')?.textContent || 'Draft spotlight';
+  writingSpotlightDescription.textContent =
+    entry.querySelector('p')?.textContent || 'Open the draft to view the current writing scaffold.';
+  writingSpotlightMeta.textContent = entry.querySelector('.entry-meta')?.textContent || 'Working draft';
+  writingSpotlightOpen.disabled = false;
+}
+
 function applyWritingFilters() {
   const query = (writingSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
+  let firstVisible = null;
 
   writingEntries.forEach((entry) => {
     const topic = entry.dataset.topic || 'all';
     const topicMatch = activeWritingTopic === 'all' || topic === activeWritingTopic;
     const visible = topicMatch && (!query || (entry.textContent || '').toLowerCase().includes(query));
     entry.classList.toggle('hidden', !visible);
-    if (visible) visibleCount += 1;
+    if (visible) {
+      visibleCount += 1;
+      if (!firstVisible) firstVisible = entry;
+    }
   });
 
   if (writingResultsMeta) {
@@ -128,6 +166,8 @@ function applyWritingFilters() {
         ? 'Showing all draft notes.'
         : `Showing ${visibleCount} matching draft${visibleCount === 1 ? '' : 's'}.`;
   }
+
+  updateWritingSpotlight(firstVisible);
 }
 
 writingSearchInput?.addEventListener('input', applyWritingFilters);
@@ -138,6 +178,25 @@ writingFilterButtons.forEach((button) => {
     button.classList.add('active');
     applyWritingFilters();
   });
+});
+
+surpriseWritingBtn?.addEventListener('click', () => {
+  const visibleEntries = writingEntries.filter((entry) => !entry.classList.contains('hidden'));
+  if (!visibleEntries.length) {
+    updateWritingSpotlight(null);
+    return;
+  }
+
+  const randomEntry = visibleEntries[Math.floor(Math.random() * visibleEntries.length)];
+  updateWritingSpotlight(randomEntry);
+  randomEntry.open = true;
+  randomEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+writingSpotlightOpen?.addEventListener('click', () => {
+  if (!currentWritingSpotlightEntry) return;
+  currentWritingSpotlightEntry.open = true;
+  currentWritingSpotlightEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
 const observer = new IntersectionObserver(

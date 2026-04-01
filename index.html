@@ -44,7 +44,7 @@
       </div>
       <div class="hero-metrics" role="list" aria-label="Portfolio metrics">
         <article role="listitem">
-          <h2>16+</h2>
+          <h2>17+</h2>
           <p>Projects in this ecosystem</p>
         </article>
         <article role="listitem">
@@ -286,6 +286,19 @@
             <a href="./projects/campus-grid-blackout/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
+
+        <article class="project-card" data-category="systems tools games">
+          <header>
+            <p class="tag">Operations Decision Lab</p>
+            <h3>Patch Window Commander</h3>
+          </header>
+          <p>Run a campus patch night across four fragile windows where each choice trades security exposure against outages, fatigue, and stakeholder trust.</p>
+          <p class="stack">HTML, CSS, JavaScript, Decision Simulation</p>
+          <div class="card-actions">
+            <a href="./projects/patch-window-commander/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/patch-window-commander/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
       </div>
       <p id="project-empty-state" class="results-meta hidden">No projects match the current filter. Try another tag or a broader search.</p>
     </section>
@@ -301,6 +314,7 @@
       <div class="filter-group" role="group" aria-label="Draft controls">
         <button id="expand-writing" class="filter-btn active" type="button">Expand All</button>
         <button id="collapse-writing" class="filter-btn" type="button">Collapse All</button>
+        <button id="surprise-writing-btn" class="filter-btn" type="button">Surprise Draft</button>
       </div>
       <div class="filter-group writing-topics" role="group" aria-label="Draft topic filters">
         <button class="filter-btn writing-filter-btn active" data-topic="all" type="button">All Topics</button>
@@ -315,6 +329,19 @@
         <input id="writing-search-input" type="search" placeholder="Filter by topic, source set, or technical angle">
       </label>
       <p id="writing-results-meta" class="results-meta" aria-live="polite">Showing all draft notes.</p>
+      <section class="project-spotlight writing-spotlight" aria-live="polite">
+        <p class="eyebrow">Draft Spotlight</p>
+        <div class="spotlight-shell">
+          <div>
+            <h3 id="writing-spotlight-title">Pick a topic and the shelf will foreground one draft.</h3>
+            <p id="writing-spotlight-description" class="section-copy">Search or filter by topic to surface the next essay worth expanding.</p>
+            <p id="writing-spotlight-meta" class="results-meta">Working drafts only, but each one has a technical spine.</p>
+          </div>
+          <div class="card-actions spotlight-actions">
+            <button id="writing-spotlight-open" class="spotlight-btn" type="button">Open Draft</button>
+          </div>
+        </div>
+      </section>
 
       <div class="entry-list">
         <details class="entry-row" data-topic="systems" open>

@@ -291,6 +291,22 @@ section {
   justify-content: flex-end;
 }
 
+.spotlight-btn {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--accent-strong);
+  font: inherit;
+  font-weight: 600;
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+}
+
+.spotlight-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .writing-search input {
   width: min(520px, 100%);
 }
