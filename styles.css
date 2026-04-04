@@ -315,6 +315,24 @@ section {
   margin-top: 0.75rem;
 }
 
+.draft-dashboard {
+  margin-top: 0.95rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.draft-dashboard article {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.85rem;
+}
+
+.draft-dashboard h3 {
+  font-size: 1.05rem;
+}
+
 .project-search input {
   width: min(420px, 100%);
   border: 1px solid var(--border);
@@ -530,6 +548,10 @@ section {
   }
 
   .spotlight-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .draft-dashboard {
     grid-template-columns: 1fr;
   }
 

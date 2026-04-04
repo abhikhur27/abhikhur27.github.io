@@ -11,6 +11,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Dark "digital spaces" visual language.
 - Project directory with category filtering.
 - Blog-style expandable writing shelf for draft essays.
+- Draft shelf summary cards for visible stages and topic mix.
 - Fully static architecture for GitHub Pages.
 - Stage-aware draft shelf filters for planning the blog pipeline.
 
@@ -24,6 +25,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/incident-command-lab`
 - `projects/patch-window-commander`
 - `projects/detour-dispatch`
+- `projects/registration-rush-command`
 
 ## Technical design
 

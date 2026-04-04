@@ -18,6 +18,8 @@ const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filt
 const writingStageButtons = Array.from(document.querySelectorAll('.writing-stage-btn'));
 const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
+const draftStageSummary = document.getElementById('draft-stage-summary');
+const draftTopicSummary = document.getElementById('draft-topic-summary');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
 const writingSpotlightMeta = document.getElementById('writing-spotlight-meta');
@@ -153,6 +155,8 @@ function applyWritingFilters() {
   const query = (writingSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
   let firstVisible = null;
+  const stageCounts = { research: 0, modeling: 0, drafting: 0 };
+  const topicCounts = { systems: 0, science: 0, language: 0, sports: 0, markets: 0 };
 
   writingEntries.forEach((entry) => {
     const topic = entry.dataset.topic || 'all';
@@ -164,6 +168,8 @@ function applyWritingFilters() {
     if (visible) {
       visibleCount += 1;
       if (!firstVisible) firstVisible = entry;
+      if (stageCounts[stage] !== undefined) stageCounts[stage] += 1;
+      if (topicCounts[topic] !== undefined) topicCounts[topic] += 1;
     }
   });
 
@@ -172,6 +178,14 @@ function applyWritingFilters() {
       visibleCount === writingEntries.length
         ? 'Showing all draft notes.'
         : `Showing ${visibleCount} matching draft${visibleCount === 1 ? '' : 's'}.`;
+  }
+
+  if (draftStageSummary) {
+    draftStageSummary.textContent = `Research ${stageCounts.research} | Modeling ${stageCounts.modeling} | Drafting ${stageCounts.drafting}`;
+  }
+
+  if (draftTopicSummary) {
+    draftTopicSummary.textContent = `Systems ${topicCounts.systems} | Science ${topicCounts.science} | Language ${topicCounts.language} | Sports ${topicCounts.sports} | Markets ${topicCounts.markets}`;
   }
 
   updateWritingSpotlight(firstVisible);
