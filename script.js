@@ -15,6 +15,7 @@ const collapseWritingBtn = document.getElementById('collapse-writing');
 const surpriseWritingBtn = document.getElementById('surprise-writing-btn');
 const writingEntries = Array.from(document.querySelectorAll('.entry-row'));
 const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filter-btn'));
+const writingStageButtons = Array.from(document.querySelectorAll('.writing-stage-btn'));
 const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
@@ -28,6 +29,7 @@ const commitSparklineEl = document.getElementById('commit-sparkline');
 
 let activeFilter = 'all';
 let activeWritingTopic = 'all';
+let activeWritingStage = 'all';
 let currentWritingSpotlightEntry = null;
 
 function applyProjectFilters() {
@@ -140,7 +142,10 @@ function updateWritingSpotlight(entry) {
   writingSpotlightTitle.textContent = entry.querySelector('.entry-title')?.textContent || 'Draft spotlight';
   writingSpotlightDescription.textContent =
     entry.querySelector('p')?.textContent || 'Open the draft to view the current writing scaffold.';
-  writingSpotlightMeta.textContent = entry.querySelector('.entry-meta')?.textContent || 'Working draft';
+  const meta = entry.querySelector('.entry-meta')?.textContent || 'Working draft';
+  const stage = entry.dataset.stage ? `${entry.dataset.stage[0].toUpperCase()}${entry.dataset.stage.slice(1)}` : 'Draft';
+  const nextMilestone = entry.dataset.next ? ` Next milestone: ${entry.dataset.next}` : '';
+  writingSpotlightMeta.textContent = `${meta} | ${stage}.${nextMilestone}`;
   writingSpotlightOpen.disabled = false;
 }
 
@@ -152,7 +157,9 @@ function applyWritingFilters() {
   writingEntries.forEach((entry) => {
     const topic = entry.dataset.topic || 'all';
     const topicMatch = activeWritingTopic === 'all' || topic === activeWritingTopic;
-    const visible = topicMatch && (!query || (entry.textContent || '').toLowerCase().includes(query));
+    const stage = entry.dataset.stage || 'all';
+    const stageMatch = activeWritingStage === 'all' || stage === activeWritingStage;
+    const visible = topicMatch && stageMatch && (!query || (entry.textContent || '').toLowerCase().includes(query));
     entry.classList.toggle('hidden', !visible);
     if (visible) {
       visibleCount += 1;
@@ -175,6 +182,15 @@ writingFilterButtons.forEach((button) => {
   button.addEventListener('click', () => {
     activeWritingTopic = button.dataset.topic || 'all';
     writingFilterButtons.forEach((item) => item.classList.remove('active'));
+    button.classList.add('active');
+    applyWritingFilters();
+  });
+});
+
+writingStageButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    activeWritingStage = button.dataset.stage || 'all';
+    writingStageButtons.forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
     applyWritingFilters();
   });

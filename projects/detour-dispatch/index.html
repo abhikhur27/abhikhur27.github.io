@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detour Dispatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <p class="eyebrow">Transit Decision Lab</p>
+    <h1>Detour Dispatch</h1>
+    <p class="lead">A protest, a lightning fault, and a stadium surge hit your campus shuttle network in the same afternoon. Keep service moving without wrecking rider trust, accessibility coverage, or your drivers.</p>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Dispatch Board</p>
+          <h2>Network pressure</h2>
+        </div>
+        <button id="restart-btn" type="button">Restart Run</button>
+      </div>
+
+      <div class="metrics" aria-label="Transit metrics">
+        <article>
+          <span>On-Time Service</span>
+          <strong id="service-score">68</strong>
+        </article>
+        <article>
+          <span>Rider Trust</span>
+          <strong id="trust-score">61</strong>
+        </article>
+        <article>
+          <span>Driver Strain</span>
+          <strong id="strain-score">37</strong>
+        </article>
+        <article>
+          <span>Accessibility Coverage</span>
+          <strong id="access-score">74</strong>
+        </article>
+      </div>
+
+      <div class="scenario-card">
+        <p id="round-label" class="eyebrow">Round 1 of 4</p>
+        <h3 id="scenario-title">Loading scenario...</h3>
+        <p id="scenario-copy" class="scenario-copy">Loading scenario...</p>
+        <p id="scenario-context" class="context-copy"></p>
+      </div>
+
+      <div id="choices" class="choices" aria-live="polite"></div>
+      <p id="status-text" class="status" aria-live="polite">Choose a dispatch move to begin the disruption run.</p>
+    </section>
+
+    <section class="panel">
+      <p class="eyebrow">Operations Readout</p>
+      <h2>Decision log</h2>
+      <ol id="decision-log" class="decision-log"></ol>
+
+      <div class="summary-card">
+        <h3>Shift brief</h3>
+        <p id="summary-text">Finish all four rounds to get the final transit operations brief.</p>
+      </div>
+
+      <div class="score-bands">
+        <article>
+          <strong>Resilient run</strong>
+          <p>You keep the network legible to riders while absorbing shock without burning operators.</p>
+        </article>
+        <article>
+          <strong>Fragile run</strong>
+          <p>You preserve one metric by letting another quietly collapse into the next incident.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

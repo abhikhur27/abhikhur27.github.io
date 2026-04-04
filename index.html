@@ -44,7 +44,7 @@
       </div>
       <div class="hero-metrics" role="list" aria-label="Portfolio metrics">
         <article role="listitem">
-          <h2>17+</h2>
+          <h2>18+</h2>
           <p>Projects in this ecosystem</p>
         </article>
         <article role="listitem">
@@ -263,6 +263,19 @@
 
         <article class="project-card" data-category="systems visualization tools">
           <header>
+            <p class="tag">Transit Decision Lab</p>
+            <h3>Detour Dispatch</h3>
+          </header>
+          <p>Reroute a campus shuttle network through closures and event surges while protecting accessibility coverage, rider trust, and driver strain.</p>
+          <p class="stack">HTML, CSS, JavaScript, Transit Operations Simulation</p>
+          <div class="card-actions">
+            <a href="./projects/detour-dispatch/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/detour-dispatch/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="systems visualization tools">
+          <header>
             <p class="tag">Systems Fiction</p>
             <h3>Midnight Dispatch Desk</h3>
           </header>
@@ -324,6 +337,12 @@
         <button class="filter-btn writing-filter-btn" data-topic="sports" type="button">Sports</button>
         <button class="filter-btn writing-filter-btn" data-topic="markets" type="button">Markets</button>
       </div>
+      <div class="filter-group writing-stages" role="group" aria-label="Draft stage filters">
+        <button class="filter-btn writing-stage-btn active" data-stage="all" type="button">All Stages</button>
+        <button class="filter-btn writing-stage-btn" data-stage="research" type="button">Research</button>
+        <button class="filter-btn writing-stage-btn" data-stage="modeling" type="button">Modeling</button>
+        <button class="filter-btn writing-stage-btn" data-stage="drafting" type="button">Drafting</button>
+      </div>
       <label class="project-search writing-search" for="writing-search-input">
         Search draft shelf
         <input id="writing-search-input" type="search" placeholder="Filter by topic, source set, or technical angle">
@@ -344,60 +363,66 @@
       </section>
 
       <div class="entry-list">
-        <details class="entry-row" data-topic="systems" open>
+        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Draft the rider-journey opener and transfer-penalty example." open>
           <summary>
             <span class="entry-title">Transfer Penalties Decide More Than Peak Speed in Urban Transit</span>
             <span class="entry-meta">Public transportation systems</span>
+            <span class="entry-stage">Drafting</span>
           </summary>
           <p><strong>Writing shape:</strong> rider mental model -> graph representation -> policy implications.</p>
           <p><strong>Sources to reference:</strong> TCQSM, GTFS datasets, agency reliability reports.</p>
           <p><strong>Technical angle:</strong> shortest path with line-switch penalties and on-time variance weighting.</p>
         </details>
 
-        <details class="entry-row" data-topic="systems">
+        <details class="entry-row" data-topic="systems" data-stage="modeling" data-next="Stress-test block-occupancy assumptions against shared-corridor dispatch cases.">
           <summary>
             <span class="entry-title">Dispatching Passenger + Freight on Shared Rail Corridors</span>
             <span class="entry-meta">Trains and rail infrastructure</span>
+            <span class="entry-stage">Modeling</span>
           </summary>
           <p><strong>Writing shape:</strong> conflict windows -> headway pressure -> infrastructure upgrades.</p>
           <p><strong>Sources to reference:</strong> FRA reports, Amtrak OTP data, dispatching literature.</p>
           <p><strong>Technical angle:</strong> discrete-event simulation with block occupancy constraints.</p>
         </details>
 
-        <details class="entry-row" data-topic="science">
+        <details class="entry-row" data-topic="science" data-stage="research" data-next="Tighten the sampling-bias case studies from museum and field datasets.">
           <summary>
             <span class="entry-title">What Bonebeds Hide: Reading Dinosaur Populations Through Bias</span>
             <span class="entry-meta">Dinosaurs and paleontology</span>
+            <span class="entry-stage">Research</span>
           </summary>
           <p><strong>Writing shape:</strong> fossilization filters -> sampling bias -> what we can actually infer.</p>
           <p><strong>Sources to reference:</strong> museum datasets, vertebrate paleontology journals.</p>
           <p><strong>Technical angle:</strong> Bayesian posterior updates under sparse, biased observations.</p>
         </details>
 
-        <details class="entry-row" data-topic="language">
+        <details class="entry-row" data-topic="language" data-stage="research" data-next="Collect a tighter set of sound-shift examples that break the clean family-tree story.">
           <summary>
             <span class="entry-title">Sound Shifts as a Migration Map</span>
             <span class="entry-meta">Etymology and language history</span>
+            <span class="entry-stage">Research</span>
           </summary>
           <p><strong>Writing shape:</strong> historical drift examples -> borrowings -> family-tree limits.</p>
           <p><strong>Sources to reference:</strong> OED, etymological corpora, historical phonology papers.</p>
           <p><strong>Technical angle:</strong> graph lineage estimation with edit-distance clustering.</p>
         </details>
 
-        <details class="entry-row" data-topic="sports">
+        <details class="entry-row" data-topic="sports" data-stage="drafting" data-next="Write the lineup-context section around possession-level uncertainty bands.">
           <summary>
             <span class="entry-title">Shot Quality vs Shot Making: Where Team Offense Actually Lives</span>
             <span class="entry-meta">Sports data analytics</span>
+            <span class="entry-stage">Drafting</span>
           </summary>
           <p><strong>Writing shape:</strong> model definitions -> lineup context -> practical front-office use.</p>
           <p><strong>Sources to reference:</strong> NBA play-by-play APIs, tracking data references.</p>
           <p><strong>Technical angle:</strong> logistic shot models with uncertainty bands at possession level.</p>
         </details>
 
-        <details class="entry-row" data-topic="markets">
+        <details class="entry-row" data-topic="markets" data-stage="modeling" data-next="Validate the regime labels against a few drawdown-heavy historical windows.">
           <summary>
             <span class="entry-title">Volatility Regimes and Why Position Sizing Breaks First</span>
             <span class="entry-meta">Trading and financial modeling</span>
+            <span class="entry-stage">Modeling</span>
           </summary>
           <p><strong>Writing shape:</strong> regime framing -> drawdown anatomy -> sizing policy comparisons.</p>
           <p><strong>Sources to reference:</strong> CBOE VIX history, FRED macro series, market microstructure papers.</p>

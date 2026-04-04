@@ -12,6 +12,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Project directory with category filtering.
 - Blog-style expandable writing shelf for draft essays.
 - Fully static architecture for GitHub Pages.
+- Stage-aware draft shelf filters for planning the blog pipeline.
 
 ## Included subprojects in this repo
 
@@ -22,12 +23,13 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/queueing-resilience-lab`
 - `projects/incident-command-lab`
 - `projects/patch-window-commander`
+- `projects/detour-dispatch`
 
 ## Technical design
 
 - `index.html`: semantic structure for hero, projects, blog sections, and topic filters.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, writing shelf spotlight controls, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, writing shelf spotlight controls, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid
@@ -56,5 +58,5 @@ Then open `http://localhost:8000`.
 ## Future improvements
 
 - Add CI for link checks and HTML validation.
-- Add richer blog post pages per topic.
+- Add richer blog post pages per topic once the draft shelf narrows them into finished essays.
 - Move project metadata into a single manifest.
