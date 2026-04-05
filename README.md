@@ -28,10 +28,12 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/detour-dispatch`
 - `projects/registration-rush-command`
 - `projects/office-hours-overflow`
+- `projects/systems-decision-labs`
 
 ## Technical design
 
 - `index.html`: semantic structure for hero, projects, blog sections, and topic filters.
+- `projects/systems-decision-labs`: anthology page that groups the repeated campus/infrastructure decision sims into one portfolio family.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, writing shelf spotlight controls, shareable filtered-view links, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.

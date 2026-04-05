@@ -11,6 +11,7 @@ A project should fail immediately if any of these are true:
 - A screenshot of the interface explains almost the entire idea.
 - The project could be replaced by a notebook plot, dashboard, or static blog post without losing much.
 - The "insight" is already obvious before using it.
+- It is mostly the same project skeleton as an existing portfolio piece with only a new setting, skin, or story wrapper.
 
 ## Positive Signals
 
@@ -31,6 +32,21 @@ A project is worth building when several of these are true:
 - Systems toys with emergent behavior
 - Decision labs where the user must commit under uncertainty
 
+## Duplicate Check
+
+Before building, compare the idea against existing portfolio families.
+
+- If it belongs to an established family, it must introduce a genuinely new mechanic, not just a new scenario.
+- "Same mechanic, different campus problem" is not enough.
+- "Same round-based choice game, different nouns" is not enough.
+- A new project in an existing family should clear at least two of these:
+  - different player verb
+  - different failure mode
+  - different information structure
+  - different time pressure model
+  - different payoff loop
+- If it fails that test, fold it into an anthology or expand the strongest existing version instead of building a new standalone project.
+
 ## Suspicious Project Shapes
 
 - Parameter sweep labs
@@ -38,6 +54,7 @@ A project is worth building when several of these are true:
 - Canvas drag/drop editors with no real stakes
 - Standard CRUD apps with a pretty skin
 - Coursework demos that stop at "look, it animates"
+- Re-skinning an existing decision lab with a new campus system and calling it a new project
 
 ## One-Sentence Test
 

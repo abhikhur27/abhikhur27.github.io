@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Systems Decision Labs</title>
+  <meta name="description" content="One unified decision game with multiple campus and infrastructure scenario packs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Unified Project</p>
+        <h1>Systems Decision Labs</h1>
+        <p class="lead">
+          One game engine, seven scenario packs. Instead of shipping the same choice-driven campus sim repeatedly,
+          this project makes the shared structure explicit and turns it into one configurable operations game.
+        </p>
+      </div>
+      <div class="hero-callout">
+        <p class="eyebrow">Design Goal</p>
+        <p>Every scenario uses the same verbs: read the room, commit to a tradeoff, and absorb the downstream cost.</p>
+      </div>
+    </header>
+
+    <section class="score-strip" aria-label="Game metrics">
+      <article>
+        <p class="metric-label">Trust</p>
+        <h2 id="metric-trust">68</h2>
+      </article>
+      <article>
+        <p class="metric-label">Throughput</p>
+        <h2 id="metric-throughput">61</h2>
+      </article>
+      <article>
+        <p class="metric-label">Resilience</p>
+        <h2 id="metric-resilience">72</h2>
+      </article>
+      <article>
+        <p class="metric-label">Team Load</p>
+        <h2 id="metric-load">57</h2>
+      </article>
+    </section>
+
+    <section class="layout">
+      <aside class="sidebar panel">
+        <div class="section-head">
+          <p class="eyebrow">Scenario Packs</p>
+          <h2>Pick a system</h2>
+        </div>
+        <div id="scenario-list" class="scenario-list"></div>
+        <div class="sidebar-actions">
+          <button id="start-run" class="primary" type="button">Start Scenario</button>
+          <button id="reset-run" type="button">Reset</button>
+        </div>
+        <div id="scenario-meta" class="meta-card"></div>
+      </aside>
+
+      <section class="play-surface panel">
+        <div class="section-head">
+          <p class="eyebrow">Round</p>
+          <h2 id="round-title">Choose a scenario pack</h2>
+        </div>
+        <p id="round-scene" class="scene-copy">
+          The combined game keeps the mechanic constant and changes the operating context. Pick a pack on the left to begin.
+        </p>
+        <div id="pressure-tags" class="pressure-tags"></div>
+        <div id="choice-list" class="choice-list"></div>
+
+        <section id="debrief" class="debrief hidden" aria-live="polite">
+          <p class="eyebrow">Debrief</p>
+          <h3 id="debrief-title">Scenario complete</h3>
+          <p id="debrief-summary"></p>
+        </section>
+      </section>
+
+      <aside class="insights panel">
+        <div class="section-head">
+          <p class="eyebrow">Ops Readout</p>
+          <h2>Status</h2>
+        </div>
+        <div id="status-copy" class="status-copy"></div>
+        <h3 class="subhead">Decision Log</h3>
+        <ol id="event-log" class="event-log">
+          <li>No actions yet.</li>
+        </ol>
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
