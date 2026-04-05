@@ -1,0 +1,281 @@
+:root {
+  --bg: #0f1117;
+  --surface: #171c24;
+  --surface-strong: #1d2430;
+  --line: rgba(207, 217, 232, 0.12);
+  --text: #eef3fb;
+  --muted: #98a4b8;
+  --accent: #f4c76a;
+  --danger: #ff8d73;
+  --ok: #79d4b0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(244, 199, 106, 0.18), transparent 30%),
+    radial-gradient(circle at top right, rgba(121, 212, 176, 0.12), transparent 24%),
+    linear-gradient(180deg, #0d1015 0%, #10151d 100%);
+  color: var(--text);
+}
+
+.hero,
+.layout {
+  width: min(1180px, 92vw);
+  margin: 0 auto;
+}
+
+.hero {
+  padding: clamp(2.4rem, 6vw, 5rem) 0 2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.9fr);
+  gap: 1.2rem;
+  align-items: end;
+}
+
+.back-link,
+button {
+  font: inherit;
+}
+
+.back-link {
+  display: inline-flex;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.eyebrow,
+.panel-label,
+.metric-label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-family: "Instrument Serif", Georgia, serif;
+  line-height: 0.98;
+}
+
+h1 {
+  font-size: clamp(3rem, 8vw, 5.6rem);
+  max-width: 9ch;
+}
+
+.lead,
+.scene-copy,
+.hero-panel p,
+.hero-panel li {
+  color: var(--muted);
+}
+
+.lead {
+  max-width: 58ch;
+  font-size: 1.02rem;
+}
+
+.hero-actions,
+.choice-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  padding: 0.72rem 1.05rem;
+  cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: rgba(244, 199, 106, 0.45);
+  transform: translateY(-1px);
+}
+
+button.primary {
+  background: var(--accent);
+  color: #24180a;
+  border-color: transparent;
+  font-weight: 800;
+}
+
+.hero-panel,
+.scoreboard article,
+.scenario-shell,
+.insight-card,
+.debrief {
+  border: 1px solid var(--line);
+  background: rgba(23, 28, 36, 0.78);
+  backdrop-filter: blur(12px);
+}
+
+.hero-panel {
+  border-radius: 26px;
+  padding: 1.2rem;
+}
+
+.hero-panel ul {
+  margin: 1rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.layout {
+  padding-bottom: 3rem;
+}
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.scoreboard article {
+  border-radius: 18px;
+  padding: 1rem;
+}
+
+.scoreboard h2 {
+  font-size: 2.15rem;
+  margin-top: 0.45rem;
+}
+
+.grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+  gap: 1rem;
+}
+
+.scenario-shell,
+.insight-card,
+.debrief {
+  border-radius: 24px;
+}
+
+.scenario-shell {
+  padding: 1.4rem;
+}
+
+.section-head {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.section-head h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.pressure-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 1.3rem;
+}
+
+.pressure-tags span {
+  border-radius: 999px;
+  background: rgba(244, 199, 106, 0.12);
+  border: 1px solid rgba(244, 199, 106, 0.2);
+  padding: 0.4rem 0.7rem;
+  font-size: 0.86rem;
+}
+
+.choice-list {
+  flex-direction: column;
+}
+
+.choice-card {
+  width: 100%;
+  text-align: left;
+  border-radius: 22px;
+  padding: 1rem 1.05rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.choice-card strong,
+.debrief-points strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.choice-impact {
+  margin-top: 0.55rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.side-column {
+  display: grid;
+  gap: 1rem;
+}
+
+.insight-card {
+  padding: 1rem;
+}
+
+.event-log {
+  margin: 0.8rem 0 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.7rem;
+  color: var(--muted);
+}
+
+.debrief {
+  margin-top: 1rem;
+  padding: 1.3rem;
+}
+
+.debrief.hidden {
+  display: none;
+}
+
+.debrief-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.debrief-points article {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  padding: 0.9rem;
+}
+
+.trend-up {
+  color: var(--ok);
+}
+
+.trend-down {
+  color: var(--danger);
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .grid,
+  .scoreboard,
+  .debrief-points {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    max-width: 11ch;
+  }
+}

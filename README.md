@@ -14,6 +14,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Draft shelf summary cards for visible stages and topic mix.
 - Fully static architecture for GitHub Pages.
 - Stage-aware draft shelf filters for planning the blog pipeline.
+- Shareable project and draft-shelf view links so filtered homepage states can be sent directly.
 
 ## Included subprojects in this repo
 
@@ -26,12 +27,13 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/patch-window-commander`
 - `projects/detour-dispatch`
 - `projects/registration-rush-command`
+- `projects/office-hours-overflow`
 
 ## Technical design
 
 - `index.html`: semantic structure for hero, projects, blog sections, and topic filters.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, writing shelf spotlight controls, stage filters, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, writing shelf spotlight controls, shareable filtered-view links, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid

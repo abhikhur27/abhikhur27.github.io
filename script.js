@@ -4,6 +4,7 @@ const projectSearchInput = document.getElementById('project-search-input');
 const projectResultsMeta = document.getElementById('project-results-meta');
 const projectEmptyState = document.getElementById('project-empty-state');
 const surpriseProjectBtn = document.getElementById('surprise-project-btn');
+const copyProjectViewBtn = document.getElementById('copy-project-view-btn');
 const spotlightTitle = document.getElementById('spotlight-title');
 const spotlightDescription = document.getElementById('spotlight-description');
 const spotlightActions = document.getElementById('spotlight-actions');
@@ -13,6 +14,7 @@ const nav = document.getElementById('site-nav');
 const expandWritingBtn = document.getElementById('expand-writing');
 const collapseWritingBtn = document.getElementById('collapse-writing');
 const surpriseWritingBtn = document.getElementById('surprise-writing-btn');
+const copyWritingViewBtn = document.getElementById('copy-writing-view-btn');
 const writingEntries = Array.from(document.querySelectorAll('.entry-row'));
 const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filter-btn'));
 const writingStageButtons = Array.from(document.querySelectorAll('.writing-stage-btn'));
@@ -33,6 +35,53 @@ let activeFilter = 'all';
 let activeWritingTopic = 'all';
 let activeWritingStage = 'all';
 let currentWritingSpotlightEntry = null;
+let suppressUrlSync = false;
+
+function updateUrlState() {
+  if (suppressUrlSync) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const projectQuery = (projectSearchInput?.value || '').trim();
+  const writingQuery = (writingSearchInput?.value || '').trim();
+
+  if (activeFilter !== 'all') params.set('projectFilter', activeFilter);
+  else params.delete('projectFilter');
+
+  if (projectQuery) params.set('projectSearch', projectQuery);
+  else params.delete('projectSearch');
+
+  if (activeWritingTopic !== 'all') params.set('writingTopic', activeWritingTopic);
+  else params.delete('writingTopic');
+
+  if (activeWritingStage !== 'all') params.set('writingStage', activeWritingStage);
+  else params.delete('writingStage');
+
+  if (writingQuery) params.set('writingSearch', writingQuery);
+  else params.delete('writingSearch');
+
+  if (currentWritingSpotlightEntry?.id) params.set('draft', currentWritingSpotlightEntry.id);
+  else params.delete('draft');
+
+  const nextUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
+  window.history.replaceState({}, '', nextUrl);
+}
+
+async function copyCurrentView(label) {
+  updateUrlState();
+
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    const target = label === 'projects' ? projectResultsMeta : writingResultsMeta;
+    if (target) {
+      target.textContent = `Copied ${label} view link.`;
+    }
+  } catch (error) {
+    const target = label === 'projects' ? projectResultsMeta : writingResultsMeta;
+    if (target) {
+      target.textContent = `Clipboard copy failed for the ${label} view link.`;
+    }
+  }
+}
 
 function applyProjectFilters() {
   const query = (projectSearchInput?.value || '').trim().toLowerCase();
@@ -60,6 +109,7 @@ function applyProjectFilters() {
   }
 
   updateSpotlight(firstVisible);
+  updateUrlState();
 }
 
 projectFilterButtons.forEach((button) => {
@@ -149,6 +199,7 @@ function updateWritingSpotlight(entry) {
   const nextMilestone = entry.dataset.next ? ` Next milestone: ${entry.dataset.next}` : '';
   writingSpotlightMeta.textContent = `${meta} | ${stage}.${nextMilestone}`;
   writingSpotlightOpen.disabled = false;
+  updateUrlState();
 }
 
 function applyWritingFilters() {
@@ -189,6 +240,7 @@ function applyWritingFilters() {
   }
 
   updateWritingSpotlight(firstVisible);
+  updateUrlState();
 }
 
 writingSearchInput?.addEventListener('input', applyWritingFilters);
@@ -227,7 +279,11 @@ writingSpotlightOpen?.addEventListener('click', () => {
   if (!currentWritingSpotlightEntry) return;
   currentWritingSpotlightEntry.open = true;
   currentWritingSpotlightEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  updateUrlState();
 });
+
+copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
+copyWritingViewBtn?.addEventListener('click', () => copyCurrentView('drafts'));
 
 const observer = new IntersectionObserver(
   (entries) => {
@@ -454,9 +510,60 @@ function renderGithubPulse(payload) {
     .join('');
 }
 
+function hydrateFiltersFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  suppressUrlSync = true;
+
+  const projectFilter = params.get('projectFilter');
+  if (projectFilter) {
+    activeFilter = projectFilter;
+    projectFilterButtons.forEach((button) => {
+      button.classList.toggle('active', button.dataset.filter === projectFilter);
+    });
+  }
+
+  const projectSearch = params.get('projectSearch');
+  if (projectSearch && projectSearchInput) {
+    projectSearchInput.value = projectSearch;
+  }
+
+  const writingTopic = params.get('writingTopic');
+  if (writingTopic) {
+    activeWritingTopic = writingTopic;
+    writingFilterButtons.forEach((button) => {
+      button.classList.toggle('active', button.dataset.topic === writingTopic);
+    });
+  }
+
+  const writingStage = params.get('writingStage');
+  if (writingStage) {
+    activeWritingStage = writingStage;
+    writingStageButtons.forEach((button) => {
+      button.classList.toggle('active', button.dataset.stage === writingStage);
+    });
+  }
+
+  const writingSearch = params.get('writingSearch');
+  if (writingSearch && writingSearchInput) {
+    writingSearchInput.value = writingSearch;
+  }
+
+  suppressUrlSync = false;
+}
+
+hydrateFiltersFromUrl();
 applyProjectFilters();
 applyWritingFilters();
 loadGithubPulse();
+
+const draftParam = new URLSearchParams(window.location.search).get('draft');
+if (draftParam) {
+  const targetDraft = writingEntries.find((entry) => entry.id === draftParam);
+  if (targetDraft) {
+    targetDraft.open = true;
+    updateWritingSpotlight(targetDraft);
+  }
+}
 
 
 

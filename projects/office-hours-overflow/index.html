@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Hours Overflow</title>
+  <meta name="description" content="Decision simulation about running overloaded CS office hours without breaking fairness, comprehension, or TA stamina.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-copy">
+      <a class="back-link" href="../../index.html">Back to Portfolio</a>
+      <p class="eyebrow">Teaching Systems Decision Lab</p>
+      <h1>Office Hours Overflow</h1>
+      <p class="lead">A packed CS help queue is collapsing. Your job is to keep comprehension, fairness, and TA stamina alive while students keep arriving with harder tickets.</p>
+      <div class="hero-actions">
+        <button id="start-run" class="primary" type="button">Start Shift</button>
+        <button id="reset-run" type="button">Reset</button>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <p class="panel-label">Premise</p>
+      <p>You are the TA lead for a data structures course. Every round forces a tradeoff between speed, depth, and queue legitimacy.</p>
+      <ul>
+        <li>Move quickly and comprehension slips.</li>
+        <li>Teach deeply and the line revolts.</li>
+        <li>Escalate too often and the staff burns down.</li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="scoreboard">
+      <article>
+        <p class="metric-label">Comprehension</p>
+        <h2 id="metric-learning">70</h2>
+      </article>
+      <article>
+        <p class="metric-label">Fairness</p>
+        <h2 id="metric-fairness">68</h2>
+      </article>
+      <article>
+        <p class="metric-label">TA Energy</p>
+        <h2 id="metric-stamina">72</h2>
+      </article>
+      <article>
+        <p class="metric-label">Queue Load</p>
+        <h2 id="metric-queue">62</h2>
+      </article>
+    </section>
+
+    <section class="grid">
+      <section class="scenario-shell">
+        <div class="section-head">
+          <p class="eyebrow">Current Round</p>
+          <h2 id="round-title">Shift briefing</h2>
+        </div>
+        <p id="round-scene" class="scene-copy">Start the shift to draw the first queue event.</p>
+        <div id="pressure-tags" class="pressure-tags"></div>
+        <div id="choice-list" class="choice-list"></div>
+      </section>
+
+      <aside class="side-column">
+        <section class="insight-card">
+          <p class="eyebrow">Shift Readout</p>
+          <div id="status-copy">
+            <p>Nothing has happened yet. Once the shift starts, each round will change the lab’s stability profile.</p>
+          </div>
+        </section>
+
+        <section class="insight-card">
+          <p class="eyebrow">Shift Log</p>
+          <ol id="event-log" class="event-log">
+            <li>No decisions logged yet.</li>
+          </ol>
+        </section>
+      </aside>
+    </section>
+
+    <section id="debrief" class="debrief hidden" aria-live="polite">
+      <div>
+        <p class="eyebrow">End of Shift</p>
+        <h2 id="debrief-title">Debrief pending</h2>
+      </div>
+      <p id="debrief-summary" class="scene-copy"></p>
+      <div id="debrief-points" class="debrief-points"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
