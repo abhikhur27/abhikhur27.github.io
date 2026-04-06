@@ -12,6 +12,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Project directory with category filtering.
 - Blog-style expandable writing shelf for draft essays.
 - Draft shelf summary cards for visible stages and topic mix.
+- A writing queue that turns the visible shelf into concrete next actions.
 - Fully static architecture for GitHub Pages.
 - Stage-aware draft shelf filters for planning the blog pipeline.
 - Shareable project and draft-shelf view links so filtered homepage states can be sent directly.
@@ -29,13 +30,15 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/registration-rush-command`
 - `projects/office-hours-overflow`
 - `projects/systems-decision-labs`
+- `projects/sound-shift-studio`
 
 ## Technical design
 
 - `index.html`: semantic structure for hero, projects, blog sections, and topic filters.
 - `projects/systems-decision-labs`: anthology page that groups the repeated campus/infrastructure decision sims into one portfolio family.
+- `projects/sound-shift-studio`: branching sound-change sandbox for exploring language drift.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, writing shelf spotlight controls, shareable filtered-view links, stage filters, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, writing shelf spotlight controls, shareable filtered-view links, stage filters, writing queue logic, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid

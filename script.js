@@ -22,6 +22,9 @@ const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
 const draftStageSummary = document.getElementById('draft-stage-summary');
 const draftTopicSummary = document.getElementById('draft-topic-summary');
+const draftQueueMeta = document.getElementById('draft-queue-meta');
+const draftQueueList = document.getElementById('draft-queue-list');
+const queueFocusBtn = document.getElementById('queue-focus-btn');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
 const writingSpotlightMeta = document.getElementById('writing-spotlight-meta');
@@ -202,12 +205,68 @@ function updateWritingSpotlight(entry) {
   updateUrlState();
 }
 
+function stagePriority(stage) {
+  if (stage === 'drafting') return 0;
+  if (stage === 'modeling') return 1;
+  return 2;
+}
+
+function formatStageLabel(stage) {
+  return stage ? `${stage[0].toUpperCase()}${stage.slice(1)}` : 'Draft';
+}
+
+function updateDraftQueue(visibleEntries) {
+  if (!draftQueueList || !draftQueueMeta) {
+    return;
+  }
+
+  if (!visibleEntries.length) {
+    draftQueueMeta.textContent = 'No visible drafts to queue right now.';
+    draftQueueList.innerHTML = '<article class="queue-card empty-queue"><strong>No queue</strong><p>Broaden the current shelf filters to repopulate the writing queue.</p></article>';
+    if (queueFocusBtn) queueFocusBtn.disabled = true;
+    return;
+  }
+
+  const orderedEntries = [...visibleEntries].sort((a, b) => {
+    const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
+    if (stageDelta !== 0) return stageDelta;
+    return (a.querySelector('.entry-title')?.textContent || '').localeCompare(b.querySelector('.entry-title')?.textContent || '');
+  });
+
+  const queue = orderedEntries.slice(0, 3);
+  const draftingCount = visibleEntries.filter((entry) => entry.dataset.stage === 'drafting').length;
+  draftQueueMeta.textContent =
+    draftingCount > 0
+      ? `${draftingCount} draft${draftingCount === 1 ? '' : 's'} are closest to publishable form.`
+      : 'No entries are in drafting yet, so the queue starts with modeling and research scaffolds.';
+
+  draftQueueList.innerHTML = queue
+    .map((entry, index) => {
+      const title = entry.querySelector('.entry-title')?.textContent || 'Untitled draft';
+      const meta = entry.querySelector('.entry-meta')?.textContent || 'Working draft';
+      const stage = formatStageLabel(entry.dataset.stage);
+      const next = entry.dataset.next || 'Review the note and define the next concrete milestone.';
+      return `
+        <article class="queue-card">
+          <p class="queue-order">Queue ${index + 1}</p>
+          <h4>${title}</h4>
+          <p class="queue-meta">${meta} | ${stage}</p>
+          <p>${next}</p>
+        </article>
+      `;
+    })
+    .join('');
+
+  if (queueFocusBtn) queueFocusBtn.disabled = false;
+}
+
 function applyWritingFilters() {
   const query = (writingSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
   let firstVisible = null;
   const stageCounts = { research: 0, modeling: 0, drafting: 0 };
   const topicCounts = { systems: 0, science: 0, language: 0, sports: 0, markets: 0 };
+  const visibleEntries = [];
 
   writingEntries.forEach((entry) => {
     const topic = entry.dataset.topic || 'all';
@@ -219,6 +278,7 @@ function applyWritingFilters() {
     if (visible) {
       visibleCount += 1;
       if (!firstVisible) firstVisible = entry;
+      visibleEntries.push(entry);
       if (stageCounts[stage] !== undefined) stageCounts[stage] += 1;
       if (topicCounts[topic] !== undefined) topicCounts[topic] += 1;
     }
@@ -239,6 +299,7 @@ function applyWritingFilters() {
     draftTopicSummary.textContent = `Systems ${topicCounts.systems} | Science ${topicCounts.science} | Language ${topicCounts.language} | Sports ${topicCounts.sports} | Markets ${topicCounts.markets}`;
   }
 
+  updateDraftQueue(visibleEntries);
   updateWritingSpotlight(firstVisible);
   updateUrlState();
 }
@@ -280,6 +341,24 @@ writingSpotlightOpen?.addEventListener('click', () => {
   currentWritingSpotlightEntry.open = true;
   currentWritingSpotlightEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
   updateUrlState();
+});
+
+queueFocusBtn?.addEventListener('click', () => {
+  const visibleEntries = writingEntries.filter((entry) => !entry.classList.contains('hidden'));
+  if (!visibleEntries.length) {
+    updateWritingSpotlight(null);
+    return;
+  }
+
+  const target = [...visibleEntries].sort((a, b) => {
+    const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
+    if (stageDelta !== 0) return stageDelta;
+    return (a.querySelector('.entry-title')?.textContent || '').localeCompare(b.querySelector('.entry-title')?.textContent || '');
+  })[0];
+
+  target.open = true;
+  updateWritingSpotlight(target);
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));

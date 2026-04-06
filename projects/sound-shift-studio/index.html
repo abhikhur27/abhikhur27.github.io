@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound Shift Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Language Systems</p>
+    <h1>Sound Shift Studio</h1>
+    <p class="lead">Fork the same seed lexicon across two branches, apply competing sound changes, and watch where language families converge or drift apart.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel controls-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Seed Lexicon</p>
+          <h2>Shared starting words</h2>
+        </div>
+        <button id="load-demo" type="button">Load Demo Lexicon</button>
+      </div>
+      <label for="seed-words">
+        One word per line
+        <textarea id="seed-words" rows="10">pater
+treyes
+kor
+genu
+kaput
+sker</textarea>
+      </label>
+
+      <section class="branch-grid" aria-label="Branch rule controls">
+        <article class="branch-card">
+          <div class="branch-head">
+            <p class="eyebrow">Branch A</p>
+            <h3>Western Drift</h3>
+          </div>
+          <p class="branch-copy">A path that rewards lenition, consonant erosion, and softer codas.</p>
+          <div id="branch-a-rules" class="rule-list"></div>
+        </article>
+
+        <article class="branch-card">
+          <div class="branch-head">
+            <p class="eyebrow">Branch B</p>
+            <h3>Highland Hold</h3>
+          </div>
+          <p class="branch-copy">A path that keeps harder consonants but front-shifts vowels in stressed environments.</p>
+          <div id="branch-b-rules" class="rule-list"></div>
+        </article>
+      </section>
+
+      <div class="action-row">
+        <button id="run-model" class="primary" type="button">Recompute Branches</button>
+        <button id="swap-branches" type="button">Swap Rule Sets</button>
+        <button id="copy-summary" type="button">Copy Summary</button>
+      </div>
+      <p id="status" class="status" aria-live="polite">Ready. Apply rules to see how the branches diverge.</p>
+    </section>
+
+    <section class="panel results-panel">
+      <div class="summary-grid">
+        <article>
+          <h3>Shared roots</h3>
+          <p id="root-count">0</p>
+        </article>
+        <article>
+          <h3>Branch distance</h3>
+          <p id="distance-score">0</p>
+        </article>
+        <article>
+          <h3>Closest pair</h3>
+          <p id="closest-pair">-</p>
+        </article>
+        <article>
+          <h3>Sharpest split</h3>
+          <p id="widest-split">-</p>
+        </article>
+      </div>
+
+      <section class="insight-panel">
+        <div>
+          <p class="eyebrow">Interpretation</p>
+          <h2>What changed between the families?</h2>
+        </div>
+        <p id="insight-copy">Run the model to compare rule pressure across the two branches.</p>
+      </section>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Seed</th>
+              <th>Branch A</th>
+              <th>Branch B</th>
+              <th>Edit Distance</th>
+            </tr>
+          </thead>
+          <tbody id="results-body">
+            <tr><td colspan="4" class="empty">Run the model to compare descendants.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
