@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merge Conflict Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header container">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Developer Workflow Game</p>
+    <h1>Merge Conflict Studio</h1>
+    <p class="lede">Resolve realistic three-way merge conflicts, keep the right behaviors alive, and score whether your final merge would actually ship.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel controls-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Scenario</p>
+          <h2 id="scenario-title">Loading scenario</h2>
+        </div>
+        <label class="scenario-select">
+          Choose conflict
+          <select id="scenario-select"></select>
+        </label>
+      </div>
+      <p id="scenario-summary" class="summary-copy"></p>
+
+      <section class="checklist-panel">
+        <h3>Merge Constraints</h3>
+        <div id="constraint-list" class="constraint-list"></div>
+      </section>
+
+      <section class="playbook-panel">
+        <h3>Branch Intent</h3>
+        <div class="intent-grid">
+          <article>
+            <strong>Base</strong>
+            <p id="base-intent"></p>
+          </article>
+          <article>
+            <strong>Your branch</strong>
+            <p id="ours-intent"></p>
+          </article>
+          <article>
+            <strong>Teammate branch</strong>
+            <p id="theirs-intent"></p>
+          </article>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel workspace-panel">
+      <div class="editor-grid">
+        <article class="editor-card">
+          <div class="editor-head">
+            <h3>Base</h3>
+            <span>Common ancestor</span>
+          </div>
+          <pre id="base-code" class="code-block"></pre>
+        </article>
+
+        <article class="editor-card">
+          <div class="editor-head">
+            <h3>Yours</h3>
+            <span>Feature branch</span>
+          </div>
+          <pre id="ours-code" class="code-block"></pre>
+        </article>
+
+        <article class="editor-card">
+          <div class="editor-head">
+            <h3>Theirs</h3>
+            <span>Incoming branch</span>
+          </div>
+          <pre id="theirs-code" class="code-block"></pre>
+        </article>
+      </div>
+
+      <section class="resolution-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Resolution</p>
+            <h2>Build the merged file</h2>
+          </div>
+          <div class="button-row">
+            <button id="use-ours" type="button">Use Yours</button>
+            <button id="use-theirs" type="button">Use Theirs</button>
+            <button id="blend-both" type="button">Blend Both</button>
+            <button id="reset-resolution" type="button">Reset</button>
+          </div>
+        </div>
+
+        <textarea id="resolution-editor" spellcheck="false" aria-label="Resolution editor"></textarea>
+
+        <div class="button-row actions-row">
+          <button id="score-resolution" class="primary" type="button">Score Resolution</button>
+          <button id="show-answer" type="button">Reveal Reference Merge</button>
+        </div>
+        <p id="status" class="status" aria-live="polite">Blend the conflict and then score it against the scenario constraints.</p>
+      </section>
+
+      <section class="results-grid">
+        <article class="result-card">
+          <h3>Score</h3>
+          <p id="score">-</p>
+        </article>
+        <article class="result-card">
+          <h3>Checks Passed</h3>
+          <p id="passed-checks">0 / 0</p>
+        </article>
+        <article class="result-card">
+          <h3>Line Match</h3>
+          <p id="line-match">-</p>
+        </article>
+      </section>
+
+      <section class="feedback-panel">
+        <div class="panel-head">
+          <h3>Review Notes</h3>
+        </div>
+        <div id="feedback-list" class="feedback-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

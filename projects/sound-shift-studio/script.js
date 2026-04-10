@@ -11,6 +11,9 @@ const distanceScoreEl = document.getElementById('distance-score');
 const closestPairEl = document.getElementById('closest-pair');
 const widestSplitEl = document.getElementById('widest-split');
 const insightCopyEl = document.getElementById('insight-copy');
+const atlasSummaryEl = document.getElementById('atlas-summary');
+const atlasRegionGridEl = document.getElementById('atlas-region-grid');
+const atlasLegendEl = document.getElementById('atlas-legend');
 const resultsBody = document.getElementById('results-body');
 
 const soundRules = [
@@ -51,6 +54,24 @@ const soundRules = [
     apply: (word) => word.replace(/a(?=[nm])/g, 'o').replace(/e(?=[nm])/g, 'a'),
   },
 ];
+
+const regionProfiles = [
+  { id: 'coast', name: 'Western Coast', x: 12, y: 18, a: { grimms: 0.9, front: 0.2, final: 0.8, palatal: 0.7, cluster: 0.3, nasal: 0.2 }, b: { grimms: 0.2, front: 0.6, final: 0.2, palatal: 0.3, cluster: 0.4, nasal: 0.5 } },
+  { id: 'strait', name: 'North Strait', x: 46, y: 10, a: { grimms: 0.6, front: 0.4, final: 0.3, palatal: 0.6, cluster: 0.3, nasal: 0.2 }, b: { grimms: 0.1, front: 0.8, final: 0.1, palatal: 0.4, cluster: 0.2, nasal: 0.5 } },
+  { id: 'plateau', name: 'Central Plateau', x: 42, y: 34, a: { grimms: 0.5, front: 0.2, final: 0.4, palatal: 0.3, cluster: 0.3, nasal: 0.1 }, b: { grimms: 0.2, front: 0.7, final: 0.2, palatal: 0.4, cluster: 0.3, nasal: 0.7 } },
+  { id: 'highland', name: 'Eastern Highland', x: 76, y: 24, a: { grimms: 0.2, front: 0.2, final: 0.2, palatal: 0.4, cluster: 0.2, nasal: 0.1 }, b: { grimms: 0.1, front: 0.9, final: 0.2, palatal: 0.6, cluster: 0.2, nasal: 0.8 } },
+  { id: 'basin', name: 'Southern Basin', x: 34, y: 66, a: { grimms: 0.4, front: 0.1, final: 0.7, palatal: 0.2, cluster: 0.2, nasal: 0.3 }, b: { grimms: 0.2, front: 0.4, final: 0.1, palatal: 0.2, cluster: 0.3, nasal: 0.9 } },
+  { id: 'delta', name: 'River Delta', x: 70, y: 72, a: { grimms: 0.3, front: 0.2, final: 0.5, palatal: 0.5, cluster: 0.4, nasal: 0.2 }, b: { grimms: 0.2, front: 0.7, final: 0.1, palatal: 0.5, cluster: 0.5, nasal: 0.6 } },
+];
+
+const ruleFamilies = {
+  'grimms-law': 'grimms',
+  'vowel-fronting': 'front',
+  'final-drop': 'final',
+  'palatal-glide': 'palatal',
+  's-cluster': 'cluster',
+  'nasal-coloring': 'nasal',
+};
 
 let branchASelection = ['grimms-law', 'final-drop', 'palatal-glide'];
 let branchBSelection = ['vowel-fronting', 's-cluster', 'nasal-coloring'];
@@ -122,6 +143,69 @@ function buildInsight(results) {
   return 'The branches still sound close. Right now the model is preserving family resemblance more than forcing a dramatic break.';
 }
 
+function computeBranchHeat(selection, weights) {
+  return selection.reduce((sum, ruleId) => {
+    const family = ruleFamilies[ruleId];
+    return sum + (weights[family] || 0);
+  }, 0);
+}
+
+function intensityLabel(value) {
+  if (value >= 2.2) return 'High';
+  if (value >= 1.3) return 'Medium';
+  if (value > 0) return 'Low';
+  return 'Quiet';
+}
+
+function renderAtlas() {
+  if (!atlasRegionGridEl || !atlasLegendEl || !atlasSummaryEl) return;
+
+  const regionResults = regionProfiles.map((region) => {
+    const heatA = computeBranchHeat(branchASelection, region.a);
+    const heatB = computeBranchHeat(branchBSelection, region.b);
+    const delta = Math.abs(heatA - heatB);
+    const dominant = heatA === heatB ? 'Shared' : heatA > heatB ? 'Branch A' : 'Branch B';
+    return { ...region, heatA, heatB, delta, dominant };
+  });
+
+  atlasRegionGridEl.innerHTML = regionResults
+    .map((region) => {
+      const strongerA = region.heatA >= region.heatB;
+      const hue = strongerA ? 'rgba(142, 201, 255,' : 'rgba(216, 197, 139,';
+      const alpha = Math.min(0.92, 0.22 + region.delta * 0.24);
+      return `
+        <article
+          class="atlas-region ${strongerA ? 'branch-a-hot' : 'branch-b-hot'}"
+          style="left:${region.x}%; top:${region.y}%; --heat:${alpha}; --region-glow:${hue}${alpha})"
+        >
+          <span class="atlas-dot"></span>
+          <div class="atlas-label">
+            <strong>${region.name}</strong>
+            <span>${region.dominant} | ${intensityLabel(region.delta)}</span>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+
+  const hottest = [...regionResults].sort((a, b) => b.delta - a.delta)[0];
+  atlasLegendEl.innerHTML = `
+    <article>
+      <strong>Branch A glow</strong>
+      <p>Blue heat marks regions where lenition and erosion pressure dominate.</p>
+    </article>
+    <article>
+      <strong>Branch B glow</strong>
+      <p>Gold heat marks regions where retention, fronting, and nasal coloring dominate.</p>
+    </article>
+    <article>
+      <strong>Hottest split</strong>
+      <p>${hottest.name} is currently diverging hardest.</p>
+    </article>
+  `;
+  atlasSummaryEl.textContent = `${hottest.name} shows the strongest regional split right now, with ${hottest.dominant.toLowerCase()} carrying the higher pressure.`;
+}
+
 function renderResults() {
   const seeds = parseSeedWords();
   rootCountEl.textContent = String(seeds.length);
@@ -134,6 +218,7 @@ function renderResults() {
     insightCopyEl.textContent = 'Add seed words to compare the branches.';
     statusEl.textContent = 'No seeds loaded yet.';
     lastResults = [];
+    renderAtlas();
     return;
   }
 
@@ -171,6 +256,7 @@ function renderResults() {
     .join('');
 
   statusEl.textContent = `Computed ${lastResults.length} descendant pair${lastResults.length === 1 ? '' : 's'}.`;
+  renderAtlas();
 }
 
 runModelBtn.addEventListener('click', () => {

@@ -9,6 +9,7 @@ Branch the same seed lexicon across two rule pipelines and compare how competing
 - Computes descendant forms for both branches.
 - Measures branch drift with per-word edit distance.
 - Summarizes the closest pair, widest split, and average branch distance.
+- Projects a drift atlas so the active rule stacks read like competing regional pressures.
 
 ## Why this project exists
 

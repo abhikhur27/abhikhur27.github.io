@@ -33,6 +33,7 @@ const commitCountEl = document.getElementById('commit-count');
 const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
 const commitSparklineEl = document.getElementById('commit-sparkline');
+const routeButtons = Array.from(document.querySelectorAll('.route-btn'));
 
 let activeFilter = 'all';
 let activeWritingTopic = 'all';
@@ -113,6 +114,17 @@ function applyProjectFilters() {
 
   updateSpotlight(firstVisible);
   updateUrlState();
+}
+
+function setProjectFilter(filter) {
+  activeFilter = filter || 'all';
+  projectFilterButtons.forEach((button) => {
+    button.classList.toggle('active', (button.dataset.filter || 'all') === activeFilter);
+  });
+  if (projectSearchInput) {
+    projectSearchInput.value = '';
+  }
+  applyProjectFilters();
 }
 
 projectFilterButtons.forEach((button) => {
@@ -304,6 +316,21 @@ function applyWritingFilters() {
   updateUrlState();
 }
 
+function setWritingFilters(topic, stage) {
+  activeWritingTopic = topic || 'all';
+  activeWritingStage = stage || 'all';
+  writingFilterButtons.forEach((button) => {
+    button.classList.toggle('active', (button.dataset.topic || 'all') === activeWritingTopic);
+  });
+  writingStageButtons.forEach((button) => {
+    button.classList.toggle('active', (button.dataset.stage || 'all') === activeWritingStage);
+  });
+  if (writingSearchInput) {
+    writingSearchInput.value = '';
+  }
+  applyWritingFilters();
+}
+
 writingSearchInput?.addEventListener('input', applyWritingFilters);
 writingFilterButtons.forEach((button) => {
   button.addEventListener('click', () => {
@@ -363,6 +390,15 @@ queueFocusBtn?.addEventListener('click', () => {
 
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
 copyWritingViewBtn?.addEventListener('click', () => copyCurrentView('drafts'));
+
+routeButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    setProjectFilter(button.dataset.projectFilter || 'all');
+    setWritingFilters(button.dataset.writingTopic || 'all', button.dataset.writingStage || 'all');
+    const targetId = button.dataset.scrollTarget || 'projects';
+    document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
 
 const observer = new IntersectionObserver(
   (entries) => {
