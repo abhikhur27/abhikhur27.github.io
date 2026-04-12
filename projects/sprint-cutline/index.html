@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprint Cutline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Product Strategy Game</p>
+    <h1>Sprint Cutline</h1>
+    <p class="lead">You are the tech lead in release week. Scope shocks keep landing. Choose what to cut, shield, or reframe before trust, stability, and schedule all collapse together.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel status-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Release Board</p>
+          <h2 id="round-title">Round 1</h2>
+        </div>
+        <p id="round-meta" class="mono">1 / 5</p>
+      </div>
+
+      <div class="metric-stack">
+        <article>
+          <div class="metric-row"><strong>Team Trust</strong><span id="metric-trust">68</span></div>
+          <div class="meter"><div id="bar-trust" class="fill trust"></div></div>
+        </article>
+        <article>
+          <div class="metric-row"><strong>Release Stability</strong><span id="metric-stability">72</span></div>
+          <div class="meter"><div id="bar-stability" class="fill stability"></div></div>
+        </article>
+        <article>
+          <div class="metric-row"><strong>Scope Confidence</strong><span id="metric-scope">74</span></div>
+          <div class="meter"><div id="bar-scope" class="fill scope"></div></div>
+        </article>
+        <article>
+          <div class="metric-row"><strong>Stakeholder Clarity</strong><span id="metric-clarity">61</span></div>
+          <div class="meter"><div id="bar-clarity" class="fill clarity"></div></div>
+        </article>
+      </div>
+
+      <section class="brief">
+        <p class="eyebrow">Current Shock</p>
+        <h3 id="event-title">Payments edge case opens in QA</h3>
+        <p id="event-body">A late QA pass found a refund-state bug that only appears when two promo systems overlap on the same cart.</p>
+      </section>
+
+      <section class="brief">
+        <p class="eyebrow">Release Posture</p>
+        <p id="posture-summary">You still have room to protect quality, but every “just squeeze it in” call now risks looking unserious.</p>
+      </section>
+    </section>
+
+    <section class="panel choice-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Decision</p>
+          <h2>Pick one response</h2>
+        </div>
+      </div>
+      <div id="choice-list" class="choice-list"></div>
+      <div id="result-card" class="result-card hidden" aria-live="polite"></div>
+      <div class="actions">
+        <button id="next-btn" class="primary" type="button" disabled>Lock Next Round</button>
+        <button id="restart-btn" type="button">Restart Run</button>
+      </div>
+    </section>
+
+    <section class="panel log-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Decision Trail</p>
+          <h2>What the release now remembers</h2>
+        </div>
+      </div>
+      <div id="timeline" class="timeline"></div>
+      <div id="final-outcome" class="final-outcome hidden"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

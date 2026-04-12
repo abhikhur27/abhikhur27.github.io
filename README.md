@@ -33,6 +33,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/systems-decision-labs`
 - `projects/sound-shift-studio`
 - `projects/merge-conflict-studio`
+- `projects/sprint-cutline`
 
 ## Technical design
 
@@ -40,6 +41,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/systems-decision-labs`: anthology page that groups the repeated campus/infrastructure decision sims into one portfolio family.
 - `projects/sound-shift-studio`: branching sound-change sandbox for exploring language drift.
 - `projects/merge-conflict-studio`: three-way merge training game for practicing conflict resolution under behavioral constraints.
+- `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, writing shelf spotlight controls, shareable filtered-view links, stage filters, writing queue logic, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.

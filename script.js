@@ -29,6 +29,7 @@ const writingSpotlightTitle = document.getElementById('writing-spotlight-title')
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
 const writingSpotlightMeta = document.getElementById('writing-spotlight-meta');
 const writingSpotlightOpen = document.getElementById('writing-spotlight-open');
+const writingSpotlightRelated = document.getElementById('writing-spotlight-related');
 const commitCountEl = document.getElementById('commit-count');
 const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
@@ -203,6 +204,7 @@ function updateWritingSpotlight(entry) {
     writingSpotlightDescription.textContent = 'Broaden the search or switch topics to bring a draft back into focus.';
     writingSpotlightMeta.textContent = 'The draft shelf is empty under the current filters.';
     writingSpotlightOpen.disabled = true;
+    writingSpotlightRelated?.classList.add('hidden');
     return;
   }
 
@@ -212,8 +214,18 @@ function updateWritingSpotlight(entry) {
   const meta = entry.querySelector('.entry-meta')?.textContent || 'Working draft';
   const stage = entry.dataset.stage ? `${entry.dataset.stage[0].toUpperCase()}${entry.dataset.stage.slice(1)}` : 'Draft';
   const nextMilestone = entry.dataset.next ? ` Next milestone: ${entry.dataset.next}` : '';
-  writingSpotlightMeta.textContent = `${meta} | ${stage}.${nextMilestone}`;
+  const relatedLabel = entry.dataset.relatedLabel ? ` Related build: ${entry.dataset.relatedLabel}.` : '';
+  writingSpotlightMeta.textContent = `${meta} | ${stage}.${nextMilestone}${relatedLabel}`;
   writingSpotlightOpen.disabled = false;
+  if (writingSpotlightRelated) {
+    if (entry.dataset.relatedLink) {
+      writingSpotlightRelated.href = entry.dataset.relatedLink;
+      writingSpotlightRelated.textContent = `Open ${entry.dataset.relatedLabel || 'Related Build'}`;
+      writingSpotlightRelated.classList.remove('hidden');
+    } else {
+      writingSpotlightRelated.classList.add('hidden');
+    }
+  }
   updateUrlState();
 }
 
