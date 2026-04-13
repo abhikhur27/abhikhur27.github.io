@@ -1,0 +1,235 @@
+:root {
+  --bg: #0f1115;
+  --panel: #171b22;
+  --panel-alt: #1d2430;
+  --text: #edf1f7;
+  --muted: #9ca8bb;
+  --border: #2e3745;
+  --accent: #8dd8be;
+  --warm: #f5be72;
+  --danger: #ff8b7a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(141, 216, 190, 0.1), transparent 32%),
+    linear-gradient(180deg, #0d1014, #12161d 45%, #0f1115);
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.shell {
+  width: min(1180px, 92vw);
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(23, 27, 34, 0.94);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+}
+
+.hero {
+  padding: 1.3rem 1.4rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.55rem;
+  color: var(--accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+h1,
+h2,
+h3,
+strong {
+  font-family: "Fraunces", serif;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+}
+
+.lede,
+.scenario-copy,
+.signal-grid p,
+.decision-note,
+.history-list p {
+  color: var(--muted);
+}
+
+.back-link {
+  display: inline-flex;
+  margin-top: 1rem;
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+}
+
+.metrics-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.metric-card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(29, 36, 48, 0.9);
+  padding: 0.9rem 1rem;
+}
+
+.metric-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 2rem;
+}
+
+.metric-card.danger strong {
+  color: var(--danger);
+}
+
+.metric-card.accent strong {
+  color: var(--accent);
+}
+
+.layout {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.85fr);
+  gap: 0.9rem;
+}
+
+.scenario-panel,
+.stack .panel {
+  padding: 1.2rem;
+}
+
+.stack {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.scenario-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+}
+
+.pressure-chip {
+  border-radius: 999px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.78rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(245, 190, 114, 0.12);
+  color: var(--warm);
+}
+
+.signal-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.signal-grid article,
+.history-item,
+.doctrine-board article {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(13, 16, 20, 0.65);
+  padding: 0.9rem;
+}
+
+.signal-grid h3,
+.doctrine-board h3 {
+  margin: 0 0 0.45rem;
+  font-size: 1rem;
+}
+
+.decision-buttons {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.decision-btn {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(141, 216, 190, 0.08), rgba(255, 255, 255, 0.02));
+  color: var(--text);
+  padding: 0.95rem 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.decision-btn strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 1.1rem;
+}
+
+.decision-btn span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.decision-btn:hover,
+.decision-btn:focus-visible,
+.restart-button:hover,
+.restart-button:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+  border-color: rgba(141, 216, 190, 0.55);
+}
+
+.doctrine-board,
+.history-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.restart-button {
+  margin-top: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(141, 216, 190, 0.12);
+  color: var(--text);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .metrics-grid,
+  .signal-grid,
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

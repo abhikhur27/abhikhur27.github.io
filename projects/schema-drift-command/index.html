@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schema Drift Command</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero panel">
+      <p class="eyebrow">Platform Strategy Game</p>
+      <h1>Schema Drift Command</h1>
+      <p class="lede">An upstream team keeps changing payload contracts while your client fleet is half-migrated. Decide when to freeze, shim, or force the cutover without detonating trust.</p>
+      <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    </section>
+
+    <section class="metrics-grid">
+      <article class="metric-card">
+        <span>Partner Trust</span>
+        <strong id="trust-score">70</strong>
+      </article>
+      <article class="metric-card">
+        <span>Delivery Tempo</span>
+        <strong id="delivery-score">72</strong>
+      </article>
+      <article class="metric-card danger">
+        <span>Incident Pressure</span>
+        <strong id="incident-score">18</strong>
+      </article>
+      <article class="metric-card accent">
+        <span>Shim Budget</span>
+        <strong id="budget-score">2</strong>
+      </article>
+    </section>
+
+    <section class="layout">
+      <section class="panel scenario-panel">
+        <div class="scenario-head">
+          <div>
+            <p class="eyebrow">Round <span id="round-label">1</span> of 5</p>
+            <h2 id="scenario-title">Loading scenario...</h2>
+          </div>
+          <div id="pressure-chip" class="pressure-chip">Pressure</div>
+        </div>
+        <p id="scenario-summary" class="scenario-copy"></p>
+        <div class="signal-grid">
+          <article>
+            <h3>Client Mix</h3>
+            <p id="client-mix"></p>
+          </article>
+          <article>
+            <h3>What Changed</h3>
+            <p id="schema-change"></p>
+          </article>
+          <article>
+            <h3>Failure Mode</h3>
+            <p id="failure-mode"></p>
+          </article>
+        </div>
+        <div id="decision-buttons" class="decision-buttons"></div>
+        <p id="decision-note" class="decision-note">Choose a response. Each move shifts trust, delivery, incidents, and your remaining shim budget.</p>
+      </section>
+
+      <aside class="stack">
+        <section class="panel">
+          <p class="eyebrow">Current Doctrine</p>
+          <div id="doctrine-board" class="doctrine-board"></div>
+        </section>
+        <section class="panel">
+          <p class="eyebrow">Decision Log</p>
+          <div id="history-list" class="history-list"></div>
+        </section>
+        <section class="panel hidden" id="ending-panel">
+          <p class="eyebrow">Campaign Verdict</p>
+          <h2 id="ending-title"></h2>
+          <p id="ending-summary" class="scenario-copy"></p>
+          <div id="ending-highlights" class="history-list"></div>
+          <button id="restart-button" class="restart-button" type="button">Restart Campaign</button>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

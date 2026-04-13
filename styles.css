@@ -259,6 +259,26 @@ section {
   padding: 1rem;
 }
 
+.trail-list {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.8rem;
+}
+
+.trail-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(130, 219, 190, 0.08), rgba(17, 19, 23, 0.96)),
+    var(--surface);
+  padding: 1rem;
+}
+
+.trail-card h3 {
+  font-size: 1.55rem;
+}
+
 .route-card h3 {
   margin-top: 0.7rem;
   font-size: 1.3rem;

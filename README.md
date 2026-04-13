@@ -13,6 +13,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Blog-style expandable writing shelf for draft essays.
 - Draft shelf summary cards for visible stages and topic mix.
 - A writing queue that turns the visible shelf into concrete next actions.
+- A linked-trails layer that bridges projects with the drafts already growing out of them.
 - Quick route cards that tune both the project index and draft shelf from one click.
 - Fully static architecture for GitHub Pages.
 - Stage-aware draft shelf filters for planning the blog pipeline.
@@ -34,6 +35,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/sound-shift-studio`
 - `projects/merge-conflict-studio`
 - `projects/sprint-cutline`
+- `projects/schema-drift-command`
 
 ## Technical design
 
@@ -42,8 +44,9 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/sound-shift-studio`: branching sound-change sandbox for exploring language drift.
 - `projects/merge-conflict-studio`: three-way merge training game for practicing conflict resolution under behavioral constraints.
 - `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.
+- `projects/schema-drift-command`: schema migration decision game about compatibility shims, partner trust, and contract cutovers.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, writing shelf spotlight controls, shareable filtered-view links, stage filters, writing queue logic, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, linked build/draft trails, writing shelf spotlight controls, shareable filtered-view links, stage filters, writing queue logic, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid

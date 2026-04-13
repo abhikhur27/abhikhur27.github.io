@@ -25,6 +25,8 @@ const draftTopicSummary = document.getElementById('draft-topic-summary');
 const draftQueueMeta = document.getElementById('draft-queue-meta');
 const draftQueueList = document.getElementById('draft-queue-list');
 const queueFocusBtn = document.getElementById('queue-focus-btn');
+const trailResultsMeta = document.getElementById('trail-results-meta');
+const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
 const writingSpotlightMeta = document.getElementById('writing-spotlight-meta');
@@ -284,6 +286,103 @@ function updateDraftQueue(visibleEntries) {
   if (queueFocusBtn) queueFocusBtn.disabled = false;
 }
 
+function renderBuildTrails() {
+  if (!trailList || !trailResultsMeta) {
+    return;
+  }
+
+  const grouped = new Map();
+  writingEntries.forEach((entry) => {
+    const link = entry.dataset.relatedLink;
+    if (!link) return;
+
+    if (!grouped.has(link)) {
+      grouped.set(link, {
+        link,
+        label: entry.dataset.relatedLabel || entry.querySelector('.entry-title')?.textContent || 'Related build',
+        entries: [],
+      });
+    }
+
+    grouped.get(link).entries.push(entry);
+  });
+
+  const trails = [...grouped.values()].sort((a, b) => {
+    const aBest = Math.min(...a.entries.map((entry) => stagePriority(entry.dataset.stage)));
+    const bBest = Math.min(...b.entries.map((entry) => stagePriority(entry.dataset.stage)));
+    return aBest - bBest || a.label.localeCompare(b.label);
+  });
+
+  trailResultsMeta.textContent = `${trails.length} linked build${trails.length === 1 ? '' : 's'} already connect the project index to the draft shelf.`;
+
+  trailList.innerHTML = trails
+    .map((trail) => {
+      const orderedEntries = [...trail.entries].sort((a, b) => {
+        const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
+        if (stageDelta !== 0) return stageDelta;
+        return (a.querySelector('.entry-title')?.textContent || '').localeCompare(
+          b.querySelector('.entry-title')?.textContent || ''
+        );
+      });
+      const nextEntry = orderedEntries[0];
+      const stageCounts = ['drafting', 'modeling', 'research']
+        .map((stage) => {
+          const count = trail.entries.filter((entry) => entry.dataset.stage === stage).length;
+          return `${formatStageLabel(stage)} ${count}`;
+        })
+        .join(' | ');
+
+      return `
+        <article class="trail-card">
+          <p class="tag">Project + Draft Trail</p>
+          <h3>${trail.label}</h3>
+          <p class="section-copy">${trail.entries.length} linked draft${trail.entries.length === 1 ? '' : 's'} already feed this build. Next writing move: ${
+            nextEntry?.dataset.next || 'Open the related draft to continue.'
+          }</p>
+          <p class="results-meta">${stageCounts}</p>
+          <div class="card-actions">
+            <button class="spotlight-btn trail-focus-btn" type="button" data-related-link="${trail.link}" data-related-label="${trail.label}">Tune Portfolio To This Trail</button>
+            <a class="spotlight-btn" href="${trail.link}" target="_blank" rel="noreferrer">Open Build</a>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+}
+
+function focusTrail(link, label) {
+  setProjectFilter('all');
+  if (projectSearchInput) {
+    projectSearchInput.value = label;
+  }
+  applyProjectFilters();
+
+  activeWritingTopic = 'all';
+  activeWritingStage = 'all';
+  writingFilterButtons.forEach((button) => {
+    button.classList.toggle('active', button.dataset.topic === 'all');
+  });
+  writingStageButtons.forEach((button) => {
+    button.classList.toggle('active', button.dataset.stage === 'all');
+  });
+  if (writingSearchInput) {
+    writingSearchInput.value = '';
+  }
+  applyWritingFilters();
+
+  const target = writingEntries
+    .filter((entry) => entry.dataset.relatedLink === link)
+    .sort((a, b) => stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage))[0];
+
+  if (!target) {
+    return;
+  }
+
+  target.open = true;
+  updateWritingSpotlight(target);
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 function applyWritingFilters() {
   const query = (writingSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
@@ -398,6 +497,15 @@ queueFocusBtn?.addEventListener('click', () => {
   target.open = true;
   updateWritingSpotlight(target);
   target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+trailList?.addEventListener('click', (event) => {
+  const button = event.target.closest('.trail-focus-btn');
+  if (!button) {
+    return;
+  }
+
+  focusTrail(button.dataset.relatedLink || '', button.dataset.relatedLabel || '');
 });
 
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
@@ -681,6 +789,7 @@ function hydrateFiltersFromUrl() {
 hydrateFiltersFromUrl();
 applyProjectFilters();
 applyWritingFilters();
+renderBuildTrails();
 loadGithubPulse();
 
 const draftParam = new URLSearchParams(window.location.search).get('draft');
