@@ -205,8 +205,12 @@ h1 {
   line-height: 1.35;
 }
 
-section {
-  margin: clamp(2.2rem, 5.2vw, 4.4rem) auto;
+main > section {
+  margin: 0 auto;
+}
+
+main > section + section {
+  margin-top: clamp(2.4rem, 5vw, 4.4rem);
 }
 
 .site-footer {
@@ -261,10 +265,6 @@ section {
   font-size: 1.38rem;
   line-height: 1.08;
   margin-bottom: 0.25rem;
-}
-
-.build-trails {
-  margin-top: clamp(2.6rem, 5vw, 4.6rem);
 }
 
 .build-trails .section-head h2 {

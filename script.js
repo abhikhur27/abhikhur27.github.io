@@ -22,9 +22,6 @@ const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
 const draftStageSummary = document.getElementById('draft-stage-summary');
 const draftTopicSummary = document.getElementById('draft-topic-summary');
-const draftBriefTitle = document.getElementById('draft-brief-title');
-const draftBriefCopy = document.getElementById('draft-brief-copy');
-const draftBriefFocus = document.getElementById('draft-brief-focus');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
@@ -239,42 +236,6 @@ function formatStageLabel(stage) {
   return stage ? `${stage[0].toUpperCase()}${stage.slice(1)}` : 'Draft';
 }
 
-function updateDraftBrief(visibleEntries) {
-  if (!draftBriefTitle || !draftBriefCopy || !draftBriefFocus) {
-    return;
-  }
-
-  if (!visibleEntries.length) {
-    draftBriefTitle.textContent = 'No drafts match the current shelf state.';
-    draftBriefCopy.textContent = 'Broaden the current filters or search terms to rebuild a reading path.';
-    draftBriefFocus.disabled = true;
-    return;
-  }
-
-  const draftingCount = visibleEntries.filter((entry) => entry.dataset.stage === 'drafting').length;
-  const modelingCount = visibleEntries.filter((entry) => entry.dataset.stage === 'modeling').length;
-  const systemsCount = visibleEntries.filter((entry) => entry.dataset.topic === 'systems').length;
-  const recommended = [...visibleEntries].sort((a, b) => {
-    const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
-    if (stageDelta !== 0) return stageDelta;
-    return (a.querySelector('.entry-title')?.textContent || '').localeCompare(b.querySelector('.entry-title')?.textContent || '');
-  })[0];
-
-  draftBriefTitle.textContent = `${visibleEntries.length} visible draft${visibleEntries.length === 1 ? '' : 's'} with ${draftingCount} nearest to publishable form.`;
-
-  let brief = `${recommended?.querySelector('.entry-title')?.textContent || 'The current shelf'} is the strongest next read.`;
-  if (systemsCount >= Math.ceil(visibleEntries.length / 2)) {
-    brief += ' The visible mix currently leans systems-heavy, so this filter state reads like an engineering notebook.';
-  } else if (modelingCount >= Math.ceil(visibleEntries.length / 2)) {
-    brief += ' Most visible notes are still in modeling mode, which makes this a better route for synthesis than polish.';
-  } else {
-    brief += ' The current mix is broad enough to browse for range instead of one narrow topic.';
-  }
-
-  draftBriefCopy.textContent = brief;
-  draftBriefFocus.disabled = false;
-}
-
 function renderBuildTrails() {
   if (!trailList) {
     return;
@@ -374,7 +335,6 @@ function applyWritingFilters() {
     draftTopicSummary.textContent = `Systems ${topicCounts.systems} | Science ${topicCounts.science} | Language ${topicCounts.language} | Sports ${topicCounts.sports} | Markets ${topicCounts.markets}`;
   }
 
-  updateDraftBrief(visibleEntries);
   updateWritingSpotlight(firstVisible);
   updateUrlState();
 }
@@ -431,21 +391,6 @@ writingSpotlightOpen?.addEventListener('click', () => {
   currentWritingSpotlightEntry.open = true;
   currentWritingSpotlightEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
   updateUrlState();
-});
-
-draftBriefFocus?.addEventListener('click', () => {
-  const visibleEntries = writingEntries.filter((entry) => !entry.classList.contains('hidden'));
-  if (!visibleEntries.length) return;
-
-  const target = [...visibleEntries].sort((a, b) => {
-    const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
-    if (stageDelta !== 0) return stageDelta;
-    return (a.querySelector('.entry-title')?.textContent || '').localeCompare(b.querySelector('.entry-title')?.textContent || '');
-  })[0];
-
-  target.open = true;
-  updateWritingSpotlight(target);
-  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));

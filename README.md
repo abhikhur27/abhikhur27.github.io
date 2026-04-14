@@ -47,7 +47,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.
 - `projects/schema-drift-command`: schema migration decision game about compatibility shims, partner trust, and contract cutovers.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, linked build/draft trails, writing shelf spotlight controls, shelf-brief guidance, shareable filtered-view links, stage filters, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, linked build/draft trails, writing shelf spotlight controls, shareable filtered-view links, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid
