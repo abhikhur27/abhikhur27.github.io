@@ -28,7 +28,6 @@ const draftBriefFocus = document.getElementById('draft-brief-focus');
 const draftQueueMeta = document.getElementById('draft-queue-meta');
 const draftQueueList = document.getElementById('draft-queue-list');
 const queueFocusBtn = document.getElementById('queue-focus-btn');
-const trailResultsMeta = document.getElementById('trail-results-meta');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
@@ -39,7 +38,6 @@ const commitCountEl = document.getElementById('commit-count');
 const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
 const commitSparklineEl = document.getElementById('commit-sparkline');
-const routeButtons = Array.from(document.querySelectorAll('.route-btn'));
 
 let activeFilter = 'all';
 let activeWritingTopic = 'all';
@@ -326,7 +324,7 @@ function updateDraftBrief(visibleEntries) {
 }
 
 function renderBuildTrails() {
-  if (!trailList || !trailResultsMeta) {
+  if (!trailList) {
     return;
   }
 
@@ -352,8 +350,6 @@ function renderBuildTrails() {
     return aBest - bBest || a.label.localeCompare(b.label);
   });
 
-  trailResultsMeta.textContent = `${trails.length} linked build${trails.length === 1 ? '' : 's'} already connect the project index to the draft shelf.`;
-
   trailList.innerHTML = trails
     .map((trail) => {
       const orderedEntries = [...trail.entries].sort((a, b) => {
@@ -373,53 +369,18 @@ function renderBuildTrails() {
 
       return `
         <article class="trail-card">
-          <p class="tag">Project + Draft Trail</p>
+          <p class="tag">Linked Notes</p>
           <h3>${trail.label}</h3>
-          <p class="section-copy">${trail.entries.length} linked draft${trail.entries.length === 1 ? '' : 's'} already feed this build. Next writing move: ${
-            nextEntry?.dataset.next || 'Open the related draft to continue.'
-          }</p>
+          <p class="section-copy">${trail.entries.length} linked draft${trail.entries.length === 1 ? '' : 's'} for this build.</p>
+          <p class="results-meta">Next write: ${nextEntry?.dataset.next || 'Open the related draft and continue the note.'}</p>
           <p class="results-meta">${stageCounts}</p>
           <div class="card-actions">
-            <button class="spotlight-btn trail-focus-btn" type="button" data-related-link="${trail.link}" data-related-label="${trail.label}">Tune Portfolio To This Trail</button>
             <a class="spotlight-btn" href="${trail.link}" target="_blank" rel="noreferrer">Open Build</a>
           </div>
         </article>
       `;
     })
     .join('');
-}
-
-function focusTrail(link, label) {
-  setProjectFilter('all');
-  if (projectSearchInput) {
-    projectSearchInput.value = label;
-  }
-  applyProjectFilters();
-
-  activeWritingTopic = 'all';
-  activeWritingStage = 'all';
-  writingFilterButtons.forEach((button) => {
-    button.classList.toggle('active', button.dataset.topic === 'all');
-  });
-  writingStageButtons.forEach((button) => {
-    button.classList.toggle('active', button.dataset.stage === 'all');
-  });
-  if (writingSearchInput) {
-    writingSearchInput.value = '';
-  }
-  applyWritingFilters();
-
-  const target = writingEntries
-    .filter((entry) => entry.dataset.relatedLink === link)
-    .sort((a, b) => stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage))[0];
-
-  if (!target) {
-    return;
-  }
-
-  target.open = true;
-  updateWritingSpotlight(target);
-  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function applyWritingFilters() {
@@ -554,26 +515,8 @@ draftBriefFocus?.addEventListener('click', () => {
   target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
-trailList?.addEventListener('click', (event) => {
-  const button = event.target.closest('.trail-focus-btn');
-  if (!button) {
-    return;
-  }
-
-  focusTrail(button.dataset.relatedLink || '', button.dataset.relatedLabel || '');
-});
-
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
 copyWritingViewBtn?.addEventListener('click', () => copyCurrentView('drafts'));
-
-routeButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    setProjectFilter(button.dataset.projectFilter || 'all');
-    setWritingFilters(button.dataset.writingTopic || 'all', button.dataset.writingStage || 'all');
-    const targetId = button.dataset.scrollTarget || 'projects';
-    document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
 
 const observer = new IntersectionObserver(
   (entries) => {

@@ -15,7 +15,6 @@ Main personal site for project demos and an in-progress engineering blog.
 - A writing queue that turns the visible shelf into concrete next actions.
 - A linked-trails layer that bridges projects with the drafts already growing out of them.
 - A real-life builds shelf for physical projects (3D prints, woodworking, robotics, homelab logs).
-- Quick route cards that tune both the project index and draft shelf from one click.
 - Fully static architecture for GitHub Pages.
 - Stage-aware draft shelf filters for planning the blog pipeline.
 - Shareable project and draft-shelf view links so filtered homepage states can be sent directly.
