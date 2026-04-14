@@ -368,68 +368,6 @@ section {
   font-size: 1.05rem;
 }
 
-.draft-queue {
-  margin-top: 0.95rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background:
-    linear-gradient(180deg, rgba(184, 196, 255, 0.08), rgba(17, 19, 23, 0.96)),
-    var(--surface);
-  padding: 0.95rem;
-}
-
-.section-head.compact {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.section-head.compact h3 {
-  margin: 0;
-  font-size: 1.08rem;
-}
-
-.draft-queue-list {
-  margin-top: 0.8rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.7rem;
-}
-
-.queue-card {
-  border: 1px solid rgba(184, 196, 255, 0.16);
-  border-radius: 12px;
-  background: rgba(11, 13, 18, 0.72);
-  padding: 0.85rem;
-}
-
-.queue-card h4 {
-  margin: 0.15rem 0 0.35rem;
-  font-size: 1rem;
-}
-
-.queue-card p {
-  margin: 0;
-  color: var(--muted);
-}
-
-.queue-order,
-.queue-meta {
-  font-size: 0.8rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.queue-order {
-  color: var(--accent-strong);
-}
-
-.empty-queue strong {
-  display: block;
-  margin-bottom: 0.35rem;
-}
-
 .project-search input {
   width: min(420px, 100%);
   border: 1px solid var(--border);
@@ -692,11 +630,6 @@ section {
 
   .draft-dashboard {
     grid-template-columns: 1fr;
-  }
-
-  .section-head.compact {
-    align-items: start;
-    flex-direction: column;
   }
 
   .entry-row summary {

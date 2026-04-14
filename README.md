@@ -12,7 +12,6 @@ Main personal site for project demos and an in-progress engineering blog.
 - Project directory with category filtering.
 - Blog-style expandable writing shelf for draft essays.
 - Draft shelf summary cards for visible stages and topic mix.
-- A writing queue that turns the visible shelf into concrete next actions.
 - A linked-trails layer that bridges projects with the drafts already growing out of them.
 - A real-life builds shelf for physical projects (3D prints, woodworking, robotics, homelab logs).
 - Fully static architecture for GitHub Pages.
@@ -48,7 +47,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.
 - `projects/schema-drift-command`: schema migration decision game about compatibility shims, partner trust, and contract cutovers.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, linked build/draft trails, writing shelf spotlight controls, shelf-brief guidance, shareable filtered-view links, stage filters, writing queue logic, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, linked build/draft trails, writing shelf spotlight controls, shelf-brief guidance, shareable filtered-view links, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid
