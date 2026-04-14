@@ -568,6 +568,12 @@ section {
   gap: 0.6rem;
 }
 
+.build-list {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
 .entry-row {
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -626,6 +632,42 @@ section {
 }
 
 .entry-row p {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+}
+
+.build-row {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.7rem 0.8rem;
+}
+
+.build-row summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.build-row summary::-webkit-details-marker {
+  display: none;
+}
+
+.build-row summary::before {
+  content: '+';
+  margin-right: 0.55rem;
+  color: #d7defe;
+  font-weight: 700;
+}
+
+.build-row[open] summary::before {
+  content: '-';
+}
+
+.build-row p {
   margin: 0.55rem 0 0;
   color: var(--muted);
 }

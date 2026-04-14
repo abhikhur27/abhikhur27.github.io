@@ -14,6 +14,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Draft shelf summary cards for visible stages and topic mix.
 - A writing queue that turns the visible shelf into concrete next actions.
 - A linked-trails layer that bridges projects with the drafts already growing out of them.
+- A real-life builds shelf for physical projects (3D prints, woodworking, robotics, homelab logs).
 - Quick route cards that tune both the project index and draft shelf from one click.
 - Fully static architecture for GitHub Pages.
 - Stage-aware draft shelf filters for planning the blog pipeline.
@@ -40,7 +41,7 @@ Main personal site for project demos and an in-progress engineering blog.
 
 ## Technical design
 
-- `index.html`: semantic structure for hero, projects, blog sections, and topic filters.
+- `index.html`: semantic structure for hero, project index, real-life builds shelf, blog sections, and topic filters.
 - `projects/systems-decision-labs`: anthology page that groups the repeated campus/infrastructure decision sims into one portfolio family.
 - `projects/cache-policy-studio`: cache policy sandbox for TTL, stale windows, and origin-load tradeoffs.
 - `projects/sound-shift-studio`: branching sound-change sandbox for exploring language drift.
