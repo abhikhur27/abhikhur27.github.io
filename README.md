@@ -26,6 +26,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/rail-headway-sandbox`
 - `projects/market-regime-lab`
 - `projects/queueing-resilience-lab`
+- `projects/cache-policy-studio`
 - `projects/incident-command-lab`
 - `projects/patch-window-commander`
 - `projects/detour-dispatch`
@@ -41,12 +42,13 @@ Main personal site for project demos and an in-progress engineering blog.
 
 - `index.html`: semantic structure for hero, projects, blog sections, and topic filters.
 - `projects/systems-decision-labs`: anthology page that groups the repeated campus/infrastructure decision sims into one portfolio family.
+- `projects/cache-policy-studio`: cache policy sandbox for TTL, stale windows, and origin-load tradeoffs.
 - `projects/sound-shift-studio`: branching sound-change sandbox for exploring language drift.
 - `projects/merge-conflict-studio`: three-way merge training game for practicing conflict resolution under behavioral constraints.
 - `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.
 - `projects/schema-drift-command`: schema migration decision game about compatibility shims, partner trust, and contract cutovers.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, linked build/draft trails, writing shelf spotlight controls, shareable filtered-view links, stage filters, writing queue logic, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, linked build/draft trails, writing shelf spotlight controls, shelf-brief guidance, shareable filtered-view links, stage filters, writing queue logic, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid

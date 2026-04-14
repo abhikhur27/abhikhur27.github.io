@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cache Policy Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <p class="eyebrow">Performance Systems Sandbox</p>
+    <h1>Cache Policy Studio</h1>
+    <p class="lead">Tune TTL, stale windows, and request pressure to see how caching shifts latency, origin load, and stale-read risk.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel controls">
+      <h2>Policy Controls</h2>
+
+      <label>
+        Requests per minute
+        <input id="traffic" type="range" min="60" max="2400" step="30" value="720">
+        <span id="traffic-value" class="value">720 rpm</span>
+      </label>
+
+      <label>
+        Base hit rate
+        <input id="hit-rate" type="range" min="10" max="95" step="1" value="68">
+        <span id="hit-rate-value" class="value">68%</span>
+      </label>
+
+      <label>
+        TTL
+        <input id="ttl" type="range" min="30" max="900" step="15" value="240">
+        <span id="ttl-value" class="value">240 s</span>
+      </label>
+
+      <label>
+        Stale-while-revalidate window
+        <input id="stale-window" type="range" min="0" max="600" step="15" value="120">
+        <span id="stale-window-value" class="value">120 s</span>
+      </label>
+
+      <label>
+        Origin latency
+        <input id="origin-latency" type="range" min="80" max="1200" step="20" value="420">
+        <span id="origin-latency-value" class="value">420 ms</span>
+      </label>
+
+      <label>
+        Payload size
+        <input id="payload-size" type="range" min="10" max="400" step="10" value="80">
+        <span id="payload-size-value" class="value">80 KB</span>
+      </label>
+
+      <div class="button-row">
+        <button id="preset-api" type="button">API Preset</button>
+        <button id="preset-news" type="button">News Feed Preset</button>
+        <button id="preset-catalog" type="button">Catalog Preset</button>
+      </div>
+    </section>
+
+    <section class="panel results">
+      <div class="summary-grid">
+        <article>
+          <h3>Edge Latency</h3>
+          <p id="edge-latency">-</p>
+        </article>
+        <article>
+          <h3>Origin Calls / Min</h3>
+          <p id="origin-calls">-</p>
+        </article>
+        <article>
+          <h3>Bandwidth / Min</h3>
+          <p id="bandwidth">-</p>
+        </article>
+        <article>
+          <h3>Stale Read Risk</h3>
+          <p id="stale-risk">-</p>
+        </article>
+      </div>
+
+      <section class="analysis-card">
+        <h2>Policy Brief</h2>
+        <p id="policy-brief">Adjust the controls to produce a recommendation.</p>
+      </section>
+
+      <section class="analysis-card">
+        <h2>Request Mix</h2>
+        <div class="bars" aria-label="Cache policy request mix">
+          <div class="bar-group">
+            <span>Edge Hits</span>
+            <div class="bar-track"><div id="hit-bar" class="bar hit"></div></div>
+          </div>
+          <div class="bar-group">
+            <span>Revalidations</span>
+            <div class="bar-track"><div id="stale-bar" class="bar stale"></div></div>
+          </div>
+          <div class="bar-group">
+            <span>Origin Misses</span>
+            <div class="bar-track"><div id="miss-bar" class="bar miss"></div></div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
