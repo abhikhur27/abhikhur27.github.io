@@ -11,6 +11,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Dark "digital spaces" visual language.
 - Project directory with category filtering.
 - Blog-style expandable writing shelf for draft essays.
+- Writing queue board that keeps the next three closest-to-shipping drafts visible.
 - Draft shelf summary cards for visible stages and topic mix.
 - A linked-trails layer that bridges projects with the drafts already growing out of them.
 - A real-life builds shelf for physical projects (3D prints, woodworking, robotics, homelab logs).
@@ -26,6 +27,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/market-regime-lab`
 - `projects/queueing-resilience-lab`
 - `projects/cache-policy-studio`
+- `projects/latency-budget-planner`
 - `projects/incident-command-lab`
 - `projects/patch-window-commander`
 - `projects/detour-dispatch`
@@ -42,6 +44,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `index.html`: semantic structure for hero, project index, real-life builds shelf, blog sections, and topic filters.
 - `projects/systems-decision-labs`: anthology page that groups the repeated campus/infrastructure decision sims into one portfolio family.
 - `projects/cache-policy-studio`: cache policy sandbox for TTL, stale windows, and origin-load tradeoffs.
+- `projects/latency-budget-planner`: latency budgeting surface for turning network/backend/render slices into loader and optimistic-UI guidance.
 - `projects/sound-shift-studio`: branching sound-change sandbox for exploring language drift.
 - `projects/merge-conflict-studio`: three-way merge training game for practicing conflict resolution under behavioral constraints.
 - `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.

@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latency Budget Planner</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071019;
+      --panel: rgba(13, 24, 37, 0.92);
+      --panel-border: rgba(152, 201, 255, 0.16);
+      --text: #edf6ff;
+      --muted: #9ab7cf;
+      --accent: #7dd3fc;
+      --accent-2: #86efac;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(125, 211, 252, 0.18), transparent 30%),
+        linear-gradient(180deg, #071019 0%, #0b1522 55%, #08111a 100%);
+      color: var(--text);
+    }
+
+    a { color: inherit; }
+    .shell {
+      width: min(1100px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    .topbar, .grid, .summary-grid, .bars { display: grid; gap: 1rem; }
+    .topbar {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      align-items: end;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 1.25rem;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      font-size: 0.78rem;
+      margin: 0 0 0.65rem;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(2.2rem, 5vw, 4rem); line-height: 0.98; margin-bottom: 0.8rem; }
+    .lead { color: var(--muted); max-width: 62ch; }
+    .cta-row, .button-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .cta, button {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.8rem 1.1rem;
+      font: inherit;
+      cursor: pointer;
+      transition: transform 140ms ease, opacity 140ms ease, background 140ms ease;
+    }
+    .cta, button.primary { background: var(--accent); color: #042033; font-weight: 700; text-decoration: none; }
+    button.secondary, .ghost { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid rgba(255,255,255,0.08); }
+    .cta:hover, button:hover { transform: translateY(-1px); }
+
+    .grid { grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); }
+    .summary-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .metric strong { display: block; font-size: 1.8rem; margin-bottom: 0.3rem; }
+    .metric span { color: var(--muted); font-size: 0.95rem; }
+
+    label { display: grid; gap: 0.35rem; margin-bottom: 1rem; color: var(--muted); }
+    input[type="range"] { width: 100%; accent-color: var(--accent); }
+    select {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      padding: 0.75rem 0.85rem;
+      font: inherit;
+    }
+
+    .bars { margin-top: 1rem; }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr) 70px;
+      gap: 0.8rem;
+      align-items: center;
+    }
+    .bar-track {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .card {
+      padding: 1rem;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .card p:last-child { margin-bottom: 0; color: var(--muted); }
+    .status-tight { color: var(--accent-2); }
+    .status-manageable { color: var(--accent); }
+    .status-fragile { color: var(--warn); }
+    .status-risky { color: var(--danger); }
+
+    .note-list { padding-left: 1rem; color: var(--muted); }
+    .footer { color: var(--muted); margin-top: 1.4rem; font-size: 0.95rem; }
+
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Static Project</p>
+        <h1>Latency Budget Planner</h1>
+        <p class="lead">Turn a product flow into a concrete latency stack, then translate the result into loader policy, optimistic UI guidance, and rollout notes.</p>
+      </div>
+      <div class="panel">
+        <p class="eyebrow">Jump</p>
+        <div class="cta-row">
+          <a class="cta" href="../../index.html">Back to Portfolio</a>
+          <a class="ghost cta" href="./README.md">Open README</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <p class="eyebrow">Budget Inputs</p>
+        <h2>Model the path from click to confidence</h2>
+
+        <label>Region preset
+          <select id="preset-select">
+            <option value="snappy">Snappy internal tool</option>
+            <option value="consumer" selected>Consumer web flow</option>
+            <option value="fragile">Fragile third-party dependency</option>
+          </select>
+        </label>
+
+        <label>Network + transport
+          <input id="network" type="range" min="10" max="400" step="10" value="90">
+        </label>
+        <label>Backend execution
+          <input id="backend" type="range" min="20" max="700" step="10" value="170">
+        </label>
+        <label>Cache miss penalty
+          <input id="cache" type="range" min="0" max="350" step="10" value="60">
+        </label>
+        <label>Frontend render + hydration
+          <input id="frontend" type="range" min="10" max="320" step="10" value="110">
+        </label>
+        <label>P95 volatility multiplier
+          <input id="volatility" type="range" min="1" max="2.8" step="0.1" value="1.8">
+        </label>
+
+        <div class="button-row">
+          <button id="cache-warm" class="secondary" type="button">Toggle Warm Cache</button>
+          <button id="optimistic-toggle" class="secondary" type="button">Toggle Optimistic UI</button>
+          <button id="copy-brief" class="primary" type="button">Copy Brief</button>
+        </div>
+        <p class="footer" id="toggle-state">Warm cache off. Optimistic UI off.</p>
+      </section>
+
+      <section class="panel">
+        <p class="eyebrow">Decision Surface</p>
+        <h2 id="headline">This flow still needs visible feedback.</h2>
+        <p class="lead" id="summary">Budget totals will update as you tune the stack.</p>
+
+        <section class="summary-grid" aria-label="Latency summary">
+          <article class="metric">
+            <strong id="p50-total">0 ms</strong>
+            <span>P50 total latency</span>
+          </article>
+          <article class="metric">
+            <strong id="p95-total">0 ms</strong>
+            <span>P95 total latency</span>
+          </article>
+          <article class="metric">
+            <strong id="first-feedback">0 ms</strong>
+            <span>First feedback target</span>
+          </article>
+          <article class="metric">
+            <strong id="loader-call">-</strong>
+            <span>Recommended treatment</span>
+          </article>
+        </section>
+
+        <div class="bars" id="stack-bars" aria-label="Latency stack"></div>
+
+        <div class="cards">
+          <article class="card">
+            <h3 id="posture-label" class="status-manageable">Manageable</h3>
+            <p id="posture-copy">The current stack is noticeable but controllable.</p>
+          </article>
+          <article class="card">
+            <h3>Loader policy</h3>
+            <p id="loader-copy">Budget not computed yet.</p>
+          </article>
+          <article class="card">
+            <h3>Optimistic UI</h3>
+            <p id="optimistic-copy">Budget not computed yet.</p>
+          </article>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Rollout Checklist</h3>
+            <ul id="checklist" class="note-list"></ul>
+          </article>
+          <article class="card">
+            <h3>Budget Notes</h3>
+            <ul id="notes" class="note-list"></ul>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const presetSelect = document.getElementById('preset-select');
+    const networkInput = document.getElementById('network');
+    const backendInput = document.getElementById('backend');
+    const cacheInput = document.getElementById('cache');
+    const frontendInput = document.getElementById('frontend');
+    const volatilityInput = document.getElementById('volatility');
+    const cacheWarmButton = document.getElementById('cache-warm');
+    const optimisticToggleButton = document.getElementById('optimistic-toggle');
+    const copyBriefButton = document.getElementById('copy-brief');
+    const toggleState = document.getElementById('toggle-state');
+    const stackBars = document.getElementById('stack-bars');
+    const headline = document.getElementById('headline');
+    const summary = document.getElementById('summary');
+    const p50Total = document.getElementById('p50-total');
+    const p95Total = document.getElementById('p95-total');
+    const firstFeedback = document.getElementById('first-feedback');
+    const loaderCall = document.getElementById('loader-call');
+    const postureLabel = document.getElementById('posture-label');
+    const postureCopy = document.getElementById('posture-copy');
+    const loaderCopy = document.getElementById('loader-copy');
+    const optimisticCopy = document.getElementById('optimistic-copy');
+    const checklist = document.getElementById('checklist');
+    const notes = document.getElementById('notes');
+
+    const presets = {
+      snappy: { network: 40, backend: 90, cache: 20, frontend: 60, volatility: 1.4 },
+      consumer: { network: 90, backend: 170, cache: 60, frontend: 110, volatility: 1.8 },
+      fragile: { network: 160, backend: 310, cache: 120, frontend: 160, volatility: 2.2 },
+    };
+
+    const state = {
+      cacheWarm: false,
+      optimistic: false,
+    };
+
+    function applyPreset(name) {
+      const preset = presets[name];
+      if (!preset) return;
+      networkInput.value = preset.network;
+      backendInput.value = preset.backend;
+      cacheInput.value = preset.cache;
+      frontendInput.value = preset.frontend;
+      volatilityInput.value = preset.volatility;
+      render();
+    }
+
+    function currentBudget() {
+      const network = Number(networkInput.value);
+      const backend = Number(backendInput.value);
+      const cache = state.cacheWarm ? Math.round(Number(cacheInput.value) * 0.3) : Number(cacheInput.value);
+      const frontend = Number(frontendInput.value);
+      const p50 = network + backend + cache + frontend;
+      const p95 = Math.round(p50 * Number(volatilityInput.value));
+      const feedbackTarget = state.optimistic ? Math.min(90, frontend) : Math.min(240, network + Math.round(frontend * 0.5));
+      return { network, backend, cache, frontend, p50, p95, feedbackTarget };
+    }
+
+    function classifyBudget(budget) {
+      if (budget.p95 <= 220) return { label: 'Tight', className: 'status-tight' };
+      if (budget.p95 <= 420) return { label: 'Manageable', className: 'status-manageable' };
+      if (budget.p95 <= 700) return { label: 'Fragile', className: 'status-fragile' };
+      return { label: 'Risky', className: 'status-risky' };
+    }
+
+    function render() {
+      const budget = currentBudget();
+      const posture = classifyBudget(budget);
+      const bars = [
+        ['Network', budget.network],
+        ['Backend', budget.backend],
+        ['Cache miss', budget.cache],
+        ['Frontend', budget.frontend],
+      ];
+
+      p50Total.textContent = `${budget.p50} ms`;
+      p95Total.textContent = `${budget.p95} ms`;
+      firstFeedback.textContent = `${budget.feedbackTarget} ms`;
+
+      stackBars.innerHTML = bars
+        .map(([label, value]) => `
+          <div class="bar-row">
+            <strong>${label}</strong>
+            <div class="bar-track"><div class="bar-fill" style="width:${Math.max(6, (value / Math.max(budget.p95, 1)) * 100)}%"></div></div>
+            <span>${value} ms</span>
+          </div>
+        `)
+        .join('');
+
+      postureLabel.textContent = posture.label;
+      postureLabel.className = posture.className;
+      postureCopy.textContent =
+        posture.label === 'Tight'
+          ? 'The flow is inside a comfortable band for lightweight feedback.'
+          : posture.label === 'Manageable'
+            ? 'The flow is visible to users, but disciplined loader policy can keep it calm.'
+            : posture.label === 'Fragile'
+              ? 'This stack is long enough that loader design and cache policy need active ownership.'
+              : 'The current latency budget is too loose to ship without deeper system work.';
+
+      const loaderRecommendation =
+        budget.p50 <= 140 ? 'Inline state only'
+          : budget.p95 <= 380 ? 'Inline pending + subtle skeleton'
+            : budget.p95 <= 700 ? 'Skeleton + progress copy'
+              : 'Strong loading state + step-down plan';
+      loaderCall.textContent = loaderRecommendation;
+      loaderCopy.textContent = `${loaderRecommendation}. The current first-feedback target is ${budget.feedbackTarget} ms.`;
+
+      optimisticCopy.textContent = state.optimistic
+        ? budget.p95 <= 500
+          ? 'Optimistic UI is enabled and still inside a defensible rollback band.'
+          : 'Optimistic UI is enabled, but the tail is long enough that rollback copy must be explicit.'
+        : budget.p95 <= 320
+          ? 'Optimistic UI is optional here; standard confirmation should still feel responsive.'
+          : 'Optimistic UI is worth testing if rollback cost is socially cheap.';
+
+      headline.textContent =
+        posture.label === 'Tight'
+          ? 'This flow can feel instant with restrained feedback.'
+          : posture.label === 'Manageable'
+            ? 'This flow still needs visible feedback.'
+            : posture.label === 'Fragile'
+              ? 'This flow needs both system work and product choreography.'
+              : 'This flow is outside a comfortable product budget.';
+      summary.textContent = `P50 is ${budget.p50} ms, while tail behavior reaches ${budget.p95} ms. Tune the stack until the treatment and the latency story agree.`;
+
+      checklist.innerHTML = [
+        budget.p95 <= 320 ? 'Keep action feedback inline and avoid over-animating the wait.' : 'Budget explicit loading copy because the wait is visible.',
+        budget.cache >= 90 ? 'Investigate cache-hit rate or request coalescing before launch.' : 'Cache pressure is contained enough for this model.',
+        budget.backend >= 220 ? 'Backend work dominates the stack; profile query or service fan-out.' : 'Backend time is not the primary bottleneck right now.',
+        state.optimistic ? 'Pair optimistic UI with clear undo or retry language.' : 'Consider optimistic UI only if rollback cost is low.',
+      ].map((item) => `<li>${item}</li>`).join('');
+
+      notes.innerHTML = [
+        `Warm cache is ${state.cacheWarm ? 'on' : 'off'}, so cache miss cost is ${budget.cache} ms.`,
+        `Volatility multiplier is ${Number(volatilityInput.value).toFixed(1)}x, which sets the P95 budget.`,
+        `Network + frontend feedback reaches the user in roughly ${budget.feedbackTarget} ms.`,
+        posture.label === 'Risky' ? 'This budget likely needs architectural reduction, not just UX polish.' : 'This budget is still small enough for UX treatment to matter.',
+      ].map((item) => `<li>${item}</li>`).join('');
+
+      toggleState.textContent = `Warm cache ${state.cacheWarm ? 'on' : 'off'}. Optimistic UI ${state.optimistic ? 'on' : 'off'}.`;
+    }
+
+    presetSelect.addEventListener('change', () => applyPreset(presetSelect.value));
+    [networkInput, backendInput, cacheInput, frontendInput, volatilityInput].forEach((input) => {
+      input.addEventListener('input', render);
+    });
+
+    cacheWarmButton.addEventListener('click', () => {
+      state.cacheWarm = !state.cacheWarm;
+      render();
+    });
+
+    optimisticToggleButton.addEventListener('click', () => {
+      state.optimistic = !state.optimistic;
+      render();
+    });
+
+    copyBriefButton.addEventListener('click', async () => {
+      const budget = currentBudget();
+      const posture = classifyBudget(budget);
+      const brief = `Latency Budget Planner\nP50: ${budget.p50} ms\nP95: ${budget.p95} ms\nPosture: ${posture.label}\nLoader: ${loaderCall.textContent}\nOptimistic UI: ${optimisticCopy.textContent}`;
+      try {
+        await navigator.clipboard.writeText(brief);
+        summary.textContent = 'Copied a rollout brief to the clipboard.';
+      } catch (error) {
+        summary.textContent = 'Clipboard copy failed in this environment.';
+      }
+    });
+
+    applyPreset('consumer');
+  </script>
+</body>
+</html>

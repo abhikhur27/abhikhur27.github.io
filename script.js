@@ -22,6 +22,7 @@ const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
 const draftStageSummary = document.getElementById('draft-stage-summary');
 const draftTopicSummary = document.getElementById('draft-topic-summary');
+const writingQueueList = document.getElementById('writing-queue-list');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
@@ -296,6 +297,67 @@ function renderBuildTrails() {
     .join('');
 }
 
+function renderWritingQueue(entries) {
+  if (!writingQueueList) {
+    return;
+  }
+
+  if (!entries.length) {
+    writingQueueList.innerHTML = `
+      <article class="trail-card">
+        <p class="tag">Queue Empty</p>
+        <h3>No drafts match the current filters.</h3>
+        <p class="section-copy">Broaden the topic or stage filters to repopulate the writing queue.</p>
+      </article>
+    `;
+    return;
+  }
+
+  const ordered = [...entries]
+    .sort((a, b) => {
+      const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
+      if (stageDelta !== 0) return stageDelta;
+      return (a.querySelector('.entry-title')?.textContent || '').localeCompare(
+        b.querySelector('.entry-title')?.textContent || ''
+      );
+    })
+    .slice(0, 3);
+
+  writingQueueList.innerHTML = ordered
+    .map((entry) => {
+      const title = entry.querySelector('.entry-title')?.textContent || 'Draft note';
+      const meta = entry.querySelector('.entry-meta')?.textContent || 'Working draft';
+      const stage = formatStageLabel(entry.dataset.stage);
+      const next = entry.dataset.next || 'Open the draft and define the next milestone.';
+      const relatedLabel = entry.dataset.relatedLabel || 'Related Build';
+      const relatedLink = entry.dataset.relatedLink;
+
+      return `
+        <article class="trail-card">
+          <p class="tag">${stage}</p>
+          <h3>${title}</h3>
+          <p class="section-copy">${meta}</p>
+          <p class="results-meta">Next milestone: ${next}</p>
+          <div class="card-actions">
+            <button class="spotlight-btn queue-open-btn" type="button" data-entry-id="${entry.id}">Open Draft</button>
+            ${relatedLink ? `<a class="spotlight-btn" href="${relatedLink}" target="_blank" rel="noreferrer">Open ${relatedLabel}</a>` : ''}
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+
+  writingQueueList.querySelectorAll('.queue-open-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const target = writingEntries.find((entry) => entry.id === button.dataset.entryId);
+      if (!target) return;
+      target.open = true;
+      updateWritingSpotlight(target);
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+}
+
 function applyWritingFilters() {
   const query = (writingSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
@@ -335,6 +397,7 @@ function applyWritingFilters() {
     draftTopicSummary.textContent = `Systems ${topicCounts.systems} | Science ${topicCounts.science} | Language ${topicCounts.language} | Sports ${topicCounts.sports} | Markets ${topicCounts.markets}`;
   }
 
+  renderWritingQueue(visibleEntries);
   updateWritingSpotlight(firstVisible);
   updateUrlState();
 }
