@@ -22,6 +22,7 @@ const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
 const draftStageSummary = document.getElementById('draft-stage-summary');
 const draftTopicSummary = document.getElementById('draft-topic-summary');
+const writingTopicAtlas = document.getElementById('writing-topic-atlas');
 const writingQueueList = document.getElementById('writing-queue-list');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
@@ -377,6 +378,57 @@ function renderWritingQueue(entries) {
   });
 }
 
+function renderTopicAtlas(topicCounts, visibleEntries) {
+  if (!writingTopicAtlas) {
+    return;
+  }
+
+  const topicMeta = [
+    { key: 'systems', label: 'Systems', cue: 'Infrastructure, reliability, and operational tradeoffs.' },
+    { key: 'science', label: 'Science', cue: 'Inference under noisy or biased evidence.' },
+    { key: 'language', label: 'Language', cue: 'Historical drift, sound change, and lineage questions.' },
+    { key: 'sports', label: 'Sports', cue: 'Shot quality, lineup context, and uncertainty bands.' },
+    { key: 'markets', label: 'Markets', cue: 'Sizing, regimes, and risk under volatility.' },
+  ];
+
+  writingTopicAtlas.innerHTML = topicMeta
+    .map((topic) => {
+      const entries = visibleEntries.filter((entry) => entry.dataset.topic === topic.key);
+      const nextEntry = [...entries].sort((a, b) => stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage))[0];
+      const stageMix = ['drafting', 'modeling', 'research']
+        .map((stage) => `${formatStageLabel(stage)} ${entries.filter((entry) => entry.dataset.stage === stage).length}`)
+        .join(' | ');
+      const activeClass = activeWritingTopic === topic.key ? 'is-active' : '';
+
+      return `
+        <article class="topic-atlas-card ${activeClass}">
+          <p class="tag">${topic.label}</p>
+          <h3>${topic.label} lane</h3>
+          <p class="topic-count">${topicCounts[topic.key] || 0}</p>
+          <p class="topic-meta">${topic.cue}</p>
+          <p class="topic-meta">${stageMix}</p>
+          <p class="section-copy">${nextEntry ? `Next draft: ${nextEntry.querySelector('.entry-title')?.textContent || 'Open the shelf.'}` : 'No visible drafts in this lane under the current filters.'}</p>
+          <div class="card-actions">
+            <button class="spotlight-btn atlas-filter-btn" type="button" data-topic="${topic.key}">
+              ${activeWritingTopic === topic.key ? 'Showing Lane' : 'Filter Lane'}
+            </button>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+
+  writingTopicAtlas.querySelectorAll('.atlas-filter-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      activeWritingTopic = button.dataset.topic || 'all';
+      writingFilterButtons.forEach((item) => {
+        item.classList.toggle('active', (item.dataset.topic || 'all') === activeWritingTopic);
+      });
+      applyWritingFilters();
+    });
+  });
+}
+
 function applyWritingFilters() {
   const query = (writingSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
@@ -416,6 +468,7 @@ function applyWritingFilters() {
     draftTopicSummary.textContent = `Systems ${topicCounts.systems} | Science ${topicCounts.science} | Language ${topicCounts.language} | Sports ${topicCounts.sports} | Markets ${topicCounts.markets}`;
   }
 
+  renderTopicAtlas(topicCounts, visibleEntries);
   renderWritingQueue(visibleEntries);
   updateWritingSpotlight(firstVisible);
   updateUrlState();
@@ -505,6 +558,23 @@ if (navToggle && nav) {
     });
   });
 }
+
+document.addEventListener('keydown', (event) => {
+  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+    return;
+  }
+
+  if (event.key === '/') {
+    event.preventDefault();
+    projectSearchInput?.focus();
+  } else if (event.key.toLowerCase() === 'w') {
+    event.preventDefault();
+    writingSearchInput?.focus();
+  } else if (event.key.toLowerCase() === 'p') {
+    event.preventDefault();
+    surpriseProjectBtn?.click();
+  }
+});
 
 function formatShortDate(date) {
   return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });

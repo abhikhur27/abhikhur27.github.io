@@ -112,15 +112,28 @@
         </article>
         <article class="route-card">
           <p class="tag">Route 03</p>
-          <h3>Decision Game Path</h3>
-          <p>Play through systems scenarios where the point is judgment under pressure, not passive browsing.</p>
+          <h3>Control Systems Path</h3>
+          <p>Jump into feedback stability, lag, and overcorrection so the newest systems build reads like an engineering lab, not a toy.</p>
           <div class="card-actions">
-            <a href="./projects/failure-mode-atlas/index.html" target="_blank" rel="noreferrer">Open newest build</a>
+            <a href="./projects/control-loop-lab/index.html" target="_blank" rel="noreferrer">Open newest build</a>
           </div>
         </article>
       </section>
 
       <div class="project-grid">
+        <article class="project-card" data-category="systems visualization tools">
+          <header>
+            <p class="tag">New Systems Build</p>
+            <h3>Control Loop Lab</h3>
+          </header>
+          <p>Model lag, gain, damping, and burst pressure to see when a system stabilizes, oscillates, or falls into a queue spiral.</p>
+          <p class="stack">HTML, CSS, JavaScript, Control Systems Modeling</p>
+          <div class="card-actions">
+            <a href="./projects/control-loop-lab/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/control-loop-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="systems tools games">
           <header>
             <p class="tag">New Systems Build</p>
@@ -463,6 +476,13 @@
           <p id="draft-topic-summary" class="results-meta">Systems 0 | Science 0 | Language 0 | Sports 0 | Markets 0</p>
         </article>
       </section>
+      <section class="topic-atlas" aria-label="Draft topic atlas">
+        <div class="section-head">
+          <p class="eyebrow">Topic Atlas</p>
+          <h2>Pick a lane from the writing shelf</h2>
+        </div>
+        <div id="writing-topic-atlas" class="topic-atlas-grid"></div>
+      </section>
       <section class="linked-trails" aria-label="Next writing queue">
         <div class="section-head">
           <p class="eyebrow">Next Up</p>
@@ -561,6 +581,17 @@
           <p><strong>Writing shape:</strong> symptom inventory -> failure family narrowing -> response design.</p>
           <p><strong>Sources to reference:</strong> postmortems, SRE incident handbooks, service dependency maps.</p>
           <p><strong>Technical angle:</strong> Bayesian clue weighting over correlated failure-mode candidates.</p>
+        </details>
+
+        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Write the overcorrection example around queue damping and delayed action." data-related-link="./projects/control-loop-lab/index.html" data-related-label="Control Loop Lab">
+          <summary>
+            <span class="entry-title">Most Reliability Failures Start as Bad Control Loops</span>
+            <span class="entry-meta">Feedback, lag, and systems tuning</span>
+            <span class="entry-stage">Drafting</span>
+          </summary>
+          <p><strong>Writing shape:</strong> control intuition -> delayed feedback traps -> product and ops examples.</p>
+          <p><strong>Sources to reference:</strong> queueing texts, SRE handbooks, process-control primers, postmortems with oscillation patterns.</p>
+          <p><strong>Technical angle:</strong> discrete-time control loop with lag, damping, overshoot, and queue spill metrics.</p>
         </details>
       </div>
     </section>

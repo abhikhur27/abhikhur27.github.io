@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Loop Lab</title>
+  <meta name="description" content="Interactive control-loop simulator for lag, gain, damping, and queue spill behavior.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Systems Modeling Lab</p>
+      <h1>Control Loop Lab</h1>
+      <p class="lede">Tune gain, lag, damping, and burst pressure to see when a service stabilizes, overcorrects, or falls into queue spirals.</p>
+      <div class="hero-actions">
+        <button class="primary" id="run-simulation" type="button">Run Simulation</button>
+        <button class="secondary" id="share-state" type="button">Copy Share Link</button>
+      </div>
+    </div>
+    <aside class="hero-panel">
+      <p class="panel-label">Current posture</p>
+      <h2 id="posture-title">Balanced recovery</h2>
+      <p id="posture-summary">The current loop should recover with modest overshoot and low queue spill.</p>
+      <div class="mini-stats">
+        <article>
+          <span>Peak queue</span>
+          <strong id="hero-queue">0</strong>
+        </article>
+        <article>
+          <span>Overshoot</span>
+          <strong id="hero-overshoot">0%</strong>
+        </article>
+        <article>
+          <span>Settle step</span>
+          <strong id="hero-settle">-</strong>
+        </article>
+      </div>
+    </aside>
+  </header>
+
+  <main class="page-shell">
+    <section class="controls">
+      <div class="section-head">
+        <p class="eyebrow">Scenario Setup</p>
+        <h2>Shape the loop</h2>
+      </div>
+
+      <div class="preset-row">
+        <button class="preset-btn active" data-preset="balanced" type="button">Balanced service</button>
+        <button class="preset-btn" data-preset="laggy" type="button">Laggy autoscaling</button>
+        <button class="preset-btn" data-preset="twitchy" type="button">Overcorrecting control</button>
+        <button class="preset-btn" data-preset="burst" type="button">Burst traffic window</button>
+      </div>
+
+      <div class="control-grid">
+        <label>
+          Control gain
+          <input id="gain" type="range" min="0.4" max="2.8" step="0.1" value="1.3">
+          <span id="gain-value">1.3</span>
+        </label>
+        <label>
+          Feedback delay (steps)
+          <input id="delay" type="range" min="0" max="6" step="1" value="2">
+          <span id="delay-value">2</span>
+        </label>
+        <label>
+          Damping
+          <input id="damping" type="range" min="0.05" max="0.8" step="0.05" value="0.35">
+          <span id="damping-value">0.35</span>
+        </label>
+        <label>
+          Burst multiplier
+          <input id="burst" type="range" min="1" max="2.8" step="0.1" value="1.4">
+          <span id="burst-value">1.4x</span>
+        </label>
+        <label>
+          Baseline demand
+          <input id="demand" type="range" min="40" max="120" step="5" value="70">
+          <span id="demand-value">70</span>
+        </label>
+        <label>
+          Baseline capacity
+          <input id="capacity" type="range" min="40" max="120" step="5" value="72">
+          <span id="capacity-value">72</span>
+        </label>
+      </div>
+
+      <div class="coach-grid">
+        <article>
+          <p class="panel-label">Controller note</p>
+          <p id="controller-note">Moderate gain with some lag is usually safe if damping is high enough to absorb a burst.</p>
+        </article>
+        <article>
+          <p class="panel-label">Failure cue</p>
+          <p id="failure-cue">Watch for delayed action plus high gain. That pair creates oscillation faster than raw demand does.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="viz-shell">
+      <div class="section-head">
+        <p class="eyebrow">Simulation Trace</p>
+        <h2>Demand, capacity, and queue over time</h2>
+      </div>
+
+      <div class="chart-card">
+        <svg id="trace-chart" viewBox="0 0 900 340" role="img" aria-label="Control loop trace chart"></svg>
+      </div>
+
+      <div class="metric-grid">
+        <article>
+          <span>Oscillation count</span>
+          <strong id="oscillation-count">0</strong>
+        </article>
+        <article>
+          <span>Queue spill</span>
+          <strong id="queue-spill">0</strong>
+        </article>
+        <article>
+          <span>Recovery score</span>
+          <strong id="recovery-score">0</strong>
+        </article>
+        <article>
+          <span>Utilization band</span>
+          <strong id="utilization-band">-</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="analysis-grid">
+      <article class="analysis-card">
+        <p class="panel-label">Decision brief</p>
+        <h2 id="decision-title">Balanced controller</h2>
+        <p id="decision-body">This loop should absorb the burst without building a persistent queue.</p>
+      </article>
+
+      <article class="analysis-card">
+        <p class="panel-label">Next tuning move</p>
+        <p id="next-move">If you want faster recovery, raise gain only after checking whether delay is still forcing stale decisions into the system.</p>
+      </article>
+
+      <article class="analysis-card">
+        <p class="panel-label">Scenario story</p>
+        <p id="scenario-story">Think of this as autoscaling or staffing a queue with imperfect information. The system is healthy only if it can recover without thrashing.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

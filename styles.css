@@ -394,6 +394,49 @@ main > section + section {
   font-size: 1.05rem;
 }
 
+.topic-atlas {
+  margin-top: 1rem;
+}
+
+.topic-atlas-grid {
+  margin-top: 0.95rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.topic-atlas-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top right, rgba(184, 196, 255, 0.12), transparent 44%),
+    var(--surface);
+  padding: 0.95rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.topic-atlas-card.is-active {
+  border-color: rgba(215, 222, 254, 0.72);
+  box-shadow: 0 0 0 1px rgba(215, 222, 254, 0.2);
+}
+
+.topic-atlas-card h3 {
+  margin: 0;
+  font-size: 1.18rem;
+}
+
+.topic-atlas-card .topic-count {
+  font-size: 1.8rem;
+  color: var(--accent-strong);
+}
+
+.topic-atlas-card .topic-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
 .project-search input {
   width: min(420px, 100%);
   border: 1px solid var(--border);
@@ -659,6 +702,10 @@ main > section + section {
   }
 
   .project-routes {
+    grid-template-columns: 1fr;
+  }
+
+  .topic-atlas-grid {
     grid-template-columns: 1fr;
   }
 
