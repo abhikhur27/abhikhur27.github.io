@@ -38,6 +38,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/merge-conflict-studio`
 - `projects/sprint-cutline`
 - `projects/schema-drift-command`
+- `projects/failure-mode-atlas`
 
 ## Technical design
 
@@ -49,6 +50,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/merge-conflict-studio`: three-way merge training game for practicing conflict resolution under behavioral constraints.
 - `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.
 - `projects/schema-drift-command`: schema migration decision game about compatibility shims, partner trust, and contract cutovers.
+- `projects/failure-mode-atlas`: incident clue-to-failure mapping tool that ranks likely failure families and next diagnostic actions.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, linked build/draft trails, writing shelf spotlight controls, shareable filtered-view links, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.

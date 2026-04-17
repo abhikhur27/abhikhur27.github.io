@@ -33,6 +33,10 @@ const commitCountEl = document.getElementById('commit-count');
 const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
 const commitSparklineEl = document.getElementById('commit-sparkline');
+const projectCountEl = document.getElementById('project-count');
+const projectCountLabelEl = document.getElementById('project-count-label');
+const draftCountEl = document.getElementById('draft-count');
+const draftCountLabelEl = document.getElementById('draft-count-label');
 
 let activeFilter = 'all';
 let activeWritingTopic = 'all';
@@ -124,6 +128,21 @@ function setProjectFilter(filter) {
     projectSearchInput.value = '';
   }
   applyProjectFilters();
+}
+
+function updatePortfolioCounts() {
+  if (projectCountEl) {
+    projectCountEl.textContent = String(cards.length);
+  }
+  if (projectCountLabelEl) {
+    projectCountLabelEl.textContent = `Projects in this ecosystem`;
+  }
+  if (draftCountEl) {
+    draftCountEl.textContent = String(writingEntries.length);
+  }
+  if (draftCountLabelEl) {
+    draftCountLabelEl.textContent = 'Drafts active on the shelf';
+  }
 }
 
 projectFilterButtons.forEach((button) => {
@@ -726,6 +745,7 @@ function hydrateFiltersFromUrl() {
 }
 
 hydrateFiltersFromUrl();
+updatePortfolioCounts();
 applyProjectFilters();
 applyWritingFilters();
 renderBuildTrails();

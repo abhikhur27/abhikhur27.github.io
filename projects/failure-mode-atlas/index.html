@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Failure Mode Atlas</title>
+  <style>
+    :root {
+      --bg: #09111a;
+      --panel: rgba(12, 22, 34, 0.88);
+      --panel-strong: #102033;
+      --line: rgba(168, 190, 215, 0.18);
+      --text: #edf4fb;
+      --muted: #9db2c6;
+      --accent: #8fd0ff;
+      --accent-2: #ffe08a;
+      --good: #7ee0b1;
+      --warn: #ffb36b;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(143, 208, 255, 0.16), transparent 34%),
+        linear-gradient(180deg, #061019, #0c1622 44%, #081018);
+      line-height: 1.5;
+    }
+    a { color: inherit; }
+    .shell {
+      width: min(1180px, 92vw);
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+    .topbar, .panel, .signal, .hypothesis {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+    }
+    .topbar {
+      padding: 1.1rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .back-link {
+      text-decoration: none;
+      color: var(--muted);
+    }
+    .hero {
+      margin-top: 1.1rem;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1rem;
+    }
+    .hero-copy, .hero-summary {
+      padding: 1.4rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(160deg, rgba(143, 208, 255, 0.08), rgba(16, 32, 51, 0.9));
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-size: clamp(2rem, 4.5vw, 3.8rem);
+      line-height: 0.98;
+      max-width: 11ch;
+      margin-top: 0.5rem;
+    }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+    .hero-copy p {
+      max-width: 58ch;
+      margin-top: 1rem;
+      color: var(--muted);
+    }
+    .stats {
+      margin-top: 1.2rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+    .stats article {
+      padding: 0.85rem;
+      border-radius: 14px;
+      background: rgba(7, 15, 24, 0.72);
+      border: 1px solid var(--line);
+    }
+    .stats strong {
+      display: block;
+      font-size: 1.4rem;
+      color: var(--accent-2);
+    }
+    .layout {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 0.95fr;
+      gap: 1rem;
+    }
+    .panel { padding: 1rem; }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.8rem;
+    }
+    .panel-head p { color: var(--muted); }
+    .scenario-list, .signal-grid, .hypothesis-list, .action-list {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .scenario-btn, .signal button, .ghost-btn {
+      width: 100%;
+      font: inherit;
+      color: inherit;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.85rem 0.9rem;
+      text-align: left;
+      cursor: pointer;
+    }
+    .scenario-btn.active, .signal button.active {
+      border-color: rgba(143, 208, 255, 0.65);
+      background: rgba(143, 208, 255, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(143, 208, 255, 0.18);
+    }
+    .scenario-btn strong, .signal button strong {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .scenario-btn span, .signal button span, .muted {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .signal-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .signal {
+      overflow: hidden;
+    }
+    .signal button {
+      border: 0;
+      border-radius: 0;
+      height: 100%;
+    }
+    .hypothesis {
+      padding: 0.9rem;
+    }
+    .hypothesis-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: baseline;
+    }
+    .score {
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+    .signal-tags, .priority-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.65rem;
+    }
+    .signal-tags span, .priority-strip span {
+      border-radius: 999px;
+      padding: 0.25rem 0.55rem;
+      font-size: 0.8rem;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .priority-strip span.primary {
+      border-color: rgba(126, 224, 177, 0.4);
+      color: var(--good);
+    }
+    .priority-strip span.secondary {
+      border-color: rgba(255, 179, 107, 0.35);
+      color: var(--warn);
+    }
+    .action-list article {
+      padding: 0.85rem;
+      border-radius: 14px;
+      background: rgba(7, 15, 24, 0.72);
+      border: 1px solid var(--line);
+    }
+    .status-line {
+      margin-top: 0.75rem;
+      color: var(--muted);
+      min-height: 1.4rem;
+    }
+    .footer-note {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 960px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+      .signal-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <a class="back-link" href="../../index.html">Back to Portfolio</a>
+        <p class="eyebrow">Static systems sandbox</p>
+      </div>
+      <a class="back-link" href="./README.md">Read project notes</a>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Failure Mode Atlas</p>
+        <h1>Turn noisy incident clues into a ranked response path.</h1>
+        <p>
+          Pick a scenario, toggle the signals you see in the system, and the atlas narrows likely failure families,
+          highlights the best next diagnostic moves, and explains which clues are actually doing the ranking.
+        </p>
+        <div class="stats">
+          <article>
+            <strong>4</strong>
+            <span>Failure families modeled</span>
+          </article>
+          <article>
+            <strong>12</strong>
+            <span>Signals with weighted evidence</span>
+          </article>
+          <article>
+            <strong>100%</strong>
+            <span>Static GitHub Pages compatible</span>
+          </article>
+        </div>
+      </div>
+      <div class="hero-summary">
+        <p class="eyebrow">How to use it</p>
+        <p class="muted">
+          Treat it like an operator briefing. Start with the incident scenario, mark only the signals you have actually observed,
+          and use the ranked actions as your first response sequence rather than a generic checklist.
+        </p>
+        <div class="priority-strip">
+          <span class="primary">Use observed signals only</span>
+          <span class="secondary">Separate cause from symptom</span>
+          <span class="primary">Prefer next diagnostic actions</span>
+        </div>
+      </div>
+    </section>
+
+    <main class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>1. Incident Scenario</h2>
+            <p>Load a failure pattern and then refine it with evidence.</p>
+          </div>
+          <button id="reset-btn" class="ghost-btn" type="button">Reset</button>
+        </div>
+        <div id="scenario-list" class="scenario-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>2. Observed Signals</h2>
+            <p>Toggle the clues that are actually present in the incident.</p>
+          </div>
+        </div>
+        <div id="signal-grid" class="signal-grid"></div>
+        <p id="status-line" class="status-line">Choose a scenario to preload incident evidence.</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>3. Ranked Response</h2>
+            <p>Read the highest-confidence failure family, then act from the next-step list.</p>
+          </div>
+        </div>
+        <div id="hypothesis-list" class="hypothesis-list"></div>
+        <h3 style="margin-top: 1rem;">Recommended next actions</h3>
+        <div id="action-list" class="action-list"></div>
+        <p class="footer-note">The atlas is a portfolio modeling exercise, not production SRE policy.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const failureModes = [
+      {
+        id: 'capacity',
+        label: 'Capacity Exhaustion',
+        summary: 'The system is serving work, but a constrained dependency is saturating under load.',
+        actionPlan: [
+          'Check queue depth, worker saturation, and any recent traffic or batch spikes.',
+          'Protect the bottleneck with rate limits, shed non-critical work, or pause noisy backfills.',
+          'Confirm whether autoscaling, connection pools, or cache hit rate are lagging the load shape.'
+        ]
+      },
+      {
+        id: 'dependency',
+        label: 'Dependency Degradation',
+        summary: 'A downstream dependency is slow or failing, and upstream services are now echoing that pain.',
+        actionPlan: [
+          'Trace the slowest dependency hop before tuning the caller.',
+          'Switch to cached, degraded, or read-only paths if the dependency is non-critical.',
+          'Inspect recent deploys, regional health, and provider status around the affected dependency.'
+        ]
+      },
+      {
+        id: 'config',
+        label: 'Configuration Drift',
+        summary: 'A rollout, flag, or environment mismatch changed system behavior without code-level regressions.',
+        actionPlan: [
+          'Diff the last rollout, feature flags, and environment values across healthy vs failing slices.',
+          'Roll back config before rolling back unrelated code if the timing lines up.',
+          'Check whether one region, shard, or tenant is running a divergent config surface.'
+        ]
+      },
+      {
+        id: 'data',
+        label: 'Data Integrity Fault',
+        summary: 'Bad, missing, or incompatible data is flowing through a healthy service path and breaking assumptions.',
+        actionPlan: [
+          'Inspect recently written records, schema transitions, and parsing failures on the affected entities.',
+          'Quarantine or replay malformed payloads before widening the blast radius.',
+          'Verify whether one producer, migration, or partner feed is creating the bad state.'
+        ]
+      }
+    ];
+
+    const signals = [
+      { id: 'latency', label: 'Latency spike', note: 'Request time climbed sharply.', weights: { capacity: 3, dependency: 3, config: 1 } },
+      { id: 'queue', label: 'Queue backlog', note: 'Jobs or requests are piling up.', weights: { capacity: 4, dependency: 2, config: 1 } },
+      { id: 'timeouts', label: 'Timeouts increasing', note: 'Retries or deadline breaches are rising.', weights: { dependency: 4, capacity: 2 } },
+      { id: 'error-burst', label: 'Error burst after deploy', note: 'Failures started right after a rollout.', weights: { config: 4, data: 2 } },
+      { id: 'regional', label: 'Single region only', note: 'Blast radius is geographically narrow.', weights: { config: 3, dependency: 2 } },
+      { id: 'cache-drop', label: 'Cache hit rate dropped', note: 'Requests are reaching origin more often.', weights: { capacity: 3, config: 2 } },
+      { id: 'db-locks', label: 'DB lock pressure', note: 'Database contention is visible.', weights: { capacity: 2, data: 3 } },
+      { id: 'schema', label: 'Schema mismatch', note: 'Payload or record format changed.', weights: { data: 4, config: 1 } },
+      { id: 'tenant', label: 'One tenant affected', note: 'Impact is isolated to a customer slice.', weights: { data: 3, config: 2 } },
+      { id: 'rollback-helped', label: 'Rollback helped', note: 'Recent rollback reduced the issue.', weights: { config: 4, dependency: 1 } },
+      { id: 'retry-storm', label: 'Retry storm', note: 'Clients are amplifying the failure.', weights: { dependency: 3, capacity: 2 } },
+      { id: 'bad-records', label: 'Malformed records found', note: 'Specific entities are broken.', weights: { data: 5 } }
+    ];
+
+    const scenarios = [
+      {
+        id: 'api-slowdown',
+        label: 'API slowdown during traffic surge',
+        detail: 'Traffic is up, p95 latency is up, and background jobs still look active.',
+        defaults: ['latency', 'queue', 'cache-drop']
+      },
+      {
+        id: 'after-deploy',
+        label: 'Errors immediately after deploy',
+        detail: 'A rollout completed, one region looks bad, and rollback partly stabilizes the service.',
+        defaults: ['error-burst', 'regional', 'rollback-helped']
+      },
+      {
+        id: 'partner-feed',
+        label: 'Partner feed corrupts downstream jobs',
+        detail: 'Specific records fail parsing and one customer segment is hit first.',
+        defaults: ['schema', 'tenant', 'bad-records']
+      }
+    ];
+
+    const scenarioList = document.getElementById('scenario-list');
+    const signalGrid = document.getElementById('signal-grid');
+    const hypothesisList = document.getElementById('hypothesis-list');
+    const actionList = document.getElementById('action-list');
+    const statusLine = document.getElementById('status-line');
+    const resetBtn = document.getElementById('reset-btn');
+
+    let activeScenario = scenarios[0].id;
+    let selectedSignals = new Set(scenarios[0].defaults);
+
+    function renderScenarios() {
+      scenarioList.innerHTML = scenarios.map((scenario) => `
+        <button class="scenario-btn ${scenario.id === activeScenario ? 'active' : ''}" data-scenario="${scenario.id}" type="button">
+          <strong>${scenario.label}</strong>
+          <span>${scenario.detail}</span>
+        </button>
+      `).join('');
+
+      scenarioList.querySelectorAll('[data-scenario]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const scenario = scenarios.find((entry) => entry.id === button.dataset.scenario);
+          if (!scenario) return;
+          activeScenario = scenario.id;
+          selectedSignals = new Set(scenario.defaults);
+          statusLine.textContent = `${scenario.label} loaded with ${scenario.defaults.length} default signal${scenario.defaults.length === 1 ? '' : 's'}.`;
+          renderAll();
+        });
+      });
+    }
+
+    function renderSignals() {
+      signalGrid.innerHTML = signals.map((signal) => `
+        <article class="signal">
+          <button class="${selectedSignals.has(signal.id) ? 'active' : ''}" data-signal="${signal.id}" type="button">
+            <strong>${signal.label}</strong>
+            <span>${signal.note}</span>
+          </button>
+        </article>
+      `).join('');
+
+      signalGrid.querySelectorAll('[data-signal]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const id = button.dataset.signal;
+          if (selectedSignals.has(id)) selectedSignals.delete(id);
+          else selectedSignals.add(id);
+          statusLine.textContent = `${selectedSignals.size} observed signal${selectedSignals.size === 1 ? '' : 's'} selected.`;
+          renderSignals();
+          renderRankings();
+        });
+      });
+    }
+
+    function computeRankings() {
+      return failureModes.map((mode) => {
+        const supportingSignals = signals.filter((signal) => selectedSignals.has(signal.id) && signal.weights[mode.id]);
+        const score = supportingSignals.reduce((sum, signal) => sum + signal.weights[mode.id], 0);
+        return { ...mode, score, supportingSignals };
+      }).sort((a, b) => b.score - a.score || a.label.localeCompare(b.label));
+    }
+
+    function renderRankings() {
+      const ranked = computeRankings();
+      hypothesisList.innerHTML = ranked.map((mode, index) => `
+        <article class="hypothesis">
+          <div class="hypothesis-header">
+            <div>
+              <h3>${index + 1}. ${mode.label}</h3>
+              <p class="muted">${mode.summary}</p>
+            </div>
+            <span class="score">${mode.score} pts</span>
+          </div>
+          <div class="signal-tags">
+            ${mode.supportingSignals.length
+              ? mode.supportingSignals.map((signal) => `<span>${signal.label}</span>`).join('')
+              : '<span>No selected evidence yet</span>'}
+          </div>
+        </article>
+      `).join('');
+
+      const primary = ranked[0];
+      actionList.innerHTML = primary.actionPlan.map((step, index) => `
+        <article>
+          <strong>Step ${index + 1}</strong>
+          <p class="muted">${step}</p>
+        </article>
+      `).join('');
+    }
+
+    function renderAll() {
+      renderScenarios();
+      renderSignals();
+      renderRankings();
+    }
+
+    resetBtn.addEventListener('click', () => {
+      const scenario = scenarios.find((entry) => entry.id === activeScenario) || scenarios[0];
+      selectedSignals = new Set(scenario.defaults);
+      statusLine.textContent = `Reset to the default signal set for ${scenario.label}.`;
+      renderSignals();
+      renderRankings();
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>

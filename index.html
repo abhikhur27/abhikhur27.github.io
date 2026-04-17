@@ -45,12 +45,12 @@
       </div>
       <div class="hero-metrics" role="list" aria-label="Portfolio metrics">
         <article role="listitem">
-          <h2>23+</h2>
-          <p>Projects in this ecosystem</p>
+          <h2 id="project-count">--</h2>
+          <p id="project-count-label">Projects in this ecosystem</p>
         </article>
         <article role="listitem">
-          <h2>6</h2>
-          <p>Blog tracks in progress</p>
+          <h2 id="draft-count">--</h2>
+          <p id="draft-count-label">Blog tracks in progress</p>
         </article>
         <article role="listitem">
           <h2 id="commit-count">--</h2>
@@ -93,7 +93,47 @@
         </div>
       </section>
 
+      <section class="project-routes" aria-label="Curated project routes">
+        <article class="route-card">
+          <p class="tag">Route 01</p>
+          <h3>Systems Builder Path</h3>
+          <p>Start with dispatch and latency modeling, then move into scheduling and resilience tradeoffs.</p>
+          <div class="card-actions">
+            <a href="?projectFilter=systems">Open systems lane</a>
+          </div>
+        </article>
+        <article class="route-card">
+          <p class="tag">Route 02</p>
+          <h3>Interactive Tooling Path</h3>
+          <p>Jump through debugging, algorithm, and data-structure tools that expose state and operator choices.</p>
+          <div class="card-actions">
+            <a href="?projectFilter=tools">Open tooling lane</a>
+          </div>
+        </article>
+        <article class="route-card">
+          <p class="tag">Route 03</p>
+          <h3>Decision Game Path</h3>
+          <p>Play through systems scenarios where the point is judgment under pressure, not passive browsing.</p>
+          <div class="card-actions">
+            <a href="./projects/failure-mode-atlas/index.html" target="_blank" rel="noreferrer">Open newest build</a>
+          </div>
+        </article>
+      </section>
+
       <div class="project-grid">
+        <article class="project-card" data-category="systems tools games">
+          <header>
+            <p class="tag">New Systems Build</p>
+            <h3>Failure Mode Atlas</h3>
+          </header>
+          <p>Map incident signals to probable failure modes, escalation posture, and next diagnostic moves in a static operations sandbox.</p>
+          <p class="stack">HTML, CSS, JavaScript, Incident Response Modeling</p>
+          <div class="card-actions">
+            <a href="./projects/failure-mode-atlas/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/failure-mode-atlas/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="systems tools">
           <header>
             <p class="tag">Systems</p>
@@ -510,6 +550,17 @@
           <p><strong>Writing shape:</strong> regime framing -> drawdown anatomy -> sizing policy comparisons.</p>
           <p><strong>Sources to reference:</strong> CBOE VIX history, FRED macro series, market microstructure papers.</p>
           <p><strong>Technical angle:</strong> rolling regime classifier with stress-tested sizing simulation.</p>
+        </details>
+
+        <details class="entry-row" data-topic="systems" data-stage="modeling" data-next="Draft the incident narrative and tighten the clue-to-failure mapping table." data-related-link="./projects/failure-mode-atlas/index.html" data-related-label="Failure Mode Atlas">
+          <summary>
+            <span class="entry-title">Incident Notes Need Failure Trees, Not Just Timelines</span>
+            <span class="entry-meta">Operations response and postmortems</span>
+            <span class="entry-stage">Modeling</span>
+          </summary>
+          <p><strong>Writing shape:</strong> symptom inventory -> failure family narrowing -> response design.</p>
+          <p><strong>Sources to reference:</strong> postmortems, SRE incident handbooks, service dependency maps.</p>
+          <p><strong>Technical angle:</strong> Bayesian clue weighting over correlated failure-mode candidates.</p>
         </details>
       </div>
     </section>

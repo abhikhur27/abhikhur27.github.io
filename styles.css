@@ -309,6 +309,32 @@ main > section + section {
   padding: 0.95rem;
 }
 
+.project-routes {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.route-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top right, rgba(184, 196, 255, 0.14), transparent 46%),
+    var(--surface);
+  padding: 1rem;
+}
+
+.route-card h3 {
+  margin-top: 0.25rem;
+  font-size: 1.45rem;
+}
+
+.route-card p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+}
+
 .spotlight-shell {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -629,6 +655,10 @@ main > section + section {
   }
 
   .draft-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .project-routes {
     grid-template-columns: 1fr;
   }
 
