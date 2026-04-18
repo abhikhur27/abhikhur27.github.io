@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handoff Briefing Lab</title>
+  <meta name="description" content="Incident handoff simulator about choosing the five updates that the next shift actually needs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Decision Lab</p>
+      <h1>Handoff Briefing Lab</h1>
+      <p class="lede">Choose the five updates that the next shift actually needs. Too little context breaks continuity. Too much context buries the real handoff.</p>
+      <div class="hero-actions">
+        <button id="copy-link" class="secondary" type="button">Copy Share Link</button>
+        <button id="copy-brief" class="primary" type="button">Copy Brief</button>
+      </div>
+    </div>
+    <aside class="hero-panel">
+      <p class="panel-label">Brief quality</p>
+      <h2 id="quality-title">Balanced handoff</h2>
+      <p id="quality-summary">Cover status, ownership, risk, and next steps without flooding the oncoming shift.</p>
+      <div class="mini-stats">
+        <article>
+          <span>Score</span>
+          <strong id="brief-score">0</strong>
+        </article>
+        <article>
+          <span>Coverage</span>
+          <strong id="coverage-score">0/0</strong>
+        </article>
+        <article>
+          <span>Load</span>
+          <strong id="load-score">0%</strong>
+        </article>
+      </div>
+    </aside>
+  </header>
+
+  <main class="page-shell">
+    <section class="scenario-panel">
+      <div class="section-head">
+        <p class="eyebrow">Scenario</p>
+        <h2>Pick the handoff context</h2>
+      </div>
+      <div id="scenario-buttons" class="preset-row"></div>
+      <div class="scenario-copy">
+        <p id="scenario-summary">Load a scenario to start building the brief.</p>
+        <p id="scenario-risk" class="mono">The scenario risk cue will appear here.</p>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <section class="candidate-panel">
+        <div class="section-head">
+          <p class="eyebrow">Incoming Notes</p>
+          <h2>Candidate updates</h2>
+        </div>
+        <p class="section-copy">Select up to five bullets for the shift handoff. The order becomes the briefing order.</p>
+        <div id="candidate-list" class="candidate-list"></div>
+      </section>
+
+      <section class="brief-panel">
+        <div class="section-head">
+          <p class="eyebrow">Shift Brief</p>
+          <h2>Your selected packet</h2>
+        </div>
+        <p id="brief-meta" class="section-copy">0 / 5 bullets selected.</p>
+        <ol id="selected-list" class="selected-list"></ol>
+
+        <div class="analysis-grid">
+          <article class="analysis-card">
+            <p class="panel-label">Coverage board</p>
+            <div id="coverage-board" class="detail-list"></div>
+          </article>
+          <article class="analysis-card">
+            <p class="panel-label">Missed cues</p>
+            <div id="missed-cues" class="detail-list"></div>
+          </article>
+          <article class="analysis-card">
+            <p class="panel-label">Next shift risk</p>
+            <div id="shift-risk" class="detail-list"></div>
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

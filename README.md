@@ -12,6 +12,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Project directory with category filtering.
 - Blog-style expandable writing shelf for draft essays.
 - Writing queue board that keeps the next three closest-to-shipping drafts visible.
+- Shipping board that ranks visible drafts by how close they are to becoming full posts.
 - Draft shelf summary cards for visible stages and topic mix.
 - Topic atlas cards that turn the draft shelf into lane-based navigation.
 - A linked-trails layer that bridges projects with the drafts already growing out of them.
@@ -41,6 +42,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/schema-drift-command`
 - `projects/failure-mode-atlas`
 - `projects/control-loop-lab`
+- `projects/handoff-briefing-lab`
 
 ## Technical design
 
@@ -54,8 +56,9 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/schema-drift-command`: schema migration decision game about compatibility shims, partner trust, and contract cutovers.
 - `projects/failure-mode-atlas`: incident clue-to-failure mapping tool that ranks likely failure families and next diagnostic actions.
 - `projects/control-loop-lab`: feedback-stability simulator for lag, gain, damping, and queue spill tradeoffs.
+- `projects/handoff-briefing-lab`: incident handoff simulator where the player chooses the five updates that the next shift actually needs.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, linked build/draft trails, topic-atlas navigation, writing shelf spotlight controls, shareable filtered-view links, stage filters, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, linked build/draft trails, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, shareable filtered-view links, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid

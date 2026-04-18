@@ -24,6 +24,7 @@ const draftStageSummary = document.getElementById('draft-stage-summary');
 const draftTopicSummary = document.getElementById('draft-topic-summary');
 const writingTopicAtlas = document.getElementById('writing-topic-atlas');
 const writingQueueList = document.getElementById('writing-queue-list');
+const writingShippingBoard = document.getElementById('writing-shipping-board');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
@@ -378,6 +379,71 @@ function renderWritingQueue(entries) {
   });
 }
 
+function shippingScoreForEntry(entry) {
+  const stageBase = entry.dataset.stage === 'drafting' ? 78 : entry.dataset.stage === 'modeling' ? 56 : 34;
+  const hasRelatedBuild = entry.dataset.relatedLink ? 10 : 0;
+  const titleBonus = (entry.querySelector('.entry-title')?.textContent || '').length > 48 ? 4 : 0;
+  return Math.min(100, stageBase + hasRelatedBuild + titleBonus);
+}
+
+function renderShippingBoard(entries) {
+  if (!writingShippingBoard) {
+    return;
+  }
+
+  if (!entries.length) {
+    writingShippingBoard.innerHTML = `
+      <article class="trail-card">
+        <p class="tag">No Drafts</p>
+        <h3>Nothing is visible under the current filters.</h3>
+        <p class="section-copy">Broaden the topic or stage filters to repopulate the shipping board.</p>
+      </article>
+    `;
+    return;
+  }
+
+  const ranked = [...entries]
+    .map((entry) => ({ entry, score: shippingScoreForEntry(entry) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4);
+
+  writingShippingBoard.innerHTML = ranked
+    .map(({ entry, score }) => {
+      const title = entry.querySelector('.entry-title')?.textContent || 'Draft note';
+      const meta = entry.querySelector('.entry-meta')?.textContent || 'Working draft';
+      const stage = formatStageLabel(entry.dataset.stage);
+      const relatedLink = entry.dataset.relatedLink;
+      const relatedLabel = entry.dataset.relatedLabel || 'Related Build';
+      const readiness =
+        score >= 88 ? 'Ready to draft into a full post.' : score >= 68 ? 'Needs one focused writing pass.' : 'Still needs more modeling or source work.';
+
+      return `
+        <article class="trail-card">
+          <p class="tag">${stage} | Score ${score}</p>
+          <h3>${title}</h3>
+          <p class="section-copy">${meta}</p>
+          <p class="results-meta">${readiness}</p>
+          <p class="results-meta">Next milestone: ${entry.dataset.next || 'Open the draft and define the next milestone.'}</p>
+          <div class="card-actions">
+            <button class="spotlight-btn shipping-open-btn" type="button" data-entry-id="${entry.id}">Open Draft</button>
+            ${relatedLink ? `<a class="spotlight-btn" href="${relatedLink}" target="_blank" rel="noreferrer">Open ${relatedLabel}</a>` : ''}
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+
+  writingShippingBoard.querySelectorAll('.shipping-open-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const target = writingEntries.find((entry) => entry.id === button.dataset.entryId);
+      if (!target) return;
+      target.open = true;
+      updateWritingSpotlight(target);
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+}
+
 function renderTopicAtlas(topicCounts, visibleEntries) {
   if (!writingTopicAtlas) {
     return;
@@ -470,6 +536,7 @@ function applyWritingFilters() {
 
   renderTopicAtlas(topicCounts, visibleEntries);
   renderWritingQueue(visibleEntries);
+  renderShippingBoard(visibleEntries);
   updateWritingSpotlight(firstVisible);
   updateUrlState();
 }

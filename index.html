@@ -112,18 +112,31 @@
         </article>
         <article class="route-card">
           <p class="tag">Route 03</p>
-          <h3>Control Systems Path</h3>
-          <p>Jump into feedback stability, lag, and overcorrection so the newest systems build reads like an engineering lab, not a toy.</p>
+          <h3>Incident Handoff Path</h3>
+          <p>Jump into decision pressure, communication load, and what the next shift actually needs when an incident is still moving.</p>
           <div class="card-actions">
-            <a href="./projects/control-loop-lab/index.html" target="_blank" rel="noreferrer">Open newest build</a>
+            <a href="./projects/handoff-briefing-lab/index.html" target="_blank" rel="noreferrer">Open newest build</a>
           </div>
         </article>
       </section>
 
       <div class="project-grid">
-        <article class="project-card" data-category="systems visualization tools">
+        <article class="project-card" data-category="systems tools games">
           <header>
             <p class="tag">New Systems Build</p>
+            <h3>Handoff Briefing Lab</h3>
+          </header>
+          <p>Build a five-bullet incident handoff under communication pressure so the next shift gets the real state, risk, and next move.</p>
+          <p class="stack">HTML, CSS, JavaScript, Incident Communication Design</p>
+          <div class="card-actions">
+            <a href="./projects/handoff-briefing-lab/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/handoff-briefing-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="systems visualization tools">
+          <header>
+            <p class="tag">Systems Build</p>
             <h3>Control Loop Lab</h3>
           </header>
           <p>Model lag, gain, damping, and burst pressure to see when a system stabilizes, oscillates, or falls into a queue spiral.</p>
@@ -490,6 +503,13 @@
         </div>
         <div id="writing-queue-list" class="trail-list"></div>
       </section>
+      <section class="linked-trails" aria-label="Shipping board">
+        <div class="section-head">
+          <p class="eyebrow">Shipping Board</p>
+          <h2>Which drafts are closest to becoming real posts</h2>
+        </div>
+        <div id="writing-shipping-board" class="trail-list"></div>
+      </section>
       <section class="project-spotlight writing-spotlight" aria-live="polite">
         <p class="eyebrow">Draft Spotlight</p>
         <div class="spotlight-shell">
@@ -592,6 +612,17 @@
           <p><strong>Writing shape:</strong> control intuition -> delayed feedback traps -> product and ops examples.</p>
           <p><strong>Sources to reference:</strong> queueing texts, SRE handbooks, process-control primers, postmortems with oscillation patterns.</p>
           <p><strong>Technical angle:</strong> discrete-time control loop with lag, damping, overshoot, and queue spill metrics.</p>
+        </details>
+
+        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the scenario notes into the five-bullet handoff rubric and add one bad-brief counterexample." data-related-link="./projects/handoff-briefing-lab/index.html" data-related-label="Handoff Briefing Lab">
+          <summary>
+            <span class="entry-title">Incident Handoffs Fail When They Try To Be Full Timelines</span>
+            <span class="entry-meta">On-call communication and shift change design</span>
+            <span class="entry-stage">Drafting</span>
+          </summary>
+          <p><strong>Writing shape:</strong> bad handoff anatomy -> constrained briefing packet -> operational consequences.</p>
+          <p><strong>Sources to reference:</strong> postmortems, incident command guides, handoff literature, on-call runbooks.</p>
+          <p><strong>Technical angle:</strong> constrained information design under ownership, risk, and next-step coverage requirements.</p>
         </details>
       </div>
     </section>
