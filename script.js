@@ -22,6 +22,8 @@ const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
 const draftStageSummary = document.getElementById('draft-stage-summary');
 const draftTopicSummary = document.getElementById('draft-topic-summary');
+const draftPipelineBrief = document.getElementById('draft-pipeline-brief');
+const draftLinkedBuild = document.getElementById('draft-linked-build');
 const writingTopicAtlas = document.getElementById('writing-topic-atlas');
 const writingQueueList = document.getElementById('writing-queue-list');
 const writingShippingBoard = document.getElementById('writing-shipping-board');
@@ -495,6 +497,59 @@ function renderTopicAtlas(topicCounts, visibleEntries) {
   });
 }
 
+function renderWritingPipelineBrief(visibleEntries) {
+  if (draftPipelineBrief) {
+    if (!visibleEntries.length) {
+      draftPipelineBrief.textContent = 'No visible drafts. Broaden the filters to surface the strongest lane.';
+    } else {
+      const laneStats = ['systems', 'science', 'language', 'sports', 'markets']
+        .map((topic) => {
+          const entries = visibleEntries.filter((entry) => entry.dataset.topic === topic);
+          if (!entries.length) return null;
+          const score =
+            entries.reduce((sum, entry) => {
+              if (entry.dataset.stage === 'drafting') return sum + 3;
+              if (entry.dataset.stage === 'modeling') return sum + 2;
+              return sum + 1;
+            }, 0) / entries.length;
+          return { topic, entries, score };
+        })
+        .filter(Boolean)
+        .sort((a, b) => b.score - a.score || b.entries.length - a.entries.length);
+
+      const topLane = laneStats[0];
+      if (topLane) {
+        const label = `${topLane.topic[0].toUpperCase()}${topLane.topic.slice(1)}`;
+        const draftingCount = topLane.entries.filter((entry) => entry.dataset.stage === 'drafting').length;
+        const nextEntry = [...topLane.entries].sort((a, b) => stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage))[0];
+        draftPipelineBrief.textContent = `${label} is the fastest lane right now: ${draftingCount} drafting draft${draftingCount === 1 ? '' : 's'} visible. Next up: ${nextEntry?.querySelector('.entry-title')?.textContent || 'Open the shelf.'}`;
+      }
+    }
+  }
+
+  if (draftLinkedBuild) {
+    const linked = new Map();
+    visibleEntries.forEach((entry) => {
+      const link = entry.dataset.relatedLink;
+      if (!link) return;
+      const label = entry.dataset.relatedLabel || entry.querySelector('.entry-title')?.textContent || 'Related build';
+      if (!linked.has(link)) {
+        linked.set(link, { label, entries: [] });
+      }
+      linked.get(link).entries.push(entry);
+    });
+
+    const rankedBuilds = [...linked.values()].sort((a, b) => b.entries.length - a.entries.length);
+    const strongest = rankedBuilds[0];
+    if (!strongest) {
+      draftLinkedBuild.textContent = 'No linked builds are visible under the current filters.';
+    } else {
+      const nextMilestone = strongest.entries[0]?.dataset.next || 'Open the linked draft and continue the note.';
+      draftLinkedBuild.textContent = `${strongest.label} has ${strongest.entries.length} visible linked draft${strongest.entries.length === 1 ? '' : 's'}. Next milestone: ${nextMilestone}`;
+    }
+  }
+}
+
 function applyWritingFilters() {
   const query = (writingSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
@@ -535,6 +590,7 @@ function applyWritingFilters() {
   }
 
   renderTopicAtlas(topicCounts, visibleEntries);
+  renderWritingPipelineBrief(visibleEntries);
   renderWritingQueue(visibleEntries);
   renderShippingBoard(visibleEntries);
   updateWritingSpotlight(firstVisible);

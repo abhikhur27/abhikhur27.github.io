@@ -1,0 +1,295 @@
+:root {
+  --bg: #08111b;
+  --panel: rgba(12, 20, 30, 0.9);
+  --panel-strong: rgba(14, 25, 38, 0.96);
+  --text: #edf3ff;
+  --muted: #aeb9ca;
+  --line: rgba(165, 189, 220, 0.22);
+  --accent: #89d2ff;
+  --accent-strong: #c6f27c;
+  --danger: #ff9578;
+  --radius: 22px;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.34);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(137, 210, 255, 0.14), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(198, 242, 124, 0.12), transparent 28%),
+    linear-gradient(180deg, #071018, #0a1520 46%, #061018);
+  min-height: 100vh;
+}
+
+.shell {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.hero {
+  padding: 2.5rem 0 1.25rem;
+}
+
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.eyebrow {
+  margin: 1rem 0 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  color: var(--accent);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Sora", sans-serif;
+}
+
+.lead {
+  margin-top: 1rem;
+  max-width: 66ch;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 18%),
+    var(--panel);
+  box-shadow: var(--shadow);
+  padding: 1.15rem;
+}
+
+.mission-panel,
+.options-panel,
+.log-panel {
+  grid-column: 1;
+}
+
+.score-panel {
+  grid-column: 2;
+  grid-row: span 2;
+}
+
+.log-panel {
+  margin-bottom: 2rem;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.pill,
+.ghost-btn,
+.option-card button {
+  border-radius: 999px;
+}
+
+.pill {
+  border: 1px solid rgba(198, 242, 124, 0.34);
+  padding: 0.45rem 0.8rem;
+  color: var(--accent-strong);
+  font-weight: 600;
+  background: rgba(198, 242, 124, 0.08);
+}
+
+.ghost-btn,
+.option-card button {
+  border: 1px solid var(--line);
+  background: rgba(8, 17, 27, 0.8);
+  color: var(--text);
+  font: inherit;
+  padding: 0.6rem 0.95rem;
+  cursor: pointer;
+}
+
+.ghost-btn:hover,
+.option-card button:hover,
+.option-card button:focus-visible {
+  border-color: rgba(137, 210, 255, 0.5);
+}
+
+.context-copy,
+.summary-copy,
+.result-card p,
+.decision-log li,
+.final-brief p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.context-copy {
+  margin-top: 0.9rem;
+}
+
+.signal-grid,
+.score-grid,
+.options-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.signal-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.signal-grid article,
+.score-grid article,
+.result-card,
+.option-card,
+.final-brief {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel-strong);
+  padding: 0.9rem;
+}
+
+.signal-grid h3,
+.score-grid h3,
+.timeline-block h3,
+.result-card h3,
+.option-card h3,
+.final-brief h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.45rem;
+}
+
+.timeline-block {
+  margin-top: 1rem;
+}
+
+.timeline {
+  margin: 0.85rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.55rem;
+  color: var(--muted);
+}
+
+.score-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.score-grid p {
+  font-family: "Sora", sans-serif;
+  font-size: 2rem;
+  color: var(--accent);
+}
+
+.summary-copy {
+  margin-top: 0.9rem;
+}
+
+.result-card {
+  margin-top: 1rem;
+}
+
+.options-grid {
+  margin-top: 1rem;
+}
+
+.option-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.option-card .tag {
+  width: fit-content;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(137, 210, 255, 0.1);
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.option-card ul {
+  margin: 0;
+  padding-left: 1rem;
+  color: var(--muted);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.decision-log {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.decision-log li {
+  border-left: 3px solid rgba(137, 210, 255, 0.45);
+  padding: 0.1rem 0 0.1rem 0.8rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.final-brief {
+  margin-top: 1rem;
+}
+
+.final-brief strong {
+  color: var(--text);
+}
+
+@media (max-width: 920px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .score-panel,
+  .mission-panel,
+  .options-panel,
+  .log-panel {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .signal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+}

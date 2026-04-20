@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Race Condition Lab</title>
+  <meta name="description" content="Static concurrency lab for reasoning about async guardrails, request races, and duplicate writes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Concurrency Decision Lab</p>
+    <h1>Race Condition Lab</h1>
+    <p class="lead">Choose guardrails for overlapping requests, duplicate actions, and stale writes. Each scenario grades the product tradeoff, not just the bug fix.</p>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel mission-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Scenario</p>
+          <h2 id="scenario-title">Loading scenario...</h2>
+        </div>
+        <p id="scenario-progress" class="pill">Round 1 / 4</p>
+      </div>
+      <p id="scenario-context" class="context-copy"></p>
+      <div class="signal-grid">
+        <article>
+          <h3>Failure symptom</h3>
+          <p id="scenario-symptom">-</p>
+        </article>
+        <article>
+          <h3>Pressure</h3>
+          <p id="scenario-pressure">-</p>
+        </article>
+        <article>
+          <h3>What matters most</h3>
+          <p id="scenario-priority">-</p>
+        </article>
+      </div>
+      <div class="timeline-block">
+        <div class="panel-head">
+          <h3>Observed event timeline</h3>
+          <button id="copy-lab-report" type="button" class="ghost-btn">Copy Run Report</button>
+        </div>
+        <ol id="scenario-timeline" class="timeline"></ol>
+      </div>
+    </section>
+
+    <section class="panel score-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Scoreboard</p>
+          <h2>Guardrail tradeoffs</h2>
+        </div>
+        <button id="reset-lab" type="button" class="ghost-btn">Restart Lab</button>
+      </div>
+      <div class="score-grid">
+        <article>
+          <h3>Correctness</h3>
+          <p id="score-correctness">0</p>
+        </article>
+        <article>
+          <h3>Latency</h3>
+          <p id="score-latency">0</p>
+        </article>
+        <article>
+          <h3>Complexity</h3>
+          <p id="score-complexity">0</p>
+        </article>
+        <article>
+          <h3>User Trust</h3>
+          <p id="score-trust">0</p>
+        </article>
+      </div>
+      <p id="score-summary" class="summary-copy">Pick a strategy to see how the tradeoff changes.</p>
+      <div id="result-card" class="result-card">
+        <h3>Round brief</h3>
+        <p id="result-title">No strategy selected yet.</p>
+        <p id="result-detail">The lab will explain why a guardrail helped or hurt once you commit to a path.</p>
+      </div>
+    </section>
+
+    <section class="panel options-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Choose a guardrail</p>
+          <h2>What would you ship?</h2>
+        </div>
+      </div>
+      <div id="options-grid" class="options-grid"></div>
+    </section>
+
+    <section class="panel log-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Operator Notes</p>
+          <h2>Decision log</h2>
+        </div>
+      </div>
+      <ul id="decision-log" class="decision-log"></ul>
+      <div id="final-brief" class="final-brief hidden"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

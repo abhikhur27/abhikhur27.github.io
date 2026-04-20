@@ -381,6 +381,19 @@
           </div>
         </article>
 
+        <article class="project-card" data-category="systems tools visualization">
+          <header>
+            <p class="tag">Concurrency Build</p>
+            <h3>Race Condition Lab</h3>
+          </header>
+          <p>Pick async guardrails for likes, search, seat reservations, and autosave conflicts, then inspect the timeline and trust-cost tradeoffs.</p>
+          <p class="stack">HTML, CSS, JavaScript, Concurrency Design</p>
+          <div class="card-actions">
+            <a href="./projects/race-condition-lab/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/race-condition-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="systems tools games">
           <header>
             <p class="tag">Product Strategy Game</p>
@@ -487,6 +500,14 @@
         <article>
           <h3>Visible topics</h3>
           <p id="draft-topic-summary" class="results-meta">Systems 0 | Science 0 | Language 0 | Sports 0 | Markets 0</p>
+        </article>
+        <article>
+          <h3>Fastest lane</h3>
+          <p id="draft-pipeline-brief" class="results-meta">Add filters or drafts to surface the lane closest to shipping.</p>
+        </article>
+        <article>
+          <h3>Most linked build</h3>
+          <p id="draft-linked-build" class="results-meta">Related project density will appear here once linked drafts are visible.</p>
         </article>
       </section>
       <section class="topic-atlas" aria-label="Draft topic atlas">
@@ -623,6 +644,17 @@
           <p><strong>Writing shape:</strong> bad handoff anatomy -> constrained briefing packet -> operational consequences.</p>
           <p><strong>Sources to reference:</strong> postmortems, incident command guides, handoff literature, on-call runbooks.</p>
           <p><strong>Technical angle:</strong> constrained information design under ownership, risk, and next-step coverage requirements.</p>
+        </details>
+
+        <details class="entry-row" data-topic="systems" data-stage="modeling" data-next="Turn the fetch races and duplicate-write examples into one narrative about product trust leaking through async edges." data-related-link="./projects/race-condition-lab/index.html" data-related-label="Race Condition Lab">
+          <summary>
+            <span class="entry-title">Race Conditions Are Product Bugs With a Stopwatch</span>
+            <span class="entry-meta">Concurrency, async UX, and correctness under overlap</span>
+            <span class="entry-stage">Modeling</span>
+          </summary>
+          <p><strong>Writing shape:</strong> out-of-order responses -> duplicate writes -> guardrail patterns and product tradeoffs.</p>
+          <p><strong>Sources to reference:</strong> async UI postmortems, Stripe idempotency docs, optimistic UI writeups, concurrency bug case studies.</p>
+          <p><strong>Technical angle:</strong> request sequencing, idempotency keys, mutexes, optimistic rollback, and version-check conflict handling.</p>
         </details>
       </div>
     </section>

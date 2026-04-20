@@ -20,6 +20,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Fully static architecture for GitHub Pages.
 - Stage-aware draft shelf filters for planning the blog pipeline.
 - Shareable project and draft-shelf view links so filtered homepage states can be sent directly.
+- Draft dashboard pipeline cards that surface the fastest lane and most-linked build in the current writing view.
 
 ## Included subprojects in this repo
 
@@ -43,6 +44,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/failure-mode-atlas`
 - `projects/control-loop-lab`
 - `projects/handoff-briefing-lab`
+- `projects/race-condition-lab`
 
 ## Technical design
 
@@ -57,8 +59,9 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/failure-mode-atlas`: incident clue-to-failure mapping tool that ranks likely failure families and next diagnostic actions.
 - `projects/control-loop-lab`: feedback-stability simulator for lag, gain, damping, and queue spill tradeoffs.
 - `projects/handoff-briefing-lab`: incident handoff simulator where the player chooses the five updates that the next shift actually needs.
+- `projects/race-condition-lab`: concurrency decision lab for request ordering, idempotency, mutexes, and autosave conflict handling.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, linked build/draft trails, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, shareable filtered-view links, stage filters, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, linked build/draft trails, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid
