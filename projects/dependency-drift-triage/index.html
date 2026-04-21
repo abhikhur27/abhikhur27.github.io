@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dependency Drift Triage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Static Maintenance Strategy Game</p>
+    <h1>Dependency Drift Triage</h1>
+    <p class="lead">Pick the packages worth touching before Friday's release window closes. Every upgrade spends engineering hours, lowers some risk, and may create a new compatibility problem.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel command">
+      <div>
+        <p class="eyebrow">Release Window</p>
+        <h2>48 hours, one frontend, one API, one anxious product lead.</h2>
+      </div>
+      <div class="score-grid" aria-live="polite">
+        <article>
+          <span>Hours Left</span>
+          <strong id="hours-left">18</strong>
+        </article>
+        <article>
+          <span>Risk Removed</span>
+          <strong id="risk-removed">0</strong>
+        </article>
+        <article>
+          <span>Breakage Load</span>
+          <strong id="breakage-load">0</strong>
+        </article>
+        <article>
+          <span>Decision Grade</span>
+          <strong id="decision-grade">Pending</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="package-list" aria-label="Dependency choices">
+      <article class="package-card" data-name="auth-token-lib" data-hours="5" data-risk="34" data-breakage="18" data-lane="Security">
+        <div>
+          <p class="tag">Security</p>
+          <h2>auth-token-lib</h2>
+          <p>High-severity JWT parsing advisory, but the major version changes refresh-token error shapes.</p>
+        </div>
+        <ul>
+          <li>Cost: 5 hours</li>
+          <li>Risk removed: 34</li>
+          <li>Breakage load: 18</li>
+        </ul>
+        <button type="button">Select</button>
+      </article>
+
+      <article class="package-card" data-name="chart-canvas" data-hours="4" data-risk="11" data-breakage="22" data-lane="UI">
+        <div>
+          <p class="tag">UI</p>
+          <h2>chart-canvas</h2>
+          <p>Three minor versions behind. Fixes a memory leak, but tooltip behavior changed on touch screens.</p>
+        </div>
+        <ul>
+          <li>Cost: 4 hours</li>
+          <li>Risk removed: 11</li>
+          <li>Breakage load: 22</li>
+        </ul>
+        <button type="button">Select</button>
+      </article>
+
+      <article class="package-card" data-name="query-cache" data-hours="7" data-risk="26" data-breakage="12" data-lane="Data">
+        <div>
+          <p class="tag">Data</p>
+          <h2>query-cache</h2>
+          <p>Stale cache invalidation bug hits campus dashboards after schedule imports. Patch is medium effort.</p>
+        </div>
+        <ul>
+          <li>Cost: 7 hours</li>
+          <li>Risk removed: 26</li>
+          <li>Breakage load: 12</li>
+        </ul>
+        <button type="button">Select</button>
+      </article>
+
+      <article class="package-card" data-name="email-renderer" data-hours="3" data-risk="14" data-breakage="9" data-lane="Comms">
+        <div>
+          <p class="tag">Comms</p>
+          <h2>email-renderer</h2>
+          <p>Patch fixes Outlook layout regressions and keeps notification emails readable during registration week.</p>
+        </div>
+        <ul>
+          <li>Cost: 3 hours</li>
+          <li>Risk removed: 14</li>
+          <li>Breakage load: 9</li>
+        </ul>
+        <button type="button">Select</button>
+      </article>
+
+      <article class="package-card" data-name="test-runner" data-hours="6" data-risk="18" data-breakage="16" data-lane="Tooling">
+        <div>
+          <p class="tag">Tooling</p>
+          <h2>test-runner</h2>
+          <p>Unlocks faster browser tests and better flakes reports, but config migration eats half a day.</p>
+        </div>
+        <ul>
+          <li>Cost: 6 hours</li>
+          <li>Risk removed: 18</li>
+          <li>Breakage load: 16</li>
+        </ul>
+        <button type="button">Select</button>
+      </article>
+    </section>
+
+    <aside class="panel briefing">
+      <p class="eyebrow">Triage Brief</p>
+      <h2 id="brief-title">No package selected yet.</h2>
+      <p id="brief-copy">Select upgrades until the release window is full enough to matter but not overloaded with compatibility risk.</p>
+      <div id="chosen-list" class="chosen-list"></div>
+      <button id="reset-btn" type="button">Reset Window</button>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
