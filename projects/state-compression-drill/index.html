@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State Compression Drill</title>
+  <meta name="description" content="Static incident handoff drill for compressing noisy system state into a compact operator packet.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Operations Writing Game</p>
+    <h1>State Compression Drill</h1>
+    <p class="lead">Pick the five facts that survive a noisy incident handoff. The drill scores whether your brief preserves state, risk, owner, customer impact, and next action under a strict packet budget.</p>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Incident Feed</p>
+          <h2 id="scenario-title">Loading scenario</h2>
+        </div>
+        <p id="budget-pill" class="pill">0 / 5 facts</p>
+      </div>
+      <p id="scenario-context" class="context-copy"></p>
+      <div id="fact-list" class="fact-list" aria-label="Candidate handoff facts"></div>
+    </section>
+
+    <section class="panel score-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Packet Quality</p>
+          <h2>Brief score</h2>
+        </div>
+        <button id="reset-drill" class="ghost-btn" type="button">Reset</button>
+      </div>
+      <div class="score-grid">
+        <article><h3>Coverage</h3><p id="coverage-score">0%</p></article>
+        <article><h3>Noise</h3><p id="noise-score">0</p></article>
+        <article><h3>Risk</h3><p id="risk-score">Missing</p></article>
+        <article><h3>Next Action</h3><p id="action-score">Missing</p></article>
+      </div>
+      <p id="score-summary" class="summary-copy">Select up to five facts to build the next-shift packet.</p>
+      <button id="copy-brief" class="primary-btn" type="button">Copy Handoff Brief</button>
+    </section>
+
+    <section class="panel packet-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Compressed Packet</p>
+          <h2>What the next operator gets</h2>
+        </div>
+        <button id="next-scenario" class="ghost-btn" type="button">Next Scenario</button>
+      </div>
+      <ol id="brief-list" class="brief-list"></ol>
+      <div id="critique" class="critique">The critique appears after you select facts.</div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

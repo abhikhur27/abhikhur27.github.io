@@ -112,10 +112,10 @@
         </article>
         <article class="route-card">
           <p class="tag">Route 03</p>
-          <h3>Dependency Triage Path</h3>
-          <p>Start with package drift, security pressure, and compatibility risk before moving into incident response tools.</p>
+          <h3>Compression Path</h3>
+          <p>Start by compressing incident state into a handoff packet, then move into dependency and failure triage.</p>
           <div class="card-actions">
-            <a href="./projects/dependency-drift-triage/index.html" target="_blank" rel="noreferrer">Open newest build</a>
+            <a href="./projects/state-compression-drill/index.html" target="_blank" rel="noreferrer">Open newest build</a>
           </div>
         </article>
       </section>
@@ -124,6 +124,19 @@
         <article class="project-card" data-category="systems tools games">
           <header>
             <p class="tag">New Systems Build</p>
+            <h3>State Compression Drill</h3>
+          </header>
+          <p>Select the five facts that survive a noisy incident handoff and score whether the next operator gets state, risk, impact, and next action.</p>
+          <p class="stack">HTML, CSS, JavaScript, Operations Writing Game</p>
+          <div class="card-actions">
+            <a href="./projects/state-compression-drill/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/state-compression-drill/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="systems tools games">
+          <header>
+            <p class="tag">Systems Build</p>
             <h3>Dependency Drift Triage</h3>
           </header>
           <p>Choose which stale packages to upgrade under a fixed release window while balancing CVE exposure, breakage risk, and user impact.</p>
@@ -657,6 +670,17 @@
           <p><strong>Writing shape:</strong> bad handoff anatomy -> constrained briefing packet -> operational consequences.</p>
           <p><strong>Sources to reference:</strong> postmortems, incident command guides, handoff literature, on-call runbooks.</p>
           <p><strong>Technical angle:</strong> constrained information design under ownership, risk, and next-step coverage requirements.</p>
+        </details>
+
+        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Write the compression rule examples around state, scope, risk, impact, and next action." data-related-link="./projects/state-compression-drill/index.html" data-related-label="State Compression Drill">
+          <summary>
+            <span class="entry-title">Incident Notes Are a Compression Problem</span>
+            <span class="entry-meta">Operations writing and handoff design</span>
+            <span class="entry-stage">Drafting</span>
+          </summary>
+          <p><strong>Writing shape:</strong> raw timeline overload -> five-role packet -> why missing state costs the next operator time.</p>
+          <p><strong>Sources to reference:</strong> postmortems, on-call handoff guides, cognitive load research, incident commander notes.</p>
+          <p><strong>Technical angle:</strong> information compression under role coverage, noise penalty, and actionability constraints.</p>
         </details>
 
         <details class="entry-row" data-topic="systems" data-stage="modeling" data-next="Turn the fetch races and duplicate-write examples into one narrative about product trust leaking through async edges." data-related-link="./projects/race-condition-lab/index.html" data-related-label="Race Condition Lab">
