@@ -16,6 +16,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Draft shelf summary cards for visible stages and topic mix.
 - Topic atlas cards that turn the draft shelf into lane-based navigation.
 - A linked-trails layer that bridges projects with the drafts already growing out of them.
+- Route composer that turns the current project filter into a build -> contrast -> draft path.
 - A real-life builds shelf for physical projects (3D prints, woodworking, robotics, homelab logs).
 - Fully static architecture for GitHub Pages.
 - Stage-aware draft shelf filters for planning the blog pipeline.
@@ -47,6 +48,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/race-condition-lab`
 - `projects/dependency-drift-triage`
 - `projects/state-compression-drill`
+- `projects/probe-budget-lab`
 
 ## Technical design
 
@@ -64,6 +66,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/race-condition-lab`: concurrency decision lab for request ordering, idempotency, mutexes, and autosave conflict handling.
 - `projects/dependency-drift-triage`: dependency maintenance triage game for choosing upgrades under security, compatibility, and release-window constraints.
 - `projects/state-compression-drill`: incident handoff writing game for compressing noisy operational state into a five-fact packet.
+- `projects/probe-budget-lab`: observability budgeting game about placing limited probes before an incident reveals what your telemetry can and cannot explain.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, linked build/draft trails, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.

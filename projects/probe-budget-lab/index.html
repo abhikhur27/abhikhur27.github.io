@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Probe Budget Lab</title>
+  <meta name="description" content="Static telemetry strategy game about placing a limited probe budget before an incident unfolds.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Telemetry Strategy Game</p>
+    <h1>Probe Budget Lab</h1>
+    <p class="lead">You only get three probes before the outage starts. Place them across the service graph, run the incident, and see whether your telemetry budget reveals the culprit and the right mitigation.</p>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Scenario</p>
+          <h2 id="scenario-title">Loading scenario</h2>
+        </div>
+        <p id="budget-pill" class="pill">0 / 3 probes</p>
+      </div>
+      <p id="scenario-context" class="context-copy"></p>
+      <div id="service-grid" class="service-grid" aria-label="Probe placement grid"></div>
+      <div class="button-row">
+        <button id="run-incident" class="primary-btn" type="button">Run Incident</button>
+        <button id="reset-probes" class="ghost-btn" type="button">Reset Probes</button>
+        <button id="next-scenario" class="ghost-btn" type="button">Next Scenario</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Observed Signals</p>
+          <h2>What your probes reveal</h2>
+        </div>
+        <p id="coverage-pill" class="pill">Coverage: 0%</p>
+      </div>
+      <div id="signal-list" class="signal-list"></div>
+      <p id="blind-spot-note" class="context-copy">Run the scenario to see which clues landed and which parts of the graph stayed dark.</p>
+    </section>
+
+    <section class="panel score-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Decision Layer</p>
+          <h2>Make the call</h2>
+        </div>
+        <button id="copy-brief" class="ghost-btn" type="button">Copy Run Brief</button>
+      </div>
+      <div class="decision-block">
+        <h3>Likely culprit</h3>
+        <div id="suspect-options" class="decision-options"></div>
+      </div>
+      <div class="decision-block">
+        <h3>Best next action</h3>
+        <div id="action-options" class="decision-options"></div>
+      </div>
+      <div class="score-grid">
+        <article><h3>Coverage</h3><p id="coverage-score">0%</p></article>
+        <article><h3>Diagnosis</h3><p id="diagnosis-score">Pending</p></article>
+        <article><h3>Action</h3><p id="action-score">Pending</p></article>
+        <article><h3>Confidence</h3><p id="confidence-score">Low</p></article>
+      </div>
+      <p id="score-summary" class="summary-copy">Pick probes, run the incident, then choose the culprit and the next operator move.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

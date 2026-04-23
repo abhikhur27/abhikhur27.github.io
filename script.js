@@ -8,6 +8,12 @@ const copyProjectViewBtn = document.getElementById('copy-project-view-btn');
 const spotlightTitle = document.getElementById('spotlight-title');
 const spotlightDescription = document.getElementById('spotlight-description');
 const spotlightActions = document.getElementById('spotlight-actions');
+const sessionRouteTitle = document.getElementById('session-route-title');
+const sessionRouteSummary = document.getElementById('session-route-summary');
+const sessionRouteStops = document.getElementById('session-route-stops');
+const sessionRouteOpen = document.getElementById('session-route-open');
+const sessionRouteDraft = document.getElementById('session-route-draft');
+const sessionRouteCopy = document.getElementById('session-route-copy');
 const revealItems = Array.from(document.querySelectorAll('.reveal'));
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
@@ -46,6 +52,7 @@ let activeFilter = 'all';
 let activeWritingTopic = 'all';
 let activeWritingStage = 'all';
 let currentWritingSpotlightEntry = null;
+let currentSessionRoute = null;
 let suppressUrlSync = false;
 
 function updateUrlState() {
@@ -98,6 +105,7 @@ function applyProjectFilters() {
   const query = (projectSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
   let firstVisible = null;
+  const visibleCards = [];
 
   cards.forEach((card) => {
     const categories = (card.dataset.category || '').split(' ');
@@ -107,6 +115,7 @@ function applyProjectFilters() {
     if (visible) {
       visibleCount += 1;
       if (!firstVisible) firstVisible = card;
+      visibleCards.push(card);
     }
     card.classList.toggle('hidden', !visible);
   });
@@ -120,6 +129,7 @@ function applyProjectFilters() {
   }
 
   updateSpotlight(firstVisible);
+  updateSessionRoute(visibleCards);
   updateUrlState();
 }
 
@@ -182,6 +192,109 @@ function updateSpotlight(card) {
   spotlightActions.innerHTML = Array.from(card.querySelectorAll('.card-actions a'))
     .map((link) => `<a href="${link.getAttribute('href')}" target="_blank" rel="noreferrer">${link.textContent}</a>`)
     .join('');
+}
+
+function normalizeComparablePath(rawHref) {
+  if (!rawHref) return '';
+  try {
+    return new URL(rawHref, window.location.href).pathname.replace(/\/index\.html$/, '/');
+  } catch (error) {
+    return '';
+  }
+}
+
+function findRelatedDraft(card) {
+  if (!card) return null;
+  const cardLinks = Array.from(card.querySelectorAll('.card-actions a'))
+    .map((link) => normalizeComparablePath(link.getAttribute('href')))
+    .filter(Boolean);
+
+  return (
+    writingEntries.find((entry) => {
+      const relatedPath = normalizeComparablePath(entry.dataset.relatedLink || '');
+      return relatedPath && cardLinks.includes(relatedPath);
+    }) || null
+  );
+}
+
+function buildSessionRouteBrief() {
+  if (!currentSessionRoute) {
+    return 'No route is currently available.';
+  }
+
+  return [
+    'Portfolio Route Composer',
+    '',
+    `Anchor build: ${currentSessionRoute.anchorTitle}`,
+    `Contrast build: ${currentSessionRoute.contrastTitle}`,
+    `Related draft: ${currentSessionRoute.draftTitle || 'None linked for this route'}`,
+    `Why this route: ${currentSessionRoute.summary}`,
+    `Open build: ${currentSessionRoute.anchorHref || window.location.href}`,
+    currentSessionRoute.draftHref ? `Open draft: ${currentSessionRoute.draftHref}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+}
+
+async function copySessionRoute() {
+  if (!sessionRouteStops) return;
+
+  try {
+    await navigator.clipboard.writeText(buildSessionRouteBrief());
+    sessionRouteStops.textContent = 'Copied the current route summary.';
+  } catch (error) {
+    sessionRouteStops.textContent = 'Clipboard copy failed for the current route summary.';
+  }
+}
+
+function updateSessionRoute(visibleCards) {
+  if (!sessionRouteTitle || !sessionRouteSummary || !sessionRouteStops || !sessionRouteOpen || !sessionRouteDraft) {
+    return;
+  }
+
+  if (!visibleCards.length) {
+    currentSessionRoute = null;
+    sessionRouteTitle.textContent = 'No route available for the current project filter.';
+    sessionRouteSummary.textContent = 'Broaden the project view so the composer can stitch together a build, a contrast, and a related draft.';
+    sessionRouteStops.textContent = 'Waiting for visible projects.';
+    sessionRouteOpen.classList.add('hidden');
+    sessionRouteDraft.classList.add('hidden');
+    return;
+  }
+
+  const anchor = visibleCards[0];
+  const contrast = visibleCards.find((card) => card !== anchor && card.dataset.category !== anchor.dataset.category) || visibleCards[1] || anchor;
+  const relatedDraft = findRelatedDraft(anchor);
+  const anchorTitle = anchor.querySelector('h3')?.textContent || 'Anchor build';
+  const contrastTitle = contrast.querySelector('h3')?.textContent || anchorTitle;
+  const anchorDescription = anchor.querySelector('p:not(.stack)')?.textContent || '';
+  const anchorHref = anchor.querySelector('.card-actions a')?.getAttribute('href') || window.location.href;
+  const draftHref = relatedDraft ? `${window.location.pathname}?draft=${relatedDraft.id}#writing` : '';
+
+  currentSessionRoute = {
+    anchorTitle,
+    contrastTitle,
+    draftTitle: relatedDraft?.querySelector('.entry-title')?.textContent || '',
+    summary: `Start with ${anchorTitle}, then contrast it with ${contrastTitle}${relatedDraft ? ' before opening the related draft.' : '.'}`,
+    anchorHref: new URL(anchorHref, window.location.href).href,
+    draftHref: draftHref ? new URL(draftHref, window.location.href).href : '',
+  };
+
+  sessionRouteTitle.textContent = `${anchorTitle} -> ${contrastTitle}`;
+  sessionRouteSummary.textContent = anchorDescription || 'Use this route to move from one concrete build into a useful contrast.';
+  sessionRouteStops.textContent = relatedDraft
+    ? `Stop 1: ${anchorTitle}. Stop 2: ${contrastTitle}. Stop 3: ${relatedDraft.querySelector('.entry-title')?.textContent || 'Related draft'}.`
+    : `Stop 1: ${anchorTitle}. Stop 2: ${contrastTitle}. No linked draft was found for the anchor build.`;
+
+  sessionRouteOpen.href = anchorHref;
+  sessionRouteOpen.classList.remove('hidden');
+
+  if (relatedDraft) {
+    sessionRouteDraft.href = draftHref;
+    sessionRouteDraft.classList.remove('hidden');
+  } else {
+    sessionRouteDraft.classList.add('hidden');
+  }
 }
 
 surpriseProjectBtn?.addEventListener('click', () => {
@@ -652,6 +765,7 @@ writingSpotlightOpen?.addEventListener('click', () => {
 });
 
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
+sessionRouteCopy?.addEventListener('click', copySessionRoute);
 copyWritingViewBtn?.addEventListener('click', () => copyCurrentView('drafts'));
 
 const observer = new IntersectionObserver(

@@ -112,15 +112,44 @@
         </article>
         <article class="route-card">
           <p class="tag">Route 03</p>
-          <h3>Compression Path</h3>
-          <p>Start by compressing incident state into a handoff packet, then move into dependency and failure triage.</p>
+          <h3>Instrumentation Path</h3>
+          <p>Start by placing probes under a hard telemetry budget, then move into dependency drift and failure triage.</p>
           <div class="card-actions">
-            <a href="./projects/state-compression-drill/index.html" target="_blank" rel="noreferrer">Open newest build</a>
+            <a href="./projects/probe-budget-lab/index.html" target="_blank" rel="noreferrer">Open newest build</a>
           </div>
         </article>
       </section>
 
+      <section class="project-spotlight" aria-live="polite">
+        <p class="eyebrow">Route Composer</p>
+        <div class="spotlight-shell">
+          <div>
+            <h3 id="session-route-title">Filter the project index to generate a guided route.</h3>
+            <p id="session-route-summary" class="section-copy">The portfolio will pair a build, a contrast project, and a related draft from the current view.</p>
+            <p id="session-route-stops" class="results-meta">Waiting for a visible route.</p>
+          </div>
+          <div class="card-actions spotlight-actions">
+            <a id="session-route-open" class="spotlight-btn hidden" href="#" target="_blank" rel="noreferrer">Open Anchor Build</a>
+            <a id="session-route-draft" class="spotlight-btn hidden" href="#">Open Related Draft</a>
+            <button id="session-route-copy" class="spotlight-btn" type="button">Copy Route Summary</button>
+          </div>
+        </div>
+      </section>
+
       <div class="project-grid">
+        <article class="project-card" data-category="systems tools visualization games">
+          <header>
+            <p class="tag">New Systems Build</p>
+            <h3>Probe Budget Lab</h3>
+          </header>
+          <p>Place a limited set of probes across a service graph, run an incident, and see whether your telemetry budget actually exposes the culprit and the right mitigation.</p>
+          <p class="stack">HTML, CSS, JavaScript, Telemetry Strategy Game</p>
+          <div class="card-actions">
+            <a href="./projects/probe-budget-lab/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/probe-budget-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="systems tools games">
           <header>
             <p class="tag">New Systems Build</p>
@@ -681,6 +710,17 @@
           <p><strong>Writing shape:</strong> raw timeline overload -> five-role packet -> why missing state costs the next operator time.</p>
           <p><strong>Sources to reference:</strong> postmortems, on-call handoff guides, cognitive load research, incident commander notes.</p>
           <p><strong>Technical angle:</strong> information compression under role coverage, noise penalty, and actionability constraints.</p>
+        </details>
+
+        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the probe-placement misses into a short argument about observability budgets, blind spots, and operator confidence." data-related-link="./projects/probe-budget-lab/index.html" data-related-label="Probe Budget Lab">
+          <summary>
+            <span class="entry-title">Observability Fails When Telemetry Is Cheap to Add but Expensive to Read</span>
+            <span class="entry-meta">Instrumentation strategy and debugging posture</span>
+            <span class="entry-stage">Drafting</span>
+          </summary>
+          <p><strong>Writing shape:</strong> probe budget setup -> missing clue consequences -> why more dashboards do not automatically improve diagnosis.</p>
+          <p><strong>Sources to reference:</strong> incident response writeups, observability guides, SRE practice notes, debugging literature.</p>
+          <p><strong>Technical angle:</strong> signal placement under limited operator attention, confidence, and mitigation-readiness constraints.</p>
         </details>
 
         <details class="entry-row" data-topic="systems" data-stage="modeling" data-next="Turn the fetch races and duplicate-write examples into one narrative about product trust leaking through async edges." data-related-link="./projects/race-condition-lab/index.html" data-related-label="Race Condition Lab">
