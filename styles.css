@@ -183,6 +183,49 @@ h1 {
   font-size: 0.88rem;
 }
 
+.launch-window {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+.launch-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(18, 24, 38, 0.98), rgba(11, 15, 24, 0.98));
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.launch-card h2 {
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  margin-top: 0.35rem;
+}
+
+.launch-meta {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.launch-meta span {
+  border: 1px solid rgba(130, 143, 173, 0.2);
+  border-radius: 999px;
+  padding: 0.28rem 0.55rem;
+  color: #d7e0f1;
+  font-size: 0.78rem;
+}
+
+.launch-list {
+  margin: 0.9rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  display: grid;
+  gap: 0.4rem;
+}
+
 .sparkline {
   margin-top: 0.5rem;
   display: grid;
@@ -690,6 +733,10 @@ main > section + section {
   }
 
   .hero-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .launch-window {
     grid-template-columns: 1fr;
   }
 

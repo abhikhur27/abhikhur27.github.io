@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Focus Lease Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to portfolio</a>
+    <p class="eyebrow">Interruption Strategy Game</p>
+    <h1>Focus Lease Simulator</h1>
+    <p class="lead">Protect a finite block of deep work as real-life interruptions arrive. Every choice leaks something: momentum, goodwill, or future debt.</p>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel board">
+      <div class="board-head">
+        <div>
+          <p class="eyebrow">Current Block</p>
+          <h2 id="block-label">Block 1 / 8</h2>
+        </div>
+        <button id="restart-btn" type="button">Restart Day</button>
+      </div>
+
+      <div class="stats">
+        <article><span>Focus</span><strong id="focus-score">58</strong></article>
+        <article><span>Energy</span><strong id="energy-score">72</strong></article>
+        <article><span>Debt</span><strong id="debt-score">12</strong></article>
+        <article><span>Deep Work</span><strong id="deep-work-score">0</strong></article>
+      </div>
+
+      <article class="event-card">
+        <p class="eyebrow">Incoming Pressure</p>
+        <h3 id="event-title">Slack ping during warm-up</h3>
+        <p id="event-copy">A teammate wants a quick answer before they move on. It is small, but it lands exactly when you were starting to settle in.</p>
+        <div class="event-meta">
+          <span id="event-urgency">Urgency: 18</span>
+          <span id="event-cost">Residue hit: 8</span>
+        </div>
+      </article>
+
+      <div class="actions">
+        <button id="accept-btn" type="button">Accept Now</button>
+        <button id="defer-btn" type="button">Defer</button>
+        <button id="protect-btn" class="primary" type="button">Protect Focus</button>
+      </div>
+
+      <div class="summary-panel">
+        <p class="eyebrow">Day Readout</p>
+        <p id="summary-text">Protect streaks to lease longer focus blocks. If debt spikes, later blocks get noisier.</p>
+      </div>
+    </section>
+
+    <aside class="panel sidebar">
+      <section>
+        <p class="eyebrow">Milestones</p>
+        <ul id="milestone-list" class="milestone-list"></ul>
+      </section>
+
+      <section>
+        <p class="eyebrow">Decision Log</p>
+        <div id="log" class="log"></div>
+      </section>
+
+      <section>
+        <p class="eyebrow">Brief</p>
+        <button id="copy-brief-btn" type="button">Copy Day Brief</button>
+        <p id="brief-status" class="brief-status">Finish a run to generate a reusable summary.</p>
+      </section>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

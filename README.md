@@ -49,6 +49,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/dependency-drift-triage`
 - `projects/state-compression-drill`
 - `projects/probe-budget-lab`
+- `projects/focus-lease-simulator`
 
 ## Technical design
 
@@ -67,8 +68,10 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/dependency-drift-triage`: dependency maintenance triage game for choosing upgrades under security, compatibility, and release-window constraints.
 - `projects/state-compression-drill`: incident handoff writing game for compressing noisy operational state into a five-fact packet.
 - `projects/probe-budget-lab`: observability budgeting game about placing limited probes before an incident reveals what your telemetry can and cannot explain.
+- `projects/focus-lease-simulator`: interruption-management game about leasing deep-work blocks while pressure, debt, and context-switch residue build over a day.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, linked build/draft trails, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
+- Homepage launch window: a direct bridge between the newest build and the blog lanes it should turn into writing.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 
 ```mermaid
