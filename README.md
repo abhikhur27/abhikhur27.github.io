@@ -22,6 +22,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Stage-aware draft shelf filters for planning the blog pipeline.
 - Shareable project and draft-shelf view links so filtered homepage states can be sent directly.
 - Draft dashboard pipeline cards that surface the fastest lane and most-linked build in the current writing view.
+- Visitor quick-start modes that turn the homepage into an intent-based project router.
 
 ## Included subprojects in this repo
 
@@ -50,6 +51,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/state-compression-drill`
 - `projects/probe-budget-lab`
 - `projects/focus-lease-simulator`
+- `projects/assumption-ledger-lab`
 
 ## Technical design
 

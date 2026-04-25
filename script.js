@@ -5,6 +5,7 @@ const projectResultsMeta = document.getElementById('project-results-meta');
 const projectEmptyState = document.getElementById('project-empty-state');
 const surpriseProjectBtn = document.getElementById('surprise-project-btn');
 const copyProjectViewBtn = document.getElementById('copy-project-view-btn');
+const visitorModeButtons = Array.from(document.querySelectorAll('.visitor-mode-btn'));
 const spotlightTitle = document.getElementById('spotlight-title');
 const spotlightDescription = document.getElementById('spotlight-description');
 const spotlightActions = document.getElementById('spotlight-actions');
@@ -172,6 +173,20 @@ projectFilterButtons.forEach((button) => {
 if (projectSearchInput) {
   projectSearchInput.addEventListener('input', applyProjectFilters);
 }
+
+visitorModeButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    activeFilter = button.dataset.modeFilter || 'all';
+    projectFilterButtons.forEach((item) => {
+      item.classList.toggle('active', (item.dataset.filter || 'all') === activeFilter);
+    });
+    if (projectSearchInput) {
+      projectSearchInput.value = button.dataset.modeQuery || '';
+    }
+    applyProjectFilters();
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
 
 function updateSpotlight(card) {
   cards.forEach((item) => item.classList.toggle('spotlighted', item === card));

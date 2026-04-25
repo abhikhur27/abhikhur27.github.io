@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assumption Ledger Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <a class="back-link" href="../../index.html">Back to portfolio</a>
+    <p class="eyebrow">Weird Tool / Release Strategy Game</p>
+    <h1>Assumption Ledger Lab</h1>
+    <p class="lede">Run a five-day release by deciding which assumptions to validate, which to guardrail, and which to trust before quiet drift turns into incident debt.</p>
+  </header>
+
+  <main class="shell">
+    <section class="panel controls">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Scenario</p>
+          <h2 id="scenario-title">Payments cutover</h2>
+        </div>
+        <select id="scenario-select" aria-label="Scenario">
+          <option value="payments">Payments cutover</option>
+          <option value="campus">Campus login surge</option>
+          <option value="robotics">Field robotics rollout</option>
+        </select>
+      </div>
+      <p id="scenario-copy" class="body-copy"></p>
+      <div class="button-row">
+        <button id="end-day-btn" class="primary" type="button">Close Day</button>
+        <button id="reset-btn" type="button">Reset Scenario</button>
+      </div>
+      <div id="coach-card" class="coach-card"></div>
+      <div id="event-log" class="event-log"></div>
+    </section>
+
+    <section class="panel board">
+      <div class="score-grid">
+        <article><span>Day</span><strong id="day-label">1 / 5</strong></article>
+        <article><span>Hours Left</span><strong id="hours-label">6</strong></article>
+        <article><span>Release Trust</span><strong id="trust-label">72</strong></article>
+        <article><span>Delivery Pace</span><strong id="velocity-label">100</strong></article>
+        <article><span>Incident Debt</span><strong id="risk-label">18</strong></article>
+      </div>
+
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Ledger</p>
+          <h2>Assumptions under pressure</h2>
+        </div>
+        <p id="priority-label" class="priority-label"></p>
+      </div>
+
+      <div id="ledger-grid" class="ledger-grid"></div>
+    </section>
+
+    <section class="panel report">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Release Read</p>
+          <h2>Why this week is bending</h2>
+        </div>
+      </div>
+      <div id="report-card" class="report-card"></div>
+      <div id="final-card" class="final-card hidden"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

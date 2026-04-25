@@ -190,6 +190,34 @@ h1 {
   margin-top: 0.2rem;
 }
 
+.visitor-modes {
+  margin-top: 2rem;
+}
+
+.visitor-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.visitor-mode-btn {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  padding: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.visitor-mode-btn:hover,
+.visitor-mode-btn:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .launch-card {
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -740,6 +768,10 @@ main > section + section {
     grid-template-columns: 1fr;
   }
 
+  .visitor-mode-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .spotlight-shell {
     grid-template-columns: 1fr;
   }
@@ -753,6 +785,10 @@ main > section + section {
   }
 
   .topic-atlas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .visitor-mode-grid {
     grid-template-columns: 1fr;
   }
 
