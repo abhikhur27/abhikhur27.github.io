@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error Budget Broker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <p class="eyebrow">Reliability Strategy Game</p>
+      <h1>Error Budget Broker</h1>
+      <p class="lede">Run a five-day release week by spending a finite error budget on the right asks before trust, growth, and incident pressure pull the org in different directions.</p>
+      <div class="hero-actions">
+        <button id="reset-btn" class="primary" type="button">Restart Week</button>
+        <button id="copy-brief-btn" type="button">Copy Week Brief</button>
+      </div>
+      <p id="status" class="status" aria-live="polite">Day 1. Choose one request to fund.</p>
+    </header>
+
+    <section class="dashboard">
+      <article class="stat-card">
+        <span>Error budget left</span>
+        <strong id="budget-value">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>Trust</span>
+        <strong id="trust-value">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>Growth shipped</span>
+        <strong id="growth-value">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>Ops strain</span>
+        <strong id="strain-value">0</strong>
+      </article>
+    </section>
+
+    <section class="board">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Incoming Queue</p>
+            <h2 id="day-title">Day 1 Requests</h2>
+          </div>
+          <p id="day-meta" class="meta">Spend one slot. Deferred work compounds.</p>
+        </div>
+        <div id="request-list" class="request-list"></div>
+      </div>
+
+      <div class="stack">
+        <section class="panel">
+          <p class="eyebrow">Broker Cue</p>
+          <h2 id="brief-title">Open the week with a defensible trade.</h2>
+          <p id="brief-summary" class="meta">You are balancing growth asks, trust protection, and the cost of running too close to zero headroom.</p>
+          <ul id="brief-points" class="brief-list"></ul>
+        </section>
+
+        <section class="panel">
+          <p class="eyebrow">Consequence Tape</p>
+          <div id="event-log" class="event-log"></div>
+        </section>
+
+        <section class="panel">
+          <p class="eyebrow">Week Verdict</p>
+          <div id="verdict" class="verdict">Finish the week to generate a final operating read.</div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

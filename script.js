@@ -15,6 +15,12 @@ const sessionRouteStops = document.getElementById('session-route-stops');
 const sessionRouteOpen = document.getElementById('session-route-open');
 const sessionRouteDraft = document.getElementById('session-route-draft');
 const sessionRouteCopy = document.getElementById('session-route-copy');
+const compareTitle = document.getElementById('compare-title');
+const compareSummary = document.getElementById('compare-summary');
+const compareMeta = document.getElementById('compare-meta');
+const compareList = document.getElementById('compare-list');
+const compareCopy = document.getElementById('compare-copy');
+const compareClear = document.getElementById('compare-clear');
 const revealItems = Array.from(document.querySelectorAll('.reveal'));
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
@@ -54,6 +60,7 @@ let activeWritingTopic = 'all';
 let activeWritingStage = 'all';
 let currentWritingSpotlightEntry = null;
 let currentSessionRoute = null;
+let pinnedProjectCards = [];
 let suppressUrlSync = false;
 
 function updateUrlState() {
@@ -68,6 +75,18 @@ function updateUrlState() {
 
   if (projectQuery) params.set('projectSearch', projectQuery);
   else params.delete('projectSearch');
+
+  if (pinnedProjectCards.length) {
+    params.set(
+      'compare',
+      pinnedProjectCards
+        .map((card) => card.querySelector('.card-actions a')?.getAttribute('href') || '')
+        .filter(Boolean)
+        .join('|')
+    );
+  } else {
+    params.delete('compare');
+  }
 
   if (activeWritingTopic !== 'all') params.set('writingTopic', activeWritingTopic);
   else params.delete('writingTopic');
@@ -131,6 +150,7 @@ function applyProjectFilters() {
 
   updateSpotlight(firstVisible);
   updateSessionRoute(visibleCards);
+  renderCompareTray();
   updateUrlState();
 }
 
@@ -170,6 +190,18 @@ projectFilterButtons.forEach((button) => {
   });
 });
 
+cards.forEach((card) => {
+  const actions = card.querySelector('.card-actions');
+  if (!actions) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'compare-pin-btn';
+  button.textContent = 'Pin to Compare';
+  button.setAttribute('aria-pressed', 'false');
+  button.addEventListener('click', () => togglePinnedCard(card));
+  actions.appendChild(button);
+});
+
 if (projectSearchInput) {
   projectSearchInput.addEventListener('input', applyProjectFilters);
 }
@@ -207,6 +239,102 @@ function updateSpotlight(card) {
   spotlightActions.innerHTML = Array.from(card.querySelectorAll('.card-actions a'))
     .map((link) => `<a href="${link.getAttribute('href')}" target="_blank" rel="noreferrer">${link.textContent}</a>`)
     .join('');
+}
+
+function getCardComparableId(card) {
+  return normalizeComparablePath(card?.querySelector('.card-actions a')?.getAttribute('href') || '');
+}
+
+function syncCompareButtons() {
+  cards.forEach((card) => {
+    const button = card.querySelector('.compare-pin-btn');
+    if (!button) return;
+    const isPinned = pinnedProjectCards.includes(card);
+    button.classList.toggle('is-active', isPinned);
+    button.textContent = isPinned ? 'Pinned' : 'Pin to Compare';
+    button.setAttribute('aria-pressed', String(isPinned));
+  });
+}
+
+function buildCompareBrief() {
+  if (!pinnedProjectCards.length) {
+    return 'No projects pinned yet.';
+  }
+
+  return [
+    'Portfolio Compare Brief',
+    '',
+    ...pinnedProjectCards.map((card, index) => {
+      const title = card.querySelector('h3')?.textContent || `Project ${index + 1}`;
+      const description = card.querySelector('p:not(.stack)')?.textContent || '';
+      const stack = card.querySelector('.stack')?.textContent || '';
+      const liveLink = new URL(card.querySelector('.card-actions a')?.getAttribute('href') || window.location.href, window.location.href).href;
+      return `${index + 1}. ${title}\n   ${description}\n   Stack: ${stack}\n   Link: ${liveLink}`;
+    }),
+    '',
+    `Through-line: ${compareSummary?.textContent || 'Use these builds as a contrast set.'}`,
+  ].join('\n');
+}
+
+function renderCompareTray() {
+  syncCompareButtons();
+
+  if (!compareTitle || !compareSummary || !compareMeta || !compareList) {
+    return;
+  }
+
+  if (!pinnedProjectCards.length) {
+    compareTitle.textContent = 'Pin up to three projects to build a sharper portfolio story.';
+    compareSummary.textContent = 'Use the pin buttons on project cards to stage a side-by-side pitch around systems, tooling, or game design.';
+    compareMeta.textContent = 'No projects pinned yet.';
+    compareList.innerHTML = '';
+    return;
+  }
+
+  const titles = pinnedProjectCards.map((card) => card.querySelector('h3')?.textContent || 'Project');
+  const categorySet = new Set(
+    pinnedProjectCards.flatMap((card) => (card.dataset.category || '').split(' ').filter(Boolean))
+  );
+  const opener = pinnedProjectCards[0];
+  const openerDescription = opener.querySelector('p:not(.stack)')?.textContent || '';
+
+  compareTitle.textContent = titles.length === 1 ? titles[0] : `${titles[0]} -> ${titles[titles.length - 1]}`;
+  compareSummary.textContent = `${openerDescription} Together these builds show a portfolio lane around ${[...categorySet].slice(0, 4).join(', ') || 'interactive systems work'} with different mechanics and stakes.`;
+  compareMeta.textContent = `${titles.length} pinned project${titles.length === 1 ? '' : 's'} | Best use: walk one anchor build, one contrast build, then the most surprising mechanic.`;
+  compareList.innerHTML = pinnedProjectCards
+    .map((card, index) => {
+      const title = card.querySelector('h3')?.textContent || `Project ${index + 1}`;
+      const description = card.querySelector('p:not(.stack)')?.textContent || '';
+      const links = Array.from(card.querySelectorAll('.card-actions a'))
+        .map((link) => `<a href="${link.getAttribute('href')}" target="_blank" rel="noreferrer">${link.textContent}</a>`)
+        .join('');
+      return `
+        <article class="compare-card">
+          <p class="tag">Pinned ${index + 1}</p>
+          <h3>${title}</h3>
+          <p class="section-copy">${description}</p>
+          <div class="card-actions">${links}</div>
+        </article>
+      `;
+    })
+    .join('');
+}
+
+function togglePinnedCard(card) {
+  const existingIndex = pinnedProjectCards.indexOf(card);
+  if (existingIndex >= 0) {
+    pinnedProjectCards.splice(existingIndex, 1);
+    renderCompareTray();
+    updateUrlState();
+    return;
+  }
+
+  if (pinnedProjectCards.length >= 3) {
+    pinnedProjectCards.shift();
+  }
+  pinnedProjectCards.push(card);
+  renderCompareTray();
+  updateUrlState();
 }
 
 function normalizeComparablePath(rawHref) {
@@ -782,6 +910,19 @@ writingSpotlightOpen?.addEventListener('click', () => {
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
 sessionRouteCopy?.addEventListener('click', copySessionRoute);
 copyWritingViewBtn?.addEventListener('click', () => copyCurrentView('drafts'));
+compareCopy?.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(buildCompareBrief());
+    if (compareMeta) compareMeta.textContent = 'Copied the current compare brief.';
+  } catch (error) {
+    if (compareMeta) compareMeta.textContent = 'Clipboard copy failed for the compare brief.';
+  }
+});
+compareClear?.addEventListener('click', () => {
+  pinnedProjectCards = [];
+  renderCompareTray();
+  updateUrlState();
+});
 
 const observer = new IntersectionObserver(
   (entries) => {
@@ -1063,6 +1204,15 @@ function hydrateFiltersFromUrl() {
     writingSearchInput.value = writingSearch;
   }
 
+  const compareParam = params.get('compare');
+  if (compareParam) {
+    const comparableIds = compareParam
+      .split('|')
+      .map((item) => normalizeComparablePath(item))
+      .filter(Boolean);
+    pinnedProjectCards = cards.filter((card) => comparableIds.includes(getCardComparableId(card))).slice(0, 3);
+  }
+
   suppressUrlSync = false;
 }
 
@@ -1071,6 +1221,7 @@ updatePortfolioCounts();
 applyProjectFilters();
 applyWritingFilters();
 renderBuildTrails();
+renderCompareTray();
 loadGithubPulse();
 
 const draftParam = new URLSearchParams(window.location.search).get('draft');

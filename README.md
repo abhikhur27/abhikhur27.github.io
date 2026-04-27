@@ -23,6 +23,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Shareable project and draft-shelf view links so filtered homepage states can be sent directly.
 - Draft dashboard pipeline cards that surface the fastest lane and most-linked build in the current writing view.
 - Visitor quick-start modes that turn the homepage into an intent-based project router.
+- Project compare tray that pins up to three builds and turns them into a copyable side-by-side pitch.
 
 ## Included subprojects in this repo
 
@@ -52,6 +53,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/probe-budget-lab`
 - `projects/focus-lease-simulator`
 - `projects/assumption-ledger-lab`
+- `projects/error-budget-broker`
 
 ## Technical design
 
@@ -71,6 +73,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/state-compression-drill`: incident handoff writing game for compressing noisy operational state into a five-fact packet.
 - `projects/probe-budget-lab`: observability budgeting game about placing limited probes before an incident reveals what your telemetry can and cannot explain.
 - `projects/focus-lease-simulator`: interruption-management game about leasing deep-work blocks while pressure, debt, and context-switch residue build over a day.
+- `projects/error-budget-broker`: release-week reliability game about spending a finite error budget across growth, trust, and operator pressure.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, linked build/draft trails, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
 - Homepage launch window: a direct bridge between the newest build and the blog lanes it should turn into writing.
