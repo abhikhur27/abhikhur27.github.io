@@ -11,6 +11,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Dark "digital spaces" visual language.
 - Project directory with category filtering.
 - Blog-style expandable writing shelf for draft essays.
+- Build-to-blog bridge board that surfaces the projects with the strongest visible writing momentum.
 - Writing queue board that keeps the next three closest-to-shipping drafts visible.
 - Shipping board that ranks visible drafts by how close they are to becoming full posts.
 - Draft shelf summary cards for visible stages and topic mix.
@@ -53,6 +54,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/probe-budget-lab`
 - `projects/focus-lease-simulator`
 - `projects/assumption-ledger-lab`
+- `projects/retry-storm-studio`
 - `projects/error-budget-broker`
 
 ## Technical design
@@ -74,8 +76,9 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/probe-budget-lab`: observability budgeting game about placing limited probes before an incident reveals what your telemetry can and cannot explain.
 - `projects/focus-lease-simulator`: interruption-management game about leasing deep-work blocks while pressure, debt, and context-switch residue build over a day.
 - `projects/error-budget-broker`: release-week reliability game about spending a finite error budget across growth, trust, and operator pressure.
+- `projects/retry-storm-studio`: retry amplification sandbox for tuning retries, jitter, overlap, fanout, and idempotency before failures turn into self-inflicted load storms.
 - `styles.css`: shared ink-style design system.
-- `script.js`: project filters, result-count feedback, linked build/draft trails, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
+- `script.js`: project filters, result-count feedback, linked build/draft trails, build-to-blog bridge board, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
 - Homepage launch window: a direct bridge between the newest build and the blog lanes it should turn into writing.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 

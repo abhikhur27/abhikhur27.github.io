@@ -38,6 +38,7 @@ const draftTopicSummary = document.getElementById('draft-topic-summary');
 const draftPipelineBrief = document.getElementById('draft-pipeline-brief');
 const draftLinkedBuild = document.getElementById('draft-linked-build');
 const writingTopicAtlas = document.getElementById('writing-topic-atlas');
+const buildBridgeList = document.getElementById('build-bridge-list');
 const writingQueueList = document.getElementById('writing-queue-list');
 const writingShippingBoard = document.getElementById('writing-shipping-board');
 const trailList = document.getElementById('trail-list');
@@ -576,6 +577,84 @@ function renderBuildTrails() {
     .join('');
 }
 
+function renderBuildBridgeBoard(entries) {
+  if (!buildBridgeList) {
+    return;
+  }
+
+  const grouped = new Map();
+  entries.forEach((entry) => {
+    const link = entry.dataset.relatedLink;
+    if (!link) return;
+    if (!grouped.has(link)) {
+      grouped.set(link, {
+        link,
+        label: entry.dataset.relatedLabel || entry.querySelector('.entry-title')?.textContent || 'Related build',
+        entries: [],
+      });
+    }
+    grouped.get(link).entries.push(entry);
+  });
+
+  const bridges = [...grouped.values()]
+    .sort((a, b) => {
+      const countDelta = b.entries.length - a.entries.length;
+      if (countDelta !== 0) return countDelta;
+      const aBest = Math.min(...a.entries.map((entry) => stagePriority(entry.dataset.stage)));
+      const bBest = Math.min(...b.entries.map((entry) => stagePriority(entry.dataset.stage)));
+      return aBest - bBest || a.label.localeCompare(b.label);
+    })
+    .slice(0, 3);
+
+  if (!bridges.length) {
+    buildBridgeList.innerHTML = `
+      <article class="trail-card">
+        <p class="tag">Bridge Waiting</p>
+        <h3>No visible build-to-draft bridges yet.</h3>
+        <p class="section-copy">Broaden the writing filters to surface projects that already have draft momentum behind them.</p>
+      </article>
+    `;
+    return;
+  }
+
+  buildBridgeList.innerHTML = bridges
+    .map((bridge) => {
+      const orderedEntries = [...bridge.entries].sort((a, b) => {
+        const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
+        if (stageDelta !== 0) return stageDelta;
+        return (a.querySelector('.entry-title')?.textContent || '').localeCompare(
+          b.querySelector('.entry-title')?.textContent || ''
+        );
+      });
+      const nextEntry = orderedEntries[0];
+      const nextTitle = nextEntry?.querySelector('.entry-title')?.textContent || 'Related draft';
+      const nextStage = formatStageLabel(nextEntry?.dataset.stage);
+      return `
+        <article class="trail-card">
+          <p class="tag">${bridge.entries.length} linked draft${bridge.entries.length === 1 ? '' : 's'}</p>
+          <h3>${bridge.label}</h3>
+          <p class="section-copy">Best next writing move: ${nextTitle}.</p>
+          <p class="results-meta">${nextStage} lane | ${nextEntry?.dataset.next || 'Open the draft and define the next milestone.'}</p>
+          <div class="card-actions">
+            <a class="spotlight-btn" href="${bridge.link}" target="_blank" rel="noreferrer">Open Build</a>
+            <button class="spotlight-btn bridge-open-btn" type="button" data-entry-id="${nextEntry?.id || ''}">Open Draft</button>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+
+  buildBridgeList.querySelectorAll('.bridge-open-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const target = writingEntries.find((entry) => entry.id === button.dataset.entryId);
+      if (!target) return;
+      target.open = true;
+      updateWritingSpotlight(target);
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+}
+
 function renderWritingQueue(entries) {
   if (!writingQueueList) {
     return;
@@ -847,6 +926,7 @@ function applyWritingFilters() {
 
   renderTopicAtlas(topicCounts, visibleEntries);
   renderWritingPipelineBrief(visibleEntries);
+  renderBuildBridgeBoard(visibleEntries);
   renderWritingQueue(visibleEntries);
   renderShippingBoard(visibleEntries);
   updateWritingSpotlight(firstVisible);

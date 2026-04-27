@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retry Storm Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Resilience Modeling</p>
+    <h1>Retry Storm Studio</h1>
+    <p class="lede">Model whether retries are saving the user journey or quietly multiplying load, duplicate writes, and operator pain.</p>
+    <div class="hero-actions">
+      <button class="preset-btn" data-preset="login" type="button">Login Spike</button>
+      <button class="preset-btn" data-preset="mobile" type="button">Mobile Reconnect</button>
+      <button class="preset-btn" data-preset="payments" type="button">Payment Timeout</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel controls">
+      <h2>Storm Inputs</h2>
+      <label>Concurrent requests <span id="requests-value">600</span><input id="requests" type="range" min="100" max="2000" step="50" value="600"></label>
+      <label>Base failure rate <span id="failure-value">24%</span><input id="failure-rate" type="range" min="0" max="80" step="1" value="24"></label>
+      <label>Retry count <span id="retries-value">2</span><input id="retry-count" type="range" min="0" max="5" step="1" value="2"></label>
+      <label>Timeout overlap <span id="overlap-value">45%</span><input id="timeout-overlap" type="range" min="0" max="100" step="5" value="45"></label>
+      <label>Downstream fanout <span id="fanout-value">2 hops</span><input id="fanout" type="range" min="1" max="5" step="1" value="2"></label>
+      <label>Jitter coverage <span id="jitter-value">35%</span><input id="jitter" type="range" min="0" max="100" step="5" value="35"></label>
+      <label>Idempotency coverage <span id="idempotency-value">40%</span><input id="idempotency" type="range" min="0" max="100" step="5" value="40"></label>
+      <label>Circuit breaker confidence <span id="breaker-value">55%</span><input id="breaker" type="range" min="0" max="100" step="5" value="55"></label>
+      <div class="button-row">
+        <button id="copy-report" type="button">Copy Report</button>
+        <button id="copy-link" type="button">Copy Share Link</button>
+      </div>
+      <p id="status" class="status">Tune the storm inputs to see whether retries are helping or amplifying harm.</p>
+    </section>
+
+    <section class="panel dashboard">
+      <div class="stat-grid">
+        <article><h3>Expected Attempts</h3><p id="expected-attempts">-</p></article>
+        <article><h3>Peak Load</h3><p id="peak-load">-</p></article>
+        <article><h3>Duplicate Write Risk</h3><p id="duplicate-risk">-</p></article>
+        <article><h3>Storm Score</h3><p id="storm-score">-</p></article>
+      </div>
+
+      <div class="note" id="storm-summary"></div>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Control Stack</h3>
+          <div id="control-stack"></div>
+        </article>
+        <article class="card">
+          <h3>Operator Read</h3>
+          <div id="operator-read"></div>
+        </article>
+        <article class="card">
+          <h3>Action Plan</h3>
+          <div id="action-plan"></div>
+        </article>
+        <article class="card">
+          <h3>Failure Walkthrough</h3>
+          <div id="failure-walkthrough"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
