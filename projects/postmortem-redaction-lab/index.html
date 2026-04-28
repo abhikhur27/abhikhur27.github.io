@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postmortem Redaction Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="../../index.html" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <h1>Postmortem Redaction Lab</h1>
+    <p>Split incident facts between a public postmortem and an internal follow-up, then see what your disclosure posture costs or protects.</p>
+    <section class="demo-strip" aria-label="Suggested portfolio demo path">
+      <strong>Demo path:</strong>
+      <span>Pick a scenario -> build a public note and internal addendum -> publish -> inspect the trust vs learning tradeoff.</span>
+    </section>
+  </header>
+
+  <main class="container layout">
+    <section class="panel controls-panel">
+      <div class="panel-head">
+        <div>
+          <h2>Scenario Control</h2>
+          <p class="section-copy">You are deciding what gets said outside the company and what stays in the operator packet.</p>
+        </div>
+        <button id="surprise-btn" type="button">Surprise Scenario</button>
+      </div>
+
+      <label for="scenario-select">Incident scenario</label>
+      <select id="scenario-select"></select>
+
+      <div class="button-row">
+        <button id="reset-btn" type="button">Reset Choices</button>
+        <button id="publish-btn" class="primary" type="button">Publish Postmortem</button>
+        <button id="copy-brief-btn" type="button">Copy Disclosure Brief</button>
+      </div>
+
+      <p id="status" class="status" aria-live="polite">Choose a scenario to start the disclosure pass.</p>
+
+      <section class="scenario-brief">
+        <h3 id="scenario-title">Scenario</h3>
+        <p id="scenario-summary" class="section-copy">Select a scenario to load incident facts.</p>
+        <div id="scenario-pressure" class="chip-row"></div>
+      </section>
+
+      <section class="score-grid" aria-label="Outcome metrics">
+        <article>
+          <h3>Public Trust</h3>
+          <p id="trust-score">0</p>
+        </article>
+        <article>
+          <h3>Internal Learning</h3>
+          <p id="learning-score">0</p>
+        </article>
+        <article>
+          <h3>Legal Exposure</h3>
+          <p id="risk-score">0</p>
+        </article>
+        <article>
+          <h3>Coverage</h3>
+          <p id="coverage-score">0</p>
+        </article>
+      </section>
+
+      <section class="diagnostic-card">
+        <h3>Disclosure Coach</h3>
+        <p id="coach-summary" class="section-copy">Balanced postmortems name customer impact, mitigation, and next safeguards without turning into a denial memo.</p>
+      </section>
+
+      <section class="diagnostic-card">
+        <h3>Scorecard</h3>
+        <ul id="scorecard-list" class="bullet-list"></ul>
+      </section>
+    </section>
+
+    <section class="panel workspace-panel">
+      <div class="workspace-grid">
+        <section>
+          <div class="panel-head">
+            <div>
+              <h2>Fact Bank</h2>
+              <p class="section-copy">Each fact moves trust, learning, and exposure differently depending on where you place it.</p>
+            </div>
+            <p id="fact-bank-meta" class="results-meta">0 facts loaded.</p>
+          </div>
+          <div id="fact-bank" class="fact-bank"></div>
+        </section>
+
+        <section>
+          <div class="panel-head">
+            <div>
+              <h2>Public Postmortem</h2>
+              <p class="section-copy">Max 5 facts. Customers need impact, explanation, mitigation, and what changes next.</p>
+            </div>
+            <p id="public-meta" class="results-meta">0 / 5 selected</p>
+          </div>
+          <div id="public-list" class="selection-list"></div>
+        </section>
+
+        <section>
+          <div class="panel-head">
+            <div>
+              <h2>Internal Follow-Up</h2>
+              <p class="section-copy">Max 4 facts. This is where root cause detail, ownership, and corrective depth belong.</p>
+            </div>
+            <p id="internal-meta" class="results-meta">0 / 4 selected</p>
+          </div>
+          <div id="internal-list" class="selection-list"></div>
+        </section>
+      </div>
+
+      <section class="diagnostic-card outcome-card" aria-live="polite">
+        <h2>Outcome Read</h2>
+        <p id="outcome-summary" class="section-copy">Publish the postmortem to read how your disclosure posture lands.</p>
+        <div id="outcome-tags" class="chip-row"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

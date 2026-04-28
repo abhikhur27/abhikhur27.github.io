@@ -40,6 +40,7 @@ const draftLinkedBuild = document.getElementById('draft-linked-build');
 const writingTopicAtlas = document.getElementById('writing-topic-atlas');
 const buildBridgeList = document.getElementById('build-bridge-list');
 const writingQueueList = document.getElementById('writing-queue-list');
+const writingActionsList = document.getElementById('writing-actions-list');
 const writingShippingBoard = document.getElementById('writing-shipping-board');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
@@ -716,6 +717,64 @@ function renderWritingQueue(entries) {
   });
 }
 
+function renderWritingActions(entries) {
+  if (!writingActionsList) {
+    return;
+  }
+
+  if (!entries.length) {
+    writingActionsList.innerHTML = `
+      <article class="trail-card">
+        <p class="tag">No Visible Drafts</p>
+        <h3>The action queue is empty under the current filters.</h3>
+        <p class="section-copy">Broaden the topic or stage filters to surface the next concrete writing move.</p>
+      </article>
+    `;
+    return;
+  }
+
+  const ranked = [...entries]
+    .sort((a, b) => {
+      const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
+      if (stageDelta !== 0) return stageDelta;
+      return (a.dataset.next || '').localeCompare(b.dataset.next || '');
+    })
+    .slice(0, 3);
+
+  writingActionsList.innerHTML = ranked
+    .map((entry, index) => {
+      const title = entry.querySelector('.entry-title')?.textContent || 'Draft note';
+      const stage = formatStageLabel(entry.dataset.stage);
+      const nextAction = entry.dataset.next || 'Open the draft and define the next milestone.';
+      const relatedLink = entry.dataset.relatedLink;
+      const relatedLabel = entry.dataset.relatedLabel || 'Related Build';
+
+      return `
+        <article class="trail-card">
+          <p class="tag">Action ${index + 1} | ${stage}</p>
+          <h3>${title}</h3>
+          <p class="section-copy">${nextAction}</p>
+          <p class="results-meta">Treat this as the next sentence or example to write, not as a broad topic reminder.</p>
+          <div class="card-actions">
+            <button class="spotlight-btn action-open-btn" type="button" data-entry-id="${entry.id}">Open Draft</button>
+            ${relatedLink ? `<a class="spotlight-btn" href="${relatedLink}" target="_blank" rel="noreferrer">Open ${relatedLabel}</a>` : ''}
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+
+  writingActionsList.querySelectorAll('.action-open-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const target = writingEntries.find((entry) => entry.id === button.dataset.entryId);
+      if (!target) return;
+      target.open = true;
+      updateWritingSpotlight(target);
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+}
+
 function shippingScoreForEntry(entry) {
   const stageBase = entry.dataset.stage === 'drafting' ? 78 : entry.dataset.stage === 'modeling' ? 56 : 34;
   const hasRelatedBuild = entry.dataset.relatedLink ? 10 : 0;
@@ -928,6 +987,7 @@ function applyWritingFilters() {
   renderWritingPipelineBrief(visibleEntries);
   renderBuildBridgeBoard(visibleEntries);
   renderWritingQueue(visibleEntries);
+  renderWritingActions(visibleEntries);
   renderShippingBoard(visibleEntries);
   updateWritingSpotlight(firstVisible);
   updateUrlState();
