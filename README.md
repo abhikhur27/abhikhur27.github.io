@@ -57,6 +57,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/retry-storm-studio`
 - `projects/error-budget-broker`
 - `projects/postmortem-redaction-lab`
+- `projects/queue-discipline-studio`
 
 ## Technical design
 
@@ -79,6 +80,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/error-budget-broker`: release-week reliability game about spending a finite error budget across growth, trust, and operator pressure.
 - `projects/retry-storm-studio`: retry amplification sandbox for tuning retries, jitter, overlap, fanout, and idempotency before failures turn into self-inflicted load storms.
 - `projects/postmortem-redaction-lab`: incident disclosure game about choosing what the public report says versus what the internal follow-up keeps, then scoring trust, learning, and legal exposure.
+- `projects/queue-discipline-studio`: service-line policy game about choosing between FIFO fairness, short-job throughput, and priority-case escalation under visible queue pressure.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, linked build/draft trails, build-to-blog bridge board, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
 - Homepage launch window: a direct bridge between the newest build and the blog lanes it should turn into writing.

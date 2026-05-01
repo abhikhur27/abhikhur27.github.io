@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue Discipline Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to portfolio</a>
+    <p class="eyebrow">Operations Policy Game</p>
+    <h1>Queue Discipline Studio</h1>
+    <p class="lead">Run a strained service desk and choose who gets served first when fairness, abandonment, VIP pressure, and throughput all pull in different directions.</p>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel board">
+      <div class="board-head">
+        <div>
+          <p class="eyebrow">Round</p>
+          <h2 id="round-label">Shift 1 / 6</h2>
+        </div>
+        <button id="restart-btn" type="button">Restart Shift</button>
+      </div>
+
+      <div class="stats">
+        <article><span>Trust</span><strong id="trust-score">64</strong></article>
+        <article><span>Backlog</span><strong id="backlog-score">18</strong></article>
+        <article><span>Abandonment</span><strong id="abandon-score">0</strong></article>
+        <article><span>Served</span><strong id="served-score">0</strong></article>
+      </div>
+
+      <article class="event-card">
+        <p class="eyebrow">Incoming Queue Pressure</p>
+        <h3 id="scenario-title">Registration desk opens with a lopsided line</h3>
+        <p id="scenario-copy">A mixed queue forms immediately: one urgent exception case, several short tasks, and one long complaint that will eat a full slot if you take it now.</p>
+        <div class="event-meta">
+          <span id="scenario-meta-1">VIP load: 1</span>
+          <span id="scenario-meta-2">Long jobs: 1</span>
+          <span id="scenario-meta-3">Short jobs: 4</span>
+        </div>
+      </article>
+
+      <div class="actions">
+        <button id="fcfs-btn" type="button">Hold FIFO</button>
+        <button id="short-btn" type="button">Fast-Lane Short Jobs</button>
+        <button id="priority-btn" class="primary" type="button">Escalate Priority Cases</button>
+      </div>
+
+      <section class="summary-panel">
+        <p class="eyebrow">Policy Readout</p>
+        <p id="summary-text">A good queue policy is not just about speed. It has to explain who waited, why, and what trust cost the shortcut created.</p>
+      </section>
+    </section>
+
+    <aside class="panel sidebar">
+      <section>
+        <p class="eyebrow">Shift Milestones</p>
+        <ul id="milestone-list" class="milestone-list"></ul>
+      </section>
+
+      <section>
+        <p class="eyebrow">Decision Ledger</p>
+        <div id="log" class="log"></div>
+      </section>
+
+      <section>
+        <p class="eyebrow">Policy Brief</p>
+        <button id="copy-brief-btn" type="button">Copy Shift Brief</button>
+        <p id="brief-status" class="brief-status">Finish a shift to generate a reusable policy summary.</p>
+      </section>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
