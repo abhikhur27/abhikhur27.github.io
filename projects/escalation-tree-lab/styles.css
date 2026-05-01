@@ -1,0 +1,207 @@
+:root {
+  color-scheme: dark;
+  --bg: #081018;
+  --bg-soft: #102033;
+  --panel: rgba(12, 22, 36, 0.92);
+  --line: rgba(148, 163, 184, 0.2);
+  --text: #e5eef8;
+  --muted: #91a4bb;
+  --accent: #7dd3fc;
+  --accent-strong: #38bdf8;
+  --danger: #f87171;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --shadow: 0 24px 60px rgba(2, 8, 23, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(56, 189, 248, 0.16), transparent 32rem),
+    linear-gradient(180deg, #071019 0%, #08131f 45%, #050b12 100%);
+}
+
+.shell {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.header {
+  padding: 2.5rem 0 1.5rem;
+}
+
+.back-link,
+.choice-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Sora", sans-serif;
+  margin: 0;
+}
+
+.lede,
+.scenario-summary,
+.status,
+.note-card p,
+.timeline-card p {
+  color: var(--muted);
+}
+
+.layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1.5fr 1fr;
+  padding-bottom: 2rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  backdrop-filter: blur(10px);
+}
+
+.timeline-panel {
+  grid-column: 1 / -1;
+}
+
+.scenario-head,
+.section-head,
+.button-row,
+.metric-grid,
+.choice-head {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.scenario-head,
+.section-head {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.pill {
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.14);
+  color: var(--accent);
+}
+
+.signal-list,
+.choice-grid,
+.timeline {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.signal {
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.button-row {
+  flex-wrap: wrap;
+  margin: 1rem 0 0.75rem;
+}
+
+button {
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text);
+  font: inherit;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+button.primary {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.95), rgba(56, 189, 248, 0.8));
+  color: #041019;
+  border-color: transparent;
+  font-weight: 700;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.choice-card,
+.timeline-card,
+.note-card,
+.metric-grid article {
+  border-radius: 1.1rem;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(8, 15, 26, 0.74);
+}
+
+.choice-card {
+  padding: 1rem;
+}
+
+.choice-card p {
+  margin: 0.35rem 0;
+}
+
+.choice-card .impact {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.metric-grid article {
+  padding: 1rem;
+}
+
+.metric-grid p {
+  margin: 0.35rem 0 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.note-card {
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.timeline-card {
+  padding: 1rem;
+}
+
+.timeline-card strong {
+  color: var(--accent);
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

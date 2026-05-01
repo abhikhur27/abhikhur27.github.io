@@ -726,35 +726,57 @@ function renderWritingActions(entries) {
     writingActionsList.innerHTML = `
       <article class="trail-card">
         <p class="tag">No Visible Drafts</p>
-        <h3>The action queue is empty under the current filters.</h3>
-        <p class="section-copy">Broaden the topic or stage filters to surface the next concrete writing move.</p>
+        <h3>No reading route is possible under the current filters.</h3>
+        <p class="section-copy">Broaden the topic or stage filters to surface a buildable essay path again.</p>
       </article>
     `;
     return;
   }
 
-  const ranked = [...entries]
-    .sort((a, b) => {
-      const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
-      if (stageDelta !== 0) return stageDelta;
-      return (a.dataset.next || '').localeCompare(b.dataset.next || '');
-    })
-    .slice(0, 3);
+  const ordered = [...entries].sort((a, b) => {
+    const stageDelta = stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage);
+    if (stageDelta !== 0) return stageDelta;
+    return (a.querySelector('.entry-title')?.textContent || '').localeCompare(
+      b.querySelector('.entry-title')?.textContent || ''
+    );
+  });
 
-  writingActionsList.innerHTML = ranked
+  const opener = ordered[0];
+  const contrast =
+    ordered.find((entry) => entry !== opener && entry.dataset.topic !== opener.dataset.topic) ||
+    ordered.find((entry) => entry !== opener) ||
+    opener;
+  const closer =
+    [...ordered]
+      .sort((a, b) => shippingScoreForEntry(b) - shippingScoreForEntry(a))
+      .find((entry) => entry !== opener && entry !== contrast) ||
+    [...ordered].find((entry) => entry !== opener && entry !== contrast) ||
+    contrast;
+
+  const route = [opener, contrast, closer].filter((entry, index, list) => list.indexOf(entry) === index);
+  const routeTopicMix = [...new Set(route.map((entry) => entry.dataset.topic || 'general'))]
+    .map((topic) => `${topic[0].toUpperCase()}${topic.slice(1)}`)
+    .join(' -> ');
+  const routeSummary =
+    route.length >= 3
+      ? `Start with the clearest live build, contrast it with a different lane, then close on the draft closest to shipping.`
+      : `Open the strongest visible draft and use its related build as the anchor.`;
+
+  writingActionsList.innerHTML = route
     .map((entry, index) => {
       const title = entry.querySelector('.entry-title')?.textContent || 'Draft note';
       const stage = formatStageLabel(entry.dataset.stage);
       const nextAction = entry.dataset.next || 'Open the draft and define the next milestone.';
       const relatedLink = entry.dataset.relatedLink;
       const relatedLabel = entry.dataset.relatedLabel || 'Related Build';
+      const role = index === 0 ? 'Open with' : index === 1 ? 'Contrast with' : 'Close on';
 
       return `
         <article class="trail-card">
-          <p class="tag">Action ${index + 1} | ${stage}</p>
+          <p class="tag">${role} | ${stage}</p>
           <h3>${title}</h3>
           <p class="section-copy">${nextAction}</p>
-          <p class="results-meta">Treat this as the next sentence or example to write, not as a broad topic reminder.</p>
+          <p class="results-meta">${index === 0 ? routeSummary : `Lane mix: ${routeTopicMix}.`}</p>
           <div class="card-actions">
             <button class="spotlight-btn action-open-btn" type="button" data-entry-id="${entry.id}">Open Draft</button>
             ${relatedLink ? `<a class="spotlight-btn" href="${relatedLink}" target="_blank" rel="noreferrer">Open ${relatedLabel}</a>` : ''}

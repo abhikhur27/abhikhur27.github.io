@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escalation Tree Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header shell">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Incident Routing Game</p>
+    <h1>Escalation Tree Lab</h1>
+    <p class="lede">Choose who gets paged first when the signal is real but incomplete. The wrong escalation costs sleep, trust, and time, even if somebody eventually fixes the issue.</p>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel scenario-panel">
+      <div class="scenario-head">
+        <div>
+          <p class="eyebrow">Active Incident</p>
+          <h2 id="scenario-title">Waiting for first scenario</h2>
+        </div>
+        <p id="scenario-tag" class="pill">Round 0</p>
+      </div>
+      <p id="scenario-summary" class="scenario-summary">Press Start Shift to begin the escalation deck.</p>
+      <div id="signal-list" class="signal-list"></div>
+      <div class="button-row">
+        <button id="start-run" class="primary" type="button">Start Shift</button>
+        <button id="reset-run" type="button">Reset</button>
+        <button id="copy-brief" type="button">Copy Brief</button>
+      </div>
+      <p id="status-text" class="status" aria-live="polite">Ready to route the first escalation.</p>
+      <div id="choice-grid" class="choice-grid" aria-live="polite"></div>
+    </section>
+
+    <aside class="panel score-panel">
+      <h2>Shift Scoreboard</h2>
+      <div class="metric-grid">
+        <article>
+          <h3>Containment</h3>
+          <p id="containment-score">70</p>
+        </article>
+        <article>
+          <h3>Trust</h3>
+          <p id="trust-score">70</p>
+        </article>
+        <article>
+          <h3>Fatigue</h3>
+          <p id="fatigue-score">20</p>
+        </article>
+        <article>
+          <h3>Blast Radius</h3>
+          <p id="blast-score">30</p>
+        </article>
+      </div>
+
+      <section class="note-card">
+        <h3>Escalation Read</h3>
+        <p id="decision-read">Wide paging is safe only when the evidence actually says the incident is cross-cutting.</p>
+      </section>
+
+      <section class="note-card">
+        <h3>Responder Mix</h3>
+        <p id="mix-read">No pages sent yet.</p>
+      </section>
+
+      <section class="note-card">
+        <h3>Debrief</h3>
+        <p id="debrief-read">Finish the shift to get the routing verdict.</p>
+      </section>
+    </aside>
+
+    <section class="panel timeline-panel">
+      <div class="section-head">
+        <p class="eyebrow">Timeline</p>
+        <h2>What each page solved or made worse</h2>
+      </div>
+      <div id="timeline" class="timeline"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
