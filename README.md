@@ -26,6 +26,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Draft dashboard pipeline cards that surface the fastest lane and most-linked build in the current writing view.
 - Visitor quick-start modes that turn the homepage into an intent-based project router.
 - Project compare tray that pins up to three builds and turns them into a copyable side-by-side pitch.
+- Draft shelf next-action card that opens the strongest visible writing move directly from the blog dashboard.
 
 ## Included subprojects in this repo
 
@@ -60,6 +61,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/postmortem-redaction-lab`
 - `projects/queue-discipline-studio`
 - `projects/escalation-tree-lab`
+- `projects/expectation-debt-studio`
 
 ## Technical design
 
@@ -84,6 +86,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/postmortem-redaction-lab`: incident disclosure game about choosing what the public report says versus what the internal follow-up keeps, then scoring trust, learning, and legal exposure.
 - `projects/queue-discipline-studio`: service-line policy game about choosing between FIFO fairness, short-job throughput, and priority-case escalation under visible queue pressure.
 - `projects/escalation-tree-lab`: incident-routing game about paging the right responder under containment, trust, fatigue, and blast-radius pressure.
+- `projects/expectation-debt-studio`: product-trust decision lab about promises, feedback honesty, and operational repayment after reliability misses.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, linked build/draft trails, build-to-blog bridge board, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
 - Homepage launch window: a direct bridge between the newest build and the blog lanes it should turn into writing.

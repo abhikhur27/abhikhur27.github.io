@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expectation Debt Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Expectation Debt Studio</p>
+    <h1>Ship a product promise without borrowing more trust than the system can repay.</h1>
+    <p class="lead">Choose launch copy, in-flight feedback, and recovery posture across six product incidents. Every over-promise buys short-term calm and compounds expectation debt later.</p>
+    <div class="hero-actions">
+      <button id="restart-btn" type="button">Restart Run</button>
+      <button id="copy-brief-btn" type="button">Copy Session Brief</button>
+    </div>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel status-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Run State</p>
+          <h2 id="round-label">Round 1 of 6</h2>
+        </div>
+        <p id="scenario-type" class="pill">Autosave reliability</p>
+      </div>
+
+      <div class="metric-grid">
+        <article>
+          <span>User Trust</span>
+          <strong id="trust-metric">72</strong>
+        </article>
+        <article>
+          <span>Support Load</span>
+          <strong id="support-metric">28</strong>
+        </article>
+        <article>
+          <span>Delivery Slack</span>
+          <strong id="slack-metric">64</strong>
+        </article>
+        <article>
+          <span>Operator Strain</span>
+          <strong id="strain-metric">22</strong>
+        </article>
+      </div>
+
+      <div id="expectation-board" class="note-card" aria-live="polite"></div>
+      <div id="debt-board" class="note-card" aria-live="polite"></div>
+      <div id="policy-board" class="note-card" aria-live="polite"></div>
+    </section>
+
+    <section class="panel scenario-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Scenario</p>
+          <h2 id="scenario-title">Warm-start autosave rollout</h2>
+        </div>
+        <div id="scenario-tags" class="tag-row"></div>
+      </div>
+
+      <p id="scenario-summary" class="scenario-copy"></p>
+      <p id="scenario-pressure" class="scenario-copy muted"></p>
+
+      <section class="choice-block">
+        <div class="choice-head">
+          <h3>1. Promise posture</h3>
+          <p>What do users hear before the system is fully proven?</p>
+        </div>
+        <div id="promise-options" class="choice-grid"></div>
+      </section>
+
+      <section class="choice-block">
+        <div class="choice-head">
+          <h3>2. Feedback posture</h3>
+          <p>What does the interface do while reality gets messy?</p>
+        </div>
+        <div id="feedback-options" class="choice-grid"></div>
+      </section>
+
+      <section class="choice-block">
+        <div class="choice-head">
+          <h3>3. Recovery posture</h3>
+          <p>How do you repay trust when the promise slips?</p>
+        </div>
+        <div id="recovery-options" class="choice-grid"></div>
+      </section>
+
+      <div class="decision-footer">
+        <p id="selection-summary" class="selection-summary">Pick one option from each lane to resolve the round.</p>
+        <button id="resolve-btn" class="primary" type="button" disabled>Resolve Round</button>
+      </div>
+    </section>
+
+    <section class="panel ledger-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Ledger</p>
+          <h2>Expectation debt tape</h2>
+        </div>
+      </div>
+
+      <div id="result-card" class="note-card" aria-live="polite">
+        <p>Resolve the first round to see how the promise lands.</p>
+      </div>
+
+      <div id="history-list" class="history-list"></div>
+      <div id="summary-card" class="note-card" aria-live="polite">
+        <p>Final posture will appear here after round six.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

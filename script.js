@@ -37,6 +37,8 @@ const draftStageSummary = document.getElementById('draft-stage-summary');
 const draftTopicSummary = document.getElementById('draft-topic-summary');
 const draftPipelineBrief = document.getElementById('draft-pipeline-brief');
 const draftLinkedBuild = document.getElementById('draft-linked-build');
+const draftNextAction = document.getElementById('draft-next-action');
+const draftNextOpen = document.getElementById('draft-next-open');
 const writingTopicAtlas = document.getElementById('writing-topic-atlas');
 const buildBridgeList = document.getElementById('build-bridge-list');
 const writingQueueList = document.getElementById('writing-queue-list');
@@ -61,6 +63,7 @@ let activeFilter = 'all';
 let activeWritingTopic = 'all';
 let activeWritingStage = 'all';
 let currentWritingSpotlightEntry = null;
+let currentDraftActionEntry = null;
 let currentSessionRoute = null;
 let pinnedProjectCards = [];
 let suppressUrlSync = false;
@@ -508,6 +511,14 @@ function updateWritingSpotlight(entry) {
   updateUrlState();
 }
 
+function openWritingEntry(entry) {
+  if (!entry) return;
+  entry.open = true;
+  updateWritingSpotlight(entry);
+  entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  updateUrlState();
+}
+
 function stagePriority(stage) {
   if (stage === 'drafting') return 0;
   if (stage === 'modeling') return 1;
@@ -649,9 +660,7 @@ function renderBuildBridgeBoard(entries) {
     button.addEventListener('click', () => {
       const target = writingEntries.find((entry) => entry.id === button.dataset.entryId);
       if (!target) return;
-      target.open = true;
-      updateWritingSpotlight(target);
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openWritingEntry(target);
     });
   });
 }
@@ -710,9 +719,7 @@ function renderWritingQueue(entries) {
     button.addEventListener('click', () => {
       const target = writingEntries.find((entry) => entry.id === button.dataset.entryId);
       if (!target) return;
-      target.open = true;
-      updateWritingSpotlight(target);
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openWritingEntry(target);
     });
   });
 }
@@ -790,9 +797,7 @@ function renderWritingActions(entries) {
     button.addEventListener('click', () => {
       const target = writingEntries.find((entry) => entry.id === button.dataset.entryId);
       if (!target) return;
-      target.open = true;
-      updateWritingSpotlight(target);
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openWritingEntry(target);
     });
   });
 }
@@ -855,9 +860,7 @@ function renderShippingBoard(entries) {
     button.addEventListener('click', () => {
       const target = writingEntries.find((entry) => entry.id === button.dataset.entryId);
       if (!target) return;
-      target.open = true;
-      updateWritingSpotlight(target);
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      openWritingEntry(target);
     });
   });
 }
@@ -964,6 +967,23 @@ function renderWritingPipelineBrief(visibleEntries) {
       draftLinkedBuild.textContent = `${strongest.label} has ${strongest.entries.length} visible linked draft${strongest.entries.length === 1 ? '' : 's'}. Next milestone: ${nextMilestone}`;
     }
   }
+
+  if (draftNextAction) {
+    if (!visibleEntries.length) {
+      currentDraftActionEntry = null;
+      draftNextAction.textContent = 'No visible drafts. Broaden the filters to surface a next writing move.';
+      draftNextOpen?.classList.add('hidden');
+    } else {
+      const ranked = [...visibleEntries]
+        .map((entry) => ({ entry, score: shippingScoreForEntry(entry) }))
+        .sort((a, b) => b.score - a.score);
+      currentDraftActionEntry = ranked[0]?.entry || null;
+      const nextTitle = currentDraftActionEntry?.querySelector('.entry-title')?.textContent || 'Open the shelf.';
+      const nextMove = currentDraftActionEntry?.dataset.next || 'Open the draft and define the next writing pass.';
+      draftNextAction.textContent = `${nextTitle} is the strongest next draft move. Action: ${nextMove}`;
+      draftNextOpen?.classList.remove('hidden');
+    }
+  }
 }
 
 function applyWritingFilters() {
@@ -1057,17 +1077,14 @@ surpriseWritingBtn?.addEventListener('click', () => {
   }
 
   const randomEntry = visibleEntries[Math.floor(Math.random() * visibleEntries.length)];
-  updateWritingSpotlight(randomEntry);
-  randomEntry.open = true;
-  randomEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  openWritingEntry(randomEntry);
 });
 
 writingSpotlightOpen?.addEventListener('click', () => {
   if (!currentWritingSpotlightEntry) return;
-  currentWritingSpotlightEntry.open = true;
-  currentWritingSpotlightEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  updateUrlState();
+  openWritingEntry(currentWritingSpotlightEntry);
 });
+draftNextOpen?.addEventListener('click', () => openWritingEntry(currentDraftActionEntry));
 
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
 sessionRouteCopy?.addEventListener('click', copySessionRoute);
