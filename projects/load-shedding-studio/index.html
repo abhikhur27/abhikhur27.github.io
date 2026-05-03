@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load Shedding Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header container">
+    <a class="back-link" href="../../index.html" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <p class="eyebrow">Reliability Strategy Game</p>
+    <h1>Load Shedding Studio</h1>
+    <p class="lead">Run a six-wave overload incident and decide which traffic gets premium treatment, which gets degraded, and how much trust you spend to keep the platform upright.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel control-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Incident Control</p>
+          <h2 id="round-label">Wave 1 of 6</h2>
+        </div>
+        <button id="reset-btn" type="button">Reset Scenario</button>
+      </div>
+      <p id="scenario-copy" class="incident-copy"></p>
+
+      <div class="resource-grid">
+        <article>
+          <h3>Degrade Tokens</h3>
+          <p id="degrade-count">3</p>
+        </article>
+        <article>
+          <h3>Protection Tokens</h3>
+          <p id="protect-count">2</p>
+        </article>
+        <article>
+          <h3>Comms Windows</h3>
+          <p id="comms-count">1</p>
+        </article>
+      </div>
+
+      <div id="lane-grid" class="lane-grid"></div>
+      <p id="status-text" class="status" aria-live="polite">Choose how this overload wave gets absorbed.</p>
+
+      <div class="button-row">
+        <button id="resolve-btn" class="primary" type="button">Resolve Wave</button>
+      </div>
+    </section>
+
+    <section class="panel summary-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Outcome Lens</p>
+          <h2>Service Posture</h2>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <article>
+          <h3>Customer Trust</h3>
+          <p id="trust-value">74</p>
+        </article>
+        <article>
+          <h3>Core Uptime</h3>
+          <p id="uptime-value">82</p>
+        </article>
+        <article>
+          <h3>Burn Rate</h3>
+          <p id="burn-value">24</p>
+        </article>
+      </div>
+
+      <div class="bar-group" aria-label="Outcome meters">
+        <div>
+          <div class="bar-label"><span>Trust</span><span id="trust-meter-label">74%</span></div>
+          <div class="meter"><span id="trust-meter"></span></div>
+        </div>
+        <div>
+          <div class="bar-label"><span>Uptime</span><span id="uptime-meter-label">82%</span></div>
+          <div class="meter"><span id="uptime-meter"></span></div>
+        </div>
+        <div>
+          <div class="bar-label"><span>Burn</span><span id="burn-meter-label">24%</span></div>
+          <div class="meter danger"><span id="burn-meter"></span></div>
+        </div>
+      </div>
+
+      <div class="coach-card">
+        <h3>Policy Read</h3>
+        <p id="policy-read">Protect one critical lane, degrade one elastic lane, and spend comms only when the degraded lane is user-visible.</p>
+      </div>
+
+      <div class="timeline-shell">
+        <h3>Wave Log</h3>
+        <ul id="timeline" class="timeline"></ul>
+      </div>
+
+      <div id="ending-card" class="ending-card hidden"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

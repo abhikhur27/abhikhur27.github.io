@@ -37,6 +37,8 @@ const draftStageSummary = document.getElementById('draft-stage-summary');
 const draftTopicSummary = document.getElementById('draft-topic-summary');
 const draftPipelineBrief = document.getElementById('draft-pipeline-brief');
 const draftLinkedBuild = document.getElementById('draft-linked-build');
+const draftRouteBrief = document.getElementById('draft-route-brief');
+const draftRouteOpen = document.getElementById('draft-route-open');
 const draftNextAction = document.getElementById('draft-next-action');
 const draftNextOpen = document.getElementById('draft-next-open');
 const writingTopicAtlas = document.getElementById('writing-topic-atlas');
@@ -965,6 +967,27 @@ function renderWritingPipelineBrief(visibleEntries) {
     } else {
       const nextMilestone = strongest.entries[0]?.dataset.next || 'Open the linked draft and continue the note.';
       draftLinkedBuild.textContent = `${strongest.label} has ${strongest.entries.length} visible linked draft${strongest.entries.length === 1 ? '' : 's'}. Next milestone: ${nextMilestone}`;
+    }
+  }
+
+  if (draftRouteBrief) {
+    const routedEntries = visibleEntries.filter((entry) => entry.dataset.relatedLink);
+    if (!routedEntries.length) {
+      draftRouteBrief.textContent = 'No linked build route is visible under the current filters.';
+      draftRouteOpen?.classList.add('hidden');
+    } else {
+      const bestRoute = [...routedEntries]
+        .map((entry) => ({ entry, score: shippingScoreForEntry(entry) }))
+        .sort((a, b) => b.score - a.score)[0]?.entry;
+      const title = bestRoute?.querySelector('.entry-title')?.textContent || 'Open the shelf.';
+      const relatedLabel = bestRoute?.dataset.relatedLabel || 'Related Build';
+      const stage = formatStageLabel(bestRoute?.dataset.stage);
+      draftRouteBrief.textContent = `${relatedLabel} -> ${title}. Anchor on the build, then use this ${stage.toLowerCase()} draft as the strongest visible writing route.`;
+      if (draftRouteOpen && bestRoute?.dataset.relatedLink) {
+        draftRouteOpen.href = bestRoute.dataset.relatedLink;
+        draftRouteOpen.textContent = `Open ${relatedLabel}`;
+        draftRouteOpen.classList.remove('hidden');
+      }
     }
   }
 

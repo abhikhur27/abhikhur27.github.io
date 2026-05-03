@@ -24,6 +24,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Stage-aware draft shelf filters for planning the blog pipeline.
 - Shareable project and draft-shelf view links so filtered homepage states can be sent directly.
 - Draft dashboard pipeline cards that surface the fastest lane and most-linked build in the current writing view.
+- Draft dashboard route card that opens the strongest visible build-to-blog path directly from the writing shelf.
 - Visitor quick-start modes that turn the homepage into an intent-based project router.
 - Project compare tray that pins up to three builds and turns them into a copyable side-by-side pitch.
 - Draft shelf next-action card that opens the strongest visible writing move directly from the blog dashboard.
@@ -62,6 +63,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/queue-discipline-studio`
 - `projects/escalation-tree-lab`
 - `projects/expectation-debt-studio`
+- `projects/load-shedding-studio`
 
 ## Technical design
 
@@ -87,6 +89,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/queue-discipline-studio`: service-line policy game about choosing between FIFO fairness, short-job throughput, and priority-case escalation under visible queue pressure.
 - `projects/escalation-tree-lab`: incident-routing game about paging the right responder under containment, trust, fatigue, and blast-radius pressure.
 - `projects/expectation-debt-studio`: product-trust decision lab about promises, feedback honesty, and operational repayment after reliability misses.
+- `projects/load-shedding-studio`: overload-management strategy game about graceful degradation, service tiers, and trust burn during demand spikes.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, linked build/draft trails, build-to-blog bridge board, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
 - Homepage launch window: a direct bridge between the newest build and the blog lanes it should turn into writing.
