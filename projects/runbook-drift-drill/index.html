@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Runbook Drift Drill</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell hero">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <p class="eyebrow">Incident Knowledge Audit</p>
+    <h1>Runbook Drift Drill</h1>
+    <p class="lead">Audit operational guidance against live evidence and decide which steps are safe, which need verification, and which are already stale enough to hurt the incident.</p>
+    <div class="hero-strip">
+      <strong>Demo path:</strong>
+      <span>Open a scenario, classify all runbook steps, then compare your judgment against the hidden drift notes.</span>
+    </div>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel scenario-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Scenario</p>
+          <h2 id="scenario-title">Loading scenario...</h2>
+        </div>
+        <button id="next-scenario" type="button">Next Scenario</button>
+      </div>
+      <p id="scenario-summary" class="section-copy"></p>
+      <div class="scenario-meta">
+        <span id="scenario-role">-</span>
+        <span id="scenario-pressure">-</span>
+        <span id="scenario-risk">-</span>
+      </div>
+
+      <section class="evidence-board">
+        <h3>Live Evidence</h3>
+        <ul id="evidence-list" class="bullet-list"></ul>
+      </section>
+
+      <section class="evidence-board">
+        <h3>Audit Prompt</h3>
+        <p id="audit-prompt" class="section-copy"></p>
+      </section>
+    </section>
+
+    <section class="panel">
+      <div class="stats-grid" aria-live="polite">
+        <article>
+          <h3>Correct Calls</h3>
+          <p id="correct-count">0 / 0</p>
+        </article>
+        <article>
+          <h3>Trust Budget</h3>
+          <p id="trust-score">100</p>
+        </article>
+        <article>
+          <h3>Time Burned</h3>
+          <p id="time-burned">0 min</p>
+        </article>
+        <article>
+          <h3>Audit Verdict</h3>
+          <p id="audit-verdict">Waiting for review</p>
+        </article>
+      </div>
+
+      <section class="steps-board">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Runbook Steps</p>
+            <h2>Mark each step before you review</h2>
+          </div>
+          <button id="review-audit" class="primary" type="button">Review Audit</button>
+        </div>
+        <div id="steps-list" class="steps-list"></div>
+      </section>
+
+      <section class="review-grid">
+        <article class="review-card">
+          <h3>Operator Read</h3>
+          <p id="operator-read">Classify the steps to see which instinct the scenario rewards.</p>
+        </article>
+        <article class="review-card">
+          <h3>Drift Pattern</h3>
+          <p id="drift-pattern">The review will surface whether the danger was stale configuration, changed topology, or outdated escalation logic.</p>
+        </article>
+        <article class="review-card">
+          <h3>Next Fix</h3>
+          <p id="next-fix">The project will recommend the smallest runbook repair that would have prevented the mismatch.</p>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

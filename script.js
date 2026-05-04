@@ -46,6 +46,11 @@ const buildBridgeList = document.getElementById('build-bridge-list');
 const writingQueueList = document.getElementById('writing-queue-list');
 const writingActionsList = document.getElementById('writing-actions-list');
 const writingShippingBoard = document.getElementById('writing-shipping-board');
+const starterKitTitle = document.getElementById('starter-kit-title');
+const starterKitSummary = document.getElementById('starter-kit-summary');
+const starterKitMeta = document.getElementById('starter-kit-meta');
+const starterKitOpen = document.getElementById('starter-kit-open');
+const starterKitCopy = document.getElementById('starter-kit-copy');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
@@ -66,6 +71,7 @@ let activeWritingTopic = 'all';
 let activeWritingStage = 'all';
 let currentWritingSpotlightEntry = null;
 let currentDraftActionEntry = null;
+let currentStarterKitEntries = [];
 let currentSessionRoute = null;
 let pinnedProjectCards = [];
 let suppressUrlSync = false;
@@ -811,6 +817,51 @@ function shippingScoreForEntry(entry) {
   return Math.min(100, stageBase + hasRelatedBuild + titleBonus);
 }
 
+function renderDraftStarterKit(entries) {
+  currentStarterKitEntries = [];
+
+  if (!starterKitTitle || !starterKitSummary || !starterKitMeta || !starterKitOpen || !starterKitCopy) {
+    return;
+  }
+
+  if (!entries.length) {
+    starterKitTitle.textContent = 'No drafts match the current filter.';
+    starterKitSummary.textContent = 'Broaden the topic, stage, or search query to generate a compact first reading route.';
+    starterKitMeta.textContent = 'Starter kit unavailable under the current filters.';
+    starterKitOpen.disabled = true;
+    starterKitCopy.disabled = true;
+    return;
+  }
+
+  const ordered = [...entries].sort((a, b) => shippingScoreForEntry(b) - shippingScoreForEntry(a));
+  const opener = ordered[0];
+  const contrast =
+    ordered.find((entry) => entry !== opener && entry.dataset.topic !== opener.dataset.topic) ||
+    ordered.find((entry) => entry !== opener) ||
+    opener;
+  const closer =
+    [...entries]
+      .sort((a, b) => stagePriority(a.dataset.stage) - stagePriority(b.dataset.stage))
+      .find((entry) => entry !== opener && entry !== contrast) ||
+    [...ordered].find((entry) => entry !== opener && entry !== contrast) ||
+    contrast;
+
+  currentStarterKitEntries = [opener, contrast, closer].filter((entry, index, list) => list.indexOf(entry) === index);
+  const laneMix = [...new Set(currentStarterKitEntries.map((entry) => entry.dataset.topic || 'general'))]
+    .map((topic) => `${topic[0].toUpperCase()}${topic.slice(1)}`)
+    .join(' -> ');
+
+  starterKitTitle.textContent = currentStarterKitEntries.length >= 3
+    ? 'A three-stop reading kit is ready from the visible shelf.'
+    : 'A compact reading kit is ready from the visible shelf.';
+  starterKitSummary.textContent = currentStarterKitEntries
+    .map((entry, index) => `${index + 1}. ${entry.querySelector('.entry-title')?.textContent || 'Draft note'}`)
+    .join('  ');
+  starterKitMeta.textContent = `Lane mix: ${laneMix}. Open with the strongest visible draft, use the middle stop as contrast, then close on the clearest next writing move.`;
+  starterKitOpen.disabled = false;
+  starterKitCopy.disabled = false;
+}
+
 function renderShippingBoard(entries) {
   if (!writingShippingBoard) {
     return;
@@ -1054,6 +1105,7 @@ function applyWritingFilters() {
   renderWritingQueue(visibleEntries);
   renderWritingActions(visibleEntries);
   renderShippingBoard(visibleEntries);
+  renderDraftStarterKit(visibleEntries);
   updateWritingSpotlight(firstVisible);
   updateUrlState();
 }
@@ -1108,6 +1160,31 @@ writingSpotlightOpen?.addEventListener('click', () => {
   openWritingEntry(currentWritingSpotlightEntry);
 });
 draftNextOpen?.addEventListener('click', () => openWritingEntry(currentDraftActionEntry));
+starterKitOpen?.addEventListener('click', () => {
+  if (!currentStarterKitEntries.length) return;
+  openWritingEntry(currentStarterKitEntries[0]);
+});
+starterKitCopy?.addEventListener('click', async () => {
+  if (!currentStarterKitEntries.length) {
+    if (starterKitMeta) starterKitMeta.textContent = 'No reading kit available to copy.';
+    return;
+  }
+
+  const lines = [
+    'Draft Shelf Starter Kit',
+    '',
+    ...currentStarterKitEntries.map((entry, index) => `${index + 1}. ${entry.querySelector('.entry-title')?.textContent || 'Draft note'}`),
+    '',
+    `Current view: ${window.location.href}`,
+  ];
+
+  try {
+    await navigator.clipboard.writeText(lines.join('\n'));
+    if (starterKitMeta) starterKitMeta.textContent = 'Copied the current reading kit.';
+  } catch (error) {
+    if (starterKitMeta) starterKitMeta.textContent = 'Clipboard copy failed for the reading kit.';
+  }
+});
 
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
 sessionRouteCopy?.addEventListener('click', copySessionRoute);
