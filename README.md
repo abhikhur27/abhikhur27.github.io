@@ -66,6 +66,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/expectation-debt-studio`
 - `projects/load-shedding-studio`
 - `projects/runbook-drift-drill`
+- `projects/verification-ladder-lab`
 
 ## Technical design
 
@@ -93,6 +94,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/escalation-tree-lab`: incident-routing game about paging the right responder under containment, trust, fatigue, and blast-radius pressure.
 - `projects/expectation-debt-studio`: product-trust decision lab about promises, feedback honesty, and operational repayment after reliability misses.
 - `projects/load-shedding-studio`: overload-management strategy game about graceful degradation, service tiers, and trust burn during demand spikes.
+- `projects/verification-ladder-lab`: verification triage game about spending limited fact-checking effort before a deadline turns uncertainty into public risk.
 - `styles.css`: shared ink-style design system.
 - `script.js`: project filters, result-count feedback, linked build/draft trails, build-to-blog bridge board, topic-atlas navigation, writing shelf spotlight controls, shipping board scoring, writing pipeline briefs, shareable filtered-view links, stage filters, and mobile nav behavior.
 - Homepage launch window: a direct bridge between the newest build and the blog lanes it should turn into writing.

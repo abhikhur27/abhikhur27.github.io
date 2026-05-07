@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verification Ladder Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <h1>Verification Ladder Lab</h1>
+    <p>Spend a limited verification budget on a risky claim, then decide whether to publish it, hedge it, or hold it back.</p>
+    <section class="demo-strip" aria-label="Suggested portfolio demo path">
+      <strong>Demo path:</strong>
+      <span>Load a scenario -> spend four checks -> compare Publish vs Hedge -> copy the briefing note.</span>
+    </section>
+  </header>
+
+  <main class="container grid">
+    <section class="panel">
+      <h2>Scenario</h2>
+      <label for="scenario-select">Choose a claim</label>
+      <select id="scenario-select"></select>
+
+      <div id="scenario-card" class="card"></div>
+
+      <h2>Verification Budget</h2>
+      <p id="budget-status" class="mono">4 checks remaining</p>
+      <div id="action-grid" class="action-grid"></div>
+
+      <div class="button-row">
+        <button id="reset-run" type="button">Reset Run</button>
+        <button id="copy-brief" type="button">Copy Brief</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Current Read</h2>
+      <div class="metric-grid">
+        <article><h3>Evidence</h3><p id="evidence-score">0</p></article>
+        <article><h3>Trust</h3><p id="trust-score">50</p></article>
+        <article><h3>Exposure</h3><p id="exposure-score">65</p></article>
+        <article><h3>Speed</h3><p id="speed-score">100</p></article>
+      </div>
+
+      <div id="ledger-board" class="card"></div>
+      <div id="verification-lens" class="card"></div>
+      <div id="ship-cue" class="card"></div>
+
+      <h2>Ship Posture</h2>
+      <div class="button-row">
+        <button class="ship-btn" data-posture="publish" type="button">Publish Claim</button>
+        <button class="ship-btn" data-posture="hedge" type="button">Publish with Hedge</button>
+        <button class="ship-btn" data-posture="hold" type="button">Hold for More Evidence</button>
+      </div>
+
+      <div id="result-card" class="result-card" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
