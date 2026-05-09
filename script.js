@@ -51,6 +51,12 @@ const starterKitSummary = document.getElementById('starter-kit-summary');
 const starterKitMeta = document.getElementById('starter-kit-meta');
 const starterKitOpen = document.getElementById('starter-kit-open');
 const starterKitCopy = document.getElementById('starter-kit-copy');
+const crossTopicRouteTitle = document.getElementById('cross-topic-route-title');
+const crossTopicRouteSummary = document.getElementById('cross-topic-route-summary');
+const crossTopicRouteMeta = document.getElementById('cross-topic-route-meta');
+const crossTopicRouteOpen = document.getElementById('cross-topic-route-open');
+const crossTopicRouteCopy = document.getElementById('cross-topic-route-copy');
+const draftReadingPosture = document.getElementById('draft-reading-posture');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
@@ -72,6 +78,7 @@ let activeWritingStage = 'all';
 let currentWritingSpotlightEntry = null;
 let currentDraftActionEntry = null;
 let currentStarterKitEntries = [];
+let currentCrossTopicEntries = [];
 let currentSessionRoute = null;
 let pinnedProjectCards = [];
 let suppressUrlSync = false;
@@ -862,6 +869,60 @@ function renderDraftStarterKit(entries) {
   starterKitCopy.disabled = false;
 }
 
+function renderCrossTopicRoute(entries) {
+  currentCrossTopicEntries = [];
+
+  if (!crossTopicRouteTitle || !crossTopicRouteSummary || !crossTopicRouteMeta || !crossTopicRouteOpen || !crossTopicRouteCopy) {
+    return;
+  }
+
+  if (!entries.length) {
+    crossTopicRouteTitle.textContent = 'No visible drafts are available for a cross-topic route.';
+    crossTopicRouteSummary.textContent = 'Broaden the filters to rebuild a route with range.';
+    crossTopicRouteMeta.textContent = 'Cross-topic route unavailable.';
+    crossTopicRouteOpen.disabled = true;
+    crossTopicRouteCopy.disabled = true;
+    return;
+  }
+
+  const topicOrder = ['systems', 'science', 'language', 'sports', 'markets'];
+  currentCrossTopicEntries = topicOrder
+    .map((topic) =>
+      [...entries]
+        .filter((entry) => entry.dataset.topic === topic)
+        .sort((a, b) => shippingScoreForEntry(b) - shippingScoreForEntry(a))[0]
+    )
+    .filter(Boolean)
+    .slice(0, 3);
+
+  if (!currentCrossTopicEntries.length) {
+    crossTopicRouteTitle.textContent = 'A cross-topic route needs at least one visible lane.';
+    crossTopicRouteSummary.textContent = 'Use broader topic filters to surface more range.';
+    crossTopicRouteMeta.textContent = 'Cross-topic route unavailable.';
+    crossTopicRouteOpen.disabled = true;
+    crossTopicRouteCopy.disabled = true;
+    return;
+  }
+
+  const laneMix = currentCrossTopicEntries
+    .map((entry) => {
+      const topic = entry.dataset.topic || 'general';
+      return `${topic[0].toUpperCase()}${topic.slice(1)}`;
+    })
+    .join(' -> ');
+
+  crossTopicRouteTitle.textContent =
+    currentCrossTopicEntries.length >= 3
+      ? 'A three-lane reading route is ready.'
+      : 'A compact cross-topic route is ready.';
+  crossTopicRouteSummary.textContent = currentCrossTopicEntries
+    .map((entry, index) => `${index + 1}. ${entry.querySelector('.entry-title')?.textContent || 'Draft note'}`)
+    .join('  ');
+  crossTopicRouteMeta.textContent = `Lane mix: ${laneMix}. Use this route when the goal is range, not just depth inside one topic.`;
+  crossTopicRouteOpen.disabled = false;
+  crossTopicRouteCopy.disabled = false;
+}
+
 function renderShippingBoard(entries) {
   if (!writingShippingBoard) {
     return;
@@ -1058,6 +1119,23 @@ function renderWritingPipelineBrief(visibleEntries) {
       draftNextOpen?.classList.remove('hidden');
     }
   }
+
+  if (draftReadingPosture) {
+    if (!visibleEntries.length) {
+      draftReadingPosture.textContent = 'No visible drafts. Broaden the shelf to inspect range versus concentration.';
+    } else {
+      const distinctTopics = new Set(visibleEntries.map((entry) => entry.dataset.topic || 'general')).size;
+      const draftingCount = visibleEntries.filter((entry) => entry.dataset.stage === 'drafting').length;
+      const modelingCount = visibleEntries.filter((entry) => entry.dataset.stage === 'modeling').length;
+      const posture =
+        distinctTopics >= 4
+          ? 'broad'
+          : distinctTopics >= 2
+            ? 'balanced'
+            : 'concentrated';
+      draftReadingPosture.textContent = `${posture[0].toUpperCase()}${posture.slice(1)} reading posture: ${distinctTopics} topic lane${distinctTopics === 1 ? '' : 's'} visible with ${draftingCount} drafting and ${modelingCount} modeling draft${draftingCount + modelingCount === 1 ? '' : 's'} in play.`;
+    }
+  }
 }
 
 function applyWritingFilters() {
@@ -1106,6 +1184,7 @@ function applyWritingFilters() {
   renderWritingActions(visibleEntries);
   renderShippingBoard(visibleEntries);
   renderDraftStarterKit(visibleEntries);
+  renderCrossTopicRoute(visibleEntries);
   updateWritingSpotlight(firstVisible);
   updateUrlState();
 }
@@ -1183,6 +1262,31 @@ starterKitCopy?.addEventListener('click', async () => {
     if (starterKitMeta) starterKitMeta.textContent = 'Copied the current reading kit.';
   } catch (error) {
     if (starterKitMeta) starterKitMeta.textContent = 'Clipboard copy failed for the reading kit.';
+  }
+});
+crossTopicRouteOpen?.addEventListener('click', () => {
+  if (!currentCrossTopicEntries.length) return;
+  openWritingEntry(currentCrossTopicEntries[0]);
+});
+crossTopicRouteCopy?.addEventListener('click', async () => {
+  if (!currentCrossTopicEntries.length) {
+    if (crossTopicRouteMeta) crossTopicRouteMeta.textContent = 'No cross-topic route available to copy.';
+    return;
+  }
+
+  const lines = [
+    'Draft Shelf Cross-Topic Route',
+    '',
+    ...currentCrossTopicEntries.map((entry, index) => `${index + 1}. ${entry.querySelector('.entry-title')?.textContent || 'Draft note'}`),
+    '',
+    `Current view: ${window.location.href}`,
+  ];
+
+  try {
+    await navigator.clipboard.writeText(lines.join('\n'));
+    if (crossTopicRouteMeta) crossTopicRouteMeta.textContent = 'Copied the cross-topic route.';
+  } catch (error) {
+    if (crossTopicRouteMeta) crossTopicRouteMeta.textContent = 'Clipboard copy failed for the cross-topic route.';
   }
 });
 

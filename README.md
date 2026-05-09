@@ -29,6 +29,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Project compare tray that pins up to three builds and turns them into a copyable side-by-side pitch.
 - Draft shelf next-action card that opens the strongest visible writing move directly from the blog dashboard.
 - Draft starter kit that turns the visible shelf into a compact first-reading route.
+- Cross-topic route card that turns the visible draft shelf into a range-first reading path.
 
 ## Included subprojects in this repo
 
@@ -66,12 +67,14 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/expectation-debt-studio`
 - `projects/load-shedding-studio`
 - `projects/runbook-drift-drill`
+- `projects/rollback-budget-lab`
 - `projects/verification-ladder-lab`
 
 ## Technical design
 
 - `index.html`: semantic structure for hero, project index, real-life builds shelf, blog sections, and topic filters.
 - `projects/runbook-drift-drill`: runbook-audit game about detecting stale operational guidance before it burns incident time and trust.
+- `projects/rollback-budget-lab`: product-safety decision lab for spending a limited safeguard budget on undo depth, staged rollout, and trust-preserving recovery.
 - `projects/systems-decision-labs`: anthology page that groups the repeated campus/infrastructure decision sims into one portfolio family.
 - `projects/cache-policy-studio`: cache policy sandbox for TTL, stale windows, and origin-load tradeoffs.
 - `projects/latency-budget-planner`: latency budgeting surface for turning network/backend/render slices into loader and optimistic-UI guidance.
