@@ -43,6 +43,7 @@ const draftNextAction = document.getElementById('draft-next-action');
 const draftNextOpen = document.getElementById('draft-next-open');
 const writingTopicAtlas = document.getElementById('writing-topic-atlas');
 const buildBridgeList = document.getElementById('build-bridge-list');
+const draftGapList = document.getElementById('draft-gap-list');
 const writingQueueList = document.getElementById('writing-queue-list');
 const writingActionsList = document.getElementById('writing-actions-list');
 const writingShippingBoard = document.getElementById('writing-shipping-board');
@@ -680,6 +681,64 @@ function renderBuildBridgeBoard(entries) {
   });
 }
 
+function renderDraftGapBoard(entries) {
+  if (!draftGapList) {
+    return;
+  }
+
+  const linkedPaths = new Set(
+    entries
+      .map((entry) => normalizeComparablePath(entry.dataset.relatedLink || ''))
+      .filter(Boolean)
+  );
+
+  const gaps = cards
+    .map((card) => {
+      const primaryLink = card.querySelector('.card-actions a')?.getAttribute('href') || '';
+      return {
+        card,
+        href: primaryLink,
+        comparable: normalizeComparablePath(primaryLink),
+        title: card.querySelector('h3')?.textContent || 'Project',
+        description: card.querySelector('p:not(.stack)')?.textContent || 'Open the build and turn its strongest tradeoff into a draft.',
+        stack: card.querySelector('.stack')?.textContent || '',
+      };
+    })
+    .filter((item) => item.comparable && !linkedPaths.has(item.comparable))
+    .sort((a, b) => {
+      const aFresh = (a.card.querySelector('.tag')?.textContent || '').toLowerCase().includes('new') ? 1 : 0;
+      const bFresh = (b.card.querySelector('.tag')?.textContent || '').toLowerCase().includes('new') ? 1 : 0;
+      return bFresh - aFresh || a.title.localeCompare(b.title);
+    })
+    .slice(0, 3);
+
+  if (!gaps.length) {
+    draftGapList.innerHTML = `
+      <article class="trail-card">
+        <p class="tag">Coverage Closed</p>
+        <h3>Every visible build already has a linked draft.</h3>
+        <p class="section-copy">The current shelf covers the visible project set well. Shift filters if you want to hunt for older uncovered builds.</p>
+      </article>
+    `;
+    return;
+  }
+
+  draftGapList.innerHTML = gaps
+    .map((gap, index) => `
+      <article class="trail-card">
+        <p class="tag">${index === 0 ? 'Best missing essay' : 'Coverage gap'}</p>
+        <h3>${gap.title}</h3>
+        <p class="section-copy">${gap.description}</p>
+        <p class="results-meta">Suggested note: capture the operator decision, the hidden tradeoff, and one failure mode this build makes visible.</p>
+        <p class="results-meta">${gap.stack}</p>
+        <div class="card-actions">
+          <a class="spotlight-btn" href="${gap.href}" target="_blank" rel="noreferrer">Open Build</a>
+        </div>
+      </article>
+    `)
+    .join('');
+}
+
 function renderWritingQueue(entries) {
   if (!writingQueueList) {
     return;
@@ -1180,6 +1239,7 @@ function applyWritingFilters() {
   renderTopicAtlas(topicCounts, visibleEntries);
   renderWritingPipelineBrief(visibleEntries);
   renderBuildBridgeBoard(visibleEntries);
+  renderDraftGapBoard(visibleEntries);
   renderWritingQueue(visibleEntries);
   renderWritingActions(visibleEntries);
   renderShippingBoard(visibleEntries);
