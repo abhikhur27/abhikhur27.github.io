@@ -41,6 +41,10 @@ const draftRouteBrief = document.getElementById('draft-route-brief');
 const draftRouteOpen = document.getElementById('draft-route-open');
 const draftNextAction = document.getElementById('draft-next-action');
 const draftNextOpen = document.getElementById('draft-next-open');
+const writingDigestTitle = document.getElementById('writing-digest-title');
+const writingDigestSummary = document.getElementById('writing-digest-summary');
+const writingDigestMeta = document.getElementById('writing-digest-meta');
+const copyWritingDigestBtn = document.getElementById('copy-writing-digest');
 const writingTopicAtlas = document.getElementById('writing-topic-atlas');
 const buildBridgeList = document.getElementById('build-bridge-list');
 const draftGapList = document.getElementById('draft-gap-list');
@@ -82,6 +86,7 @@ let currentStarterKitEntries = [];
 let currentCrossTopicEntries = [];
 let currentSessionRoute = null;
 let pinnedProjectCards = [];
+let currentWritingDigest = '';
 let suppressUrlSync = false;
 
 function updateUrlState() {
@@ -1197,6 +1202,70 @@ function renderWritingPipelineBrief(visibleEntries) {
   }
 }
 
+function buildWritingDigest(entries, stageCounts, topicCounts) {
+  if (!entries.length) {
+    return {
+      title: 'No drafts match the current filter.',
+      summary: 'Broaden the topic, stage, or search query to regenerate a shelf brief.',
+      meta: 'Shelf brief unavailable.',
+      text: '',
+    };
+  }
+
+  const orderedByScore = [...entries]
+    .map((entry) => ({ entry, score: shippingScoreForEntry(entry) }))
+    .sort((a, b) => b.score - a.score);
+  const publishCandidate = orderedByScore[0]?.entry || null;
+  const route = orderedByScore.slice(0, 3).map((item) => item.entry);
+  const linkedBuildCount = new Set(entries.map((entry) => entry.dataset.relatedLink).filter(Boolean)).size;
+  const topTopic = Object.entries(topicCounts).sort((a, b) => b[1] - a[1])[0];
+  const topicLabel = topTopic?.[0] ? `${topTopic[0][0].toUpperCase()}${topTopic[0].slice(1)}` : 'Mixed';
+  const stageLine = `Research ${stageCounts.research} | Modeling ${stageCounts.modeling} | Drafting ${stageCounts.drafting}`;
+  const routeLine = route
+    .map((entry, index) => `${index + 1}. ${entry.querySelector('.entry-title')?.textContent || 'Draft note'}`)
+    .join('  ');
+  const publishTitle = publishCandidate?.querySelector('.entry-title')?.textContent || 'Open the shelf';
+  const publishNext = publishCandidate?.dataset.next || 'Open the draft and define the next writing move.';
+
+  return {
+    title: 'A copyable writing brief is ready from the visible shelf.',
+    summary: `Publish candidate: ${publishTitle}. Route: ${routeLine}`,
+    meta: `${stageLine}. ${topicLabel} is the densest visible lane. ${linkedBuildCount} linked build${linkedBuildCount === 1 ? '' : 's'} remain in play.`,
+    text: [
+      'Draft Shelf Brief',
+      '',
+      `Visible drafts: ${entries.length}`,
+      `Stage mix: ${stageLine}`,
+      `Densest lane: ${topicLabel}`,
+      `Linked builds in view: ${linkedBuildCount}`,
+      '',
+      `Publish candidate: ${publishTitle}`,
+      `Next move: ${publishNext}`,
+      '',
+      'Suggested reading route:',
+      ...route.map((entry, index) => {
+        const title = entry.querySelector('.entry-title')?.textContent || `Draft ${index + 1}`;
+        const stage = formatStageLabel(entry.dataset.stage);
+        const next = entry.dataset.next || 'Open the draft and define the next milestone.';
+        return `${index + 1}. ${title} (${stage}) - ${next}`;
+      }),
+    ].join('\n'),
+  };
+}
+
+function renderWritingDigest(entries, stageCounts, topicCounts) {
+  if (!writingDigestTitle || !writingDigestSummary || !writingDigestMeta || !copyWritingDigestBtn) {
+    return;
+  }
+
+  const digest = buildWritingDigest(entries, stageCounts, topicCounts);
+  currentWritingDigest = digest.text;
+  writingDigestTitle.textContent = digest.title;
+  writingDigestSummary.textContent = digest.summary;
+  writingDigestMeta.textContent = digest.meta;
+  copyWritingDigestBtn.disabled = !digest.text;
+}
+
 function applyWritingFilters() {
   const query = (writingSearchInput?.value || '').trim().toLowerCase();
   let visibleCount = 0;
@@ -1238,6 +1307,7 @@ function applyWritingFilters() {
 
   renderTopicAtlas(topicCounts, visibleEntries);
   renderWritingPipelineBrief(visibleEntries);
+  renderWritingDigest(visibleEntries, stageCounts, topicCounts);
   renderBuildBridgeBoard(visibleEntries);
   renderDraftGapBoard(visibleEntries);
   renderWritingQueue(visibleEntries);
@@ -1292,6 +1362,17 @@ surpriseWritingBtn?.addEventListener('click', () => {
 
   const randomEntry = visibleEntries[Math.floor(Math.random() * visibleEntries.length)];
   openWritingEntry(randomEntry);
+});
+
+copyWritingDigestBtn?.addEventListener('click', async () => {
+  if (!currentWritingDigest) return;
+
+  try {
+    await navigator.clipboard.writeText(currentWritingDigest);
+    writingResultsMeta.textContent = 'Copied the current draft shelf brief.';
+  } catch (error) {
+    writingResultsMeta.textContent = 'Clipboard copy failed for the draft shelf brief.';
+  }
 });
 
 writingSpotlightOpen?.addEventListener('click', () => {

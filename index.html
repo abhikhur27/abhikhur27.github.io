@@ -64,16 +64,16 @@
     <section class="launch-window container reveal" aria-label="Current launch window">
       <article class="launch-card">
         <p class="eyebrow">Current Launch</p>
-        <h2>Scope Negotiation Lab</h2>
-        <p class="section-copy">Interrogate a vague feature request under a short meeting budget, decide which clarifying questions are worth spending, then commit to a delivery posture before ambiguity turns into rework.</p>
+        <h2>Cutover Window Planner</h2>
+        <p class="section-copy">Stage prep work, reorder a migration runbook, and simulate whether a maintenance window actually lands cleanly before trust, rollback posture, and time budget fracture.</p>
         <div class="launch-meta">
-          <span>Ambiguous feature requests</span>
-          <span>Question-budget mechanic</span>
-          <span>Static decision lab</span>
+          <span>Sequence-first planning</span>
+          <span>Rollback readiness</span>
+          <span>Static cutover simulator</span>
         </div>
         <div class="card-actions">
-          <a href="./projects/scope-negotiation-lab/index.html" target="_blank" rel="noreferrer">Open build</a>
-          <a href="./projects/scope-negotiation-lab/README.md" target="_blank" rel="noreferrer">Read docs</a>
+          <a href="./projects/cutover-window-planner/index.html" target="_blank" rel="noreferrer">Open build</a>
+          <a href="./projects/cutover-window-planner/README.md" target="_blank" rel="noreferrer">Read docs</a>
         </div>
       </article>
       <article class="launch-card">
@@ -101,7 +101,7 @@
         <button class="visitor-mode-btn" type="button" data-mode-filter="systems" data-mode-query="lab">Show me systems pressure games</button>
         <button class="visitor-mode-btn" type="button" data-mode-filter="tools" data-mode-query="playground">Show me debugging tools</button>
         <button class="visitor-mode-btn" type="button" data-mode-filter="visualization" data-mode-query="lab">Show me simulation-heavy builds</button>
-        <button class="visitor-mode-btn" type="button" data-mode-filter="all" data-mode-query="queue">Show me the newest weird tool</button>
+        <button class="visitor-mode-btn" type="button" data-mode-filter="all" data-mode-query="cutover">Show me the newest weird tool</button>
       </div>
     </section>
 
@@ -205,6 +205,19 @@
       </section>
 
       <div class="project-grid">
+        <article class="project-card" data-category="systems tools visualization games">
+          <header>
+            <p class="tag">Newest Static Project</p>
+            <h3>Cutover Window Planner</h3>
+          </header>
+          <p>Choose prep moves, reorder a maintenance runbook, and simulate whether a risky platform cutover lands within window, rollback, and trust constraints.</p>
+          <p class="stack">HTML, CSS, JavaScript, Maintenance Cutover Planning Game</p>
+          <div class="card-actions">
+            <a href="./projects/cutover-window-planner/index.html" target="_blank" rel="noreferrer">Play</a>
+            <a href="./projects/cutover-window-planner/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="systems tools games">
           <header>
             <p class="tag">Newest Static Project</p>
@@ -815,6 +828,19 @@
           <h3>Reading Posture</h3>
           <p id="draft-reading-posture" class="results-meta">Visible draft breadth and stage posture will appear here.</p>
         </article>
+      </section>
+      <section class="project-spotlight writing-spotlight" aria-live="polite">
+        <p class="eyebrow">Shelf Digest</p>
+        <div class="spotlight-shell">
+          <div>
+            <h3 id="writing-digest-title">Filter the draft shelf to generate a brief worth sharing.</h3>
+            <p id="writing-digest-summary" class="section-copy">The blog section will condense visible drafts into a publish candidate, route, and coverage read.</p>
+            <p id="writing-digest-meta" class="results-meta">No digest available until the shelf is visible.</p>
+          </div>
+          <div class="card-actions spotlight-actions">
+            <button id="copy-writing-digest" class="spotlight-btn" type="button">Copy Shelf Brief</button>
+          </div>
+        </div>
       </section>
       <section class="topic-atlas" aria-label="Draft topic atlas">
         <div class="section-head">

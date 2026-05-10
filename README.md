@@ -31,6 +31,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Draft starter kit that turns the visible shelf into a compact first-reading route.
 - Cross-topic route card that turns the visible draft shelf into a range-first reading path.
 - Coverage-gap board that surfaces strong builds still waiting on a linked blog note.
+- Draft shelf digest that turns the current writing filters into a copyable publish brief.
 
 ## Included subprojects in this repo
 
@@ -51,6 +52,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/merge-conflict-studio`
 - `projects/sprint-cutline`
 - `projects/schema-drift-command`
+- `projects/cutover-window-planner`
 - `projects/failure-mode-atlas`
 - `projects/control-loop-lab`
 - `projects/handoff-briefing-lab`
@@ -85,6 +87,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/merge-conflict-studio`: three-way merge training game for practicing conflict resolution under behavioral constraints.
 - `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.
 - `projects/schema-drift-command`: schema migration decision game about compatibility shims, partner trust, and contract cutovers.
+- `projects/cutover-window-planner`: maintenance-window sequencing simulator where prep choices and task order decide whether a risky cutover lands cleanly.
 - `projects/failure-mode-atlas`: incident clue-to-failure mapping tool that ranks likely failure families and next diagnostic actions.
 - `projects/control-loop-lab`: feedback-stability simulator for lag, gain, damping, and queue spill tradeoffs.
 - `projects/handoff-briefing-lab`: incident handoff simulator where the player chooses the five updates that the next shift actually needs.

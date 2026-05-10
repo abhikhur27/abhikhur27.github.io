@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cutover Window Planner</title>
+  <meta name="description" content="Plan a risky maintenance cutover by sequencing tasks, buying guardrails, and simulating whether the window survives trust, rollback, and timing pressure.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Static Operations Planning Game</p>
+      <h1>Cutover Window Planner</h1>
+      <p>
+        A maintenance window only looks calm from far away. Pick the prep work that earns real safety,
+        reorder the cutover sequence, and simulate whether the plan survives time pressure, rollback
+        reality, and public trust.
+      </p>
+      <div class="hero-actions">
+        <button id="next-scenario" type="button">Load Next Scenario</button>
+        <button id="reset-scenario" type="button" class="ghost">Reset Scenario</button>
+        <button id="copy-plan-brief" type="button" class="ghost">Copy Plan Brief</button>
+      </div>
+    </div>
+    <div class="hero-stats" aria-label="Plan metrics">
+      <article>
+        <span class="stat-label">Hours left</span>
+        <strong id="time-left">0</strong>
+      </article>
+      <article>
+        <span class="stat-label">Readiness</span>
+        <strong id="readiness-score">0</strong>
+      </article>
+      <article>
+        <span class="stat-label">Rollback</span>
+        <strong id="rollback-score">0</strong>
+      </article>
+      <article>
+        <span class="stat-label">Trust</span>
+        <strong id="trust-score">0</strong>
+      </article>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel briefing-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Window Briefing</p>
+          <h2 id="scenario-title">Loading scenario...</h2>
+        </div>
+        <p id="scenario-badge" class="badge">-</p>
+      </div>
+      <p id="scenario-summary" class="lede"></p>
+      <div class="briefing-grid">
+        <article class="brief-card">
+          <h3>Pressure</h3>
+          <p id="scenario-pressure"></p>
+        </article>
+        <article class="brief-card">
+          <h3>Safe landing</h3>
+          <p id="scenario-success"></p>
+        </article>
+        <article class="brief-card">
+          <h3>Operator note</h3>
+          <p id="scenario-note"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel prep-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Prep Budget</p>
+          <h2>Buy the guardrails before you reorder the runbook</h2>
+        </div>
+        <p id="prep-summary" class="badge">0 selected</p>
+      </div>
+      <div id="prep-grid" class="prep-grid"></div>
+    </section>
+
+    <section class="panel sequence-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Cutover Sequence</p>
+          <h2>Reorder the maintenance plan</h2>
+        </div>
+        <p id="sequence-summary" class="badge">Move tasks until the riskiest handoff is protected.</p>
+      </div>
+      <div id="task-list" class="task-list"></div>
+    </section>
+
+    <section class="panel boards-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Operator Boards</p>
+          <h2>What this plan is telegraphing right now</h2>
+        </div>
+      </div>
+      <div class="board-grid">
+        <article class="board-card">
+          <h3>Dependency Board</h3>
+          <p id="dependency-board">Loading preview...</p>
+        </article>
+        <article class="board-card">
+          <h3>Rollback Board</h3>
+          <p id="rollback-board">Loading preview...</p>
+        </article>
+        <article class="board-card">
+          <h3>Window Board</h3>
+          <p id="window-board">Loading preview...</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel result-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Simulation</p>
+          <h2>Launch the cutover</h2>
+        </div>
+        <button id="simulate-plan" type="button">Simulate Plan</button>
+      </div>
+      <div id="result-summary" class="result-card">
+        <h3>No simulation run yet</h3>
+        <p>Pick prep work, reorder the runbook, and then simulate how the window behaves under pressure.</p>
+      </div>
+      <div id="action-log" class="action-log"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
