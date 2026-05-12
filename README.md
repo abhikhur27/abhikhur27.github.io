@@ -32,6 +32,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Cross-topic route card that turns the visible draft shelf into a range-first reading path.
 - Coverage-gap board that surfaces strong builds still waiting on a linked blog note.
 - Draft shelf digest that turns the current writing filters into a copyable publish brief.
+- Interface-contract launch window that ties the newest build to the writing shelf's trust-and-policy lane.
 
 ## Included subprojects in this repo
 
@@ -52,6 +53,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/merge-conflict-studio`
 - `projects/sprint-cutline`
 - `projects/schema-drift-command`
+- `projects/interface-treaty-studio`
 - `projects/cutover-window-planner`
 - `projects/failure-mode-atlas`
 - `projects/control-loop-lab`
@@ -87,6 +89,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/merge-conflict-studio`: three-way merge training game for practicing conflict resolution under behavioral constraints.
 - `projects/sprint-cutline`: release-week prioritization game about cutting scope without breaking trust.
 - `projects/schema-drift-command`: schema migration decision game about compatibility shims, partner trust, and contract cutovers.
+- `projects/interface-treaty-studio`: interaction-policy drafting game about what an interface promises before pressure exposes the missing clause.
 - `projects/cutover-window-planner`: maintenance-window sequencing simulator where prep choices and task order decide whether a risky cutover lands cleanly.
 - `projects/failure-mode-atlas`: incident clue-to-failure mapping tool that ranks likely failure families and next diagnostic actions.
 - `projects/control-loop-lab`: feedback-stability simulator for lag, gain, damping, and queue spill tradeoffs.

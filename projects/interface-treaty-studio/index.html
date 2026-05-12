@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interface Treaty Studio</title>
+  <meta name="description" content="Draft an interaction contract under a tight policy budget and see how different users react.">
+  <meta property="og:title" content="Interface Treaty Studio">
+  <meta property="og:description" content="Choose what an interface promises about speed, reversibility, visibility, and automation under pressure.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abhikhur27.github.io/projects/interface-treaty-studio/">
+  <meta name="theme-color" content="#1f1712">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <p class="eyebrow">Interaction Policy Game</p>
+      <h1>Interface Treaty Studio</h1>
+      <p class="lead">
+        Every interface makes promises, even when it does not write them down. Spend a small policy budget on
+        acknowledgement, reversibility, visibility, and automation, then see which users trust the result and which
+        failure modes still slip through.
+      </p>
+      <div class="hero-actions">
+        <button id="copy-brief" type="button">Copy Treaty Brief</button>
+        <button id="copy-link" type="button">Copy Share Link</button>
+      </div>
+      <p id="status" class="status">Choose a scenario and draft a treaty.</p>
+    </section>
+
+    <section class="layout-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Scenario</p>
+            <h2>Pick the pressure</h2>
+          </div>
+          <p id="scenario-summary" class="summary">Scenario pressure will appear here.</p>
+        </div>
+        <div id="scenario-list" class="scenario-list"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Treaty Clauses</p>
+            <h2>Spend a 9-point policy budget</h2>
+          </div>
+          <p id="budget-summary" class="summary">No clauses selected yet.</p>
+        </div>
+        <div id="clause-list" class="clause-list"></div>
+      </article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel compact">
+        <p class="eyebrow">Treaty Posture</p>
+        <div id="posture-board" class="stack"></div>
+      </article>
+      <article class="panel compact">
+        <p class="eyebrow">Pressure Ledger</p>
+        <div id="ledger-board" class="stack"></div>
+      </article>
+      <article class="panel compact">
+        <p class="eyebrow">Likely Breaks</p>
+        <div id="failure-board" class="stack"></div>
+      </article>
+      <article class="panel compact">
+        <p class="eyebrow">Persona Reactions</p>
+        <div id="persona-board" class="stack"></div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Selected Treaty</p>
+          <h2>Promises currently on the table</h2>
+        </div>
+        <p id="treaty-summary" class="summary">Add clauses to generate the active treaty.</p>
+      </div>
+      <div id="treaty-chips" class="chip-row"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
