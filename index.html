@@ -64,16 +64,16 @@
     <section class="launch-window container reveal" aria-label="Current launch window">
       <article class="launch-card">
         <p class="eyebrow">Current Launch</p>
-        <h2>Interface Treaty Studio</h2>
-        <p class="section-copy">Draft what an interface promises about acknowledgement, reversibility, automation, and operator traceability before pressure reveals the missing clause.</p>
+        <h2>Alert Charter Studio</h2>
+        <p class="section-copy">Author how latency, errors, backlog, and saturation escalate across a live shift, then see whether the charter catches the real incidents without burning pager trust on noise.</p>
         <div class="launch-meta">
-          <span>Interaction contract drafting</span>
-          <span>Policy budget game</span>
-          <span>Static UX systems lab</span>
+          <span>On-call policy authoring</span>
+          <span>Shift simulation</span>
+          <span>Static operator-systems lab</span>
         </div>
         <div class="card-actions">
-          <a href="./projects/interface-treaty-studio/index.html" target="_blank" rel="noreferrer">Open build</a>
-          <a href="./projects/interface-treaty-studio/README.md" target="_blank" rel="noreferrer">Read docs</a>
+          <a href="./projects/alert-charter-studio/index.html" target="_blank" rel="noreferrer">Open build</a>
+          <a href="./projects/alert-charter-studio/README.md" target="_blank" rel="noreferrer">Read docs</a>
         </div>
       </article>
       <article class="launch-card">
@@ -102,7 +102,8 @@
         <button class="visitor-mode-btn" type="button" data-mode-filter="tools" data-mode-query="playground">Show me debugging tools</button>
         <button class="visitor-mode-btn" type="button" data-mode-filter="visualization" data-mode-query="lab">Show me simulation-heavy builds</button>
         <button class="visitor-mode-btn" type="button" data-mode-filter="tools" data-mode-query="treaty">Show me interface contract builds</button>
-        <button class="visitor-mode-btn" type="button" data-mode-filter="all" data-mode-query="treaty">Show me the newest weird tool</button>
+        <button class="visitor-mode-btn" type="button" data-mode-filter="systems" data-mode-query="alert">Show me operator policy builds</button>
+        <button class="visitor-mode-btn" type="button" data-mode-filter="all" data-mode-query="alert">Show me the newest weird tool</button>
       </div>
     </section>
 
@@ -181,10 +182,10 @@
         </article>
         <article class="route-card">
           <p class="tag">Route 04</p>
-          <h3>Instrumentation Path</h3>
-          <p>Start by placing probes under a hard telemetry budget, then move into dependency drift and failure triage.</p>
+          <h3>Operator Signal Path</h3>
+          <p>Start by authoring alert routes under shift pressure, then move into probe budgets and failure-family triage.</p>
           <div class="card-actions">
-            <a href="./projects/probe-budget-lab/index.html" target="_blank" rel="noreferrer">Open newest build</a>
+            <a href="./projects/alert-charter-studio/index.html" target="_blank" rel="noreferrer">Open alert route</a>
           </div>
         </article>
         <article class="route-card">
@@ -214,6 +215,19 @@
       </section>
 
       <div class="project-grid">
+        <article class="project-card" data-category="systems tools games">
+          <header>
+            <p class="tag">Newest Static Project</p>
+            <h3>Alert Charter Studio</h3>
+          </header>
+          <p>Author alert thresholds and routes for a noisy shift, then inspect which real incidents get caught, which false positives burn pager trust, and where digest-only policies quietly hide operator pain.</p>
+          <p class="stack">HTML, CSS, JavaScript, On-Call Policy Simulation</p>
+          <div class="card-actions">
+            <a href="./projects/alert-charter-studio/index.html" target="_blank" rel="noreferrer">Play</a>
+            <a href="./projects/alert-charter-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="systems tools games">
           <header>
             <p class="tag">Newest Static Project</p>
@@ -949,7 +963,34 @@
         </div>
       </section>
 
+      <section class="project-spotlight writing-spotlight" aria-live="polite">
+        <p class="eyebrow">Draft Queue</p>
+        <div class="spotlight-shell">
+          <div>
+            <h3 id="draft-queue-title">Pin up to three drafts to build your own reading route.</h3>
+            <p id="draft-queue-summary" class="section-copy">Use the pin button on any draft to stage a custom essay sequence instead of relying only on the automatic routes.</p>
+            <p id="draft-queue-meta" class="results-meta">No drafts pinned yet.</p>
+          </div>
+          <div class="card-actions spotlight-actions">
+            <button id="draft-queue-copy" class="spotlight-btn" type="button">Copy Draft Queue</button>
+            <button id="draft-queue-clear" class="spotlight-btn" type="button">Clear Queue</button>
+          </div>
+        </div>
+        <div id="draft-queue-list" class="compare-list"></div>
+      </section>
+
       <div class="entry-list">
+        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the shift timeline into one argument about why alerting is operator interface design, not backend plumbing." data-related-link="./projects/alert-charter-studio/index.html" data-related-label="Alert Charter Studio">
+          <summary>
+            <span class="entry-title">Alert Thresholds Are Product Decisions for Operators</span>
+            <span class="entry-meta">On-call systems, paging, and trust optics</span>
+            <span class="entry-stage">Drafting</span>
+          </summary>
+          <p><strong>Writing shape:</strong> noisy shift -> alert charter choices -> trust and fatigue tradeoffs.</p>
+          <p><strong>Sources to reference:</strong> SRE paging guides, incident-response writeups, alert fatigue studies, operator tooling notes.</p>
+          <p><strong>Technical angle:</strong> signal routing under false-positive cost, detection delay, and human interruption budgets.</p>
+        </details>
+
         <details class="entry-row" data-topic="systems" data-stage="research" data-next="Turn the clause draft into one argument about acknowledgements, undo windows, and operator traceability as one interaction contract." data-related-link="./projects/interface-treaty-studio/index.html" data-related-label="Interface Treaty Studio">
           <summary>
             <span class="entry-title">Interfaces Make Promises Long Before the UI Copy Says So</span>

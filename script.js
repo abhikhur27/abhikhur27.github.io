@@ -68,6 +68,12 @@ const writingSpotlightDescription = document.getElementById('writing-spotlight-d
 const writingSpotlightMeta = document.getElementById('writing-spotlight-meta');
 const writingSpotlightOpen = document.getElementById('writing-spotlight-open');
 const writingSpotlightRelated = document.getElementById('writing-spotlight-related');
+const draftQueueTitle = document.getElementById('draft-queue-title');
+const draftQueueSummary = document.getElementById('draft-queue-summary');
+const draftQueueMeta = document.getElementById('draft-queue-meta');
+const draftQueueList = document.getElementById('draft-queue-list');
+const draftQueueCopy = document.getElementById('draft-queue-copy');
+const draftQueueClear = document.getElementById('draft-queue-clear');
 const commitCountEl = document.getElementById('commit-count');
 const commitCaptionEl = document.getElementById('commit-caption');
 const commitMetaEl = document.getElementById('commit-meta');
@@ -86,6 +92,7 @@ let currentStarterKitEntries = [];
 let currentCrossTopicEntries = [];
 let currentSessionRoute = null;
 let pinnedProjectCards = [];
+let pinnedWritingEntries = [];
 let currentWritingDigest = '';
 let suppressUrlSync = false;
 
@@ -495,6 +502,22 @@ writingEntries.forEach((entry, index) => {
   }
 });
 
+writingEntries.forEach((entry) => {
+  const summary = entry.querySelector('summary');
+  if (!summary) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'entry-pin-btn';
+  button.textContent = 'Pin Draft';
+  button.setAttribute('aria-pressed', 'false');
+  button.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    togglePinnedWritingEntry(entry);
+  });
+  summary.appendChild(button);
+});
+
 function updateWritingSpotlight(entry) {
   currentWritingSpotlightEntry = entry || null;
 
@@ -538,6 +561,100 @@ function openWritingEntry(entry) {
   updateWritingSpotlight(entry);
   entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
   updateUrlState();
+}
+
+function syncDraftQueueButtons() {
+  writingEntries.forEach((entry) => {
+    const button = entry.querySelector('.entry-pin-btn');
+    if (!button) return;
+    const isPinned = pinnedWritingEntries.includes(entry);
+    button.classList.toggle('is-active', isPinned);
+    button.textContent = isPinned ? 'Pinned' : 'Pin Draft';
+    button.setAttribute('aria-pressed', String(isPinned));
+  });
+}
+
+function buildDraftQueueBrief() {
+  if (!pinnedWritingEntries.length) {
+    return 'No drafts pinned yet.';
+  }
+
+  return [
+    'Draft Queue Brief',
+    '',
+    ...pinnedWritingEntries.map((entry, index) => {
+      const title = entry.querySelector('.entry-title')?.textContent || `Draft ${index + 1}`;
+      const stage = formatStageLabel(entry.dataset.stage);
+      const next = entry.dataset.next || 'Open the draft and define the next milestone.';
+      return `${index + 1}. ${title} (${stage})\n   ${next}`;
+    }),
+    '',
+    `Current shelf view: ${window.location.href}`,
+  ].join('\n');
+}
+
+function renderDraftQueueTray() {
+  syncDraftQueueButtons();
+
+  if (!draftQueueTitle || !draftQueueSummary || !draftQueueMeta || !draftQueueList) {
+    return;
+  }
+
+  if (!pinnedWritingEntries.length) {
+    draftQueueTitle.textContent = 'Pin up to three drafts to build your own reading route.';
+    draftQueueSummary.textContent = 'Use the pin button on any draft to stage a custom essay sequence instead of relying only on the automatic routes.';
+    draftQueueMeta.textContent = 'No drafts pinned yet.';
+    draftQueueList.innerHTML = '';
+    return;
+  }
+
+  const titles = pinnedWritingEntries.map((entry) => entry.querySelector('.entry-title')?.textContent || 'Draft');
+  draftQueueTitle.textContent = titles.length === 1 ? titles[0] : `${titles[0]} -> ${titles[titles.length - 1]}`;
+  draftQueueSummary.textContent = `Custom route across ${pinnedWritingEntries.length} draft${pinnedWritingEntries.length === 1 ? '' : 's'} with a deliberate mix of stages, topics, or related builds.`;
+  draftQueueMeta.textContent = `${pinnedWritingEntries.length} pinned draft${pinnedWritingEntries.length === 1 ? '' : 's'} | Best use: open one anchor essay, one contrast note, then the closest-to-ship follow-up.`;
+  draftQueueList.innerHTML = pinnedWritingEntries
+    .map((entry, index) => {
+      const title = entry.querySelector('.entry-title')?.textContent || `Draft ${index + 1}`;
+      const description = entry.querySelector('p')?.textContent || '';
+      const stage = formatStageLabel(entry.dataset.stage);
+      const relatedLink = entry.dataset.relatedLink;
+      const relatedLabel = entry.dataset.relatedLabel || 'Related build';
+      return `
+        <article class="compare-card">
+          <p class="tag">Pinned ${index + 1}</p>
+          <h3>${title}</h3>
+          <p class="section-copy">${description}</p>
+          <p class="results-meta">${stage}</p>
+          <div class="card-actions">
+            <button class="spotlight-btn draft-open-btn" type="button" data-entry-id="${entry.id}">Open Draft</button>
+            ${relatedLink ? `<a href="${relatedLink}" target="_blank" rel="noreferrer">${relatedLabel}</a>` : ''}
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+
+  draftQueueList.querySelectorAll('.draft-open-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const entry = writingEntries.find((item) => item.id === button.dataset.entryId);
+      if (entry) openWritingEntry(entry);
+    });
+  });
+}
+
+function togglePinnedWritingEntry(entry) {
+  const existingIndex = pinnedWritingEntries.indexOf(entry);
+  if (existingIndex >= 0) {
+    pinnedWritingEntries.splice(existingIndex, 1);
+    renderDraftQueueTray();
+    return;
+  }
+
+  if (pinnedWritingEntries.length >= 3) {
+    pinnedWritingEntries.shift();
+  }
+  pinnedWritingEntries.push(entry);
+  renderDraftQueueTray();
 }
 
 function stagePriority(stage) {
@@ -1316,6 +1433,7 @@ function applyWritingFilters() {
   renderDraftStarterKit(visibleEntries);
   renderCrossTopicRoute(visibleEntries);
   updateWritingSpotlight(firstVisible);
+  renderDraftQueueTray();
   updateUrlState();
 }
 
@@ -1429,6 +1547,20 @@ crossTopicRouteCopy?.addEventListener('click', async () => {
   } catch (error) {
     if (crossTopicRouteMeta) crossTopicRouteMeta.textContent = 'Clipboard copy failed for the cross-topic route.';
   }
+});
+
+draftQueueCopy?.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(buildDraftQueueBrief());
+    if (draftQueueMeta) draftQueueMeta.textContent = 'Copied the current draft queue.';
+  } catch (error) {
+    if (draftQueueMeta) draftQueueMeta.textContent = 'Clipboard copy failed for the draft queue.';
+  }
+});
+
+draftQueueClear?.addEventListener('click', () => {
+  pinnedWritingEntries = [];
+  renderDraftQueueTray();
 });
 
 copyProjectViewBtn?.addEventListener('click', () => copyCurrentView('projects'));
@@ -1746,6 +1878,7 @@ applyProjectFilters();
 applyWritingFilters();
 renderBuildTrails();
 renderCompareTray();
+renderDraftQueueTray();
 loadGithubPulse();
 
 const draftParam = new URLSearchParams(window.location.search).get('draft');
