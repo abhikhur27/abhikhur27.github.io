@@ -31,6 +31,7 @@ const copyWritingViewBtn = document.getElementById('copy-writing-view-btn');
 const writingEntries = Array.from(document.querySelectorAll('#writing .entry-row'));
 const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filter-btn'));
 const writingStageButtons = Array.from(document.querySelectorAll('.writing-stage-btn'));
+const writingPresetButtons = Array.from(document.querySelectorAll('.writing-preset-btn'));
 const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
 const draftStageSummary = document.getElementById('draft-stage-summary');
@@ -1452,6 +1453,21 @@ function setWritingFilters(topic, stage) {
   applyWritingFilters();
 }
 
+function applyWritingPreset(topic, stage, query) {
+  activeWritingTopic = topic || 'all';
+  activeWritingStage = stage || 'all';
+  writingFilterButtons.forEach((button) => {
+    button.classList.toggle('active', (button.dataset.topic || 'all') === activeWritingTopic);
+  });
+  writingStageButtons.forEach((button) => {
+    button.classList.toggle('active', (button.dataset.stage || 'all') === activeWritingStage);
+  });
+  if (writingSearchInput) {
+    writingSearchInput.value = query || '';
+  }
+  applyWritingFilters();
+}
+
 writingSearchInput?.addEventListener('input', applyWritingFilters);
 writingFilterButtons.forEach((button) => {
   button.addEventListener('click', () => {
@@ -1468,6 +1484,12 @@ writingStageButtons.forEach((button) => {
     writingStageButtons.forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
     applyWritingFilters();
+  });
+});
+
+writingPresetButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    applyWritingPreset(button.dataset.topic || 'all', button.dataset.stage || 'all', button.dataset.query || '');
   });
 });
 

@@ -217,6 +217,19 @@
       <div class="project-grid">
         <article class="project-card" data-category="systems tools games">
           <header>
+            <p class="tag">New</p>
+            <h3>Graceful Degradation Lab</h3>
+          </header>
+          <p>Choose fallback modes for search, media, checkout, and analytics under incident pressure, then see which degraded path preserves trust, throughput, and operator calm.</p>
+          <p class="stack">HTML, CSS, JavaScript, Degraded-Mode Policy Simulation</p>
+          <div class="card-actions">
+            <a href="./projects/graceful-degradation-lab/index.html" target="_blank" rel="noreferrer">Play</a>
+            <a href="./projects/graceful-degradation-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="systems tools games">
+          <header>
             <p class="tag">Newest Static Project</p>
             <h3>Alert Charter Studio</h3>
           </header>
@@ -828,6 +841,12 @@
         <button class="filter-btn writing-stage-btn" data-stage="modeling" type="button">Modeling</button>
         <button class="filter-btn writing-stage-btn" data-stage="drafting" type="button">Drafting</button>
       </div>
+      <div class="filter-group writing-presets" role="group" aria-label="Draft route presets">
+        <button class="filter-btn writing-preset-btn" data-topic="systems" data-stage="drafting" data-query="operator" type="button">Operator Route</button>
+        <button class="filter-btn writing-preset-btn" data-topic="systems" data-stage="drafting" data-query="transit" type="button">Transit Route</button>
+        <button class="filter-btn writing-preset-btn" data-topic="all" data-stage="modeling" data-query="" type="button">Modeling Shelf</button>
+        <button class="filter-btn writing-preset-btn" data-topic="systems" data-stage="drafting" data-query="degradation" type="button">Degradation Route</button>
+      </div>
       <label class="project-search writing-search" for="writing-search-input">
         Search draft shelf
         <input id="writing-search-input" type="search" placeholder="Filter by topic, source set, or technical angle">
@@ -989,6 +1008,17 @@
           <p><strong>Writing shape:</strong> noisy shift -> alert charter choices -> trust and fatigue tradeoffs.</p>
           <p><strong>Sources to reference:</strong> SRE paging guides, incident-response writeups, alert fatigue studies, operator tooling notes.</p>
           <p><strong>Technical angle:</strong> signal routing under false-positive cost, detection delay, and human interruption budgets.</p>
+        </details>
+
+        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the fallback timeline into one argument about degraded modes as product promises, not just ops toggles." data-related-link="./projects/graceful-degradation-lab/index.html" data-related-label="Graceful Degradation Lab">
+          <summary>
+            <span class="entry-title">Graceful Degradation Is a Product Contract, Not an Ops Afterthought</span>
+            <span class="entry-meta">Systems, reliability posture, and user-facing fallback design</span>
+            <span class="entry-stage">Drafting</span>
+          </summary>
+          <p><strong>Writing shape:</strong> incident pressure -> fallback policy choices -> trust and throughput tradeoffs.</p>
+          <p><strong>Sources to reference:</strong> SRE overload guidance, outage case studies, graceful degradation patterns, queueing and fallback design notes.</p>
+          <p><strong>Technical angle:</strong> degraded-mode routing across critical surfaces, operator load, user pain, and revenue-protection posture.</p>
         </details>
 
         <details class="entry-row" data-topic="systems" data-stage="research" data-next="Turn the clause draft into one argument about acknowledgements, undo windows, and operator traceability as one interaction contract." data-related-link="./projects/interface-treaty-studio/index.html" data-related-label="Interface Treaty Studio">

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graceful Degradation Lab</title>
+  <meta name="description" content="Choose degraded-mode policies for key product surfaces and inspect the trust, throughput, and operator consequences.">
+  <meta property="og:title" content="Graceful Degradation Lab">
+  <meta property="og:description" content="Author fallback modes under incident pressure and see which degraded path preserves trust instead of just uptime optics.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abhikhur27.github.io/projects/graceful-degradation-lab/">
+  <meta name="theme-color" content="#14161f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <p class="eyebrow">Fallback Policy Simulator</p>
+      <h1>Graceful Degradation Lab</h1>
+      <p class="lead">
+        Reliability is not only keeping the lights on. Choose which product surfaces stay full, switch to cached reads,
+        move into queues, or shut off cleanly, then inspect which degraded path actually protects user trust,
+        throughput, and operator sanity.
+      </p>
+      <div class="hero-actions">
+        <button id="run-simulation" type="button">Run Scenario</button>
+        <button id="copy-brief" type="button">Copy Degradation Brief</button>
+        <button id="copy-link" type="button">Copy Share Link</button>
+      </div>
+      <p id="status" class="status">Pick a scenario and author the fallback policy.</p>
+    </section>
+
+    <section class="layout-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Scenario</p>
+            <h2>Choose the incident day</h2>
+          </div>
+          <p id="scenario-summary" class="summary">Scenario posture will appear here.</p>
+        </div>
+        <div id="scenario-list" class="scenario-list"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Fallback Policy</p>
+            <h2>Author the degraded path</h2>
+          </div>
+          <p id="policy-summary" class="summary">No simulation yet.</p>
+        </div>
+        <div id="surface-list" class="scenario-list"></div>
+      </article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel compact">
+        <p class="eyebrow">Scenario Verdict</p>
+        <div id="verdict-board" class="stack"></div>
+      </article>
+      <article class="panel compact">
+        <p class="eyebrow">Throughput Posture</p>
+        <div id="capacity-board" class="stack"></div>
+      </article>
+      <article class="panel compact">
+        <p class="eyebrow">Trust Budget</p>
+        <div id="trust-board" class="stack"></div>
+      </article>
+      <article class="panel compact">
+        <p class="eyebrow">Operator Load</p>
+        <div id="operator-board" class="stack"></div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Impact Timeline</p>
+          <h2>What the fallback path actually did</h2>
+        </div>
+        <p id="timeline-summary" class="summary">Run the scenario to generate timeline consequences.</p>
+      </div>
+      <div id="timeline-list" class="scenario-list"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

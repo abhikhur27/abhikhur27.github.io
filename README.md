@@ -35,6 +35,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Interface-contract launch window that ties the newest build to the writing shelf's trust-and-policy lane.
 - Draft queue tray that lets visitors pin up to three essays and build a custom reading route.
 - Alert-charter launch window that foregrounds operator-facing signal policy work instead of only interaction-contract work.
+- Draft route presets that jump the blog shelf into reusable operator, transit, modeling, or degradation reading paths in one click.
 
 ## Included subprojects in this repo
 
@@ -78,6 +79,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/verification-ladder-lab`
 - `projects/scope-negotiation-lab`
 - `projects/alert-charter-studio`
+- `projects/graceful-degradation-lab`
 
 ## Technical design
 
@@ -86,6 +88,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/rollback-budget-lab`: product-safety decision lab for spending a limited safeguard budget on undo depth, staged rollout, and trust-preserving recovery.
 - `projects/scope-negotiation-lab`: ambiguity-first product scope game about spending a short discovery budget before a vague request turns into rework.
 - `projects/alert-charter-studio`: on-call alert-policy simulator for authoring signal thresholds and escalation routes under noisy shift pressure.
+- `projects/graceful-degradation-lab`: degraded-mode policy simulator for choosing which product surfaces stay full, cached, queued, or disabled under incident pressure.
 - `projects/systems-decision-labs`: anthology page that groups the repeated campus/infrastructure decision sims into one portfolio family.
 - `projects/cache-policy-studio`: cache policy sandbox for TTL, stale windows, and origin-load tradeoffs.
 - `projects/latency-budget-planner`: latency budgeting surface for turning network/backend/render slices into loader and optimistic-UI guidance.
