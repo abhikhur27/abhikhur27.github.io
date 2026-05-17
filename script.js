@@ -63,6 +63,12 @@ const crossTopicRouteMeta = document.getElementById('cross-topic-route-meta');
 const crossTopicRouteOpen = document.getElementById('cross-topic-route-open');
 const crossTopicRouteCopy = document.getElementById('cross-topic-route-copy');
 const draftReadingPosture = document.getElementById('draft-reading-posture');
+const draftReadingPace = document.getElementById('draft-reading-pace');
+const readingPaceRouteTitle = document.getElementById('reading-pace-route-title');
+const readingPaceRouteSummary = document.getElementById('reading-pace-route-summary');
+const readingPaceRouteMeta = document.getElementById('reading-pace-route-meta');
+const readingPaceRouteOpen = document.getElementById('reading-pace-route-open');
+const readingPaceRouteCopy = document.getElementById('reading-pace-route-copy');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
@@ -91,6 +97,7 @@ let currentWritingSpotlightEntry = null;
 let currentDraftActionEntry = null;
 let currentStarterKitEntries = [];
 let currentCrossTopicEntries = [];
+let currentReadingPaceEntries = [];
 let currentSessionRoute = null;
 let pinnedProjectCards = [];
 let pinnedWritingEntries = [];
@@ -1006,6 +1013,13 @@ function shippingScoreForEntry(entry) {
   return Math.min(100, stageBase + hasRelatedBuild + titleBonus);
 }
 
+function estimateDraftMinutes(entry) {
+  const textLength = (entry.textContent || '').trim().length;
+  const baseMinutes = Math.max(2, Math.round(textLength / 280));
+  const stageAdjustment = entry.dataset.stage === 'drafting' ? 0 : entry.dataset.stage === 'modeling' ? 1 : 2;
+  return Math.min(10, baseMinutes + stageAdjustment);
+}
+
 function renderDraftStarterKit(entries) {
   currentStarterKitEntries = [];
 
@@ -1103,6 +1117,59 @@ function renderCrossTopicRoute(entries) {
   crossTopicRouteMeta.textContent = `Lane mix: ${laneMix}. Use this route when the goal is range, not just depth inside one topic.`;
   crossTopicRouteOpen.disabled = false;
   crossTopicRouteCopy.disabled = false;
+}
+
+function renderReadingPaceRoute(entries) {
+  currentReadingPaceEntries = [];
+
+  if (
+    !readingPaceRouteTitle ||
+    !readingPaceRouteSummary ||
+    !readingPaceRouteMeta ||
+    !readingPaceRouteOpen ||
+    !readingPaceRouteCopy ||
+    !draftReadingPace
+  ) {
+    return;
+  }
+
+  if (!entries.length) {
+    draftReadingPace.textContent = 'No visible drafts. Broaden the shelf to estimate a quick reading pass.';
+    readingPaceRouteTitle.textContent = 'No quick route is possible under the current filters.';
+    readingPaceRouteSummary.textContent = 'Broaden the topic, stage, or search query to rebuild a compact reading pass.';
+    readingPaceRouteMeta.textContent = 'Quick route unavailable.';
+    readingPaceRouteOpen.disabled = true;
+    readingPaceRouteCopy.disabled = true;
+    return;
+  }
+
+  const ordered = [...entries].sort((a, b) => estimateDraftMinutes(a) - estimateDraftMinutes(b) || shippingScoreForEntry(b) - shippingScoreForEntry(a));
+  const route = [];
+  let budget = 0;
+  ordered.forEach((entry) => {
+    if (route.length >= 3) return;
+    const minutes = estimateDraftMinutes(entry);
+    if (route.length === 0 || budget + minutes <= 8 || route.length < 2) {
+      route.push(entry);
+      budget += minutes;
+    }
+  });
+
+  currentReadingPaceEntries = route;
+  const totalMinutes = route.reduce((sum, entry) => sum + estimateDraftMinutes(entry), 0);
+  const label = totalMinutes <= 6 ? 'Fast' : totalMinutes <= 10 ? 'Balanced' : 'Deep';
+  const laneMix = [...new Set(route.map((entry) => entry.dataset.topic || 'general'))]
+    .map((topic) => `${topic[0].toUpperCase()}${topic.slice(1)}`)
+    .join(' -> ');
+
+  draftReadingPace.textContent = `${label} shelf pace: ${route.length} draft stop${route.length === 1 ? '' : 's'} for about ${totalMinutes} minutes from the current view.`;
+  readingPaceRouteTitle.textContent = `${label} reading route ready from the visible shelf.`;
+  readingPaceRouteSummary.textContent = route
+    .map((entry, index) => `${index + 1}. ${entry.querySelector('.entry-title')?.textContent || 'Draft note'} (${estimateDraftMinutes(entry)} min)`)
+    .join('  ');
+  readingPaceRouteMeta.textContent = `Lane mix: ${laneMix}. Use this when you want one compact pass through the blog shelf instead of the longer curated routes.`;
+  readingPaceRouteOpen.disabled = false;
+  readingPaceRouteCopy.disabled = false;
 }
 
 function renderShippingBoard(entries) {
@@ -1432,6 +1499,7 @@ function applyWritingFilters() {
   renderWritingActions(visibleEntries);
   renderShippingBoard(visibleEntries);
   renderDraftStarterKit(visibleEntries);
+  renderReadingPaceRoute(visibleEntries);
   renderCrossTopicRoute(visibleEntries);
   updateWritingSpotlight(firstVisible);
   renderDraftQueueTray();
@@ -1543,6 +1611,31 @@ starterKitCopy?.addEventListener('click', async () => {
     if (starterKitMeta) starterKitMeta.textContent = 'Copied the current reading kit.';
   } catch (error) {
     if (starterKitMeta) starterKitMeta.textContent = 'Clipboard copy failed for the reading kit.';
+  }
+});
+readingPaceRouteOpen?.addEventListener('click', () => {
+  if (!currentReadingPaceEntries.length) return;
+  openWritingEntry(currentReadingPaceEntries[0]);
+});
+readingPaceRouteCopy?.addEventListener('click', async () => {
+  if (!currentReadingPaceEntries.length) {
+    if (readingPaceRouteMeta) readingPaceRouteMeta.textContent = 'No quick route available to copy.';
+    return;
+  }
+
+  const lines = [
+    'Draft Shelf Quick Route',
+    '',
+    ...currentReadingPaceEntries.map((entry, index) => `${index + 1}. ${entry.querySelector('.entry-title')?.textContent || 'Draft note'} (${estimateDraftMinutes(entry)} min)`),
+    '',
+    `Current view: ${window.location.href}`,
+  ];
+
+  try {
+    await navigator.clipboard.writeText(lines.join('\n'));
+    if (readingPaceRouteMeta) readingPaceRouteMeta.textContent = 'Copied the quick reading route.';
+  } catch (error) {
+    if (readingPaceRouteMeta) readingPaceRouteMeta.textContent = 'Clipboard copy failed for the quick reading route.';
   }
 });
 crossTopicRouteOpen?.addEventListener('click', () => {
