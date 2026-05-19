@@ -1,0 +1,265 @@
+:root {
+  color-scheme: dark;
+  --bg: #120f13;
+  --bg-alt: #1c1720;
+  --panel: rgba(33, 25, 38, 0.92);
+  --panel-strong: rgba(45, 34, 52, 0.96);
+  --line: rgba(240, 213, 181, 0.14);
+  --text: #f8efe3;
+  --muted: #c7b8ab;
+  --accent: #f09d51;
+  --accent-soft: rgba(240, 157, 81, 0.18);
+  --good: #7dd3a7;
+  --bad: #f28b82;
+  --warn: #f5c468;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Manrope', sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(240, 157, 81, 0.22), transparent 28%),
+    linear-gradient(160deg, #120f13 0%, #17131a 48%, #0d0a10 100%);
+  color: var(--text);
+}
+
+.shell {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2.5rem 0 3rem;
+}
+
+.hero,
+.panel,
+.scoreboard article {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.hero {
+  padding: 1.6rem;
+  border-radius: 28px;
+  margin-bottom: 1.4rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.74rem;
+  color: var(--accent);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 4vw, 4.2rem);
+}
+
+.lede,
+.summary,
+.watch,
+.status-line,
+li,
+button {
+  line-height: 1.6;
+}
+
+.lede,
+.summary,
+.watch,
+.status-line,
+.fact-list,
+.decision-log {
+  color: var(--muted);
+}
+
+.hero-actions,
+.decision-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.25rem;
+}
+
+button {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.8rem 1.15rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--accent-soft);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+button:hover,
+button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(240, 157, 81, 0.38);
+  outline: none;
+}
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1.4rem;
+}
+
+.scoreboard article {
+  padding: 1rem 1.1rem;
+  border-radius: 20px;
+}
+
+.scoreboard span {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+
+.scoreboard strong {
+  font-size: 1.9rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.8fr);
+  gap: 1rem;
+}
+
+.panel {
+  border-radius: 26px;
+  padding: 1.2rem;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+}
+
+.round-pill {
+  margin: 0;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+}
+
+.case-grid,
+.stake-map,
+.decision-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.case-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 1rem 0 1.1rem;
+}
+
+.fact-list,
+.decision-log {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.stake-map {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stake-card {
+  padding: 0.85rem 0.95rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stake-card span {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.decision-grid {
+  margin-top: 0.9rem;
+}
+
+.decision-card {
+  text-align: left;
+  border-radius: 22px;
+  padding: 1rem;
+  background: var(--panel-strong);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.decision-card strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+}
+
+.decision-card .delta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  font-size: 0.8rem;
+}
+
+.delta-chip {
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.delta-good {
+  color: var(--good);
+}
+
+.delta-bad {
+  color: var(--bad);
+}
+
+.delta-warn {
+  color: var(--warn);
+}
+
+.sidebar {
+  display: grid;
+  gap: 1rem;
+}
+
+.log-panel {
+  min-height: 260px;
+}
+
+.decision-log li + li {
+  margin-top: 0.7rem;
+}
+
+@media (max-width: 900px) {
+  .scoreboard,
+  .layout,
+  .case-grid,
+  .stake-map {
+    grid-template-columns: 1fr;
+  }
+}

@@ -69,6 +69,9 @@ const readingPaceRouteSummary = document.getElementById('reading-pace-route-summ
 const readingPaceRouteMeta = document.getElementById('reading-pace-route-meta');
 const readingPaceRouteOpen = document.getElementById('reading-pace-route-open');
 const readingPaceRouteCopy = document.getElementById('reading-pace-route-copy');
+const routeTensionTitle = document.getElementById('route-tension-title');
+const routeTensionSummary = document.getElementById('route-tension-summary');
+const routeTensionMeta = document.getElementById('route-tension-meta');
 const trailList = document.getElementById('trail-list');
 const writingSpotlightTitle = document.getElementById('writing-spotlight-title');
 const writingSpotlightDescription = document.getElementById('writing-spotlight-description');
@@ -1172,6 +1175,45 @@ function renderReadingPaceRoute(entries) {
   readingPaceRouteCopy.disabled = false;
 }
 
+function renderRouteTensionBoard(visibleEntries) {
+  if (!routeTensionTitle || !routeTensionSummary || !routeTensionMeta) {
+    return;
+  }
+
+  if (!visibleEntries.length) {
+    routeTensionTitle.textContent = 'No route-style recommendation is possible under the current filters.';
+    routeTensionSummary.textContent = 'Broaden the shelf so the site can compare whether this draft mix wants depth, speed, or range.';
+    routeTensionMeta.textContent = 'Route tension unavailable.';
+    return;
+  }
+
+  const distinctTopics = new Set(visibleEntries.map((entry) => entry.dataset.topic || 'general')).size;
+  const draftingCount = visibleEntries.filter((entry) => entry.dataset.stage === 'drafting').length;
+  const linkedCount = visibleEntries.filter((entry) => entry.dataset.relatedLink).length;
+
+  let recommendedRoute = 'Quick Route';
+  let reason = 'The visible shelf is compact enough that one fast pass is the cleanest way to enter it.';
+  let watch = 'Use this when the goal is momentum, not full range.';
+
+  if (distinctTopics >= 3) {
+    recommendedRoute = 'Cross-Topic Route';
+    reason = `There are ${distinctTopics} visible lanes in play, so range is more persuasive than a single-topic sprint.`;
+    watch = 'Start broad, then let visitors choose a lane to stay in afterward.';
+  } else if (linkedCount >= 2) {
+    recommendedRoute = 'Build-Linked Route';
+    reason = `${linkedCount} visible drafts already point back to concrete builds, so a project-to-blog handoff will feel more intentional than a topic-only sequence.`;
+    watch = 'Anchor on the build first, then let the draft explain the engineering judgment behind it.';
+  } else if (draftingCount >= 2) {
+    recommendedRoute = 'Starter Kit';
+    reason = `${draftingCount} drafts are already close enough to shipping that a compact publish-first route beats a broad survey.`;
+    watch = 'Use the starter kit when you want one draft, one contrast, and one next action instead of pure shelf breadth.';
+  }
+
+  routeTensionTitle.textContent = `${recommendedRoute} is the best fit for the current shelf.`;
+  routeTensionSummary.textContent = reason;
+  routeTensionMeta.textContent = `Visible drafts: ${visibleEntries.length}. Topics in play: ${distinctTopics}. Linked builds: ${linkedCount}. ${watch}`;
+}
+
 function renderShippingBoard(entries) {
   if (!writingShippingBoard) {
     return;
@@ -1500,6 +1542,7 @@ function applyWritingFilters() {
   renderShippingBoard(visibleEntries);
   renderDraftStarterKit(visibleEntries);
   renderReadingPaceRoute(visibleEntries);
+  renderRouteTensionBoard(visibleEntries);
   renderCrossTopicRoute(visibleEntries);
   updateWritingSpotlight(firstVisible);
   renderDraftQueueTray();

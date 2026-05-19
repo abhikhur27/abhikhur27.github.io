@@ -37,6 +37,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - Alert-charter launch window that foregrounds operator-facing signal policy work instead of only interaction-contract work.
 - Draft route presets that jump the blog shelf into reusable operator, transit, modeling, or degradation reading paths in one click.
 - Reading pace route that turns the visible draft shelf into a compact quick-pass sequence with estimated reading load.
+- Route tension board that recommends whether the visible shelf wants a quick pass, a cross-topic route, or a build-linked reading path.
 
 ## Included subprojects in this repo
 
@@ -82,6 +83,7 @@ Main personal site for project demos and an in-progress engineering blog.
 - `projects/alert-charter-studio`
 - `projects/graceful-degradation-lab`
 - `projects/status-page-voice-lab`
+- `projects/return-window-tribunal`
 
 ## Technical design
 

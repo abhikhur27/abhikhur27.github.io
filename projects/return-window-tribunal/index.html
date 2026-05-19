@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Return Window Tribunal</title>
+  <meta name="description" content="Rule on messy refund cases and watch how every exception changes trust, abuse pressure, support load, and margin discipline.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">Policy Decision Game</p>
+      <h1>Return Window Tribunal</h1>
+      <p class="lede">You are running returns policy during a messy hardware launch. Every ruling shifts customer trust, abuse pressure, support load, and margin discipline, and the queue remembers your precedents.</p>
+      <div class="hero-actions">
+        <button id="restart-btn" type="button">Restart Queue</button>
+        <button id="copy-brief-btn" type="button">Copy Session Brief</button>
+      </div>
+    </section>
+
+    <section class="scoreboard">
+      <article>
+        <span>Trust</span>
+        <strong id="trust-score">50</strong>
+      </article>
+      <article>
+        <span>Abuse Pressure</span>
+        <strong id="abuse-score">50</strong>
+      </article>
+      <article>
+        <span>Support Load</span>
+        <strong id="support-score">50</strong>
+      </article>
+      <article>
+        <span>Margin Discipline</span>
+        <strong id="margin-score">50</strong>
+      </article>
+    </section>
+
+    <section class="layout">
+      <article class="panel case-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Current Case</p>
+            <h2 id="case-title">Loading queue...</h2>
+          </div>
+          <p id="case-round" class="round-pill">Case 0 / 0</p>
+        </div>
+        <p id="case-summary" class="summary">The tribunal is loading.</p>
+        <div class="case-grid">
+          <div>
+            <h3>Facts on the record</h3>
+            <ul id="case-facts" class="fact-list"></ul>
+          </div>
+          <div>
+            <h3>Stake map</h3>
+            <div id="stake-map" class="stake-map"></div>
+          </div>
+        </div>
+        <div>
+          <h3>Rulings</h3>
+          <div id="decision-grid" class="decision-grid"></div>
+        </div>
+        <p id="status-line" class="status-line">Pick a ruling to move the queue forward.</p>
+      </article>
+
+      <aside class="sidebar">
+        <article class="panel insight-panel">
+          <p class="eyebrow">Policy Read</p>
+          <h2 id="policy-title">Queue not judged yet</h2>
+          <p id="policy-summary" class="summary">A few rulings will turn the queue into a visible trust-versus-discipline posture.</p>
+          <p id="policy-watch" class="watch">The strongest sessions explain not just who got a refund, but which precedent the next customer now expects.</p>
+        </article>
+
+        <article class="panel insight-panel">
+          <p class="eyebrow">Precedent Pressure</p>
+          <h2 id="precedent-title">No precedent yet</h2>
+          <p id="precedent-summary" class="summary">Repeated exceptions or denials will change what the later cases can defend.</p>
+          <p id="precedent-watch" class="watch">Consistency is useful until a brittle rule starts teaching customers the wrong lesson.</p>
+        </article>
+
+        <article class="panel insight-panel">
+          <p class="eyebrow">Queue Verdict</p>
+          <h2 id="verdict-title">Finish the queue</h2>
+          <p id="verdict-summary" class="summary">The final ruling set will resolve into a launch-era return policy posture.</p>
+          <p id="verdict-watch" class="watch">Look for the tradeoff you protected and the one you quietly taxed.</p>
+        </article>
+
+        <article class="panel log-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Decision Log</p>
+              <h2>Ruling Tape</h2>
+            </div>
+          </div>
+          <ol id="decision-log" class="decision-log"></ol>
+        </article>
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
