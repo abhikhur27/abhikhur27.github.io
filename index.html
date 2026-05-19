@@ -1,12 +1,12 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abhi Khurana | Digital Spaces, Systems, and Writing</title>
-  <meta name="description" content="I build digital spaces: interactive systems, simulations, and engineering notes.">
-  <meta property="og:title" content="Abhi Khurana | Digital Spaces, Systems, and Writing">
-  <meta property="og:description" content="Portfolio + blog for simulations, tools, and systems-focused engineering projects.">
+  <title>Abhi Khurana | Projects</title>
+  <meta name="description" content="Curated portfolio of browser-based tools, simulations, and interactive systems projects.">
+  <meta property="og:title" content="Abhi Khurana | Projects">
+  <meta property="og:description" content="Curated portfolio of browser-based tools, simulations, and interactive systems projects.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://abhikhur27.github.io/">
   <meta property="og:image" content="https://abhikhur27.github.io/preview-image.png">
@@ -21,97 +21,38 @@
 
   <header class="site-header" id="top">
     <div class="header-inner container">
-      <a class="brand" href="#top" aria-label="Go to top">Abhi / Digital Spaces</a>
+      <a class="brand" href="#top" aria-label="Go to top">Abhi / Projects</a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
       <nav id="site-nav" class="site-nav" aria-label="Primary">
         <a href="#projects">Projects</a>
-        <a href="#real-builds">Real-Life Builds</a>
-        <a href="#writing">Blog</a>
+        <a href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </div>
   </header>
 
   <main id="main-content">
-    <section class="hero container reveal">
-      <p class="eyebrow">Portfolio + Notebook</p>
-      <h1>I build digital spaces with a systems mind and a notebook open.</h1>
+    <section class="hero container">
+      <p class="eyebrow">Portfolio</p>
+      <h1>Curated browser-based tools, simulations, and interactive systems projects.</h1>
       <p class="lead">
-        This site is both a portfolio and a running engineering blog. I use it to ship interactive tools,
-        document experiments, and turn curiosities into technical projects.
+        This page is intentionally simple. Most of the work here is built with HTML, CSS, and JavaScript for the browser.
+        I am trimming repetitive experiments and pushing the portfolio toward sharper, more useful software.
       </p>
       <div class="hero-ctas">
-        <a class="btn btn-primary" href="#projects">Enter Project Index</a>
+        <a class="btn btn-primary" href="#projects">Browse Projects</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </div>
-      <div class="hero-metrics" role="list" aria-label="Portfolio metrics">
-        <article role="listitem">
-          <h2 id="project-count">--</h2>
-          <p id="project-count-label">Projects in this ecosystem</p>
-        </article>
-        <article role="listitem">
-          <h2 id="draft-count">--</h2>
-          <p id="draft-count-label">Blog tracks in progress</p>
-        </article>
-        <article role="listitem">
-          <h2 id="commit-count">--</h2>
-          <p id="commit-caption">GitHub coding pulse</p>
-          <div id="commit-sparkline" class="sparkline" aria-hidden="true"></div>
-          <p id="commit-meta" class="metric-meta">Loading recent commits...</p>
-        </article>
-      </div>
     </section>
 
-    <section class="launch-window container reveal" aria-label="Current launch window">
-      <article class="launch-card">
-        <p class="eyebrow">Current Launch</p>
-        <h2>Alert Charter Studio</h2>
-        <p class="section-copy">Author how latency, errors, backlog, and saturation escalate across a live shift, then see whether the charter catches the real incidents without burning pager trust on noise.</p>
-        <div class="launch-meta">
-          <span>On-call policy authoring</span>
-          <span>Shift simulation</span>
-          <span>Static operator-systems lab</span>
-        </div>
-        <div class="card-actions">
-          <a href="./projects/alert-charter-studio/index.html" target="_blank" rel="noreferrer">Open build</a>
-          <a href="./projects/alert-charter-studio/README.md" target="_blank" rel="noreferrer">Read docs</a>
-        </div>
-      </article>
-      <article class="launch-card">
-        <p class="eyebrow">Blog Runway</p>
-        <h2>Builds Worth Writing Out</h2>
-        <p class="section-copy">The portfolio is strongest when each new build leaves a drafting trail: what promise the interface quietly made, which user paid for the missing clause, and what engineering tradeoff became visible.</p>
-        <ul class="launch-list">
-          <li>Why interaction contracts matter more than feature checklists.</li>
-          <li>How reversibility changes product trust more than raw speed does.</li>
-          <li>What operators lose when interfaces hide their own decision trail.</li>
-        </ul>
-        <div class="card-actions">
-          <a href="#writing">Open blog shelf</a>
-          <a href="?writingTopic=systems">Filter systems drafts</a>
-        </div>
-      </article>
-    </section>
-
-    <section class="visitor-modes container reveal" aria-label="Quick start modes">
+    <section id="projects" class="container">
       <div class="section-head">
-        <p class="eyebrow">Quick Starts</p>
-        <h2>Enter the portfolio by intent, not by scrolling.</h2>
+        <p class="eyebrow">Projects</p>
+        <h2>Smaller, clearer, higher-conviction work</h2>
       </div>
-      <div class="visitor-mode-grid">
-        <button class="visitor-mode-btn" type="button" data-mode-filter="systems" data-mode-query="lab">Show me systems pressure games</button>
-        <button class="visitor-mode-btn" type="button" data-mode-filter="tools" data-mode-query="playground">Show me debugging tools</button>
-        <button class="visitor-mode-btn" type="button" data-mode-filter="visualization" data-mode-query="lab">Show me simulation-heavy builds</button>
-        <button class="visitor-mode-btn" type="button" data-mode-filter="tools" data-mode-query="treaty">Show me interface contract builds</button>
-        <button class="visitor-mode-btn" type="button" data-mode-filter="systems" data-mode-query="alert">Show me operator policy builds</button>
-        <button class="visitor-mode-btn" type="button" data-mode-filter="all" data-mode-query="alert">Show me the newest weird tool</button>
-      </div>
-    </section>
-
-    <section id="projects" class="container reveal">
-      <div class="section-head">
-        <p class="eyebrow">Project Index</p>
-        <h2>Live builds and active experiments</h2>
-      </div>
+      <p class="section-copy">
+        This is a curated set, not every experiment I have made. If a project is browser-based, I label it that way directly.
+        Blog drafts and physical build logs are disabled on the public site for now.
+      </p>
 
       <div class="filter-group" role="group" aria-label="Project filters">
         <button class="filter-btn active" data-filter="all">All</button>
@@ -125,548 +66,73 @@
 
       <label class="project-search" for="project-search-input">
         Search projects
-        <input id="project-search-input" type="search" placeholder="Filter by name, stack, or description">
+        <input id="project-search-input" type="search" placeholder="Filter by name, tech, or description">
       </label>
-      <p id="project-results-meta" class="results-meta" aria-live="polite">Showing all projects.</p>
-      <section class="project-spotlight" aria-live="polite">
-        <p class="eyebrow">Spotlight</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="spotlight-title">Pick a project lane and the site will surface a build.</h3>
-            <p id="spotlight-description" class="section-copy">Use the filters, search, or the surprise button to highlight something worth opening next.</p>
-          </div>
-          <div id="spotlight-actions" class="card-actions spotlight-actions"></div>
-        </div>
-      </section>
-
-      <section class="project-spotlight compare-tray" aria-live="polite">
-        <p class="eyebrow">Compare Tray</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="compare-title">Pin up to three projects to build a sharper portfolio story.</h3>
-            <p id="compare-summary" class="section-copy">Use the pin buttons on project cards to stage a side-by-side pitch around systems, tooling, or game design.</p>
-            <p id="compare-meta" class="results-meta">No projects pinned yet.</p>
-          </div>
-          <div class="card-actions spotlight-actions">
-            <button id="compare-copy" class="spotlight-btn" type="button">Copy Compare Brief</button>
-            <button id="compare-clear" class="spotlight-btn" type="button">Clear Pins</button>
-          </div>
-        </div>
-        <div id="compare-list" class="compare-list"></div>
-      </section>
-
-      <section class="project-routes" aria-label="Curated project routes">
-        <article class="route-card">
-          <p class="tag">Route 01</p>
-          <h3>Systems Builder Path</h3>
-          <p>Start with dispatch and latency modeling, then move into scheduling and resilience tradeoffs.</p>
-          <div class="card-actions">
-            <a href="?projectFilter=systems">Open systems lane</a>
-          </div>
-        </article>
-        <article class="route-card">
-          <p class="tag">Route 02</p>
-          <h3>Interactive Tooling Path</h3>
-          <p>Jump through debugging, algorithm, and data-structure tools that expose state and operator choices.</p>
-          <div class="card-actions">
-            <a href="?projectFilter=tools">Open tooling lane</a>
-          </div>
-        </article>
-        <article class="route-card">
-          <p class="tag">Route 03</p>
-          <h3>Interface Contract Path</h3>
-          <p>Start with explicit interface promises, then move into rollback, expectation debt, and public trust tradeoffs.</p>
-          <div class="card-actions">
-            <a href="./projects/interface-treaty-studio/index.html" target="_blank" rel="noreferrer">Open treaty route</a>
-          </div>
-        </article>
-        <article class="route-card">
-          <p class="tag">Route 04</p>
-          <h3>Operator Signal Path</h3>
-          <p>Start by authoring alert routes under shift pressure, then move into probe budgets and failure-family triage.</p>
-          <div class="card-actions">
-            <a href="./projects/alert-charter-studio/index.html" target="_blank" rel="noreferrer">Open alert route</a>
-          </div>
-        </article>
-        <article class="route-card">
-          <p class="tag">Route 05</p>
-          <h3>Trust Under Reversal</h3>
-          <p>Start with risky product actions, then move into expectation debt and public postmortem tradeoffs.</p>
-          <div class="card-actions">
-            <a href="./projects/rollback-budget-lab/index.html" target="_blank" rel="noreferrer">Open rollback route</a>
-          </div>
-        </article>
-      </section>
-
-      <section class="project-spotlight" aria-live="polite">
-        <p class="eyebrow">Route Composer</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="session-route-title">Filter the project index to generate a guided route.</h3>
-            <p id="session-route-summary" class="section-copy">The portfolio will pair a build, a contrast project, and a related draft from the current view.</p>
-            <p id="session-route-stops" class="results-meta">Waiting for a visible route.</p>
-          </div>
-          <div class="card-actions spotlight-actions">
-            <a id="session-route-open" class="spotlight-btn hidden" href="#" target="_blank" rel="noreferrer">Open Anchor Build</a>
-            <a id="session-route-draft" class="spotlight-btn hidden" href="#">Open Related Draft</a>
-            <button id="session-route-copy" class="spotlight-btn" type="button">Copy Route Summary</button>
-          </div>
-        </div>
-      </section>
+      <p id="project-results-meta" class="results-meta" aria-live="polite">Showing all curated projects.</p>
 
       <div class="project-grid">
         <article class="project-card" data-category="systems tools games">
           <header>
-            <p class="tag">New Static Project</p>
+            <p class="tag">Featured</p>
             <h3>Return Window Tribunal</h3>
           </header>
-          <p>Rule on messy refund cases during a hardware launch, then watch how each exception shifts trust, abuse pressure, support load, and margin discipline across the queue.</p>
-          <p class="stack">HTML, CSS, JavaScript, Decision Game, Product Policy Simulation</p>
+          <p>Decision game about refund policy, customer trust, abuse pressure, support load, and margin discipline during a messy hardware launch.</p>
+          <p class="stack">HTML, CSS, JavaScript, Product Policy Simulation</p>
           <div class="card-actions">
-            <a href="./projects/return-window-tribunal/index.html" target="_blank" rel="noreferrer">Play</a>
+            <a href="./projects/return-window-tribunal/index.html" target="_blank" rel="noreferrer">Open</a>
             <a href="./projects/return-window-tribunal/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
         <article class="project-card" data-category="systems tools games">
           <header>
-            <p class="tag">New Static Project</p>
-            <h3>Status Page Voice Lab</h3>
+            <p class="tag">Anthology</p>
+            <h3>Systems Decision Labs</h3>
           </header>
-          <p>Compose live incident updates under partial truth, then watch how wording shifts user trust, ticket pressure, compliance risk, and operator calm.</p>
-          <p class="stack">HTML, CSS, JavaScript, Incident Communication Simulation</p>
+          <p>Anthology page for the stronger decision-lab family instead of pretending each closely related simulation is a separate top-level product.</p>
+          <p class="stack">HTML, CSS, JavaScript, Anthology</p>
           <div class="card-actions">
-            <a href="./projects/status-page-voice-lab/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/status-page-voice-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New</p>
-            <h3>Graceful Degradation Lab</h3>
-          </header>
-          <p>Choose fallback modes for search, media, checkout, and analytics under incident pressure, then see which degraded path preserves trust, throughput, and operator calm.</p>
-          <p class="stack">HTML, CSS, JavaScript, Degraded-Mode Policy Simulation</p>
-          <div class="card-actions">
-            <a href="./projects/graceful-degradation-lab/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/graceful-degradation-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Newest Static Project</p>
-            <h3>Alert Charter Studio</h3>
-          </header>
-          <p>Author alert thresholds and routes for a noisy shift, then inspect which real incidents get caught, which false positives burn pager trust, and where digest-only policies quietly hide operator pain.</p>
-          <p class="stack">HTML, CSS, JavaScript, On-Call Policy Simulation</p>
-          <div class="card-actions">
-            <a href="./projects/alert-charter-studio/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/alert-charter-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Newest Static Project</p>
-            <h3>Interface Treaty Studio</h3>
-          </header>
-          <p>Spend a small policy budget on acknowledgement, undo, visibility, and automation clauses, then see whether first-timers, power users, and operators can trust the interface that results.</p>
-          <p class="stack">HTML, CSS, JavaScript, Interaction Contract Game</p>
-          <div class="card-actions">
-            <a href="./projects/interface-treaty-studio/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/interface-treaty-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools visualization games">
-          <header>
-            <p class="tag">Newest Static Project</p>
-            <h3>Cutover Window Planner</h3>
-          </header>
-          <p>Choose prep moves, reorder a maintenance runbook, and simulate whether a risky platform cutover lands within window, rollback, and trust constraints.</p>
-          <p class="stack">HTML, CSS, JavaScript, Maintenance Cutover Planning Game</p>
-          <div class="card-actions">
-            <a href="./projects/cutover-window-planner/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/cutover-window-planner/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Newest Static Project</p>
-            <h3>Scope Negotiation Lab</h3>
-          </header>
-          <p>Spend a limited discovery budget on clarifying questions, expose hidden dependencies inside an ambiguous feature request, and choose whether to narrow scope, ship carefully, or overpromise.</p>
-          <p class="stack">HTML, CSS, JavaScript, Product Scope Decision Game</p>
-          <div class="card-actions">
-            <a href="./projects/scope-negotiation-lab/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/scope-negotiation-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Recent Static Project</p>
-            <h3>Rollback Budget Lab</h3>
-          </header>
-          <p>Choose undo windows, rollout gates, audit trails, and confirmation friction around risky product actions before one bad launch teaches whether recovery was real or performative.</p>
-          <p class="stack">HTML, CSS, JavaScript, Product Safety Decision Game</p>
-          <div class="card-actions">
-            <a href="./projects/rollback-budget-lab/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/rollback-budget-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Newest Static Project</p>
-            <h3>Verification Ladder Lab</h3>
-          </header>
-          <p>Spend limited verification moves on a risky claim, then decide whether to ship, hedge, or hold while trust, speed, and error exposure all move differently.</p>
-          <p class="stack">HTML, CSS, JavaScript, Verification Strategy Game</p>
-          <div class="card-actions">
-            <a href="./projects/verification-ladder-lab/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/verification-ladder-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Static Project</p>
-            <h3>Runbook Drift Drill</h3>
-          </header>
-          <p>Audit a living incident runbook against fresh evidence, decide which steps are still safe, and see how stale operational guidance quietly burns time and trust.</p>
-          <p class="stack">HTML, CSS, JavaScript, Incident Knowledge Audit Game</p>
-          <div class="card-actions">
-            <a href="./projects/runbook-drift-drill/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/runbook-drift-drill/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Fresh Static Project</p>
-            <h3>Load Shedding Studio</h3>
-          </header>
-          <p>Run a six-wave overload incident and decide which service slices degrade gracefully, which stay premium, and how much customer trust you burn to survive the spike.</p>
-          <p class="stack">HTML, CSS, JavaScript, Reliability Strategy Game</p>
-          <div class="card-actions">
-            <a href="./projects/load-shedding-studio/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/load-shedding-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Systems Build</p>
-            <h3>Expectation Debt Studio</h3>
-          </header>
-          <p>Choose what a product promises, what the interface shows during uncertainty, and how the team repays trust once reality slips behind the marketing story.</p>
-          <p class="stack">HTML, CSS, JavaScript, Product Trust Game</p>
-          <div class="card-actions">
-            <a href="./projects/expectation-debt-studio/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/expectation-debt-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Systems Build</p>
-            <h3>Escalation Tree Lab</h3>
-          </header>
-          <p>Route ambiguous incidents to the right responder under sleep, trust, and containment pressure, then see whether you escalated too wide, too late, or to the wrong specialty.</p>
-          <p class="stack">HTML, CSS, JavaScript, Incident Routing Game</p>
-          <div class="card-actions">
-            <a href="./projects/escalation-tree-lab/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/escalation-tree-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Systems Build</p>
-            <h3>Queue Discipline Studio</h3>
-          </header>
-          <p>Choose whether to preserve FIFO fairness, fast-lane short jobs, or protect priority cases while backlog, abandonment, and trust all move differently.</p>
-          <p class="stack">HTML, CSS, JavaScript, Queue Policy Game</p>
-          <div class="card-actions">
-            <a href="./projects/queue-discipline-studio/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/queue-discipline-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Systems Build</p>
-            <h3>Retry Storm Studio</h3>
-          </header>
-          <p>Model how retries, overlap, fanout, jitter, and idempotency turn one shaky dependency into a load amplifier or a survivable incident.</p>
-          <p class="stack">HTML, CSS, JavaScript, Resilience Modeling</p>
-          <div class="card-actions">
-            <a href="./projects/retry-storm-studio/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/retry-storm-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Communication Systems</p>
-            <h3>Postmortem Redaction Lab</h3>
-          </header>
-          <p>Choose what an incident report says in public versus internal channels, then see how trust, learning, and legal exposure move when you hide the wrong thing.</p>
-          <p class="stack">HTML, CSS, JavaScript, Incident Communication Game</p>
-          <div class="card-actions">
-            <a href="./projects/postmortem-redaction-lab/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/postmortem-redaction-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Systems Build</p>
-            <h3>Error Budget Broker</h3>
-          </header>
-          <p>Allocate a shrinking reliability budget across product asks, platform work, and incident pressure while preserving trust long enough to finish the week.</p>
-          <p class="stack">HTML, CSS, JavaScript, Reliability Strategy Game</p>
-          <div class="card-actions">
-            <a href="./projects/error-budget-broker/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/error-budget-broker/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Weird Tool</p>
-            <h3>Assumption Ledger Lab</h3>
-          </header>
-          <p>Run a five-day release by deciding which assumptions to validate, which to guardrail, and which to trust before quiet drift becomes incident debt.</p>
-          <p class="stack">HTML, CSS, JavaScript, Release Strategy Game</p>
-          <div class="card-actions">
-            <a href="./projects/assumption-ledger-lab/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/assumption-ledger-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Weird Tool</p>
-            <h3>Focus Lease Simulator</h3>
-          </header>
-          <p>Run a study/work block as interruptions land in real time and decide whether to protect momentum, absorb context-switch cost, or punt debt into later hours.</p>
-          <p class="stack">HTML, CSS, JavaScript, Attention Strategy Game</p>
-          <div class="card-actions">
-            <a href="./projects/focus-lease-simulator/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/focus-lease-simulator/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools visualization games">
-          <header>
-            <p class="tag">New Systems Build</p>
-            <h3>Probe Budget Lab</h3>
-          </header>
-          <p>Place a limited set of probes across a service graph, run an incident, and see whether your telemetry budget actually exposes the culprit and the right mitigation.</p>
-          <p class="stack">HTML, CSS, JavaScript, Telemetry Strategy Game</p>
-          <div class="card-actions">
-            <a href="./projects/probe-budget-lab/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/probe-budget-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Systems Build</p>
-            <h3>State Compression Drill</h3>
-          </header>
-          <p>Select the five facts that survive a noisy incident handoff and score whether the next operator gets state, risk, impact, and next action.</p>
-          <p class="stack">HTML, CSS, JavaScript, Operations Writing Game</p>
-          <div class="card-actions">
-            <a href="./projects/state-compression-drill/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/state-compression-drill/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Systems Build</p>
-            <h3>Dependency Drift Triage</h3>
-          </header>
-          <p>Choose which stale packages to upgrade under a fixed release window while balancing CVE exposure, breakage risk, and user impact.</p>
-          <p class="stack">HTML, CSS, JavaScript, Maintenance Strategy Game</p>
-          <div class="card-actions">
-            <a href="./projects/dependency-drift-triage/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/dependency-drift-triage/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Systems Build</p>
-            <h3>Handoff Briefing Lab</h3>
-          </header>
-          <p>Build a five-bullet incident handoff under communication pressure so the next shift gets the real state, risk, and next move.</p>
-          <p class="stack">HTML, CSS, JavaScript, Incident Communication Design</p>
-          <div class="card-actions">
-            <a href="./projects/handoff-briefing-lab/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/handoff-briefing-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems visualization tools">
-          <header>
-            <p class="tag">Systems Build</p>
-            <h3>Control Loop Lab</h3>
-          </header>
-          <p>Model lag, gain, damping, and burst pressure to see when a system stabilizes, oscillates, or falls into a queue spiral.</p>
-          <p class="stack">HTML, CSS, JavaScript, Control Systems Modeling</p>
-          <div class="card-actions">
-            <a href="./projects/control-loop-lab/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/control-loop-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">New Systems Build</p>
-            <h3>Failure Mode Atlas</h3>
-          </header>
-          <p>Map incident signals to probable failure modes, escalation posture, and next diagnostic moves in a static operations sandbox.</p>
-          <p class="stack">HTML, CSS, JavaScript, Incident Response Modeling</p>
-          <div class="card-actions">
-            <a href="./projects/failure-mode-atlas/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/failure-mode-atlas/README.md" target="_blank" rel="noreferrer">Docs</a>
+            <a href="./projects/systems-decision-labs/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/systems-decision-labs/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
         <article class="project-card" data-category="systems tools">
           <header>
-            <p class="tag">Systems</p>
-            <h3>OS Scheduler Simulator</h3>
+            <p class="tag">Systems Tool</p>
+            <h3>Failure Mode Atlas</h3>
           </header>
-          <p>FCFS, SJF, SRTF, and RR simulation with accurate timeline and metric modeling.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
+          <p>Static operations sandbox for mapping incident signals to likely failure families, escalation posture, and next diagnostic moves.</p>
+          <p class="stack">HTML, CSS, JavaScript, Incident Response Modeling</p>
           <div class="card-actions">
-            <a href="https://abhikhur27.github.io/OS-Scheduler-Simulator/" target="_blank" rel="noreferrer">Live</a>
-            <a href="https://github.com/abhikhur27/OS-Scheduler-Simulator" target="_blank" rel="noreferrer">Code</a>
+            <a href="./projects/failure-mode-atlas/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/failure-mode-atlas/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
-        <article class="project-card" data-category="visualization tools">
-          <header>
-            <p class="tag">Visualization</p>
-            <h3>Algorithm Visualizer</h3>
-          </header>
-          <p>Step-based sorting engine with playback controls, operation counters, and algorithm comparison.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="https://abhikhur27.github.io/Algorithm-Visualizer/" target="_blank" rel="noreferrer">Live</a>
-            <a href="https://github.com/abhikhur27/Algorithm-Visualizer" target="_blank" rel="noreferrer">Code</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="tools visualization">
+        <article class="project-card" data-category="tools systems">
           <header>
             <p class="tag">Developer Tool</p>
-            <h3>Regex Playground</h3>
+            <h3>Merge Conflict Studio</h3>
           </header>
-          <p>Regex debugger with flag controls, capture-group inspection, and safe highlighting.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
+          <p>Three-way merge training game focused on behavior, tradeoffs, and conflict resolution rather than generic editor UI.</p>
+          <p class="stack">HTML, CSS, JavaScript, Developer Workflow Training</p>
           <div class="card-actions">
-            <a href="https://abhikhur27.github.io/regex-playground/" target="_blank" rel="noreferrer">Live</a>
-            <a href="https://github.com/abhikhur27/regex-playground" target="_blank" rel="noreferrer">Code</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="visualization tools">
-          <header>
-            <p class="tag">UX Engineering</p>
-            <h3>UX Latency Lab</h3>
-          </header>
-          <p>Perception-focused latency experiments across delay thresholds, loaders, and optimistic updates.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="https://abhikhur27.github.io/UX-Latency-Lab/" target="_blank" rel="noreferrer">Live</a>
-            <a href="https://github.com/abhikhur27/UX-Latency-Lab" target="_blank" rel="noreferrer">Code</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="games">
-          <header>
-            <p class="tag">Interactive Apps</p>
-            <h3>Mini Game Hub</h3>
-          </header>
-          <p>Ink-themed arcade with reaction timing, memory matching, and sequence recall.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="https://abhikhur27.github.io/Mini-Game-Hub/" target="_blank" rel="noreferrer">Live</a>
-            <a href="https://github.com/abhikhur27/Mini-Game-Hub" target="_blank" rel="noreferrer">Code</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems games">
-          <header>
-            <p class="tag">Systems + Game Logic</p>
-            <h3>Abhi Chess Engine</h3>
-          </header>
-          <p>Chess workspace with legal move hints, history, and FEN/PGN export tooling.</p>
-          <p class="stack">HTML, CSS, JavaScript, chess.js</p>
-          <div class="card-actions">
-            <a href="https://abhikhur27.github.io/abhi-chess-engine/" target="_blank" rel="noreferrer">Live</a>
-            <a href="https://github.com/abhikhur27/abhi-chess-engine" target="_blank" rel="noreferrer">Code</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="visualization tools">
-          <header>
-            <p class="tag">Data Structures</p>
-            <h3>DS Playground (Vanilla)</h3>
-          </header>
-          <p>Framework-free stack/queue/BST visualizer with operation logs and animated search.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="https://abhikhur27.github.io/ds-playground-html/" target="_blank" rel="noreferrer">Live</a>
-            <a href="https://github.com/abhikhur27/ds-playground-html" target="_blank" rel="noreferrer">Code</a>
+            <a href="./projects/merge-conflict-studio/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/merge-conflict-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
         <article class="project-card" data-category="systems visualization">
           <header>
             <p class="tag">Transit Systems</p>
-            <h3>Transit Network Lab (Interactive Editor)</h3>
+            <h3>Transit Network Lab</h3>
           </header>
-          <p>Drag stops, edit lines, and live-optimize routes with transfer-aware shortest-path simulation.</p>
+          <p>Interactive editor for routes, line transfers, and shortest-path tradeoffs in a transit-style network.</p>
           <p class="stack">HTML, CSS, JavaScript, Graph Algorithms</p>
           <div class="card-actions">
-            <a href="./projects/transit-network-lab/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/transit-network-lab/index.html" target="_blank" rel="noreferrer">Open</a>
             <a href="./projects/transit-network-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="visualization tools">
-          <header>
-            <p class="tag">Sports Analytics</p>
-            <h3>NBA Offensive Identity Model (Multi-Season)</h3>
-          </header>
-          <p>Weight-adjusted offense model ranking NBA teams across four seasons by shot efficiency, turnovers, rebounding, and free throws.</p>
-          <p class="stack">HTML, CSS, JavaScript, Data Modeling</p>
-          <div class="card-actions">
-            <a href="./projects/sports-analytics-explorer/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/sports-analytics-explorer/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems visualization">
-          <header>
-            <p class="tag">Rail Simulation</p>
-            <h3>Rail Headway Sandbox</h3>
-          </header>
-          <p>Tune dwell time, fleet size, and line length to see corridor throughput and wait-time tradeoffs.</p>
-          <p class="stack">HTML, CSS, JavaScript, Systems Modeling</p>
-          <div class="card-actions">
-            <a href="./projects/rail-headway-sandbox/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/rail-headway-sandbox/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
@@ -675,559 +141,94 @@
             <p class="tag">Financial Systems</p>
             <h3>Market Regime Monte Carlo Lab</h3>
           </header>
-          <p>Regime-switching simulator with Monte Carlo stress tests, sizing policy comparison, and drawdown analytics.</p>
+          <p>Regime-switching simulator with Monte Carlo stress tests, sizing-policy comparisons, and drawdown analytics.</p>
           <p class="stack">HTML, CSS, JavaScript, Quant Modeling</p>
           <div class="card-actions">
-            <a href="./projects/market-regime-lab/index.html" target="_blank" rel="noreferrer">Live</a>
+            <a href="./projects/market-regime-lab/index.html" target="_blank" rel="noreferrer">Open</a>
             <a href="./projects/market-regime-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
-        <article class="project-card" data-category="systems visualization">
+        <article class="project-card" data-category="systems tools">
           <header>
-            <p class="tag">Network Systems</p>
-            <h3>Signal Flow Lab</h3>
+            <p class="tag">Browser Demo</p>
+            <h3>OS Scheduler Simulator</h3>
           </header>
-          <p>Directed-graph propagation sandbox for feedback, damping, and threshold-trigger behavior across networked nodes.</p>
-          <p class="stack">HTML, CSS, JavaScript, Graph Simulation</p>
+          <p>Browser-based CPU scheduling simulator covering FCFS, SJF, SRTF, and Round Robin with timeline and metric modeling.</p>
+          <p class="stack">HTML, CSS, JavaScript, Operating Systems Concepts</p>
           <div class="card-actions">
-            <a href="./projects/signal-flow-lab/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/signal-flow-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+            <a href="https://abhikhur27.github.io/OS-Scheduler-Simulator/" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://github.com/abhikhur27/OS-Scheduler-Simulator" target="_blank" rel="noreferrer">Code</a>
           </div>
         </article>
 
-        <article class="project-card" data-category="systems tools visualization">
+        <article class="project-card" data-category="visualization tools">
           <header>
-            <p class="tag">Performance Systems</p>
-            <h3>Cache Policy Studio</h3>
+            <p class="tag">Browser Demo</p>
+            <h3>Algorithm Visualizer</h3>
           </header>
-          <p>Model TTL, stale windows, and request pressure to see how cache policy changes origin cost and perceived speed.</p>
-          <p class="stack">HTML, CSS, JavaScript, Systems Modeling</p>
+          <p>Step-based sorting visualizer with playback controls, operation counters, and algorithm comparison.</p>
+          <p class="stack">HTML, CSS, JavaScript, Browser Visualization</p>
           <div class="card-actions">
-            <a href="./projects/cache-policy-studio/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/cache-policy-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools visualization">
-          <header>
-            <p class="tag">Product Systems</p>
-            <h3>Latency Budget Planner</h3>
-          </header>
-          <p>Allocate network, backend, and frontend latency budgets, then turn the stack into rollout guidance for loaders and optimistic UI.</p>
-          <p class="stack">HTML, CSS, JavaScript, UX Systems Modeling</p>
-          <div class="card-actions">
-            <a href="./projects/latency-budget-planner/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/latency-budget-planner/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems visualization tools games">
-          <header>
-            <p class="tag">Unified Simulation</p>
-            <h3>Systems Decision Labs</h3>
-          </header>
-          <p>One shared operations game where campus outages, patch nights, transit detours, and teaching queues run through the same decision engine as scenario packs.</p>
-          <p class="stack">HTML, CSS, JavaScript, Scenario-Driven Operations Game</p>
-          <div class="card-actions">
-            <a href="./projects/systems-decision-labs/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/systems-decision-labs/README.md" target="_blank" rel="noreferrer">Docs</a>
+            <a href="https://abhikhur27.github.io/Algorithm-Visualizer/" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://github.com/abhikhur27/Algorithm-Visualizer" target="_blank" rel="noreferrer">Code</a>
           </div>
         </article>
 
         <article class="project-card" data-category="tools visualization">
           <header>
-            <p class="tag">Language Systems</p>
-            <h3>Sound Shift Studio</h3>
+            <p class="tag">Browser Tool</p>
+            <h3>Regex Playground</h3>
           </header>
-          <p>Branch phonological rules across two timelines, mutate shared seed words, and inspect where language families drift apart.</p>
-          <p class="stack">HTML, CSS, JavaScript, Linguistics Sandbox</p>
+          <p>Regex debugger with flag controls, capture-group inspection, replacement previews, and safe highlighting.</p>
+          <p class="stack">HTML, CSS, JavaScript, Developer Tooling</p>
           <div class="card-actions">
-            <a href="./projects/sound-shift-studio/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/sound-shift-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
+            <a href="https://abhikhur27.github.io/regex-playground/" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://github.com/abhikhur27/regex-playground" target="_blank" rel="noreferrer">Code</a>
           </div>
         </article>
 
-        <article class="project-card" data-category="tools systems">
+        <article class="project-card" data-category="visualization tools">
           <header>
-            <p class="tag">Developer Workflow</p>
-            <h3>Merge Conflict Studio</h3>
+            <p class="tag">Browser Lab</p>
+            <h3>UX Latency Lab</h3>
           </header>
-          <p>Resolve three-way merge conflicts under behavioral constraints and score whether the final file would actually survive review.</p>
-          <p class="stack">HTML, CSS, JavaScript, Workflow Training</p>
+          <p>Perception-focused latency experiments around delay thresholds, loading affordances, and optimistic UI tradeoffs.</p>
+          <p class="stack">HTML, CSS, JavaScript, UX Experimentation</p>
           <div class="card-actions">
-            <a href="./projects/merge-conflict-studio/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/merge-conflict-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
+            <a href="https://abhikhur27.github.io/UX-Latency-Lab/" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://github.com/abhikhur27/UX-Latency-Lab" target="_blank" rel="noreferrer">Code</a>
           </div>
         </article>
 
-        <article class="project-card" data-category="systems tools visualization">
+        <article class="project-card" data-category="systems games">
           <header>
-            <p class="tag">Concurrency Build</p>
-            <h3>Race Condition Lab</h3>
+            <p class="tag">Browser Demo</p>
+            <h3>Abhi Chess Engine</h3>
           </header>
-          <p>Pick async guardrails for likes, search, seat reservations, and autosave conflicts, then inspect the timeline and trust-cost tradeoffs.</p>
-          <p class="stack">HTML, CSS, JavaScript, Concurrency Design</p>
+          <p>Chess workspace with legal move hints, history, FEN/PGN export, and a lightweight browser-side engine.</p>
+          <p class="stack">HTML, CSS, JavaScript, chess.js, Browser Engine Demo</p>
           <div class="card-actions">
-            <a href="./projects/race-condition-lab/index.html" target="_blank" rel="noreferrer">Live</a>
-            <a href="./projects/race-condition-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+            <a href="https://abhikhur27.github.io/abhi-chess-engine/" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://github.com/abhikhur27/abhi-chess-engine" target="_blank" rel="noreferrer">Code</a>
           </div>
         </article>
 
-        <article class="project-card" data-category="systems tools games">
+        <article class="project-card" data-category="visualization tools">
           <header>
-            <p class="tag">Product Strategy Game</p>
-            <h3>Sprint Cutline</h3>
+            <p class="tag">Browser Demo</p>
+            <h3>DS Playground (Vanilla)</h3>
           </header>
-          <p>Lead a release week under scope shock, stakeholder pressure, and trust constraints by choosing what gets cut, reframed, or protected.</p>
-          <p class="stack">HTML, CSS, JavaScript, Narrative Decision Game</p>
+          <p>Framework-free stack, queue, linked-list, and BST visualizer with operation logs and animated search.</p>
+          <p class="stack">HTML, CSS, JavaScript, Data Structures Concepts</p>
           <div class="card-actions">
-            <a href="./projects/sprint-cutline/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/sprint-cutline/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="systems tools games">
-          <header>
-            <p class="tag">Platform Strategy Game</p>
-            <h3>Schema Drift Command</h3>
-          </header>
-          <p>Steer an API platform through breaking payload changes, fragile clients, and trust tradeoffs by choosing how aggressively to migrate.</p>
-          <p class="stack">HTML, CSS, JavaScript, Compatibility Decision Game</p>
-          <div class="card-actions">
-            <a href="./projects/schema-drift-command/index.html" target="_blank" rel="noreferrer">Play</a>
-            <a href="./projects/schema-drift-command/README.md" target="_blank" rel="noreferrer">Docs</a>
+            <a href="https://abhikhur27.github.io/ds-playground-html/" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://github.com/abhikhur27/ds-playground-html" target="_blank" rel="noreferrer">Code</a>
           </div>
         </article>
       </div>
+
       <p id="project-empty-state" class="results-meta hidden">No projects match the current filter. Try another tag or a broader search.</p>
-    </section>
-
-    <section class="container reveal build-trails" aria-label="Connected projects and drafts">
-      <div class="section-head">
-        <p class="eyebrow">Linked Trails</p>
-        <h2>Projects with active writing notes</h2>
-      </div>
-      <div id="trail-list" class="trail-list"></div>
-    </section>
-
-    <section id="real-builds" class="container reveal">
-      <div class="section-head">
-        <p class="eyebrow">Real-Life Builds</p>
-        <h2>Physical build log: 3D prints, woodworking, robotics, and homelabs</h2>
-      </div>
-      <p class="section-copy">
-        This shelf is for tangible projects. Duplicate any row below and replace the placeholders with photos, CAD links, BOM notes, failures, and final outcomes.
-      </p>
-
-      <div class="build-list">
-        <details class="build-row" open>
-          <summary>
-            <span class="entry-title">Build Template</span>
-            <span class="entry-meta">Type: Any physical build</span>
-            <span class="entry-stage">Template</span>
-          </summary>
-          <p><strong>Status:</strong> Planning / In Progress / Completed</p>
-          <p><strong>Build brief:</strong> What problem this solves and why I built it.</p>
-          <p><strong>Materials + tools:</strong> PLA/wood/aluminum, printer/model, hand tools, electronics stack.</p>
-          <p><strong>Process notes:</strong> What failed, what changed, what design decisions mattered.</p>
-          <p><strong>Outcome:</strong> Final result, performance metrics, and what you would improve next.</p>
-          <p><strong>Media links:</strong> abhi remember to add photos/video/CAD/repo URLs here.</p>
-        </details>
-
-       
-      </div>
-    </section>
-
-    <section id="writing" class="container reveal">
-      <div class="section-head">
-        <p class="eyebrow">Blog</p>
-        <h2>Draft shelf: essays I am actively shaping</h2>
-      </div>
-      <p class="section-copy">
-        These are working drafts, not final posts. Each row expands into the thinking scaffold I plan to write from.
-      </p>
-      <div class="filter-group" role="group" aria-label="Draft controls">
-        <button id="expand-writing" class="filter-btn active" type="button">Expand All</button>
-        <button id="collapse-writing" class="filter-btn" type="button">Collapse All</button>
-        <button id="surprise-writing-btn" class="filter-btn" type="button">Surprise Draft</button>
-        <button id="copy-writing-view-btn" class="filter-btn" type="button">Copy View Link</button>
-      </div>
-      <div class="filter-group writing-topics" role="group" aria-label="Draft topic filters">
-        <button class="filter-btn writing-filter-btn active" data-topic="all" type="button">All Topics</button>
-        <button class="filter-btn writing-filter-btn" data-topic="systems" type="button">Systems</button>
-        <button class="filter-btn writing-filter-btn" data-topic="science" type="button">Science</button>
-        <button class="filter-btn writing-filter-btn" data-topic="language" type="button">Language</button>
-        <button class="filter-btn writing-filter-btn" data-topic="sports" type="button">Sports</button>
-        <button class="filter-btn writing-filter-btn" data-topic="markets" type="button">Markets</button>
-      </div>
-      <div class="filter-group writing-stages" role="group" aria-label="Draft stage filters">
-        <button class="filter-btn writing-stage-btn active" data-stage="all" type="button">All Stages</button>
-        <button class="filter-btn writing-stage-btn" data-stage="research" type="button">Research</button>
-        <button class="filter-btn writing-stage-btn" data-stage="modeling" type="button">Modeling</button>
-        <button class="filter-btn writing-stage-btn" data-stage="drafting" type="button">Drafting</button>
-      </div>
-      <div class="filter-group writing-presets" role="group" aria-label="Draft route presets">
-        <button class="filter-btn writing-preset-btn" data-topic="systems" data-stage="drafting" data-query="operator" type="button">Operator Route</button>
-        <button class="filter-btn writing-preset-btn" data-topic="systems" data-stage="drafting" data-query="transit" type="button">Transit Route</button>
-        <button class="filter-btn writing-preset-btn" data-topic="all" data-stage="modeling" data-query="" type="button">Modeling Shelf</button>
-        <button class="filter-btn writing-preset-btn" data-topic="systems" data-stage="drafting" data-query="degradation" type="button">Degradation Route</button>
-      </div>
-      <label class="project-search writing-search" for="writing-search-input">
-        Search draft shelf
-        <input id="writing-search-input" type="search" placeholder="Filter by topic, source set, or technical angle">
-      </label>
-      <p id="writing-results-meta" class="results-meta" aria-live="polite">Showing all draft notes.</p>
-      <section class="draft-dashboard" aria-label="Draft shelf summary">
-        <article>
-          <h3>Visible stages</h3>
-          <p id="draft-stage-summary" class="results-meta">Research 0 | Modeling 0 | Drafting 0</p>
-        </article>
-        <article>
-          <h3>Visible topics</h3>
-          <p id="draft-topic-summary" class="results-meta">Systems 0 | Science 0 | Language 0 | Sports 0 | Markets 0</p>
-        </article>
-        <article>
-          <h3>Fastest lane</h3>
-          <p id="draft-pipeline-brief" class="results-meta">Add filters or drafts to surface the lane closest to shipping.</p>
-        </article>
-        <article>
-          <h3>Most linked build</h3>
-          <p id="draft-linked-build" class="results-meta">Related project density will appear here once linked drafts are visible.</p>
-        </article>
-        <article>
-          <h3>Best Build-to-Blog Route</h3>
-          <p id="draft-route-brief" class="results-meta">Visible linked drafts will surface a build-plus-post route here.</p>
-          <a id="draft-route-open" class="spotlight-btn hidden" href="#" target="_blank" rel="noreferrer">Open Anchor Build</a>
-        </article>
-        <article>
-          <h3>Next Draft Action</h3>
-          <p id="draft-next-action" class="results-meta">Open a filtered shelf to surface the strongest next draft move.</p>
-          <button id="draft-next-open" class="spotlight-btn hidden" type="button">Open Next Draft</button>
-        </article>
-        <article>
-          <h3>Reading Posture</h3>
-          <p id="draft-reading-posture" class="results-meta">Visible draft breadth and stage posture will appear here.</p>
-        </article>
-        <article>
-          <h3>Reading Pace</h3>
-          <p id="draft-reading-pace" class="results-meta">Visible drafts will generate a quick-route estimate here.</p>
-        </article>
-      </section>
-      <section class="project-spotlight writing-spotlight" aria-live="polite">
-        <p class="eyebrow">Shelf Digest</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="writing-digest-title">Filter the draft shelf to generate a brief worth sharing.</h3>
-            <p id="writing-digest-summary" class="section-copy">The blog section will condense visible drafts into a publish candidate, route, and coverage read.</p>
-            <p id="writing-digest-meta" class="results-meta">No digest available until the shelf is visible.</p>
-          </div>
-          <div class="card-actions spotlight-actions">
-            <button id="copy-writing-digest" class="spotlight-btn" type="button">Copy Shelf Brief</button>
-          </div>
-        </div>
-      </section>
-      <section class="topic-atlas" aria-label="Draft topic atlas">
-        <div class="section-head">
-          <p class="eyebrow">Topic Atlas</p>
-          <h2>Pick a lane from the writing shelf</h2>
-        </div>
-        <div id="writing-topic-atlas" class="topic-atlas-grid"></div>
-      </section>
-      <section class="linked-trails" aria-label="Build to blog bridge board">
-        <div class="section-head">
-          <p class="eyebrow">Bridge Board</p>
-          <h2>Builds that already have writing momentum behind them</h2>
-        </div>
-        <div id="build-bridge-list" class="trail-list"></div>
-      </section>
-      <section class="linked-trails" aria-label="Builds still waiting on essays">
-        <div class="section-head">
-          <p class="eyebrow">Coverage Gaps</p>
-          <h2>Strong builds that still need a blog note behind them</h2>
-        </div>
-        <div id="draft-gap-list" class="trail-list"></div>
-      </section>
-      <section class="linked-trails" aria-label="Next writing queue">
-        <div class="section-head">
-          <p class="eyebrow">Next Up</p>
-          <h2>Three drafts that are closest to shipping</h2>
-        </div>
-        <div id="writing-queue-list" class="trail-list"></div>
-      </section>
-      <section class="linked-trails" aria-label="Immediate writing actions">
-        <div class="section-head">
-          <p class="eyebrow">Reading Routes</p>
-          <h2>Three-draft sequences that turn the shelf into a guided blog path</h2>
-        </div>
-        <div id="writing-actions-list" class="trail-list"></div>
-      </section>
-      <section class="linked-trails" aria-label="Shipping board">
-        <div class="section-head">
-          <p class="eyebrow">Shipping Board</p>
-          <h2>Which drafts are closest to becoming real posts</h2>
-        </div>
-        <div id="writing-shipping-board" class="trail-list"></div>
-      </section>
-      <section class="project-spotlight writing-spotlight" aria-live="polite">
-        <p class="eyebrow">Starter Kit</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="starter-kit-title">Filter the shelf to generate a compact first reading route.</h3>
-            <p id="starter-kit-summary" class="section-copy">The site will pick a short sequence that opens with a visible draft, adds one contrast, and ends on the strongest next writing move.</p>
-            <p id="starter-kit-meta" class="results-meta">No filtered reading kit yet.</p>
-          </div>
-          <div class="card-actions spotlight-actions">
-            <button id="starter-kit-open" class="spotlight-btn" type="button">Open First Draft</button>
-            <button id="starter-kit-copy" class="spotlight-btn" type="button">Copy Reading Kit</button>
-          </div>
-        </div>
-      </section>
-      <section class="project-spotlight writing-spotlight" aria-live="polite">
-        <p class="eyebrow">Quick Route</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="reading-pace-route-title">Filter the shelf to generate a short reading route.</h3>
-            <p id="reading-pace-route-summary" class="section-copy">The site will pick a compact sequence for visitors who want one fast pass through the current writing shelf.</p>
-            <p id="reading-pace-route-meta" class="results-meta">No quick route available yet.</p>
-          </div>
-          <div class="card-actions spotlight-actions">
-            <button id="reading-pace-route-open" class="spotlight-btn" type="button">Open First Draft</button>
-            <button id="reading-pace-route-copy" class="spotlight-btn" type="button">Copy Quick Route</button>
-          </div>
-        </div>
-      </section>
-      <section class="project-spotlight writing-spotlight" aria-live="polite">
-        <p class="eyebrow">Route Tension</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="route-tension-title">Filter the shelf to see which reading route style best fits the current draft mix.</h3>
-            <p id="route-tension-summary" class="section-copy">The site will compare whether the visible shelf wants a compact pass, a cross-topic route, or a build-linked sequence.</p>
-            <p id="route-tension-meta" class="results-meta">No route-style recommendation yet.</p>
-          </div>
-        </div>
-      </section>
-      <section class="project-spotlight writing-spotlight" aria-live="polite">
-        <p class="eyebrow">Cross-Topic Route</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="cross-topic-route-title">Filter the shelf to generate a route that changes topics on purpose.</h3>
-            <p id="cross-topic-route-summary" class="section-copy">The site will pick up to three visible drafts that create range instead of staying inside one lane.</p>
-            <p id="cross-topic-route-meta" class="results-meta">No cross-topic route available yet.</p>
-          </div>
-          <div class="card-actions spotlight-actions">
-            <button id="cross-topic-route-open" class="spotlight-btn" type="button">Open First Draft</button>
-            <button id="cross-topic-route-copy" class="spotlight-btn" type="button">Copy Route</button>
-          </div>
-        </div>
-      </section>
-      <section class="project-spotlight writing-spotlight" aria-live="polite">
-        <p class="eyebrow">Draft Spotlight</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="writing-spotlight-title">Pick a topic and the shelf will foreground one draft.</h3>
-            <p id="writing-spotlight-description" class="section-copy">Search or filter by topic to surface the next essay worth expanding.</p>
-            <p id="writing-spotlight-meta" class="results-meta">Working drafts only, but each one has a technical spine.</p>
-          </div>
-          <div class="card-actions spotlight-actions">
-            <button id="writing-spotlight-open" class="spotlight-btn" type="button">Open Draft</button>
-            <a id="writing-spotlight-related" class="spotlight-btn hidden" href="#" target="_blank" rel="noreferrer">Open Related Build</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="project-spotlight writing-spotlight" aria-live="polite">
-        <p class="eyebrow">Draft Queue</p>
-        <div class="spotlight-shell">
-          <div>
-            <h3 id="draft-queue-title">Pin up to three drafts to build your own reading route.</h3>
-            <p id="draft-queue-summary" class="section-copy">Use the pin button on any draft to stage a custom essay sequence instead of relying only on the automatic routes.</p>
-            <p id="draft-queue-meta" class="results-meta">No drafts pinned yet.</p>
-          </div>
-          <div class="card-actions spotlight-actions">
-            <button id="draft-queue-copy" class="spotlight-btn" type="button">Copy Draft Queue</button>
-            <button id="draft-queue-clear" class="spotlight-btn" type="button">Clear Queue</button>
-          </div>
-        </div>
-        <div id="draft-queue-list" class="compare-list"></div>
-      </section>
-
-      <div class="entry-list">
-        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the shift timeline into one argument about why alerting is operator interface design, not backend plumbing." data-related-link="./projects/alert-charter-studio/index.html" data-related-label="Alert Charter Studio">
-          <summary>
-            <span class="entry-title">Alert Thresholds Are Product Decisions for Operators</span>
-            <span class="entry-meta">On-call systems, paging, and trust optics</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> noisy shift -> alert charter choices -> trust and fatigue tradeoffs.</p>
-          <p><strong>Sources to reference:</strong> SRE paging guides, incident-response writeups, alert fatigue studies, operator tooling notes.</p>
-          <p><strong>Technical angle:</strong> signal routing under false-positive cost, detection delay, and human interruption budgets.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the fallback timeline into one argument about degraded modes as product promises, not just ops toggles." data-related-link="./projects/graceful-degradation-lab/index.html" data-related-label="Graceful Degradation Lab">
-          <summary>
-            <span class="entry-title">Graceful Degradation Is a Product Contract, Not an Ops Afterthought</span>
-            <span class="entry-meta">Systems, reliability posture, and user-facing fallback design</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> incident pressure -> fallback policy choices -> trust and throughput tradeoffs.</p>
-          <p><strong>Sources to reference:</strong> SRE overload guidance, outage case studies, graceful degradation patterns, queueing and fallback design notes.</p>
-          <p><strong>Technical angle:</strong> degraded-mode routing across critical surfaces, operator load, user pain, and revenue-protection posture.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="research" data-next="Turn the clause draft into one argument about acknowledgements, undo windows, and operator traceability as one interaction contract." data-related-link="./projects/interface-treaty-studio/index.html" data-related-label="Interface Treaty Studio">
-          <summary>
-            <span class="entry-title">Interfaces Make Promises Long Before the UI Copy Says So</span>
-            <span class="entry-meta">Systems / Research</span>
-          </summary>
-          <p>
-            I want to write about interaction contracts as a systems problem: speed, reversibility, visibility, and automation posture are not separate UX niceties. They are the treaty between the interface and the user.
-          </p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Draft the rider-journey opener and transfer-penalty example." data-related-link="./projects/transit-network-lab/index.html" data-related-label="Transit Network Lab" open>
-          <summary>
-            <span class="entry-title">Transfer Penalties Decide More Than Peak Speed in Urban Transit</span>
-            <span class="entry-meta">Public transportation systems</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> rider mental model -> graph representation -> policy implications.</p>
-          <p><strong>Sources to reference:</strong> TCQSM, GTFS datasets, agency reliability reports.</p>
-          <p><strong>Technical angle:</strong> shortest path with line-switch penalties and on-time variance weighting.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the service-desk scenarios into one argument about why queue policy is part of product trust, not just operations math." data-related-link="./projects/queue-discipline-studio/index.html" data-related-label="Queue Discipline Studio">
-          <summary>
-            <span class="entry-title">Queue Fairness Is a Product Decision Wearing an Operations Costume</span>
-            <span class="entry-meta">Service systems, wait times, and trust optics</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> visible skip -> fairness optics -> throughput vs legitimacy tradeoff.</p>
-          <p><strong>Sources to reference:</strong> queueing texts, service-design notes, hospital/DMV/campus support line case studies.</p>
-          <p><strong>Technical angle:</strong> scheduling policy as a multi-objective optimization problem with abandonment, trust, and backlog pressure.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="modeling" data-next="Stress-test block-occupancy assumptions against shared-corridor dispatch cases." data-related-link="./projects/rail-headway-sandbox/index.html" data-related-label="Rail Headway Sandbox">
-          <summary>
-            <span class="entry-title">Dispatching Passenger + Freight on Shared Rail Corridors</span>
-            <span class="entry-meta">Trains and rail infrastructure</span>
-            <span class="entry-stage">Modeling</span>
-          </summary>
-          <p><strong>Writing shape:</strong> conflict windows -> headway pressure -> infrastructure upgrades.</p>
-          <p><strong>Sources to reference:</strong> FRA reports, Amtrak OTP data, dispatching literature.</p>
-          <p><strong>Technical angle:</strong> discrete-event simulation with block occupancy constraints.</p>
-        </details>
-
-        <details class="entry-row" data-topic="science" data-stage="research" data-next="Tighten the sampling-bias case studies from museum and field datasets.">
-          <summary>
-            <span class="entry-title">What Bonebeds Hide: Reading Dinosaur Populations Through Bias</span>
-            <span class="entry-meta">Dinosaurs and paleontology</span>
-            <span class="entry-stage">Research</span>
-          </summary>
-          <p><strong>Writing shape:</strong> fossilization filters -> sampling bias -> what we can actually infer.</p>
-          <p><strong>Sources to reference:</strong> museum datasets, vertebrate paleontology journals.</p>
-          <p><strong>Technical angle:</strong> Bayesian posterior updates under sparse, biased observations.</p>
-        </details>
-
-        <details class="entry-row" data-topic="language" data-stage="research" data-next="Collect a tighter set of sound-shift examples that break the clean family-tree story." data-related-link="./projects/sound-shift-studio/index.html" data-related-label="Sound Shift Studio">
-          <summary>
-            <span class="entry-title">Sound Shifts as a Migration Map</span>
-            <span class="entry-meta">Etymology and language history</span>
-            <span class="entry-stage">Research</span>
-          </summary>
-          <p><strong>Writing shape:</strong> historical drift examples -> borrowings -> family-tree limits.</p>
-          <p><strong>Sources to reference:</strong> OED, etymological corpora, historical phonology papers.</p>
-          <p><strong>Technical angle:</strong> graph lineage estimation with edit-distance clustering.</p>
-        </details>
-
-        <details class="entry-row" data-topic="sports" data-stage="drafting" data-next="Write the lineup-context section around possession-level uncertainty bands." data-related-link="./projects/sports-analytics-explorer/index.html" data-related-label="NBA Offensive Identity Model">
-          <summary>
-            <span class="entry-title">Shot Quality vs Shot Making: Where Team Offense Actually Lives</span>
-            <span class="entry-meta">Sports data analytics</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> model definitions -> lineup context -> practical front-office use.</p>
-          <p><strong>Sources to reference:</strong> NBA play-by-play APIs, tracking data references.</p>
-          <p><strong>Technical angle:</strong> logistic shot models with uncertainty bands at possession level.</p>
-        </details>
-
-        <details class="entry-row" data-topic="markets" data-stage="modeling" data-next="Validate the regime labels against a few drawdown-heavy historical windows." data-related-link="./projects/market-regime-lab/index.html" data-related-label="Market Regime Monte Carlo Lab">
-          <summary>
-            <span class="entry-title">Volatility Regimes and Why Position Sizing Breaks First</span>
-            <span class="entry-meta">Trading and financial modeling</span>
-            <span class="entry-stage">Modeling</span>
-          </summary>
-          <p><strong>Writing shape:</strong> regime framing -> drawdown anatomy -> sizing policy comparisons.</p>
-          <p><strong>Sources to reference:</strong> CBOE VIX history, FRED macro series, market microstructure papers.</p>
-          <p><strong>Technical angle:</strong> rolling regime classifier with stress-tested sizing simulation.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="modeling" data-next="Draft the incident narrative and tighten the clue-to-failure mapping table." data-related-link="./projects/failure-mode-atlas/index.html" data-related-label="Failure Mode Atlas">
-          <summary>
-            <span class="entry-title">Incident Notes Need Failure Trees, Not Just Timelines</span>
-            <span class="entry-meta">Operations response and postmortems</span>
-            <span class="entry-stage">Modeling</span>
-          </summary>
-          <p><strong>Writing shape:</strong> symptom inventory -> failure family narrowing -> response design.</p>
-          <p><strong>Sources to reference:</strong> postmortems, SRE incident handbooks, service dependency maps.</p>
-          <p><strong>Technical angle:</strong> Bayesian clue weighting over correlated failure-mode candidates.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Write the overcorrection example around queue damping and delayed action." data-related-link="./projects/control-loop-lab/index.html" data-related-label="Control Loop Lab">
-          <summary>
-            <span class="entry-title">Most Reliability Failures Start as Bad Control Loops</span>
-            <span class="entry-meta">Feedback, lag, and systems tuning</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> control intuition -> delayed feedback traps -> product and ops examples.</p>
-          <p><strong>Sources to reference:</strong> queueing texts, SRE handbooks, process-control primers, postmortems with oscillation patterns.</p>
-          <p><strong>Technical angle:</strong> discrete-time control loop with lag, damping, overshoot, and queue spill metrics.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the scenario notes into the five-bullet handoff rubric and add one bad-brief counterexample." data-related-link="./projects/handoff-briefing-lab/index.html" data-related-label="Handoff Briefing Lab">
-          <summary>
-            <span class="entry-title">Incident Handoffs Fail When They Try To Be Full Timelines</span>
-            <span class="entry-meta">On-call communication and shift change design</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> bad handoff anatomy -> constrained briefing packet -> operational consequences.</p>
-          <p><strong>Sources to reference:</strong> postmortems, incident command guides, handoff literature, on-call runbooks.</p>
-          <p><strong>Technical angle:</strong> constrained information design under ownership, risk, and next-step coverage requirements.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Write the compression rule examples around state, scope, risk, impact, and next action." data-related-link="./projects/state-compression-drill/index.html" data-related-label="State Compression Drill">
-          <summary>
-            <span class="entry-title">Incident Notes Are a Compression Problem</span>
-            <span class="entry-meta">Operations writing and handoff design</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> raw timeline overload -> five-role packet -> why missing state costs the next operator time.</p>
-          <p><strong>Sources to reference:</strong> postmortems, on-call handoff guides, cognitive load research, incident commander notes.</p>
-          <p><strong>Technical angle:</strong> information compression under role coverage, noise penalty, and actionability constraints.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="drafting" data-next="Turn the probe-placement misses into a short argument about observability budgets, blind spots, and operator confidence." data-related-link="./projects/probe-budget-lab/index.html" data-related-label="Probe Budget Lab">
-          <summary>
-            <span class="entry-title">Observability Fails When Telemetry Is Cheap to Add but Expensive to Read</span>
-            <span class="entry-meta">Instrumentation strategy and debugging posture</span>
-            <span class="entry-stage">Drafting</span>
-          </summary>
-          <p><strong>Writing shape:</strong> probe budget setup -> missing clue consequences -> why more dashboards do not automatically improve diagnosis.</p>
-          <p><strong>Sources to reference:</strong> incident response writeups, observability guides, SRE practice notes, debugging literature.</p>
-          <p><strong>Technical angle:</strong> signal placement under limited operator attention, confidence, and mitigation-readiness constraints.</p>
-        </details>
-
-        <details class="entry-row" data-topic="systems" data-stage="modeling" data-next="Turn the fetch races and duplicate-write examples into one narrative about product trust leaking through async edges." data-related-link="./projects/race-condition-lab/index.html" data-related-label="Race Condition Lab">
-          <summary>
-            <span class="entry-title">Race Conditions Are Product Bugs With a Stopwatch</span>
-            <span class="entry-meta">Concurrency, async UX, and correctness under overlap</span>
-            <span class="entry-stage">Modeling</span>
-          </summary>
-          <p><strong>Writing shape:</strong> out-of-order responses -> duplicate writes -> guardrail patterns and product tradeoffs.</p>
-          <p><strong>Sources to reference:</strong> async UI postmortems, Stripe idempotency docs, optimistic UI writeups, concurrency bug case studies.</p>
-          <p><strong>Technical angle:</strong> request sequencing, idempotency keys, mutexes, optimistic rollback, and version-check conflict handling.</p>
-        </details>
-      </div>
     </section>
   </main>
 

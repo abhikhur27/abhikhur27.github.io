@@ -17,6 +17,8 @@ A project should fail immediately if any of these are true:
 
 A project is worth building when several of these are true:
 
+- It solves a real workflow problem someone might actually reuse.
+- It can become a utility, installer, CLI, desktop app, or practical browser tool rather than only a portfolio artifact.
 - It gives the user a new role, constraint, or decision to inhabit.
 - It has a mechanic, loop, or system that creates tension.
 - Different choices lead to meaningfully different outcomes.
@@ -26,6 +28,9 @@ A project is worth building when several of these are true:
 
 ## Preferred Project Shapes
 
+- Useful Windows utilities, small desktop apps, and command-line tools
+- AMC/workflow helpers that automate real repetitive tasks
+- Practical browser tools that save time or reduce mistakes
 - Small simulation games with pressure and tradeoffs
 - Weird tools with a strong point of view
 - Interactive essays where the interface changes the argument
