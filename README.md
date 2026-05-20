@@ -23,6 +23,7 @@ Main personal site for curated project demos.
 - `projects/merge-conflict-studio`
 - `projects/failure-mode-atlas`
 - `projects/return-window-tribunal`
+- `projects/release-brief-studio`
 
 ## Technical Design
 

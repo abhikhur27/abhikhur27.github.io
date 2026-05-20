@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Release Brief Studio</title>
+  <meta name="description" content="Static release-communication workspace for turning raw changes into QA checklists, rollout briefs, rollback plans, and stakeholder updates.">
+  <meta property="og:title" content="Release Brief Studio">
+  <meta property="og:description" content="Draft clearer release notes, QA checklists, and rollback plans from one browser-based release worksheet.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abhikhur27.github.io/projects/release-brief-studio/">
+  <meta name="theme-color" content="#10161f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container header">
+    <a class="back-link" href="https://abhikhur27.github.io/" target="_blank" rel="noreferrer">Back to Portfolio</a>
+    <h1>Release Brief Studio</h1>
+    <p>Turn messy deployment notes into a clean release summary, QA checklist, rollback plan, and stakeholder update.</p>
+    <section class="demo-strip" aria-label="Suggested demo path">
+      <strong>Demo path:</strong>
+      <span>Pick a preset - fill the release facts - copy the QA brief and stakeholder update.</span>
+    </section>
+  </header>
+
+  <main class="container grid">
+    <section class="panel">
+      <h2>Release Facts</h2>
+      <label>
+        Release name
+        <input id="release-name" type="text" value="Campus Portal Patch 1.6" placeholder="e.g. May checkout hotfix">
+      </label>
+
+      <label>
+        Audience
+        <select id="audience">
+          <option value="internal">Internal engineering</option>
+          <option value="product">Product + operations</option>
+          <option value="customer">Customer-facing summary</option>
+        </select>
+      </label>
+
+      <label>
+        Release type
+        <select id="release-type">
+          <option value="feature">Feature release</option>
+          <option value="hotfix">Hotfix</option>
+          <option value="maintenance">Maintenance window</option>
+        </select>
+      </label>
+
+      <label>
+        Core changes
+        <textarea id="changes" rows="6" placeholder="One change per line">Improved login timeout handling
+Fixed stale dashboard cache after course registration
+Added admin warning for duplicate roster imports</textarea>
+      </label>
+
+      <label>
+        Risk areas
+        <textarea id="risks" rows="4" placeholder="One risk per line">Session expiry edge cases
+Dashboard data freshness
+Admin CSV import validation</textarea>
+      </label>
+
+      <label>
+        Checks run
+        <textarea id="checks" rows="4" placeholder="One check per line">Manual login/logout smoke test
+Dashboard cache invalidation check
+CSV import with duplicate and malformed rows</textarea>
+      </label>
+
+      <label>
+        Rollout notes
+        <textarea id="rollout" rows="4" placeholder="One note per line">Deploy during low-traffic campus window
+Monitor login failures for 30 minutes
+Keep prior import job version ready for rollback</textarea>
+      </label>
+
+      <div class="button-row">
+        <button id="preset-campus" type="button">Load Campus SaaS Preset</button>
+        <button id="preset-commerce" type="button">Load Commerce Hotfix Preset</button>
+        <button id="copy-link" type="button">Copy Share Link</button>
+      </div>
+      <p id="status" class="status" aria-live="polite">Ready to build a release brief.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Release Summary</h2>
+      <div id="summary-board" class="board"></div>
+
+      <h2>QA Checklist</h2>
+      <div id="qa-board" class="board"></div>
+
+      <h2>Rollback Plan</h2>
+      <div id="rollback-board" class="board"></div>
+
+      <h2>Stakeholder Update</h2>
+      <div id="stakeholder-board" class="board"></div>
+
+      <div class="button-row">
+        <button id="copy-summary" type="button">Copy Summary</button>
+        <button id="copy-qa" type="button">Copy QA Checklist</button>
+        <button id="copy-rollback" type="button">Copy Rollback Plan</button>
+        <button id="copy-stakeholder" type="button">Copy Stakeholder Update</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
