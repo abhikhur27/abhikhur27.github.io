@@ -43,5 +43,7 @@ These are the non-negotiable truths for this portfolio.
 - Do not add extra routing layers, compare trays, pinning systems, or portfolio meta-features unless explicitly requested.
 - Do not inflate project UIs with excessive coach/diagnostic/lens boards that duplicate the same signal in different wording.
 - Prefer one strong, actionable result surface over many verbose summary panels.
+- Keep control surfaces tight: do not ship large button walls when a smaller set of primary actions can do the job.
+- Treat "button budget" as a quality gate. If a new button is not clearly essential to the core workflow, remove it or keep it behind a dev-only path.
 - Before creating a new project, check whether it is actually distinct from existing work.
 - Before publishing anything, ask: would a stranger immediately understand what this is and why it exists?

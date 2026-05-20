@@ -12,6 +12,7 @@ In `C:/Users/abhim/Desktop/abhiportfoliorepogroup`, scan every git repo in the w
 - Do not add compare trays, pinning systems, route composers, or similar meta-navigation unless explicitly requested.
 - Do not add panel-heavy "coach / lens / pressure / confidence" dashboard clutter unless the user explicitly asks for that depth.
 - When simplifying existing apps, remove verbose explanatory panel stacks and keep only the controls plus primary output/results.
+- Enforce a button budget on project pages. Keep only core actions visible by default; move secondary export/share/debug actions out of the primary surface unless explicitly requested.
 - Label projects honestly. If a project is browser-based, say so clearly in the UI and avoid implying native systems-language implementations.
 - In the main portfolio repo, prefer simplifying the homepage and improving project clarity over adding more dense homepage features.
 - If a project is low-quality or too similar to an existing project family, remove it from the public tree or fold the idea into an anthology.
