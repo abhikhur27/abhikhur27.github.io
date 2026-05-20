@@ -5,7 +5,6 @@ const projectResultsMeta = document.getElementById('project-results-meta');
 const projectEmptyState = document.getElementById('project-empty-state');
 const surpriseProjectBtn = document.getElementById('surprise-project-btn');
 const copyProjectViewBtn = document.getElementById('copy-project-view-btn');
-const quickPickButtons = Array.from(document.querySelectorAll('.quick-pick-btn'));
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
 
@@ -88,22 +87,6 @@ projectFilterButtons.forEach((button) => {
 
 projectSearchInput?.addEventListener('input', applyProjectFilters);
 copyProjectViewBtn?.addEventListener('click', copyCurrentView);
-
-quickPickButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    const nextFilter = button.dataset.filter || 'all';
-    const nextSearch = button.dataset.search || '';
-    activeFilter = nextFilter;
-    if (projectSearchInput) {
-      projectSearchInput.value = nextSearch;
-    }
-    projectFilterButtons.forEach((item) => {
-      item.classList.toggle('active', item.dataset.filter === nextFilter);
-    });
-    applyProjectFilters();
-    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
 
 surpriseProjectBtn?.addEventListener('click', () => {
   const visibleCards = cards.filter((card) => !card.classList.contains('hidden'));

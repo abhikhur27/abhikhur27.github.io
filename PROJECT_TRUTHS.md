@@ -29,6 +29,9 @@ These are the non-negotiable truths for this portfolio.
 - The portfolio should increasingly include real utility software, not only concept sims.
 - Strong future additions are Windows tools, productivity utilities, AMC-related software, and small apps people could actually use.
 - New work should bias toward usefulness, installability, and real workflows.
+- Non-browser repos are a priority direction when they are substantive and applied.
+- Strong non-browser lanes include applied machine learning, quantitative finance research tooling, and quantum-computing-adjacent experiments with real technical depth.
+- Automation should actively favor high-quality standalone repos in those lanes over adding another browser demo variation.
 - A smaller number of sharper, more believable projects is better than a huge pile of same-family experiments.
 - The current public repo intentionally keeps only a small curated set of internal subprojects.
 

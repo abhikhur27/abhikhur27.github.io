@@ -211,44 +211,6 @@ h3 {
   gap: 0.7rem;
 }
 
-.quick-picks {
-  display: grid;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: linear-gradient(145deg, rgba(16, 24, 32, 0.9), rgba(20, 33, 43, 0.58));
-  box-shadow: var(--shadow);
-}
-
-.quick-picks-copy p:last-child {
-  margin-bottom: 0;
-  max-width: 46rem;
-  color: var(--muted);
-}
-
-.quick-picks-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-}
-
-.quick-pick-btn {
-  min-height: 44px;
-  padding: 0.72rem 0.95rem;
-  color: var(--text);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.04);
-  cursor: pointer;
-}
-
-.quick-pick-btn:hover,
-.quick-pick-btn:focus-visible {
-  border-color: rgba(183, 240, 123, 0.62);
-  background: rgba(183, 240, 123, 0.08);
-}
-
 .btn,
 .card-actions a {
   display: inline-flex;
