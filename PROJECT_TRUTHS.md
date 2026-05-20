@@ -8,6 +8,8 @@ These are the non-negotiable truths for this portfolio.
 - Browsing projects is more important than clever portfolio mechanics.
 - If a section makes the site harder to navigate, it should be removed or simplified.
 - Visitors should never need to learn "how the website works" before they can read the work.
+- Avoid clutter-heavy copy blocks and dashboard-like "panel farms" that bury the core project action.
+- If a project page has too many explanatory cards, keep only the controls, primary output, and one concise results surface.
 
 ## Content truths
 
@@ -39,5 +41,7 @@ These are the non-negotiable truths for this portfolio.
 
 - Default to simplification, clarity, and honesty.
 - Do not add extra routing layers, compare trays, pinning systems, or portfolio meta-features unless explicitly requested.
+- Do not inflate project UIs with excessive coach/diagnostic/lens boards that duplicate the same signal in different wording.
+- Prefer one strong, actionable result surface over many verbose summary panels.
 - Before creating a new project, check whether it is actually distinct from existing work.
 - Before publishing anything, ask: would a stranger immediately understand what this is and why it exists?

@@ -10,6 +10,8 @@ In `C:/Users/abhim/Desktop/abhiportfoliorepogroup`, scan every git repo in the w
 - Prioritize clarity, honesty, and ease of navigation over adding more portfolio mechanics.
 - Do not publish placeholders, templates, fake shelves, or unfinished sections on the main branch.
 - Do not add compare trays, pinning systems, route composers, or similar meta-navigation unless explicitly requested.
+- Do not add panel-heavy "coach / lens / pressure / confidence" dashboard clutter unless the user explicitly asks for that depth.
+- When simplifying existing apps, remove verbose explanatory panel stacks and keep only the controls plus primary output/results.
 - Label projects honestly. If a project is browser-based, say so clearly in the UI and avoid implying native systems-language implementations.
 - In the main portfolio repo, prefer simplifying the homepage and improving project clarity over adding more dense homepage features.
 - If a project is low-quality or too similar to an existing project family, remove it from the public tree or fold the idea into an anthology.
