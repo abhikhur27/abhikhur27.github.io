@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV Join Sentinel</title>
+  <meta name="description" content="Static browser tool for diagnosing CSV join failures, duplicate keys, and unmatched rows before analysis or reporting work.">
+  <meta property="og:title" content="CSV Join Sentinel">
+  <meta property="og:description" content="Inspect join keys, row mismatches, and cardinality risk across two pasted CSV datasets.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0f1720">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Workflow Tool</p>
+    <h1>CSV Join Sentinel</h1>
+    <p class="lead">Paste two CSV or TSV datasets, pick their keys, and catch duplicate-key blowups or orphaned rows before the join gets trusted.</p>
+  </header>
+
+  <main class="container layout">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Inputs</h2>
+          <p>Supports comma-, tab-, or pipe-delimited text with quoted fields.</p>
+        </div>
+        <div class="button-row">
+          <button id="load-sample" type="button">Load Sample</button>
+          <button id="analyze-join" class="primary" type="button">Analyze Join</button>
+          <button id="export-report" type="button">Export Report JSON</button>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <label class="dataset-field">
+          <span>Left dataset</span>
+          <textarea id="left-input" rows="12" placeholder="customer_id,name,tier&#10;101,Avery,Gold"></textarea>
+        </label>
+
+        <label class="dataset-field">
+          <span>Right dataset</span>
+          <textarea id="right-input" rows="12" placeholder="customer_id,last_order,status&#10;101,2026-05-18,active"></textarea>
+        </label>
+      </div>
+
+      <div class="selector-grid">
+        <label>
+          Left key
+          <select id="left-key"></select>
+        </label>
+        <label>
+          Right key
+          <select id="right-key"></select>
+        </label>
+        <label>
+          Join mode
+          <select id="join-mode">
+            <option value="inner">Inner join</option>
+            <option value="left" selected>Left join</option>
+            <option value="full">Full outer join</option>
+          </select>
+        </label>
+      </div>
+
+      <p id="status" class="status" aria-live="polite">Paste two datasets or load the sample to inspect join health.</p>
+    </section>
+
+    <section class="panel summary-panel">
+      <h2>Join Summary</h2>
+      <div class="summary-grid">
+        <article><h3>Join posture</h3><p id="join-posture">-</p></article>
+        <article><h3>Matched keys</h3><p id="matched-keys">-</p></article>
+        <article><h3>Left only</h3><p id="left-only">-</p></article>
+        <article><h3>Right only</h3><p id="right-only">-</p></article>
+        <article><h3>Left duplicates</h3><p id="left-duplicates">-</p></article>
+        <article><h3>Right duplicates</h3><p id="right-duplicates">-</p></article>
+      </div>
+      <div id="risk-board" class="note">Analyze a join to turn row counts into a concrete risk call.</div>
+      <div id="schema-board" class="note">Schema overlap and missing-column warnings will appear here.</div>
+    </section>
+
+    <section class="panel">
+      <h2>Unmatched Keys</h2>
+      <div class="preview-grid">
+        <div>
+          <h3>Left-only sample</h3>
+          <ul id="left-only-list" class="key-list"></ul>
+        </div>
+        <div>
+          <h3>Right-only sample</h3>
+          <ul id="right-only-list" class="key-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Joined Preview</h2>
+      <div class="table-wrap">
+        <table>
+          <thead id="preview-head"></thead>
+          <tbody id="preview-body">
+            <tr><td>Analyze a join to preview the merged rows.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Shape Diff Studio</title>
+  <meta name="description" content="Static JSON diff tool for comparing payload shape, path coverage, and type drift.">
+  <meta property="og:title" content="JSON Shape Diff Studio">
+  <meta property="og:description" content="Compare two JSON payloads, isolate added or removed paths, and catch type drift before it ships.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abhikhur27.github.io/projects/json-shape-diff-studio/">
+  <meta name="theme-color" content="#10141a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero shell">
+    <a class="back-link" href="../../index.html">Back to portfolio</a>
+    <p class="eyebrow">Static browser utility</p>
+    <h1>JSON Shape Diff Studio</h1>
+    <p class="lead">Compare two JSON payloads, spot added or removed paths, and catch type drift before an API or config change turns into a bug hunt.</p>
+    <div class="hero-actions">
+      <button id="compare-btn" class="primary" type="button">Compare JSON</button>
+      <button id="copy-summary-btn" type="button">Copy Summary</button>
+      <button id="swap-btn" type="button">Swap Sides</button>
+    </div>
+  </header>
+
+  <main class="shell layout">
+    <section class="panel editors">
+      <div>
+        <div class="panel-head">
+          <h2>Left JSON</h2>
+          <button class="ghost preset-btn" type="button" data-preset="api">Load API sample</button>
+        </div>
+        <textarea id="left-json" spellcheck="false"></textarea>
+      </div>
+      <div>
+        <div class="panel-head">
+          <h2>Right JSON</h2>
+          <button class="ghost preset-btn" type="button" data-preset="config">Load config sample</button>
+        </div>
+        <textarea id="right-json" spellcheck="false"></textarea>
+      </div>
+    </section>
+
+    <section class="panel summary-panel">
+      <div class="panel-head stacked">
+        <div>
+          <h2>Diff Summary</h2>
+          <p id="summary-text">Load the samples or paste your own payloads to inspect path-level changes.</p>
+        </div>
+        <label class="filter-control" for="change-filter">
+          Filter changes
+          <select id="change-filter">
+            <option value="all">All</option>
+            <option value="added">Added</option>
+            <option value="removed">Removed</option>
+            <option value="type-changed">Type changed</option>
+            <option value="value-changed">Value changed</option>
+            <option value="unchanged">Unchanged</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="summary-grid" role="list">
+        <article role="listitem">
+          <h3>Total paths</h3>
+          <p id="total-count">0</p>
+        </article>
+        <article role="listitem">
+          <h3>Added</h3>
+          <p id="added-count">0</p>
+        </article>
+        <article role="listitem">
+          <h3>Removed</h3>
+          <p id="removed-count">0</p>
+        </article>
+        <article role="listitem">
+          <h3>Type drift</h3>
+          <p id="type-count">0</p>
+        </article>
+        <article role="listitem">
+          <h3>Value change</h3>
+          <p id="value-count">0</p>
+        </article>
+        <article role="listitem">
+          <h3>Stable</h3>
+          <p id="unchanged-count">0</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel results-panel">
+      <div class="panel-head stacked">
+        <div>
+          <h2>Path Diff</h2>
+          <p>Container nodes and leaf values are both included so schema drift is visible, not just the last primitive value.</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Path</th>
+              <th>Status</th>
+              <th>Left</th>
+              <th>Right</th>
+              <th>Preview</th>
+            </tr>
+          </thead>
+          <tbody id="diff-body">
+            <tr>
+              <td colspan="5" class="empty-row">No diff yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

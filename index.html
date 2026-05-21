@@ -25,6 +25,7 @@
       <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
       <nav id="site-nav" class="site-nav" aria-label="Primary">
         <a href="#projects">Projects</a>
+        <a href="#writing">Writing</a>
         <a href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </div>
@@ -38,8 +39,14 @@
         I build software and experiments around decision-making, performance, and practical tooling.
         This portfolio highlights work across interactive systems, developer workflows, and applied technical ideas.
       </p>
+      <div class="browse-strip" aria-label="Fast portfolio paths">
+        <a href="#projects">Start with the newest utility</a>
+        <a href="./?projectFilter=tools#projects">Browse practical tools</a>
+        <a href="./?projectFilter=systems#projects">Browse systems work</a>
+      </div>
       <div class="hero-ctas">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
+        <a class="btn btn-secondary" href="#writing">Read Notes</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </section>
@@ -49,6 +56,18 @@
         <p class="eyebrow">Projects</p>
       </div>
 
+      <article class="featured-project">
+        <div>
+          <p class="eyebrow">Newest Utility</p>
+          <h2>CSV Join Sentinel</h2>
+          <p class="section-copy">Static browser tool for diagnosing duplicate keys, unmatched rows, and row-multiplication risk before a CSV join quietly corrupts an analysis.</p>
+        </div>
+        <div class="card-actions">
+          <a href="./projects/csv-join-sentinel/index.html" target="_blank" rel="noreferrer">Open Tool</a>
+          <a href="./projects/csv-join-sentinel/README.md" target="_blank" rel="noreferrer">Read README</a>
+        </div>
+      </article>
+
       <div class="filter-group" role="group" aria-label="Project filters">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="systems">Systems</button>
@@ -56,7 +75,6 @@
         <button class="filter-btn" data-filter="tools">Developer Tools</button>
         <button class="filter-btn" data-filter="games">Interactive Apps</button>
         <button id="surprise-project-btn" class="filter-btn" type="button">Surprise Me</button>
-        <button id="copy-project-view-btn" class="filter-btn" type="button">Copy View Link</button>
       </div>
 
       <label class="project-search" for="project-search-input">
@@ -64,8 +82,35 @@
         <input id="project-search-input" type="search" placeholder="Filter by name, tech, or description">
       </label>
       <p id="project-results-meta" class="results-meta" aria-live="polite">Showing all curated projects.</p>
+      <button id="copy-project-view-btn" class="text-link-btn" type="button">Copy current view link</button>
 
       <div class="project-grid">
+        <article class="project-card" data-category="tools systems">
+          <header>
+            <p class="tag">Workflow Tool</p>
+            <h3>CSV Join Sentinel</h3>
+          </header>
+          <p>Static browser tool for debugging CSV joins before they corrupt an analysis, with key-cardinality warnings, unmatched-row previews, and join-risk summaries.</p>
+          <p class="stack">HTML, CSS, JavaScript, Data QA Workflow</p>
+          <div class="card-actions">
+            <a href="./projects/csv-join-sentinel/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/csv-join-sentinel/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="tools systems">
+          <header>
+            <p class="tag">Browser Tool</p>
+            <h3>JSON Shape Diff Studio</h3>
+          </header>
+          <p>JSON comparison tool for API payloads and config edits, with path-level added/removed/type-change detection and a filterable diff table.</p>
+          <p class="stack">HTML, CSS, JavaScript, Developer Workflow Tooling</p>
+          <div class="card-actions">
+            <a href="./projects/json-shape-diff-studio/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/json-shape-diff-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="tools systems">
           <header>
             <p class="tag">Applied ML</p>
@@ -211,6 +256,37 @@
       </div>
 
       <p id="project-empty-state" class="results-meta hidden">No projects match the current filter. Try another tag or a broader search.</p>
+    </section>
+
+    <section id="writing" class="container writing-section">
+      <div class="section-head">
+        <p class="eyebrow">Writing</p>
+        <h2>Project notes, not generic blog filler.</h2>
+        <p class="section-copy">A small writing lane for portfolio direction, tooling decisions, and why some experiments stay public while others get cut.</p>
+      </div>
+
+      <div class="writing-grid">
+        <article class="writing-card">
+          <p class="writing-meta">May 2026 · Portfolio Direction</p>
+          <h3>Why the homepage got smaller</h3>
+          <p>Trust improves when the portfolio is easier to parse. Fewer cards, cleaner labels, and sharper picks beat a wall of half-distinct browser demos.</p>
+          <a href="https://github.com/abhikhur27/abhikhur27.github.io/blob/main/PROJECT_TRUTHS.md" target="_blank" rel="noreferrer">Read the portfolio truths</a>
+        </article>
+
+        <article class="writing-card">
+          <p class="writing-meta">May 2026 · Practical Tooling</p>
+          <h3>What a static tool must earn</h3>
+          <p>If a browser project stays public, it should reduce mistakes, compress handoff context, or make one real decision easier to defend.</p>
+          <a href="https://github.com/abhikhur27/abhikhur27.github.io/blob/main/docs/portfolio-originality-rubric.md" target="_blank" rel="noreferrer">Read the originality rubric</a>
+        </article>
+
+        <article class="writing-card">
+          <p class="writing-meta">May 2026 · Current Build</p>
+          <h3>CSV joins fail quietly</h3>
+          <p>Most bad joins do not throw an error. They drift through duplicate keys, asymmetric schemas, and missing records that nobody checked early enough.</p>
+          <a href="./projects/csv-join-sentinel/index.html" target="_blank" rel="noreferrer">Open CSV Join Sentinel</a>
+        </article>
+      </div>
     </section>
   </main>
 
