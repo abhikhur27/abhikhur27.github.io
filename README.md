@@ -19,7 +19,6 @@ Main personal site for curated project demos.
 
 - `projects/transit-network-lab`
 - `projects/market-regime-lab`
-- `projects/csv-join-sentinel`
 - `projects/systems-decision-labs`
 - `projects/merge-conflict-studio`
 - `projects/failure-mode-atlas`
