@@ -25,13 +25,15 @@ Main personal site for curated project demos.
 - `projects/return-window-tribunal`
 - `projects/release-brief-studio`
 - `projects/json-shape-diff-studio`
+- `projects/csv-column-profiler`
 
 ## Technical Design
 
 - `index.html`: semantic structure for hero, curated project index, and a small writing lane.
 - `styles.css`: shared visual system for the portfolio homepage.
-- `script.js`: project filtering, search, shareable filtered-view links, GitHub pulse, and mobile nav behavior.
+- `script.js`: project filtering, writing filters, shareable filtered-view links, GitHub pulse, and mobile nav behavior.
 - `projects/json-shape-diff-studio`: static JSON comparison utility for schema and payload drift.
+- `projects/csv-column-profiler`: static CSV QA tool for column-shape checks, null pressure, and duplicate-row detection.
 - `PROJECT_TRUTHS.md`: portfolio constraints that future changes and automations should follow.
 - `docs/portfolio-originality-rubric.md`: the bar future projects must clear before they get built.
 - `docs/portfolio-automation-message-update.md`: recommended update for the recurring automation prompt.

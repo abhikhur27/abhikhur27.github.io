@@ -408,12 +408,19 @@ section[id] {
 }
 
 .project-card.hidden,
+.writing-card.hidden,
 .hidden {
   display: none;
 }
 
 .writing-section {
   padding-bottom: 4.5rem;
+}
+
+.writing-controls {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .writing-grid {

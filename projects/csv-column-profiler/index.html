@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV Column Profiler</title>
+  <meta name="description" content="Static CSV profiling tool for column type inference, null pressure, duplicate rows, and quick QA briefs.">
+  <meta property="og:title" content="CSV Column Profiler">
+  <meta property="og:description" content="Profile pasted CSV data before import, modeling, or dashboard work.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abhikhur27.github.io/projects/csv-column-profiler/">
+  <meta name="theme-color" content="#0d1217">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container hero">
+    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <p class="eyebrow">Static data utility</p>
+    <h1>CSV Column Profiler</h1>
+    <p class="lead">Paste CSV data, infer column shape, spot mixed types and null-heavy fields, and export a compact QA brief before the file reaches a loader or notebook.</p>
+    <section class="demo-strip" aria-label="Suggested demo path">
+      <strong>Demo path:</strong>
+      <span>Load sample data -> inspect flagged columns -> copy the profiling brief.</span>
+    </section>
+  </header>
+
+  <main class="container layout">
+    <section class="panel controls-panel">
+      <div class="panel-head">
+        <div>
+          <h2>Input</h2>
+          <p class="section-copy">Supports quoted values, commas inside fields, and quick delimiter overrides.</p>
+        </div>
+        <div class="action-row">
+          <button id="load-sample-btn" type="button">Load Sample</button>
+          <button id="clear-btn" type="button">Clear</button>
+        </div>
+      </div>
+
+      <label for="delimiter-select">
+        Delimiter
+        <select id="delimiter-select">
+          <option value="auto" selected>Auto-detect</option>
+          <option value=",">Comma</option>
+          <option value=";">Semicolon</option>
+          <option value="tab">Tab</option>
+          <option value="|">Pipe</option>
+        </select>
+      </label>
+
+      <label class="checkbox-row">
+        <input id="header-checkbox" type="checkbox" checked>
+        First row contains headers
+      </label>
+
+      <label for="csv-input">
+        CSV data
+        <textarea id="csv-input" rows="16" placeholder="order_id,customer,status,total,signup_date&#10;1001,Ada,paid,42.50,2026-05-01"></textarea>
+      </label>
+
+      <div class="action-row stack">
+        <button id="analyze-btn" class="primary" type="button">Analyze CSV</button>
+        <button id="copy-brief-btn" type="button">Copy Profiling Brief</button>
+        <button id="export-report-btn" type="button">Export Report</button>
+      </div>
+      <p id="status-text" class="status" aria-live="polite">Paste CSV data or load the sample dataset.</p>
+    </section>
+
+    <section class="panel results-panel">
+      <div class="summary-grid" role="list" aria-label="Dataset summary">
+        <article role="listitem">
+          <h3>Rows</h3>
+          <p id="summary-rows">-</p>
+        </article>
+        <article role="listitem">
+          <h3>Columns</h3>
+          <p id="summary-columns">-</p>
+        </article>
+        <article role="listitem">
+          <h3>Duplicate Rows</h3>
+          <p id="summary-duplicates">-</p>
+        </article>
+        <article role="listitem">
+          <h3>Missing Cells</h3>
+          <p id="summary-missing">-</p>
+        </article>
+      </div>
+
+      <section class="insight-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Import Readiness</h2>
+            <p class="section-copy">One compact judgment on whether the file looks clean enough for downstream work.</p>
+          </div>
+        </div>
+        <p id="readiness-summary" class="summary-callout">Analyze a dataset to score its current QA posture.</p>
+        <ul id="issue-list" class="issue-list">
+          <li>No issues yet. Run an analysis first.</li>
+        </ul>
+      </section>
+
+      <section class="insight-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Column Profiles</h2>
+            <p class="section-copy">Columns are ranked by risk so mixed or sparse fields surface first.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Column</th>
+                <th>Type</th>
+                <th>Null %</th>
+                <th>Unique %</th>
+                <th>Samples</th>
+                <th>Watch-out</th>
+              </tr>
+            </thead>
+            <tbody id="profile-body">
+              <tr><td colspan="6" class="empty">Analyze a CSV to inspect column-level profiles.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

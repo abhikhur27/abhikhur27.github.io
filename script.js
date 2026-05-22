@@ -5,10 +5,15 @@ const projectResultsMeta = document.getElementById('project-results-meta');
 const projectEmptyState = document.getElementById('project-empty-state');
 const surpriseProjectBtn = document.getElementById('surprise-project-btn');
 const copyProjectViewBtn = document.getElementById('copy-project-view-btn');
+const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filter-btn'));
+const writingCards = Array.from(document.querySelectorAll('.writing-card'));
+const writingSearchInput = document.getElementById('writing-search-input');
+const writingResultsMeta = document.getElementById('writing-results-meta');
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
 
 let activeFilter = 'all';
+let activeWritingFilter = 'all';
 
 function updateUrlState() {
   const params = new URLSearchParams(window.location.search);
@@ -75,6 +80,30 @@ function applyProjectFilters() {
   updateUrlState();
 }
 
+function applyWritingFilters() {
+  const query = (writingSearchInput?.value || '').trim().toLowerCase();
+  let visibleCount = 0;
+
+  writingCards.forEach((card) => {
+    const topics = (card.dataset.topic || '').split(' ');
+    const matchesTopic = activeWritingFilter === 'all' || topics.includes(activeWritingFilter);
+    const searchableText = `${card.textContent || ''} ${card.dataset.writingContent || ''}`.toLowerCase();
+    const matchesQuery = !query || searchableText.includes(query);
+    const visible = matchesTopic && matchesQuery;
+
+    card.classList.toggle('hidden', !visible);
+    if (visible) {
+      visibleCount += 1;
+    }
+  });
+
+  if (writingResultsMeta) {
+    writingResultsMeta.textContent = visibleCount === writingCards.length
+      ? 'Showing all portfolio notes.'
+      : `Showing ${visibleCount} matching note${visibleCount === 1 ? '' : 's'}.`;
+  }
+}
+
 projectFilterButtons.forEach((button) => {
   button.addEventListener('click', () => {
     activeFilter = button.dataset.filter || 'all';
@@ -87,6 +116,17 @@ projectFilterButtons.forEach((button) => {
 
 projectSearchInput?.addEventListener('input', applyProjectFilters);
 copyProjectViewBtn?.addEventListener('click', copyCurrentView);
+writingSearchInput?.addEventListener('input', applyWritingFilters);
+
+writingFilterButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    activeWritingFilter = button.dataset.writingFilter || 'all';
+    writingFilterButtons.forEach((item) => {
+      item.classList.toggle('active', item === button);
+    });
+    applyWritingFilters();
+  });
+});
 
 surpriseProjectBtn?.addEventListener('click', () => {
   const visibleCards = cards.filter((card) => !card.classList.contains('hidden'));
@@ -125,3 +165,4 @@ function hydrateFiltersFromUrl() {
 
 hydrateFiltersFromUrl();
 applyProjectFilters();
+applyWritingFilters();

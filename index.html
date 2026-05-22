@@ -59,12 +59,12 @@
       <article class="featured-project">
         <div>
           <p class="eyebrow">Newest Utility</p>
-          <h2>JSON Shape Diff Studio</h2>
-          <p class="section-copy">Static browser tool for comparing two JSON payloads, isolating added or removed paths, and spotting type drift before an API or config change turns into a debugging session.</p>
+          <h2>CSV Column Profiler</h2>
+          <p class="section-copy">Static browser utility for profiling pasted CSV data, inferring column types, surfacing null and duplicate pressure, and exporting a compact QA brief before a dataset moves downstream.</p>
         </div>
         <div class="card-actions">
-          <a href="./projects/json-shape-diff-studio/index.html" target="_blank" rel="noreferrer">Open Tool</a>
-          <a href="./projects/json-shape-diff-studio/README.md" target="_blank" rel="noreferrer">Read README</a>
+          <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open Tool</a>
+          <a href="./projects/csv-column-profiler/README.md" target="_blank" rel="noreferrer">Read README</a>
         </div>
       </article>
 
@@ -85,6 +85,19 @@
       <button id="copy-project-view-btn" class="text-link-btn" type="button">Copy current view link</button>
 
       <div class="project-grid">
+        <article class="project-card" data-category="tools systems">
+          <header>
+            <p class="tag">Data Utility</p>
+            <h3>CSV Column Profiler</h3>
+          </header>
+          <p>Static CSV analysis tool for checking inferred column types, null density, duplicate rows, and suspicious mixed-field patterns before import or modeling work.</p>
+          <p class="stack">HTML, CSS, JavaScript, Data QA Tooling</p>
+          <div class="card-actions">
+            <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/csv-column-profiler/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="tools systems">
           <header>
             <p class="tag">Browser Tool</p>
@@ -252,26 +265,48 @@
         <p class="section-copy">A small writing lane for portfolio direction, tooling decisions, and why some experiments stay public while others get cut.</p>
       </div>
 
+      <div class="writing-controls">
+        <div class="filter-group" role="group" aria-label="Writing filters">
+          <button class="filter-btn writing-filter-btn active" data-writing-filter="all">All Notes</button>
+          <button class="filter-btn writing-filter-btn" data-writing-filter="portfolio">Portfolio</button>
+          <button class="filter-btn writing-filter-btn" data-writing-filter="tooling">Tooling</button>
+          <button class="filter-btn writing-filter-btn" data-writing-filter="builds">Current Builds</button>
+        </div>
+
+        <label class="project-search" for="writing-search-input">
+          Search notes
+          <input id="writing-search-input" type="search" placeholder="Filter by title or topic">
+        </label>
+      </div>
+      <p id="writing-results-meta" class="results-meta" aria-live="polite">Showing all portfolio notes.</p>
+
       <div class="writing-grid">
-        <article class="writing-card">
+        <article class="writing-card" data-topic="portfolio" data-writing-content="homepage smaller portfolio direction trust labels curated picks">
           <p class="writing-meta">May 2026 · Portfolio Direction</p>
           <h3>Why the homepage got smaller</h3>
           <p>Trust improves when the portfolio is easier to parse. Fewer cards, cleaner labels, and sharper picks beat a wall of half-distinct browser demos.</p>
           <a href="https://github.com/abhikhur27/abhikhur27.github.io/blob/main/PROJECT_TRUTHS.md" target="_blank" rel="noreferrer">Read the portfolio truths</a>
         </article>
 
-        <article class="writing-card">
+        <article class="writing-card" data-topic="tooling" data-writing-content="static tools originality rubric practical tooling decisions shipping">
           <p class="writing-meta">May 2026 · Practical Tooling</p>
           <h3>What a static tool must earn</h3>
           <p>If a browser project stays public, it should reduce mistakes, compress handoff context, or make one real decision easier to defend.</p>
           <a href="https://github.com/abhikhur27/abhikhur27.github.io/blob/main/docs/portfolio-originality-rubric.md" target="_blank" rel="noreferrer">Read the originality rubric</a>
         </article>
 
-        <article class="writing-card">
+        <article class="writing-card" data-topic="builds tooling" data-writing-content="json payload shape drift debugging current build schema fields">
           <p class="writing-meta">May 2026 · Current Build</p>
           <h3>Why payload shape drift hurts</h3>
           <p>Schema mistakes rarely look dramatic at first. They show up as silent field loss, type drift, or inconsistent nested paths that waste debugging time later.</p>
           <a href="./projects/json-shape-diff-studio/index.html" target="_blank" rel="noreferrer">Open JSON Shape Diff Studio</a>
+        </article>
+
+        <article class="writing-card" data-topic="builds tooling" data-writing-content="csv data quality nulls mixed types imports profiling brief">
+          <p class="writing-meta">May 2026 - Current Build</p>
+          <h3>Why CSV cleanup fails quietly</h3>
+          <p>Spreadsheet exports usually look valid until one mixed-type column, duplicate header, or null-heavy field reaches an import step that assumes everything is already clean.</p>
+          <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open CSV Column Profiler</a>
         </article>
       </div>
     </section>
