@@ -1,0 +1,252 @@
+:root {
+  --line: rgba(212, 231, 219, 0.14);
+  --text: #edf3ee;
+  --muted: #a8b8ae;
+  --accent: #9fe870;
+  --accent-strong: #4fd1b3;
+  --danger: #f58f6c;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(79, 209, 179, 0.18), transparent 22rem),
+    radial-gradient(circle at top right, rgba(245, 143, 108, 0.16), transparent 24rem),
+    linear-gradient(145deg, #091014, #0f161a 55%, #11130f);
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.shell {
+  width: min(1140px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.back-link,
+button,
+select,
+input {
+  font: inherit;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  margin-top: 1.2rem;
+  padding: 0 0.9rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  text-decoration: none;
+}
+
+.eyebrow {
+  margin: 1.25rem 0 0.5rem;
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Sora", "Space Grotesk", sans-serif;
+}
+
+h1 {
+  max-width: 840px;
+  font-size: clamp(2.4rem, 4vw, 4.5rem);
+  line-height: 0.96;
+}
+
+.lead {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 1.02rem;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(17, 28, 35, 0.96), rgba(23, 37, 47, 0.92));
+  padding: 1rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+.panel-head {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.panel-head p,
+.status,
+.insight-card {
+  color: var(--muted);
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.control-grid,
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.8rem;
+}
+
+input,
+select,
+button {
+  min-height: 44px;
+  padding: 0.7rem 0.8rem;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(10, 17, 21, 0.82);
+}
+
+button {
+  cursor: pointer;
+}
+
+button.primary {
+  color: #07110d;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  font-weight: 700;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.summary-grid article,
+.insight-card,
+.timeline-bar {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.summary-grid article {
+  padding: 0.85rem;
+}
+
+.summary-grid h3 {
+  margin-bottom: 0.45rem;
+  font-size: 1rem;
+}
+
+.summary-grid p {
+  margin-bottom: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.insight-card {
+  margin: 1rem 0;
+  padding: 0.95rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.8rem 0.65rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+th {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+}
+
+.timeline-head {
+  margin-top: 1rem;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+}
+
+.timeline {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.timeline-bar {
+  padding: 0.75rem;
+}
+
+.timeline-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.bar-stack {
+  display: grid;
+  grid-template-columns: var(--admitted, 0fr) var(--dropped, 0fr);
+  min-height: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.bar-good {
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent));
+}
+
+.bar-bad {
+  background: linear-gradient(90deg, #f27d72, var(--danger));
+}
+
+@media (min-width: 980px) {
+  .grid {
+    grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+  }
+}

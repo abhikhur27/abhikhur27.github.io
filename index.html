@@ -59,12 +59,12 @@
       <article class="featured-project">
         <div>
           <p class="eyebrow">Newest Utility</p>
-          <h2>CSV Column Profiler</h2>
-          <p class="section-copy">Static browser utility for profiling pasted CSV data, inferring column types, surfacing null and duplicate pressure, and exporting a compact QA brief before a dataset moves downstream.</p>
+          <h2>Rate Limit Policy Lab</h2>
+          <p class="section-copy">Static browser simulator for comparing fixed-window, sliding-window, and token-bucket rate limiting under steady, bursty, and spiky traffic before an API policy gets shipped.</p>
         </div>
         <div class="card-actions">
-          <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open Tool</a>
-          <a href="./projects/csv-column-profiler/README.md" target="_blank" rel="noreferrer">Read README</a>
+          <a href="./projects/rate-limit-policy-lab/index.html" target="_blank" rel="noreferrer">Open Tool</a>
+          <a href="./projects/rate-limit-policy-lab/README.md" target="_blank" rel="noreferrer">Read README</a>
         </div>
       </article>
 
@@ -85,6 +85,19 @@
       <button id="copy-project-view-btn" class="text-link-btn" type="button">Copy current view link</button>
 
       <div class="project-grid">
+        <article class="project-card" data-category="tools systems visualization">
+          <header>
+            <p class="tag">Systems Utility</p>
+            <h3>Rate Limit Policy Lab</h3>
+          </header>
+          <p>Browser-based rate-limit simulator that compares fixed-window, sliding-window, and token-bucket behavior across different burst shapes before an API gateway policy is chosen.</p>
+          <p class="stack">HTML, CSS, JavaScript, API Reliability Tooling</p>
+          <div class="card-actions">
+            <a href="./projects/rate-limit-policy-lab/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/rate-limit-policy-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article class="project-card" data-category="tools systems">
           <header>
             <p class="tag">Data Utility</p>
@@ -279,6 +292,7 @@
         </label>
       </div>
       <p id="writing-results-meta" class="results-meta" aria-live="polite">Showing all portfolio notes.</p>
+      <button id="copy-writing-view-btn" class="text-link-btn" type="button">Copy current note view</button>
 
       <div class="writing-grid">
         <article class="writing-card" data-topic="portfolio" data-writing-content="homepage smaller portfolio direction trust labels curated picks">
@@ -293,6 +307,13 @@
           <h3>What a static tool must earn</h3>
           <p>If a browser project stays public, it should reduce mistakes, compress handoff context, or make one real decision easier to defend.</p>
           <a href="https://github.com/abhikhur27/abhikhur27.github.io/blob/main/docs/portfolio-originality-rubric.md" target="_blank" rel="noreferrer">Read the originality rubric</a>
+        </article>
+
+        <article class="writing-card" data-topic="builds systems tooling" data-writing-content="rate limit fixed window sliding window token bucket burst traffic gateway policy current build">
+          <p class="writing-meta">May 2026 - Current Build</p>
+          <h3>Why rate limits fail at the burst edge</h3>
+          <p>Most rate-limit policies look fine on averages. The real mistakes show up when short bursts, refill timing, and edge-case fairness collide under one visible traffic pattern.</p>
+          <a href="./projects/rate-limit-policy-lab/index.html" target="_blank" rel="noreferrer">Open Rate Limit Policy Lab</a>
         </article>
 
         <article class="writing-card" data-topic="builds tooling" data-writing-content="json payload shape drift debugging current build schema fields">

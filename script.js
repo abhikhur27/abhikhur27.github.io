@@ -9,6 +9,7 @@ const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filt
 const writingCards = Array.from(document.querySelectorAll('.writing-card'));
 const writingSearchInput = document.getElementById('writing-search-input');
 const writingResultsMeta = document.getElementById('writing-results-meta');
+const copyWritingViewBtn = document.getElementById('copy-writing-view-btn');
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
 
@@ -18,6 +19,7 @@ let activeWritingFilter = 'all';
 function updateUrlState() {
   const params = new URLSearchParams(window.location.search);
   const projectQuery = (projectSearchInput?.value || '').trim();
+  const writingQuery = (writingSearchInput?.value || '').trim();
 
   if (activeFilter !== 'all') {
     params.set('projectFilter', activeFilter);
@@ -29,6 +31,18 @@ function updateUrlState() {
     params.set('projectSearch', projectQuery);
   } else {
     params.delete('projectSearch');
+  }
+
+  if (activeWritingFilter !== 'all') {
+    params.set('writingFilter', activeWritingFilter);
+  } else {
+    params.delete('writingFilter');
+  }
+
+  if (writingQuery) {
+    params.set('writingSearch', writingQuery);
+  } else {
+    params.delete('writingSearch');
   }
 
   const nextUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
@@ -46,6 +60,21 @@ async function copyCurrentView() {
   } catch {
     if (projectResultsMeta) {
       projectResultsMeta.textContent = 'Clipboard copy failed for the current project view link.';
+    }
+  }
+}
+
+async function copyCurrentWritingView() {
+  updateUrlState();
+
+  try {
+    await navigator.clipboard.writeText(`${window.location.href.split('#')[0]}#writing`);
+    if (writingResultsMeta) {
+      writingResultsMeta.textContent = 'Copied the current note view link.';
+    }
+  } catch {
+    if (writingResultsMeta) {
+      writingResultsMeta.textContent = 'Clipboard copy failed for the current note view link.';
     }
   }
 }
@@ -117,6 +146,7 @@ projectFilterButtons.forEach((button) => {
 projectSearchInput?.addEventListener('input', applyProjectFilters);
 copyProjectViewBtn?.addEventListener('click', copyCurrentView);
 writingSearchInput?.addEventListener('input', applyWritingFilters);
+copyWritingViewBtn?.addEventListener('click', copyCurrentWritingView);
 
 writingFilterButtons.forEach((button) => {
   button.addEventListener('click', () => {
@@ -150,6 +180,8 @@ function hydrateFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const projectFilter = params.get('projectFilter');
   const projectSearch = params.get('projectSearch');
+  const writingFilter = params.get('writingFilter');
+  const writingSearch = params.get('writingSearch');
 
   if (projectFilter) {
     activeFilter = projectFilter;
@@ -160,6 +192,17 @@ function hydrateFiltersFromUrl() {
 
   if (projectSearch && projectSearchInput) {
     projectSearchInput.value = projectSearch;
+  }
+
+  if (writingFilter) {
+    activeWritingFilter = writingFilter;
+    writingFilterButtons.forEach((button) => {
+      button.classList.toggle('active', button.dataset.writingFilter === writingFilter);
+    });
+  }
+
+  if (writingSearch && writingSearchInput) {
+    writingSearchInput.value = writingSearch;
   }
 }
 
