@@ -67,6 +67,23 @@ projectFilterButtons.forEach((button) => {
 
 projectSearchInput?.addEventListener('input', applyProjectFilters);
 
+document.addEventListener('keydown', (event) => {
+  if (!projectSearchInput) return;
+  const targetTag = event.target?.tagName?.toLowerCase();
+  const isTypingField = targetTag === 'input' || targetTag === 'textarea';
+
+  if (event.key === '/' && !isTypingField) {
+    event.preventDefault();
+    projectSearchInput.focus();
+  }
+
+  if (event.key === 'Escape' && document.activeElement === projectSearchInput) {
+    projectSearchInput.value = '';
+    applyProjectFilters();
+    projectSearchInput.blur();
+  }
+});
+
 if (navToggle && nav) {
   navToggle.addEventListener('click', () => {
     const expanded = navToggle.getAttribute('aria-expanded') === 'true';

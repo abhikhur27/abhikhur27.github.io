@@ -26,6 +26,7 @@ Main personal site for curated project demos.
 - `projects/release-brief-studio`
 - `projects/json-shape-diff-studio`
 - `projects/csv-column-profiler`
+- `projects/sql-index-advisor`
 
 ## Technical Design
 

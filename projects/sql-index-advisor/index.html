@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Index Advisor</title>
+  <meta name="description" content="Analyze a SQL query and get practical candidate index suggestions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <p class="eyebrow">Browser Tool</p>
+      <h1>SQL Index Advisor</h1>
+      <p>Paste a SQL query and table columns to generate practical candidate index recommendations.</p>
+    </header>
+
+    <section class="panel">
+      <h2>Inputs</h2>
+      <label for="table-name">Table Name</label>
+      <input id="table-name" type="text" value="orders" placeholder="orders">
+
+      <label for="columns">Table Columns (comma separated)</label>
+      <input id="columns" type="text" value="order_id, customer_id, status, created_at, region_id, total_amount">
+
+      <label for="query">SQL Query</label>
+      <textarea id="query" rows="10">SELECT order_id, total_amount
+FROM orders
+WHERE status = 'paid'
+  AND region_id = 4
+  AND created_at >= '2026-01-01'
+ORDER BY created_at DESC;</textarea>
+
+      <div class="actions">
+        <button id="analyze-btn" type="button">Analyze Query</button>
+        <button id="load-join-sample-btn" type="button" class="secondary">Load Join Sample</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Detected Access Pattern</h2>
+      <ul id="pattern-list"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Index Recommendations</h2>
+      <p id="empty-state">Run an analysis to generate candidate indexes.</p>
+      <div id="recommendations"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
