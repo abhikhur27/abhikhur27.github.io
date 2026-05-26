@@ -10,6 +10,10 @@ These are the non-negotiable truths for this portfolio.
 - Visitors should never need to learn "how the website works" before they can read the work.
 - Avoid clutter-heavy copy blocks and dashboard-like "panel farms" that bury the core project action.
 - If a project page has too many explanatory cards, keep only the controls, primary output, and one concise results surface.
+- Keep visual styling clean and restrained; do not ship gradient-heavy "AI-generated" looking surfaces as the default UI.
+- Prefer flat backgrounds, clear contrast, and readable spacing over decorative visual effects.
+- Keep portfolio cards and section copy short. If a card needs a paragraph to be understood, the copy is too dense.
+- Default to low-clutter layouts with fewer controls and less on-page text.
 
 ## Content truths
 
@@ -25,6 +29,8 @@ These are the non-negotiable truths for this portfolio.
 - If something is a browser simulation or static web app, say `HTML, CSS, JavaScript` clearly.
 - Do not let names like `OS Scheduler Simulator` imply C, C++, Rust, Java, or native systems work when the implementation is actually web-based.
 - Prefer phrases like `Browser demo`, `Browser tool`, or `Static web project` when that is the truth.
+- Avoid filler naming like `Lab`, `Playground`, or `Hub` unless there is a specific reason and the title still reads professional.
+- Do not publish "AI-slop game" style project framing; names should be plain, concrete, and credible.
 
 ## Direction truths
 
@@ -36,6 +42,8 @@ These are the non-negotiable truths for this portfolio.
 - Automation should actively favor high-quality standalone repos in those lanes over adding another browser demo variation.
 - A smaller number of sharper, more believable projects is better than a huge pile of same-family experiments.
 - The current public repo intentionally keeps only a small curated set of internal subprojects.
+- Future automation runs should prioritize non-HTML repos with practical use: Rust, C++, Python, PHP, or similarly substantive stacks.
+- WebGL/Three.js work is welcome when useful, but should be one option among many platforms, not the default path.
 
 ## Automation truths
 
@@ -45,5 +53,6 @@ These are the non-negotiable truths for this portfolio.
 - Prefer one strong, actionable result surface over many verbose summary panels.
 - Keep control surfaces tight: do not ship large button walls when a smaller set of primary actions can do the job.
 - Treat "button budget" as a quality gate. If a new button is not clearly essential to the core workflow, remove it or keep it behind a dev-only path.
+- Avoid "AI-slop game" style projects unless there is clear functional use and technical depth.
 - Before creating a new project, check whether it is actually distinct from existing work.
 - Before publishing anything, ask: would a stranger immediately understand what this is and why it exists?

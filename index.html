@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Abhi Khurana | Projects</title>
-  <meta name="description" content="Curated portfolio of browser-based tools, simulations, and interactive systems projects.">
+  <meta name="description" content="Curated portfolio of practical software and technical projects.">
   <meta property="og:title" content="Abhi Khurana | Projects">
-  <meta property="og:description" content="Curated portfolio of browser-based tools, simulations, and interactive systems projects.">
+  <meta property="og:description" content="Curated portfolio of practical software and technical projects.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://abhikhur27.github.io/">
   <meta property="og:image" content="https://abhikhur27.github.io/preview-image.png">
@@ -25,7 +25,6 @@
       <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
       <nav id="site-nav" class="site-nav" aria-label="Primary">
         <a href="#projects">Projects</a>
-        <a href="#writing">Writing</a>
         <a href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </div>
@@ -34,19 +33,10 @@
   <main id="main-content">
     <section class="hero container">
       <p class="eyebrow">Portfolio</p>
-      <h1>Projects in systems, software, and computational modeling.</h1>
-      <p class="lead">
-        I build software and experiments around decision-making, performance, and practical tooling.
-        This portfolio highlights work across interactive systems, developer workflows, and applied technical ideas.
-      </p>
-      <div class="browse-strip" aria-label="Fast portfolio paths">
-        <a href="#projects">Start with the newest utility</a>
-        <a href="./?projectFilter=tools#projects">Browse practical tools</a>
-        <a href="./?projectFilter=systems#projects">Browse systems work</a>
-      </div>
+      <h1>Practical software and technical projects.</h1>
+      <p class="lead">Focused tools and systems work with clear use cases.</p>
       <div class="hero-ctas">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
-        <a class="btn btn-secondary" href="#writing">Read Notes</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </section>
@@ -56,25 +46,12 @@
         <p class="eyebrow">Projects</p>
       </div>
 
-      <article class="featured-project">
-        <div>
-          <p class="eyebrow">Newest Utility</p>
-          <h2>Rate Limit Policy Lab</h2>
-          <p class="section-copy">Static browser simulator for comparing fixed-window, sliding-window, and token-bucket rate limiting under steady, bursty, and spiky traffic before an API policy gets shipped.</p>
-        </div>
-        <div class="card-actions">
-          <a href="./projects/rate-limit-policy-lab/index.html" target="_blank" rel="noreferrer">Open Tool</a>
-          <a href="./projects/rate-limit-policy-lab/README.md" target="_blank" rel="noreferrer">Read README</a>
-        </div>
-      </article>
-
       <div class="filter-group" role="group" aria-label="Project filters">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="systems">Systems</button>
         <button class="filter-btn" data-filter="visualization">Visualization</button>
         <button class="filter-btn" data-filter="tools">Developer Tools</button>
         <button class="filter-btn" data-filter="games">Interactive Apps</button>
-        <button id="surprise-project-btn" class="filter-btn" type="button">Surprise Me</button>
       </div>
 
       <label class="project-search" for="project-search-input">
@@ -82,29 +59,15 @@
         <input id="project-search-input" type="search" placeholder="Filter by name, tech, or description">
       </label>
       <p id="project-results-meta" class="results-meta" aria-live="polite">Showing all curated projects.</p>
-      <button id="copy-project-view-btn" class="text-link-btn" type="button">Copy current view link</button>
 
       <div class="project-grid">
-        <article class="project-card" data-category="tools systems visualization">
-          <header>
-            <p class="tag">Systems Utility</p>
-            <h3>Rate Limit Policy Lab</h3>
-          </header>
-          <p>Browser-based rate-limit simulator that compares fixed-window, sliding-window, and token-bucket behavior across different burst shapes before an API gateway policy is chosen.</p>
-          <p class="stack">HTML, CSS, JavaScript, API Reliability Tooling</p>
-          <div class="card-actions">
-            <a href="./projects/rate-limit-policy-lab/index.html" target="_blank" rel="noreferrer">Open</a>
-            <a href="./projects/rate-limit-policy-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
         <article class="project-card" data-category="tools systems">
           <header>
             <p class="tag">Data Utility</p>
-            <h3>CSV Column Profiler</h3>
+            <h3>CSV Quality Checker</h3>
           </header>
-          <p>Static CSV analysis tool for checking inferred column types, null density, duplicate rows, and suspicious mixed-field patterns before import or modeling work.</p>
-          <p class="stack">HTML, CSS, JavaScript, Data QA Tooling</p>
+          <p>Checks CSV fields, nulls, duplicates, and mixed types before import.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open</a>
             <a href="./projects/csv-column-profiler/README.md" target="_blank" rel="noreferrer">Docs</a>
@@ -116,8 +79,8 @@
             <p class="tag">Browser Tool</p>
             <h3>JSON Shape Diff Studio</h3>
           </header>
-          <p>JSON comparison tool for API payloads and config edits, with path-level added/removed/type-change detection and a filterable diff table.</p>
-          <p class="stack">HTML, CSS, JavaScript, Developer Workflow Tooling</p>
+          <p>Compares JSON payloads and flags added, removed, or type-drift paths.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="./projects/json-shape-diff-studio/index.html" target="_blank" rel="noreferrer">Open</a>
             <a href="./projects/json-shape-diff-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
@@ -127,10 +90,10 @@
         <article class="project-card" data-category="tools systems">
           <header>
             <p class="tag">Applied ML</p>
-            <h3>Applied ML Signal Lab</h3>
+            <h3>Applied ML Signal Classifier</h3>
           </header>
-          <p>Machine-learning workflow for market regime classification with feature engineering, walk-forward validation, and reproducible experiment runs.</p>
-          <p class="stack">Python, scikit-learn, pandas, Quantitative Modeling</p>
+          <p>Market-regime classifier with feature engineering and walk-forward evaluation.</p>
+          <p class="stack">Python, scikit-learn, pandas</p>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/applied-ml-signal-lab" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/applied-ml-signal-lab#readme" target="_blank" rel="noreferrer">Docs</a>
@@ -142,8 +105,8 @@
             <p class="tag">Market Tool</p>
             <h3>Warframe Arbitrage Market Scanner</h3>
           </header>
-          <p>Live-market scanner that ranks Warframe flip opportunities using spread, ROI, order freshness, and buyer/seller fallback depth.</p>
-          <p class="stack">Node.js, Express, JavaScript, Market Microstructure Tooling</p>
+          <p>Ranks flip opportunities by spread, ROI, freshness, and liquidity depth.</p>
+          <p class="stack">Node.js, Express, JavaScript</p>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/warframe-auction-market" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/warframe-auction-market#readme" target="_blank" rel="noreferrer">Docs</a>
@@ -153,12 +116,12 @@
         <article class="project-card" data-category="systems tools games">
           <header>
             <p class="tag">Archive</p>
-            <h3>Legacy Browser Lab Collection</h3>
+            <h3>Legacy Browser Collection</h3>
           </header>
-          <p>Consolidated set of older browser-based decision and workflow experiments, grouped into one archive instead of multiple standalone homepage entries.</p>
-          <p class="stack">HTML, CSS, JavaScript, Archived Experiments</p>
+          <p>Archive of older browser experiments kept off the main project lane.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
-            <a href="./projects/systems-decision-labs/index.html" target="_blank" rel="noreferrer">Open Archive</a>
+            <a href="./projects/systems-decision-labs/index.html" target="_blank" rel="noreferrer">Open</a>
             <a href="./projects/systems-decision-labs/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
@@ -166,10 +129,10 @@
         <article class="project-card" data-category="systems visualization">
           <header>
             <p class="tag">Transit Systems</p>
-            <h3>Transit Network Lab</h3>
+            <h3>Transit Network Planner</h3>
           </header>
-          <p>Interactive editor for routes, line transfers, and shortest-path tradeoffs in a transit-style network.</p>
-          <p class="stack">HTML, CSS, JavaScript, Graph Algorithms</p>
+          <p>Transit route editor with transfer modeling and shortest-path tradeoffs.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="./projects/transit-network-lab/index.html" target="_blank" rel="noreferrer">Open</a>
             <a href="./projects/transit-network-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
@@ -179,10 +142,10 @@
         <article class="project-card" data-category="systems visualization tools">
           <header>
             <p class="tag">Financial Systems</p>
-            <h3>Market Regime Monte Carlo Lab</h3>
+            <h3>Market Regime Monte Carlo Simulator</h3>
           </header>
-          <p>Regime-switching simulator with Monte Carlo stress tests, sizing-policy comparisons, and drawdown analytics.</p>
-          <p class="stack">HTML, CSS, JavaScript, Quant Modeling</p>
+          <p>Regime-switching Monte Carlo simulator with risk and drawdown analytics.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="./projects/market-regime-lab/index.html" target="_blank" rel="noreferrer">Open</a>
             <a href="./projects/market-regime-lab/README.md" target="_blank" rel="noreferrer">Docs</a>
@@ -194,8 +157,8 @@
             <p class="tag">Browser Demo</p>
             <h3>OS Scheduler Simulator</h3>
           </header>
-          <p>Browser-based CPU scheduling simulator covering FCFS, SJF, SRTF, and Round Robin with timeline and metric modeling.</p>
-          <p class="stack">HTML, CSS, JavaScript, Operating Systems Concepts</p>
+          <p>CPU scheduling simulator for FCFS, SJF, SRTF, and Round Robin.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="https://abhikhur27.github.io/OS-Scheduler-Simulator/" target="_blank" rel="noreferrer">Open</a>
             <a href="https://github.com/abhikhur27/OS-Scheduler-Simulator" target="_blank" rel="noreferrer">Code</a>
@@ -207,8 +170,8 @@
             <p class="tag">Browser Demo</p>
             <h3>Algorithm Visualizer</h3>
           </header>
-          <p>Step-based sorting visualizer with playback controls, operation counters, and algorithm comparison.</p>
-          <p class="stack">HTML, CSS, JavaScript, Browser Visualization</p>
+          <p>Step-based sorting visualizer with replay, metrics, and comparisons.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="https://abhikhur27.github.io/Algorithm-Visualizer/" target="_blank" rel="noreferrer">Open</a>
             <a href="https://github.com/abhikhur27/Algorithm-Visualizer" target="_blank" rel="noreferrer">Code</a>
@@ -218,10 +181,10 @@
         <article class="project-card" data-category="tools visualization">
           <header>
             <p class="tag">Browser Tool</p>
-            <h3>Regex Playground</h3>
+            <h3>Regex Debugger</h3>
           </header>
-          <p>Regex debugger with flag controls, capture-group inspection, replacement previews, and safe highlighting.</p>
-          <p class="stack">HTML, CSS, JavaScript, Developer Tooling</p>
+          <p>Regex debugger with captures, replacements, flags, and safe highlighting.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="https://abhikhur27.github.io/regex-playground/" target="_blank" rel="noreferrer">Open</a>
             <a href="https://github.com/abhikhur27/regex-playground" target="_blank" rel="noreferrer">Code</a>
@@ -230,11 +193,11 @@
 
         <article class="project-card" data-category="visualization tools">
           <header>
-            <p class="tag">Browser Lab</p>
-            <h3>UX Latency Lab</h3>
+            <p class="tag">Browser Demo</p>
+            <h3>UX Latency Analyzer</h3>
           </header>
-          <p>Perception-focused latency experiments around delay thresholds, loading affordances, and optimistic UI tradeoffs.</p>
-          <p class="stack">HTML, CSS, JavaScript, UX Experimentation</p>
+          <p>Latency experiments for loading feedback and optimistic-UI tradeoffs.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="https://abhikhur27.github.io/UX-Latency-Lab/" target="_blank" rel="noreferrer">Open</a>
             <a href="https://github.com/abhikhur27/UX-Latency-Lab" target="_blank" rel="noreferrer">Code</a>
@@ -246,8 +209,8 @@
             <p class="tag">Browser Demo</p>
             <h3>Abhi Chess Engine</h3>
           </header>
-          <p>Chess workspace with legal move hints, history, FEN/PGN export, and a lightweight browser-side engine.</p>
-          <p class="stack">HTML, CSS, JavaScript, chess.js, Browser Engine Demo</p>
+          <p>Chess workspace with legal hints, history, and lightweight engine analysis.</p>
+          <p class="stack">HTML, CSS, JavaScript, chess.js</p>
           <div class="card-actions">
             <a href="https://abhikhur27.github.io/abhi-chess-engine/" target="_blank" rel="noreferrer">Open</a>
             <a href="https://github.com/abhikhur27/abhi-chess-engine" target="_blank" rel="noreferrer">Code</a>
@@ -257,10 +220,10 @@
         <article class="project-card" data-category="visualization tools">
           <header>
             <p class="tag">Browser Demo</p>
-            <h3>DS Playground (Vanilla)</h3>
+            <h3>Data Structures Visualizer (Vanilla)</h3>
           </header>
-          <p>Framework-free stack, queue, linked-list, and BST visualizer with operation logs and animated search.</p>
-          <p class="stack">HTML, CSS, JavaScript, Data Structures Concepts</p>
+          <p>Vanilla visualizer for stack, queue, linked list, and BST workflows.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
           <div class="card-actions">
             <a href="https://abhikhur27.github.io/ds-playground-html/" target="_blank" rel="noreferrer">Open</a>
             <a href="https://github.com/abhikhur27/ds-playground-html" target="_blank" rel="noreferrer">Code</a>
@@ -268,68 +231,7 @@
         </article>
       </div>
 
-      <p id="project-empty-state" class="results-meta hidden">No projects match the current filter. Try another tag or a broader search.</p>
-    </section>
-
-    <section id="writing" class="container writing-section">
-      <div class="section-head">
-        <p class="eyebrow">Writing</p>
-        <h2>Project notes, not generic blog filler.</h2>
-        <p class="section-copy">A small writing lane for portfolio direction, tooling decisions, and why some experiments stay public while others get cut.</p>
-      </div>
-
-      <div class="writing-controls">
-        <div class="filter-group" role="group" aria-label="Writing filters">
-          <button class="filter-btn writing-filter-btn active" data-writing-filter="all">All Notes</button>
-          <button class="filter-btn writing-filter-btn" data-writing-filter="portfolio">Portfolio</button>
-          <button class="filter-btn writing-filter-btn" data-writing-filter="tooling">Tooling</button>
-          <button class="filter-btn writing-filter-btn" data-writing-filter="builds">Current Builds</button>
-        </div>
-
-        <label class="project-search" for="writing-search-input">
-          Search notes
-          <input id="writing-search-input" type="search" placeholder="Filter by title or topic">
-        </label>
-      </div>
-      <p id="writing-results-meta" class="results-meta" aria-live="polite">Showing all portfolio notes.</p>
-      <button id="copy-writing-view-btn" class="text-link-btn" type="button">Copy current note view</button>
-
-      <div class="writing-grid">
-        <article class="writing-card" data-topic="portfolio" data-writing-content="homepage smaller portfolio direction trust labels curated picks">
-          <p class="writing-meta">May 2026 · Portfolio Direction</p>
-          <h3>Why the homepage got smaller</h3>
-          <p>Trust improves when the portfolio is easier to parse. Fewer cards, cleaner labels, and sharper picks beat a wall of half-distinct browser demos.</p>
-          <a href="https://github.com/abhikhur27/abhikhur27.github.io/blob/main/PROJECT_TRUTHS.md" target="_blank" rel="noreferrer">Read the portfolio truths</a>
-        </article>
-
-        <article class="writing-card" data-topic="tooling" data-writing-content="static tools originality rubric practical tooling decisions shipping">
-          <p class="writing-meta">May 2026 · Practical Tooling</p>
-          <h3>What a static tool must earn</h3>
-          <p>If a browser project stays public, it should reduce mistakes, compress handoff context, or make one real decision easier to defend.</p>
-          <a href="https://github.com/abhikhur27/abhikhur27.github.io/blob/main/docs/portfolio-originality-rubric.md" target="_blank" rel="noreferrer">Read the originality rubric</a>
-        </article>
-
-        <article class="writing-card" data-topic="builds systems tooling" data-writing-content="rate limit fixed window sliding window token bucket burst traffic gateway policy current build">
-          <p class="writing-meta">May 2026 - Current Build</p>
-          <h3>Why rate limits fail at the burst edge</h3>
-          <p>Most rate-limit policies look fine on averages. The real mistakes show up when short bursts, refill timing, and edge-case fairness collide under one visible traffic pattern.</p>
-          <a href="./projects/rate-limit-policy-lab/index.html" target="_blank" rel="noreferrer">Open Rate Limit Policy Lab</a>
-        </article>
-
-        <article class="writing-card" data-topic="builds tooling" data-writing-content="json payload shape drift debugging current build schema fields">
-          <p class="writing-meta">May 2026 · Current Build</p>
-          <h3>Why payload shape drift hurts</h3>
-          <p>Schema mistakes rarely look dramatic at first. They show up as silent field loss, type drift, or inconsistent nested paths that waste debugging time later.</p>
-          <a href="./projects/json-shape-diff-studio/index.html" target="_blank" rel="noreferrer">Open JSON Shape Diff Studio</a>
-        </article>
-
-        <article class="writing-card" data-topic="builds tooling" data-writing-content="csv data quality nulls mixed types imports profiling brief">
-          <p class="writing-meta">May 2026 - Current Build</p>
-          <h3>Why CSV cleanup fails quietly</h3>
-          <p>Spreadsheet exports usually look valid until one mixed-type column, duplicate header, or null-heavy field reaches an import step that assumes everything is already clean.</p>
-          <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open CSV Column Profiler</a>
-        </article>
-      </div>
+      <p id="project-empty-state" class="results-meta hidden">No projects match the current filter. Try another filter or search.</p>
     </section>
   </main>
 

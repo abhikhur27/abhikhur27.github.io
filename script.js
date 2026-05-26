@@ -3,23 +3,14 @@ const cards = Array.from(document.querySelectorAll('.project-card'));
 const projectSearchInput = document.getElementById('project-search-input');
 const projectResultsMeta = document.getElementById('project-results-meta');
 const projectEmptyState = document.getElementById('project-empty-state');
-const surpriseProjectBtn = document.getElementById('surprise-project-btn');
-const copyProjectViewBtn = document.getElementById('copy-project-view-btn');
-const writingFilterButtons = Array.from(document.querySelectorAll('.writing-filter-btn'));
-const writingCards = Array.from(document.querySelectorAll('.writing-card'));
-const writingSearchInput = document.getElementById('writing-search-input');
-const writingResultsMeta = document.getElementById('writing-results-meta');
-const copyWritingViewBtn = document.getElementById('copy-writing-view-btn');
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
 
 let activeFilter = 'all';
-let activeWritingFilter = 'all';
 
 function updateUrlState() {
   const params = new URLSearchParams(window.location.search);
   const projectQuery = (projectSearchInput?.value || '').trim();
-  const writingQuery = (writingSearchInput?.value || '').trim();
 
   if (activeFilter !== 'all') {
     params.set('projectFilter', activeFilter);
@@ -33,50 +24,8 @@ function updateUrlState() {
     params.delete('projectSearch');
   }
 
-  if (activeWritingFilter !== 'all') {
-    params.set('writingFilter', activeWritingFilter);
-  } else {
-    params.delete('writingFilter');
-  }
-
-  if (writingQuery) {
-    params.set('writingSearch', writingQuery);
-  } else {
-    params.delete('writingSearch');
-  }
-
   const nextUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
   window.history.replaceState({}, '', nextUrl);
-}
-
-async function copyCurrentView() {
-  updateUrlState();
-
-  try {
-    await navigator.clipboard.writeText(window.location.href);
-    if (projectResultsMeta) {
-      projectResultsMeta.textContent = 'Copied the current project view link.';
-    }
-  } catch {
-    if (projectResultsMeta) {
-      projectResultsMeta.textContent = 'Clipboard copy failed for the current project view link.';
-    }
-  }
-}
-
-async function copyCurrentWritingView() {
-  updateUrlState();
-
-  try {
-    await navigator.clipboard.writeText(`${window.location.href.split('#')[0]}#writing`);
-    if (writingResultsMeta) {
-      writingResultsMeta.textContent = 'Copied the current note view link.';
-    }
-  } catch {
-    if (writingResultsMeta) {
-      writingResultsMeta.textContent = 'Clipboard copy failed for the current note view link.';
-    }
-  }
 }
 
 function applyProjectFilters() {
@@ -90,10 +39,7 @@ function applyProjectFilters() {
     const visible = categoryMatch && textMatch;
 
     card.classList.toggle('hidden', !visible);
-
-    if (visible) {
-      visibleCount += 1;
-    }
+    if (visible) visibleCount += 1;
   });
 
   if (projectResultsMeta) {
@@ -109,30 +55,6 @@ function applyProjectFilters() {
   updateUrlState();
 }
 
-function applyWritingFilters() {
-  const query = (writingSearchInput?.value || '').trim().toLowerCase();
-  let visibleCount = 0;
-
-  writingCards.forEach((card) => {
-    const topics = (card.dataset.topic || '').split(' ');
-    const matchesTopic = activeWritingFilter === 'all' || topics.includes(activeWritingFilter);
-    const searchableText = `${card.textContent || ''} ${card.dataset.writingContent || ''}`.toLowerCase();
-    const matchesQuery = !query || searchableText.includes(query);
-    const visible = matchesTopic && matchesQuery;
-
-    card.classList.toggle('hidden', !visible);
-    if (visible) {
-      visibleCount += 1;
-    }
-  });
-
-  if (writingResultsMeta) {
-    writingResultsMeta.textContent = visibleCount === writingCards.length
-      ? 'Showing all portfolio notes.'
-      : `Showing ${visibleCount} matching note${visibleCount === 1 ? '' : 's'}.`;
-  }
-}
-
 projectFilterButtons.forEach((button) => {
   button.addEventListener('click', () => {
     activeFilter = button.dataset.filter || 'all';
@@ -144,29 +66,6 @@ projectFilterButtons.forEach((button) => {
 });
 
 projectSearchInput?.addEventListener('input', applyProjectFilters);
-copyProjectViewBtn?.addEventListener('click', copyCurrentView);
-writingSearchInput?.addEventListener('input', applyWritingFilters);
-copyWritingViewBtn?.addEventListener('click', copyCurrentWritingView);
-
-writingFilterButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    activeWritingFilter = button.dataset.writingFilter || 'all';
-    writingFilterButtons.forEach((item) => {
-      item.classList.toggle('active', item === button);
-    });
-    applyWritingFilters();
-  });
-});
-
-surpriseProjectBtn?.addEventListener('click', () => {
-  const visibleCards = cards.filter((card) => !card.classList.contains('hidden'));
-  if (!visibleCards.length) return;
-
-  const randomCard = visibleCards[Math.floor(Math.random() * visibleCards.length)];
-  randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  randomCard.classList.add('highlighted');
-  window.setTimeout(() => randomCard.classList.remove('highlighted'), 1600);
-});
 
 if (navToggle && nav) {
   navToggle.addEventListener('click', () => {
@@ -180,8 +79,6 @@ function hydrateFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const projectFilter = params.get('projectFilter');
   const projectSearch = params.get('projectSearch');
-  const writingFilter = params.get('writingFilter');
-  const writingSearch = params.get('writingSearch');
 
   if (projectFilter) {
     activeFilter = projectFilter;
@@ -193,19 +90,7 @@ function hydrateFiltersFromUrl() {
   if (projectSearch && projectSearchInput) {
     projectSearchInput.value = projectSearch;
   }
-
-  if (writingFilter) {
-    activeWritingFilter = writingFilter;
-    writingFilterButtons.forEach((button) => {
-      button.classList.toggle('active', button.dataset.writingFilter === writingFilter);
-    });
-  }
-
-  if (writingSearch && writingSearchInput) {
-    writingSearchInput.value = writingSearch;
-  }
 }
 
 hydrateFiltersFromUrl();
 applyProjectFilters();
-applyWritingFilters();
