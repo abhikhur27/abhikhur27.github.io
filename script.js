@@ -1,6 +1,7 @@
 const projectFilterButtons = Array.from(document.querySelectorAll('#projects .filter-btn[data-filter]'));
 const cards = Array.from(document.querySelectorAll('.project-card'));
 const projectSearchInput = document.getElementById('project-search-input');
+const projectClearFiltersButton = document.getElementById('project-clear-filters');
 const projectResultsMeta = document.getElementById('project-results-meta');
 const projectEmptyState = document.getElementById('project-empty-state');
 const navToggle = document.querySelector('.menu-toggle');
@@ -30,6 +31,7 @@ function updateUrlState() {
 
 function applyProjectFilters() {
   const query = (projectSearchInput?.value || '').trim().toLowerCase();
+  const totalCount = cards.length;
   let visibleCount = 0;
 
   cards.forEach((card) => {
@@ -43,16 +45,31 @@ function applyProjectFilters() {
   });
 
   if (projectResultsMeta) {
-    projectResultsMeta.textContent = visibleCount === cards.length
-      ? 'Showing all curated projects.'
-      : `Showing ${visibleCount} matching project${visibleCount === 1 ? '' : 's'}.`;
+    projectResultsMeta.textContent = `Showing ${visibleCount} of ${totalCount} curated project${totalCount === 1 ? '' : 's'}.`;
   }
 
   if (projectEmptyState) {
     projectEmptyState.classList.toggle('hidden', visibleCount > 0);
   }
 
+  if (projectClearFiltersButton) {
+    const hasSearch = Boolean(query);
+    const hasCategory = activeFilter !== 'all';
+    projectClearFiltersButton.classList.toggle('hidden', !hasSearch && !hasCategory);
+  }
+
   updateUrlState();
+}
+
+function resetProjectFilters() {
+  activeFilter = 'all';
+  projectFilterButtons.forEach((button) => {
+    button.classList.toggle('active', button.dataset.filter === 'all');
+  });
+  if (projectSearchInput) {
+    projectSearchInput.value = '';
+  }
+  applyProjectFilters();
 }
 
 projectFilterButtons.forEach((button) => {
@@ -66,6 +83,7 @@ projectFilterButtons.forEach((button) => {
 });
 
 projectSearchInput?.addEventListener('input', applyProjectFilters);
+projectClearFiltersButton?.addEventListener('click', resetProjectFilters);
 
 document.addEventListener('keydown', (event) => {
   if (!projectSearchInput) return;
@@ -96,8 +114,9 @@ function hydrateFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const projectFilter = params.get('projectFilter');
   const projectSearch = params.get('projectSearch');
+  const validFilters = new Set(projectFilterButtons.map((button) => button.dataset.filter || 'all'));
 
-  if (projectFilter) {
+  if (projectFilter && validFilters.has(projectFilter)) {
     activeFilter = projectFilter;
     projectFilterButtons.forEach((button) => {
       button.classList.toggle('active', button.dataset.filter === projectFilter);
