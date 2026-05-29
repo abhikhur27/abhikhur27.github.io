@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
 
 def read_positions(csv_path: Path) -> list[Position]:
     rows: list[Position] = []
-    with csv_path.open("r", encoding="utf-8", newline="") as handle:
+    with csv_path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         required = {"symbol", "shares", "price", "annual_volatility"}
         missing = required.difference(set(reader.fieldnames or []))
