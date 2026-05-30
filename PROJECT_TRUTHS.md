@@ -29,7 +29,7 @@ These are the non-negotiable truths for this portfolio.
 - If something is a browser simulation or static web app, say `HTML, CSS, JavaScript` clearly.
 - Do not let names like `OS Scheduler Simulator` imply C, C++, Rust, Java, or native systems work when the implementation is actually web-based.
 - Prefer phrases like `Browser demo`, `Browser tool`, or `Static web project` when that is the truth.
-- Avoid filler naming like `Lab`, `Playground`, or `Hub` unless there is a specific reason and the title still reads professional.
+- Avoid weak suffix naming. Do not end public project titles with labels like `Simulator`, `Studio`, `Lab`, `Playground`, `Hub`, or similar filler unless there is a concrete, defensible reason.
 - Do not publish "AI-slop game" style project framing; names should be plain, concrete, and credible.
 
 ## Direction truths
