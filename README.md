@@ -27,6 +27,7 @@ Main personal site for curated project demos.
 - `projects/json-shape-diff-studio`
 - `projects/csv-column-profiler`
 - `projects/sql-index-advisor`
+- `projects/cache-policy-simulator`
 
 ## Technical Design
 

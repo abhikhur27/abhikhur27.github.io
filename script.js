@@ -9,6 +9,26 @@ const nav = document.getElementById('site-nav');
 
 let activeFilter = 'all';
 
+function updateFilterButtonCounts(query = '') {
+  const normalizedQuery = query.toLowerCase();
+  projectFilterButtons.forEach((button) => {
+    const filter = button.dataset.filter || 'all';
+    const baseLabel = button.dataset.label || button.textContent;
+    let count = 0;
+
+    cards.forEach((card) => {
+      const categories = (card.dataset.category || '').split(' ');
+      const categoryMatch = filter === 'all' || categories.includes(filter);
+      const textMatch = !normalizedQuery || (card.textContent || '').toLowerCase().includes(normalizedQuery);
+      if (categoryMatch && textMatch) {
+        count += 1;
+      }
+    });
+
+    button.textContent = `${baseLabel} (${count})`;
+  });
+}
+
 function updateUrlState() {
   const params = new URLSearchParams(window.location.search);
   const projectQuery = (projectSearchInput?.value || '').trim();
@@ -47,6 +67,8 @@ function applyProjectFilters() {
   if (projectResultsMeta) {
     projectResultsMeta.textContent = `Showing ${visibleCount} of ${totalCount} curated project${totalCount === 1 ? '' : 's'}.`;
   }
+
+  updateFilterButtonCounts(query);
 
   if (projectEmptyState) {
     projectEmptyState.classList.toggle('hidden', visibleCount > 0);

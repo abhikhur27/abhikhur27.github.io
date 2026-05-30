@@ -47,17 +47,18 @@
       </div>
 
       <div class="filter-group" role="group" aria-label="Project filters">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="systems">Systems</button>
-        <button class="filter-btn" data-filter="visualization">Visualization</button>
-        <button class="filter-btn" data-filter="tools">Developer Tools</button>
-        <button class="filter-btn" data-filter="games">Interactive Apps</button>
+        <button class="filter-btn active" data-filter="all" data-label="All">All</button>
+        <button class="filter-btn" data-filter="systems" data-label="Systems">Systems</button>
+        <button class="filter-btn" data-filter="visualization" data-label="Visualization">Visualization</button>
+        <button class="filter-btn" data-filter="tools" data-label="Developer Tools">Developer Tools</button>
+        <button class="filter-btn" data-filter="games" data-label="Interactive Apps">Interactive Apps</button>
       </div>
 
       <label class="project-search" for="project-search-input">
         Search projects
         <input id="project-search-input" type="search" placeholder="Filter by name, tech, or description">
       </label>
+      <p class="search-hint">Shortcut: press <kbd>/</kbd> to focus search and <kbd>Esc</kbd> to clear it.</p>
       <button id="project-clear-filters" class="text-link-btn" type="button">Clear Filters</button>
       <p id="project-results-meta" class="results-meta" aria-live="polite">Showing all curated projects.</p>
 
@@ -137,6 +138,19 @@
           <div class="card-actions">
             <a href="./projects/portfolio-risk-rebalancer/rebalance.py" target="_blank" rel="noreferrer">Code</a>
             <a href="./projects/portfolio-risk-rebalancer/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="tools systems">
+          <header>
+            <p class="tag">C++ Utility</p>
+            <h3>Cache Policy Simulator</h3>
+          </header>
+          <p>Command-line simulator that compares LRU and FIFO cache hit behavior on trace workloads.</p>
+          <p class="stack">C++, CLI, Performance Analysis</p>
+          <div class="card-actions">
+            <a href="./projects/cache-policy-simulator/cache_policy_sim.cpp" target="_blank" rel="noreferrer">Code</a>
+            <a href="./projects/cache-policy-simulator/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 

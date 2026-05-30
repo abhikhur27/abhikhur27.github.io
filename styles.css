@@ -190,6 +190,15 @@ h3 {
   font-size: 1.05rem;
 }
 
+kbd {
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.85em;
+}
+
 .hero-ctas,
 .card-actions,
 .filter-group {
@@ -235,6 +244,12 @@ h3 {
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.03);
   text-decoration: none;
+}
+
+.search-hint {
+  margin: 0.45rem 0 0.2rem;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .browse-strip a:hover,
