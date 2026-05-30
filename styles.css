@@ -373,8 +373,15 @@ section[id] {
 }
 
 .project-card header {
-  display: grid;
-  gap: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+}
+
+.project-card header h3 {
+  flex-basis: 100%;
+  margin-top: 0.1rem;
 }
 
 .project-card p {
@@ -390,14 +397,35 @@ section[id] {
 .tag {
   width: fit-content;
   margin-bottom: 0;
-  padding: 0.24rem 0.5rem;
-  color: #0b0f14;
+  padding: 0.3rem 0.62rem;
+  color: #211405;
+  border: 1px solid rgba(236, 168, 61, 0.72);
   border-radius: 999px;
-  background: var(--warm);
-  font-size: 0.72rem;
+  background: #f6ca82;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.pin-pill {
+  width: fit-content;
+  margin-bottom: 0;
+  padding: 0.22rem 0.56rem;
+  color: var(--text);
+  border: 1px solid rgba(183, 240, 123, 0.56);
+  border-radius: 999px;
+  background: rgba(183, 240, 123, 0.12);
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.project-card.pinned {
+  border-color: rgba(183, 240, 123, 0.42);
+  background: rgba(22, 32, 41, 0.98);
 }
 
 .card-actions {
