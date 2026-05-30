@@ -40,6 +40,7 @@ These are the non-negotiable truths for this portfolio.
 - Non-browser repos are a priority direction when they are substantive and applied.
 - Strong non-browser lanes include applied machine learning, quantitative finance research tooling, and quantum-computing-adjacent experiments with real technical depth.
 - Automation should actively favor high-quality standalone repos in those lanes over adding another browser demo variation.
+- Every new serious project should be created in its own standalone repository by default, not only as a folder inside this portfolio repo.
 - A smaller number of sharper, more believable projects is better than a huge pile of same-family experiments.
 - The current public repo intentionally keeps only a small curated set of internal subprojects.
 - Future automation runs should prioritize non-HTML repos with practical use: Rust, C++, Python, PHP, or similarly substantive stacks.

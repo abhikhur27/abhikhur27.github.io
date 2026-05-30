@@ -27,7 +27,11 @@ Main personal site for curated project demos.
 - `projects/json-shape-diff-studio`
 - `projects/csv-column-profiler`
 - `projects/sql-index-advisor`
-- `projects/cache-policy-simulator`
+
+## Standalone Project Repositories
+
+- `https://github.com/abhikhur27/portfolio-risk-rebalancer`
+- `https://github.com/abhikhur27/cache-policy-simulator`
 
 ## Technical Design
 
