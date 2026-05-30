@@ -1,16 +1,23 @@
 const projectFilterButtons = Array.from(document.querySelectorAll('#projects .filter-btn[data-filter]'));
 const cards = Array.from(document.querySelectorAll('.project-card'));
-const projectSearchInput = document.getElementById('project-search-input');
 const projectClearFiltersButton = document.getElementById('project-clear-filters');
 const projectResultsMeta = document.getElementById('project-results-meta');
 const projectEmptyState = document.getElementById('project-empty-state');
 const navToggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
+const projectGrid = document.querySelector('.project-grid');
 
 let activeFilter = 'all';
 
-function updateFilterButtonCounts(query = '') {
-  const normalizedQuery = query.toLowerCase();
+function reorderPinnedCards() {
+  if (!projectGrid) return;
+  cards.sort((a, b) => Number(b.classList.contains('pinned')) - Number(a.classList.contains('pinned')));
+  cards.forEach((card) => {
+    projectGrid.appendChild(card);
+  });
+}
+
+function updateFilterButtonCounts() {
   projectFilterButtons.forEach((button) => {
     const filter = button.dataset.filter || 'all';
     const baseLabel = button.dataset.label || button.textContent;
@@ -19,8 +26,7 @@ function updateFilterButtonCounts(query = '') {
     cards.forEach((card) => {
       const categories = (card.dataset.category || '').split(' ');
       const categoryMatch = filter === 'all' || categories.includes(filter);
-      const textMatch = !normalizedQuery || (card.textContent || '').toLowerCase().includes(normalizedQuery);
-      if (categoryMatch && textMatch) {
+      if (categoryMatch) {
         count += 1;
       }
     });
@@ -31,7 +37,6 @@ function updateFilterButtonCounts(query = '') {
 
 function updateUrlState() {
   const params = new URLSearchParams(window.location.search);
-  const projectQuery = (projectSearchInput?.value || '').trim();
 
   if (activeFilter !== 'all') {
     params.set('projectFilter', activeFilter);
@@ -39,26 +44,18 @@ function updateUrlState() {
     params.delete('projectFilter');
   }
 
-  if (projectQuery) {
-    params.set('projectSearch', projectQuery);
-  } else {
-    params.delete('projectSearch');
-  }
-
   const nextUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
   window.history.replaceState({}, '', nextUrl);
 }
 
 function applyProjectFilters() {
-  const query = (projectSearchInput?.value || '').trim().toLowerCase();
   const totalCount = cards.length;
   let visibleCount = 0;
 
   cards.forEach((card) => {
     const categories = (card.dataset.category || '').split(' ');
     const categoryMatch = activeFilter === 'all' || categories.includes(activeFilter);
-    const textMatch = !query || (card.textContent || '').toLowerCase().includes(query);
-    const visible = categoryMatch && textMatch;
+    const visible = categoryMatch;
 
     card.classList.toggle('hidden', !visible);
     if (visible) visibleCount += 1;
@@ -68,16 +65,15 @@ function applyProjectFilters() {
     projectResultsMeta.textContent = `Showing ${visibleCount} of ${totalCount} curated project${totalCount === 1 ? '' : 's'}.`;
   }
 
-  updateFilterButtonCounts(query);
+  updateFilterButtonCounts();
 
   if (projectEmptyState) {
     projectEmptyState.classList.toggle('hidden', visibleCount > 0);
   }
 
   if (projectClearFiltersButton) {
-    const hasSearch = Boolean(query);
     const hasCategory = activeFilter !== 'all';
-    projectClearFiltersButton.classList.toggle('hidden', !hasSearch && !hasCategory);
+    projectClearFiltersButton.classList.toggle('hidden', !hasCategory);
   }
 
   updateUrlState();
@@ -88,9 +84,6 @@ function resetProjectFilters() {
   projectFilterButtons.forEach((button) => {
     button.classList.toggle('active', button.dataset.filter === 'all');
   });
-  if (projectSearchInput) {
-    projectSearchInput.value = '';
-  }
   applyProjectFilters();
 }
 
@@ -104,25 +97,7 @@ projectFilterButtons.forEach((button) => {
   });
 });
 
-projectSearchInput?.addEventListener('input', applyProjectFilters);
 projectClearFiltersButton?.addEventListener('click', resetProjectFilters);
-
-document.addEventListener('keydown', (event) => {
-  if (!projectSearchInput) return;
-  const targetTag = event.target?.tagName?.toLowerCase();
-  const isTypingField = targetTag === 'input' || targetTag === 'textarea';
-
-  if (event.key === '/' && !isTypingField) {
-    event.preventDefault();
-    projectSearchInput.focus();
-  }
-
-  if (event.key === 'Escape' && document.activeElement === projectSearchInput) {
-    projectSearchInput.value = '';
-    applyProjectFilters();
-    projectSearchInput.blur();
-  }
-});
 
 if (navToggle && nav) {
   navToggle.addEventListener('click', () => {
@@ -135,7 +110,6 @@ if (navToggle && nav) {
 function hydrateFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const projectFilter = params.get('projectFilter');
-  const projectSearch = params.get('projectSearch');
   const validFilters = new Set(projectFilterButtons.map((button) => button.dataset.filter || 'all'));
 
   if (projectFilter && validFilters.has(projectFilter)) {
@@ -145,10 +119,8 @@ function hydrateFiltersFromUrl() {
     });
   }
 
-  if (projectSearch && projectSearchInput) {
-    projectSearchInput.value = projectSearch;
-  }
 }
 
+reorderPinnedCards();
 hydrateFiltersFromUrl();
 applyProjectFilters();

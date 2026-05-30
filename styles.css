@@ -246,12 +246,6 @@ kbd {
   text-decoration: none;
 }
 
-.search-hint {
-  margin: 0.45rem 0 0.2rem;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
 .browse-strip a:hover,
 .browse-strip a:focus-visible,
 .text-link-btn:hover,
@@ -315,30 +309,6 @@ section[id] {
   color: #081014;
   border-color: transparent;
   background: var(--accent);
-}
-
-.project-search {
-  display: grid;
-  gap: 0.5rem;
-  max-width: 680px;
-  margin: 1rem 0 0.75rem;
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.project-search input {
-  min-height: 48px;
-  width: 100%;
-  padding: 0.8rem 0.95rem;
-  color: var(--text);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(8, 16, 20, 0.78);
-}
-
-.project-search input:focus {
-  outline: 2px solid rgba(183, 240, 123, 0.48);
-  outline-offset: 2px;
 }
 
 .results-meta {
