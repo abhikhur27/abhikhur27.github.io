@@ -32,6 +32,7 @@ Main personal site for curated project demos.
 
 - `https://github.com/abhikhur27/portfolio-risk-rebalancer`
 - `https://github.com/abhikhur27/cache-policy-simulator`
+- `https://github.com/abhikhur27/context-constellation-rag`
 
 ## Technical Design
 
