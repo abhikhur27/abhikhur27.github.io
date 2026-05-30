@@ -273,6 +273,42 @@ section[id] {
   margin-bottom: 0.8rem;
 }
 
+.project-toolbar {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.project-toolbar label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.project-toolbar input {
+  max-width: 460px;
+  min-height: 44px;
+  padding: 0.62rem 0.78rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  background: rgba(16, 24, 32, 0.95);
+}
+
+.project-toolbar input:focus-visible {
+  outline: 2px solid rgba(183, 240, 123, 0.55);
+  outline-offset: 1px;
+}
+
+#project-search-status {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .featured-project {
   display: flex;
   align-items: end;
