@@ -37,7 +37,7 @@ Main personal site for curated project demos.
 
 - `index.html`: semantic structure for hero, curated project index, and a small writing lane.
 - `styles.css`: shared visual system for the portfolio homepage.
-- `script.js`: project filtering, writing filters, shareable filtered-view links, GitHub pulse, and mobile nav behavior.
+- `script.js`: pinned-project ordering and mobile nav behavior.
 - `projects/json-shape-diff-studio`: static JSON comparison utility for schema and payload drift.
 - `projects/csv-column-profiler`: static CSV QA tool for column-shape checks, null pressure, and duplicate-row detection.
 - `PROJECT_TRUTHS.md`: portfolio constraints that future changes and automations should follow.

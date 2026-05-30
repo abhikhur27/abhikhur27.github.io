@@ -102,7 +102,6 @@ input {
 
 .site-nav a,
 .menu-toggle,
-.filter-btn,
 .btn,
 .card-actions a {
   min-height: 44px;
@@ -122,8 +121,6 @@ input {
 
 .site-nav a:hover,
 .site-nav a:focus-visible,
-.filter-btn:hover,
-.filter-btn:focus-visible,
 .card-actions a:hover,
 .card-actions a:focus-visible {
   color: var(--text);
@@ -200,8 +197,7 @@ kbd {
 }
 
 .hero-ctas,
-.card-actions,
-.filter-group {
+.card-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
@@ -295,33 +291,6 @@ section[id] {
   margin-top: 0;
 }
 
-.filter-group {
-  margin: 1.75rem 0 1rem;
-}
-
-.filter-btn {
-  padding: 0.62rem 0.85rem;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.filter-btn.active {
-  color: #081014;
-  border-color: transparent;
-  background: var(--accent);
-}
-
-.results-meta {
-  margin: 0.25rem 0 1.2rem;
-  color: var(--muted);
-  font-size: 0.94rem;
-}
-
-.text-link-btn {
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -364,21 +333,6 @@ section[id] {
   font-size: 0.92rem;
 }
 
-.tag {
-  width: fit-content;
-  margin-bottom: 0;
-  padding: 0.3rem 0.62rem;
-  color: #211405;
-  border: 1px solid rgba(236, 168, 61, 0.72);
-  border-radius: 999px;
-  background: #f6ca82;
-  font-size: 0.78rem;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
 .pin-pill {
   width: fit-content;
   margin-bottom: 0;
@@ -405,12 +359,6 @@ section[id] {
 .card-actions a {
   flex: 1;
   padding: 0.65rem 0.8rem;
-}
-
-.project-card.hidden,
-.writing-card.hidden,
-.hidden {
-  display: none;
 }
 
 .writing-section {
@@ -571,10 +519,6 @@ section[id] {
   .featured-project {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .filter-btn {
-    flex: 1 1 auto;
   }
 
   #projects {

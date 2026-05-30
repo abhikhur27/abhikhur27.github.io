@@ -46,21 +46,9 @@
         <p class="eyebrow">Projects</p>
       </div>
 
-      <div class="filter-group" role="group" aria-label="Project filters">
-        <button class="filter-btn active" data-filter="all" data-label="All">All</button>
-        <button class="filter-btn" data-filter="systems" data-label="Systems">Systems</button>
-        <button class="filter-btn" data-filter="visualization" data-label="Visualization">Visualization</button>
-        <button class="filter-btn" data-filter="tools" data-label="Developer Tools">Developer Tools</button>
-        <button class="filter-btn" data-filter="games" data-label="Interactive Apps">Interactive Apps</button>
-      </div>
-
-      <button id="project-clear-filters" class="text-link-btn" type="button">Clear Filters</button>
-      <p id="project-results-meta" class="results-meta" aria-live="polite">Showing all curated projects.</p>
-
       <div class="project-grid">
-        <article class="project-card" data-category="tools systems">
+        <article class="project-card">
           <header>
-            <p class="tag">Data Utility</p>
             <h3>CSV Quality Checker</h3>
           </header>
           <p>Checks CSV fields, nulls, duplicates, and mixed types before import.</p>
@@ -71,9 +59,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="tools systems">
+        <article class="project-card">
           <header>
-            <p class="tag">Developer Tool</p>
             <h3>SQL Index Advisor</h3>
           </header>
           <p>Parses query access patterns and proposes candidate index definitions.</p>
@@ -84,10 +71,9 @@
           </div>
         </article>
 
-        <article class="project-card pinned" data-category="tools systems">
+        <article class="project-card pinned">
           <header>
             <p class="pin-pill">Pinned</p>
-            <p class="tag">Web Product</p>
             <h3>Brick-Brick</h3>
           </header>
           <p>Builds business and founder websites, AI workflow automations, and client/team portals.</p>
@@ -98,9 +84,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="tools systems">
+        <article class="project-card">
           <header>
-            <p class="tag">Browser Tool</p>
             <h3>JSON Shape Diff Tool</h3>
           </header>
           <p>Compares JSON payloads and flags added, removed, or type-drift paths.</p>
@@ -111,10 +96,9 @@
           </div>
         </article>
 
-        <article class="project-card pinned" data-category="tools systems">
+        <article class="project-card pinned">
           <header>
             <p class="pin-pill">Pinned</p>
-            <p class="tag">Applied ML</p>
             <h3>Applied ML Signal Classifier</h3>
           </header>
           <p>Market-regime classifier with feature engineering and walk-forward evaluation.</p>
@@ -125,10 +109,9 @@
           </div>
         </article>
 
-        <article class="project-card pinned" data-category="tools systems">
+        <article class="project-card pinned">
           <header>
             <p class="pin-pill">Pinned</p>
-            <p class="tag">Market Tool</p>
             <h3>Warframe Arbitrage Market Scanner</h3>
           </header>
           <p>Ranks flip opportunities by spread, ROI, freshness, and liquidity depth.</p>
@@ -139,9 +122,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="tools systems">
+        <article class="project-card">
           <header>
-            <p class="tag">Python Utility</p>
             <h3>Portfolio Risk Rebalancer</h3>
           </header>
           <p>CLI tool that converts holdings + volatility estimates into an inverse-volatility trade plan.</p>
@@ -152,9 +134,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="tools systems">
+        <article class="project-card">
           <header>
-            <p class="tag">C++ Utility</p>
             <h3>Cache Policy Analyzer</h3>
           </header>
           <p>Command-line utility that compares LRU and FIFO cache hit behavior on trace workloads.</p>
@@ -165,9 +146,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="games tools">
+        <article class="project-card">
           <header>
-            <p class="tag">Word Solver</p>
             <h3>Boggle Visual Solver</h3>
           </header>
           <p>Single-file Boggle and Word Hunt solver with visual path tracing and touch-friendly flow.</p>
@@ -178,9 +158,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="systems visualization">
+        <article class="project-card">
           <header>
-            <p class="tag">Transit Systems</p>
             <h3>Transit Network Planner</h3>
           </header>
           <p>Transit route editor with transfer modeling and shortest-path tradeoffs.</p>
@@ -191,9 +170,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="systems visualization tools">
+        <article class="project-card">
           <header>
-            <p class="tag">Financial Systems</p>
             <h3>Market Regime Monte Carlo Engine</h3>
           </header>
           <p>Regime-switching Monte Carlo engine with risk and drawdown analytics.</p>
@@ -204,9 +182,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="visualization tools">
+        <article class="project-card">
           <header>
-            <p class="tag">Browser Demo</p>
             <h3>Algorithm Visualizer</h3>
           </header>
           <p>Step-based sorting visualizer with replay, metrics, and comparisons.</p>
@@ -217,9 +194,8 @@
           </div>
         </article>
 
-        <article class="project-card" data-category="visualization tools">
+        <article class="project-card">
           <header>
-            <p class="tag">Browser Demo</p>
             <h3>Data Structures Visualizer (Vanilla)</h3>
           </header>
           <p>Vanilla visualizer for stack, queue, linked list, and BST workflows.</p>
@@ -231,7 +207,6 @@
         </article>
       </div>
 
-      <p id="project-empty-state" class="results-meta hidden">No projects match the current filter. Try another filter or search.</p>
     </section>
   </main>
 
