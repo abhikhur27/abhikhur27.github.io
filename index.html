@@ -24,6 +24,7 @@
       <a class="brand" href="#top" aria-label="Go to top">Abhi / Projects</a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
       <nav id="site-nav" class="site-nav" aria-label="Primary">
+        <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
@@ -31,11 +32,21 @@
   </header>
 
   <main id="main-content">
-    <section class="hero container">
-      <p class="eyebrow">Portfolio</p>
-      <h1>Practical software and technical projects.</h1>
-      <p class="lead">Focused tools and systems work with clear use cases.</p>
-      <div class="hero-ctas">
+    <section id="about" class="intro container">
+      <div class="portrait-frame">
+        <img class="portrait" src="https://github.com/abhikhur27.png?size=600" alt="Portrait of Abhimanyu Khurana">
+      </div>
+      <div class="about-panel">
+        <h1>Abhimanyu Khurana</h1>
+        <p class="lead">
+          I build practical software with a focus on useful workflows, clear execution, and technical depth.
+        </p>
+        <p class="about-copy">
+          I'm a Computer Science student at UT Dallas building tools across Python, C++, JavaScript, and applied ML.
+          My portfolio prioritizes projects that are production-minded, defensible in interviews, and strong enough to ship.
+        </p>
+      </div>
+      <div class="intro-actions">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </div>
@@ -44,11 +55,6 @@
     <section id="projects" class="container">
       <div class="section-head">
         <p class="eyebrow">Projects</p>
-      </div>
-      <div class="project-toolbar">
-        <label for="project-search">Find a project</label>
-        <input id="project-search" type="search" placeholder="Search by title, stack, or keyword" autocomplete="off">
-        <p id="project-search-status" role="status" aria-live="polite"></p>
       </div>
 
       <div class="project-grid">
