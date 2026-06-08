@@ -156,8 +156,15 @@ input {
   position: absolute;
   inset: 0;
   border-radius: 22px;
-  border: 1px solid rgba(183, 240, 123, 0.26);
-  background: rgba(14, 18, 24, 0.94);
+  background: conic-gradient(
+    from 0deg,
+    rgba(183, 240, 123, 0.95) 0%,
+    rgba(183, 240, 123, 0) 26%,
+    rgba(93, 211, 158, 0.82) 50%,
+    rgba(93, 211, 158, 0) 76%,
+    rgba(183, 240, 123, 0.95) 100%
+  );
+  animation: frame-spin 9s linear infinite;
 }
 
 .portrait-frame::after {
@@ -191,29 +198,6 @@ input {
   margin-bottom: 0;
   color: var(--muted);
   font-size: 1.02rem;
-}
-
-.focus-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-}
-
-.focus-strip span,
-.project-kind {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  min-height: 30px;
-  padding: 0.15rem 0.55rem;
-  border: 1px solid rgba(183, 240, 123, 0.22);
-  border-radius: 999px;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.03);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .eyebrow {
@@ -359,24 +343,6 @@ section[id] {
   color: var(--muted);
 }
 
-.featured-project {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0 0 1.25rem;
-  padding: 1.1rem 1.2rem;
-  border: 1px solid rgba(183, 240, 123, 0.22);
-  border-radius: var(--radius);
-  background: rgba(16, 24, 32, 0.94);
-  box-shadow: var(--shadow);
-}
-
-.featured-project .card-actions {
-  min-width: 220px;
-  margin-top: 0;
-}
-
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -402,10 +368,6 @@ section[id] {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.4rem 0.5rem;
-}
-
-.project-kind {
-  margin: 0;
 }
 
 .project-card header h3 {
@@ -611,11 +573,6 @@ section[id] {
 
   .writing-grid {
     grid-template-columns: 1fr;
-  }
-
-  .featured-project {
-    align-items: stretch;
-    flex-direction: column;
   }
 
   #projects {
