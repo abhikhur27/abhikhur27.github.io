@@ -193,6 +193,29 @@ input {
   font-size: 1.02rem;
 }
 
+.focus-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.focus-strip span,
+.project-kind {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 30px;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid rgba(183, 240, 123, 0.22);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .eyebrow {
   margin: 0;
   color: var(--accent);
@@ -379,6 +402,10 @@ section[id] {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.4rem 0.5rem;
+}
+
+.project-kind {
+  margin: 0;
 }
 
 .project-card header h3 {
