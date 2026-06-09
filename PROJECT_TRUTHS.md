@@ -14,6 +14,9 @@ These are the non-negotiable truths for this portfolio.
 - Prefer flat backgrounds, clear contrast, and readable spacing over decorative visual effects.
 - Keep portfolio cards and section copy short. If a card needs a paragraph to be understood, the copy is too dense.
 - Default to low-clutter layouts with fewer controls and less on-page text.
+- Do not add extra homepage hero taglines, category slogans, or decorative project-section headlines unless explicitly requested.
+- Do not add homepage filtering chips, tabs, or category controls unless they are clearly necessary.
+- Default homepage project browsing should be a simple list/grid of projects, not a navigation system.
 
 ## Content truths
 
@@ -57,3 +60,4 @@ These are the non-negotiable truths for this portfolio.
 - Avoid "AI-slop game" style projects unless there is clear functional use and technical depth.
 - Before creating a new project, check whether it is actually distinct from existing work.
 - Before publishing anything, ask: would a stranger immediately understand what this is and why it exists?
+- If GitHub pinned repos change, homepage project ordering should reflect that priority when it does not create self-referential clutter.

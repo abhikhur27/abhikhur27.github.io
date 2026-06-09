@@ -261,38 +261,6 @@ kbd {
   color: var(--text);
 }
 
-.browse-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-}
-
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  margin-bottom: 1rem;
-}
-
-.filter-chip {
-  min-height: 42px;
-  padding: 0.55rem 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.04);
-  cursor: pointer;
-}
-
-.filter-chip:hover,
-.filter-chip:focus-visible,
-.filter-chip.active {
-  color: var(--text);
-  border-color: rgba(183, 240, 123, 0.62);
-  background: rgba(183, 240, 123, 0.08);
-}
-
-.browse-strip a,
 .text-link-btn {
   display: inline-flex;
   align-items: center;
@@ -360,6 +328,26 @@ section[id] {
   transform: translateY(-3px);
   border-color: rgba(183, 240, 123, 0.48);
   background: rgba(20, 33, 43, 0.98);
+}
+
+.pinned-card {
+  border-color: rgba(183, 240, 123, 0.48);
+  background: rgba(20, 33, 43, 0.98);
+}
+
+.pin-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid rgba(183, 240, 123, 0.44);
+  border-radius: 999px;
+  color: var(--accent);
+  background: rgba(183, 240, 123, 0.08);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .project-card header {

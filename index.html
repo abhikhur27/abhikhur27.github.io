@@ -49,11 +49,6 @@
           Outside of code, I'm an avid Bears fan, video game lover, guitarist, and gardener. I also like getting my hands
           dirty with crafts and building things in the physical world when I'm away from the keyboard.
         </p>
-        <div class="browse-strip" aria-label="Fast browsing">
-          <a href="#projects">Utility software first</a>
-          <a href="#projects" data-filter-link="browser">Browser projects</a>
-          <a href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">All repos</a>
-        </div>
       </div>
       <div class="intro-actions">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
@@ -64,19 +59,36 @@
     <section id="projects" class="container">
       <div class="section-head">
         <p class="eyebrow">Projects</p>
-        <h2>Useful software first</h2>
-        <p class="section-copy">A small curated set of projects with the clearest portfolio signal. Browser demos are labeled honestly, and the strongest utilities sit first.</p>
-      </div>
-
-      <div class="filter-row" role="group" aria-label="Project filters">
-        <button class="filter-chip active" type="button" data-filter="all">All</button>
-        <button class="filter-chip" type="button" data-filter="utility">Utility software</button>
-        <button class="filter-chip" type="button" data-filter="browser">Browser projects</button>
-        <button class="filter-chip" type="button" data-filter="external">External and client</button>
       </div>
 
       <div class="project-grid">
-        <article class="project-card" data-group="utility">
+        <article class="project-card pinned-card">
+          <header>
+            <span class="pin-badge">Pinned on GitHub</span>
+            <h3>Warframe Arbitrage Market Scanner</h3>
+          </header>
+          <p>Ranks flip opportunities by spread, ROI, freshness, and liquidity depth.</p>
+          <p class="stack">Node.js, Express, JavaScript</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/warframe-auction-market" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/warframe-auction-market#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card pinned-card">
+          <header>
+            <span class="pin-badge">Pinned on GitHub</span>
+            <h3>Boggle Visual Solver</h3>
+          </header>
+          <p>Single-file Boggle and Word Hunt solver with visual path tracing and touch-friendly flow.</p>
+          <p class="stack">HTML, Tailwind CSS, JavaScript</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/bogglebot" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/bogglebot#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card">
           <header>
             <h3>Course Grade Allocator</h3>
           </header>
@@ -88,7 +100,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="browser">
+        <article class="project-card">
           <header>
             <h3>CSV Quality Checker</h3>
           </header>
@@ -100,7 +112,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="browser">
+        <article class="project-card">
           <header>
             <h3>SQL Index Advisor</h3>
           </header>
@@ -112,7 +124,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="external">
+        <article class="project-card">
           <header>
             <h3>Brick-Brick</h3>
           </header>
@@ -124,7 +136,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="browser">
+        <article class="project-card">
           <header>
             <h3>JSON Shape Diff Tool</h3>
           </header>
@@ -136,7 +148,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="utility">
+        <article class="project-card">
           <header>
             <h3>Applied ML Signal Classifier</h3>
           </header>
@@ -148,19 +160,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="utility">
-          <header>
-            <h3>Warframe Arbitrage Market Scanner</h3>
-          </header>
-          <p>Ranks flip opportunities by spread, ROI, freshness, and liquidity depth.</p>
-          <p class="stack">Node.js, Express, JavaScript</p>
-          <div class="card-actions">
-            <a href="https://github.com/abhikhur27/warframe-auction-market" target="_blank" rel="noreferrer">Code</a>
-            <a href="https://github.com/abhikhur27/warframe-auction-market#readme" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-group="utility">
+        <article class="project-card">
           <header>
             <h3>Portfolio Risk Rebalancer</h3>
           </header>
@@ -172,7 +172,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="utility">
+        <article class="project-card">
           <header>
             <h3>Cache Policy Analyzer</h3>
           </header>
@@ -184,7 +184,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="utility">
+        <article class="project-card">
           <header>
             <h3>Context Constellation RAG</h3>
           </header>
@@ -196,7 +196,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="browser">
+        <article class="project-card">
           <header>
             <h3>Continental Feuds</h3>
           </header>
@@ -208,19 +208,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="browser">
-          <header>
-            <h3>Boggle Visual Solver</h3>
-          </header>
-          <p>Single-file Boggle and Word Hunt solver with visual path tracing and touch-friendly flow.</p>
-          <p class="stack">HTML, Tailwind CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="https://github.com/abhikhur27/bogglebot" target="_blank" rel="noreferrer">Code</a>
-            <a href="https://github.com/abhikhur27/bogglebot#readme" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-group="browser">
+        <article class="project-card">
           <header>
             <h3>Transit Network Planner</h3>
           </header>
@@ -232,7 +220,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="browser">
+        <article class="project-card">
           <header>
             <h3>Market Regime Monte Carlo Engine</h3>
           </header>
@@ -244,7 +232,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="browser">
+        <article class="project-card">
           <header>
             <h3>Algorithm Visualizer</h3>
           </header>
@@ -256,7 +244,7 @@
           </div>
         </article>
 
-        <article class="project-card" data-group="browser">
+        <article class="project-card">
           <header>
             <h3>Data Structures Visualizer (Vanilla)</h3>
           </header>
