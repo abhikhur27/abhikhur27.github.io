@@ -335,6 +335,10 @@ section[id] {
   background: rgba(20, 33, 43, 0.98);
 }
 
+.featured-card {
+  border-color: rgba(243, 179, 91, 0.52);
+}
+
 .pin-badge {
   display: inline-flex;
   width: fit-content;
