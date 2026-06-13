@@ -221,6 +221,14 @@ h3 {
   font-size: 1.05rem;
 }
 
+.secondary-head {
+  margin-top: 2.4rem;
+}
+
+.secondary-grid {
+  margin-top: 1.1rem;
+}
+
 kbd {
   padding: 0.05rem 0.4rem;
   border: 1px solid var(--line);

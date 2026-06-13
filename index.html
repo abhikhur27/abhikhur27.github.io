@@ -48,13 +48,13 @@
       </div>
       <div class="intro-actions">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
-        <a class="btn btn-secondary" href="#project-change-risk-sentry">Latest Utility</a>
+        <a class="btn btn-secondary" href="#project-folder-triage-cli">Latest Utility</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </div>
       <div class="quick-picks" aria-label="Recommended starting projects">
         <span>Open first:</span>
+        <a href="#project-folder-triage-cli">Folder Triage CLI</a>
         <a href="#project-change-risk-sentry">Change Risk Sentry</a>
-        <a href="#project-deadline-calendar-builder">Deadline Calendar Builder</a>
         <a href="https://github.com/abhikhur27/cache-policy-simulator" target="_blank" rel="noreferrer">Cache Policy Analyzer</a>
       </div>
     </section>
@@ -62,13 +62,26 @@
     <section id="projects" class="container">
       <div class="section-head">
         <p class="eyebrow">Projects</p>
-        <p class="section-copy">Start with the standalone utilities and research tools; the browser demos are lower in the list.</p>
+        <p class="section-copy">Start with the standalone utilities and research tools. Smaller browser-only builds are grouped below instead of mixed into the first scan.</p>
       </div>
 
       <div class="project-grid">
-        <article id="project-change-risk-sentry" class="project-card featured-card">
+        <article id="project-folder-triage-cli" class="project-card featured-card">
           <header>
             <span class="project-chip">New</span>
+            <h3>Folder Triage CLI</h3>
+          </header>
+          <p>Scans a directory tree, ranks large and stale files, flags probable duplicates, and exports a cleanup brief.</p>
+          <p class="stack">C++, CLI, Filesystem Utility</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/folder-triage-cli" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/folder-triage-cli#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article id="project-change-risk-sentry" class="project-card featured-card">
+          <header>
+            <span class="project-chip">Utility</span>
             <h3>Change Risk Sentry</h3>
           </header>
           <p>Audits a local git worktree and flags review risk from source, test, config, and churn patterns before a push.</p>
@@ -158,30 +171,6 @@
 
         <article class="project-card">
           <header>
-            <h3>CSV Quality Checker</h3>
-          </header>
-          <p>Checks CSV fields, nulls, duplicates, and mixed types before import.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open</a>
-            <a href="./projects/csv-column-profiler/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <header>
-            <h3>SQL Index Advisor</h3>
-          </header>
-          <p>Parses query access patterns and proposes candidate index definitions.</p>
-          <p class="stack">HTML, CSS, JavaScript, SQL Heuristics</p>
-          <div class="card-actions">
-            <a href="./projects/sql-index-advisor/index.html" target="_blank" rel="noreferrer">Open</a>
-            <a href="./projects/sql-index-advisor/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <header>
             <h3>Brick-Brick</h3>
           </header>
           <p>Builds business and founder websites, AI workflow automations, and client/team portals.</p>
@@ -189,18 +178,6 @@
           <div class="card-actions">
             <a href="https://brick-brick.org" target="_blank" rel="noreferrer">Open</a>
             <a href="https://brick-brick.org" target="_blank" rel="noreferrer">Website</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <header>
-            <h3>JSON Shape Diff Tool</h3>
-          </header>
-          <p>Compares JSON payloads and flags added, removed, or type-drift paths.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="./projects/json-shape-diff-studio/index.html" target="_blank" rel="noreferrer">Open</a>
-            <a href="./projects/json-shape-diff-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
@@ -249,6 +226,50 @@
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/context-constellation-rag" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/context-constellation-rag#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="section-head secondary-head">
+        <p class="eyebrow">Browser Builds</p>
+        <p class="section-copy">These are smaller browser-only tools and demos. They are still public, but they are intentionally separated from the main utility-heavy scan.</p>
+      </div>
+
+      <div class="project-grid secondary-grid">
+        <article class="project-card">
+          <header>
+            <h3>CSV Quality Checker</h3>
+          </header>
+          <p>Checks CSV fields, nulls, duplicates, and mixed types before import.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
+          <div class="card-actions">
+            <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/csv-column-profiler/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <header>
+            <h3>SQL Index Advisor</h3>
+          </header>
+          <p>Parses query access patterns and proposes candidate index definitions.</p>
+          <p class="stack">HTML, CSS, JavaScript, SQL Heuristics</p>
+          <div class="card-actions">
+            <a href="./projects/sql-index-advisor/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/sql-index-advisor/README.md" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <header>
+            <h3>JSON Shape Diff Tool</h3>
+          </header>
+          <p>Compares JSON payloads and flags added, removed, or type-drift paths.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
+          <div class="card-actions">
+            <a href="./projects/json-shape-diff-studio/index.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="./projects/json-shape-diff-studio/README.md" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
