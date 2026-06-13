@@ -48,21 +48,40 @@
       </div>
       <div class="intro-actions">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
-        <a class="btn btn-secondary" href="#project-deadline-calendar-builder">Latest Utility</a>
+        <a class="btn btn-secondary" href="#project-change-risk-sentry">Latest Utility</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+      <div class="quick-picks" aria-label="Recommended starting projects">
+        <span>Open first:</span>
+        <a href="#project-change-risk-sentry">Change Risk Sentry</a>
+        <a href="#project-deadline-calendar-builder">Deadline Calendar Builder</a>
+        <a href="https://github.com/abhikhur27/cache-policy-simulator" target="_blank" rel="noreferrer">Cache Policy Analyzer</a>
       </div>
     </section>
 
     <section id="projects" class="container">
       <div class="section-head">
         <p class="eyebrow">Projects</p>
-        <p class="section-copy">Selected standalone tools and research utilities first, followed by a smaller set of browser demos.</p>
+        <p class="section-copy">Start with the standalone utilities and research tools; the browser demos are lower in the list.</p>
       </div>
 
       <div class="project-grid">
-        <article id="project-deadline-calendar-builder" class="project-card featured-card">
+        <article id="project-change-risk-sentry" class="project-card featured-card">
           <header>
             <span class="project-chip">New</span>
+            <h3>Change Risk Sentry</h3>
+          </header>
+          <p>Audits a local git worktree and flags review risk from source, test, config, and churn patterns before a push.</p>
+          <p class="stack">Rust, CLI, Git Workflow Utility</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/change-risk-sentry" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/change-risk-sentry#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article id="project-deadline-calendar-builder" class="project-card featured-card">
+          <header>
+            <span class="project-chip">Utility</span>
             <h3>Deadline Calendar Builder</h3>
           </header>
           <p>Turns a deadline CSV into an importable ICS calendar and a Markdown review sheet for planning.</p>

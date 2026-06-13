@@ -232,7 +232,8 @@ kbd {
 
 .hero-ctas,
 .intro-actions,
-.card-actions {
+.card-actions,
+.quick-picks {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
@@ -240,6 +241,30 @@ kbd {
 
 .intro-actions {
   grid-column: 2;
+}
+
+.quick-picks {
+  grid-column: 2;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.quick-picks span {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.quick-picks a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.quick-picks a:hover,
+.quick-picks a:focus-visible {
+  color: var(--text);
+  border-bottom-color: rgba(183, 240, 123, 0.62);
 }
 
 .btn,
@@ -551,6 +576,10 @@ section[id] {
   }
 
   .intro-actions {
+    grid-column: 1;
+  }
+
+  .quick-picks {
     grid-column: 1;
   }
 
