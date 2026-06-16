@@ -48,14 +48,14 @@
       </div>
       <div class="intro-actions">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
-        <a class="btn btn-secondary" href="#project-windows-autostart-auditor">Latest Utility</a>
+        <a class="btn btn-secondary" href="#project-path-shadow-auditor">Latest Utility</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </div>
       <div class="quick-picks" aria-label="Recommended starting projects">
         <span>Open first:</span>
+        <a href="#project-path-shadow-auditor">Path Shadow Auditor</a>
         <a href="#project-windows-autostart-auditor">Windows Autostart Auditor</a>
         <a href="#project-folder-triage-cli">Folder Triage CLI</a>
-        <a href="#project-change-risk-sentry">Change Risk Sentry</a>
       </div>
     </section>
 
@@ -66,6 +66,19 @@
       </div>
 
       <div class="project-grid featured-grid">
+        <article id="project-path-shadow-auditor" class="project-card featured-card">
+          <header>
+            <span class="project-chip">New</span>
+            <h3>Path Shadow Auditor</h3>
+          </header>
+          <p>Audits Windows PATH ordering, flags duplicate or missing entries, and shows which command copies are being shadowed.</p>
+          <p class="stack">PowerShell, Windows, CLI Environment Utility</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/path-shadow-auditor" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/path-shadow-auditor#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article id="project-windows-autostart-auditor" class="project-card featured-card">
           <header>
             <span class="project-chip">New</span>
@@ -102,19 +115,6 @@
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/change-risk-sentry" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/change-risk-sentry#readme" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article id="project-deadline-calendar-builder" class="project-card featured-card">
-          <header>
-            <span class="project-chip">Utility</span>
-            <h3>Deadline Calendar Builder</h3>
-          </header>
-          <p>Turns a deadline CSV into an importable ICS calendar and a Markdown review sheet for planning.</p>
-          <p class="stack">Node.js, CLI, ICS Workflow Utility</p>
-          <div class="card-actions">
-            <a href="https://github.com/abhikhur27/deadline-calendar-builder" target="_blank" rel="noreferrer">Code</a>
-            <a href="https://github.com/abhikhur27/deadline-calendar-builder#readme" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
@@ -192,6 +192,18 @@
 
         <article class="project-card">
           <header>
+            <h3>Deadline Calendar Builder</h3>
+          </header>
+          <p>Turns a deadline CSV into an importable ICS calendar and a Markdown review sheet for planning.</p>
+          <p class="stack">Node.js, CLI, ICS Workflow Utility</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/deadline-calendar-builder" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/deadline-calendar-builder#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <header>
             <h3>Brick-Brick</h3>
           </header>
           <p>Builds business and founder websites, AI workflow automations, and client/team portals.</p>
@@ -252,10 +264,12 @@
 
       </div>
 
-      <div class="section-head secondary-head">
-        <p class="eyebrow">Browser Builds</p>
-        <p class="section-copy">These are smaller browser-only tools and demos. They are still public, but they are intentionally separated from the main utility-heavy scan.</p>
-      </div>
+      <details class="project-disclosure secondary-head">
+        <summary>Open browser-only builds (8)</summary>
+        <div class="section-head subsection-head">
+          <p class="eyebrow">Browser Builds</p>
+          <p class="section-copy">These are smaller browser-only tools and demos. They are still public, but they stay collapsed by default so the first scan stays utility-first.</p>
+        </div>
 
       <div class="project-grid secondary-grid">
         <article class="project-card">
@@ -354,6 +368,7 @@
           </div>
         </article>
       </div>
+      </details>
 
     </section>
   </main>

@@ -33,6 +33,7 @@ Main personal site for curated project demos.
 - `https://github.com/abhikhur27/course-grade-allocator`
 - `https://github.com/abhikhur27/change-risk-sentry`
 - `https://github.com/abhikhur27/deadline-calendar-builder`
+- `https://github.com/abhikhur27/path-shadow-auditor`
 - `https://github.com/abhikhur27/windows-autostart-auditor`
 - `https://github.com/abhikhur27/trade-journal-normalizer`
 - `https://github.com/abhikhur27/portfolio-risk-rebalancer`
@@ -45,6 +46,7 @@ Main personal site for curated project demos.
 - `index.html`: semantic structure for hero, curated project index, and a small writing lane.
 - `styles.css`: shared visual system for the portfolio homepage.
 - `script.js`: pinned-project ordering and mobile nav behavior.
+- homepage browser-only section now stays collapsed by default so the first scan stays utility-first.
 - `projects/json-shape-diff-studio`: static JSON comparison utility for schema and payload drift.
 - `projects/csv-column-profiler`: static CSV QA tool for column-shape checks, null pressure, and duplicate-row detection.
 - `PROJECT_TRUTHS.md`: portfolio constraints that future changes and automations should follow.

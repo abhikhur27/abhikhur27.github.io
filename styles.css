@@ -233,6 +233,38 @@ h3 {
   margin-top: 1.1rem;
 }
 
+.project-disclosure {
+  margin-top: 2.4rem;
+}
+
+.project-disclosure summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.72rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+
+.project-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.project-disclosure summary:hover,
+.project-disclosure summary:focus-visible {
+  border-color: rgba(183, 240, 123, 0.62);
+  background: rgba(183, 240, 123, 0.08);
+}
+
+.project-disclosure[open] summary {
+  margin-bottom: 1rem;
+}
+
 kbd {
   padding: 0.05rem 0.4rem;
   border: 1px solid var(--line);
