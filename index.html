@@ -48,27 +48,40 @@
       </div>
       <div class="intro-actions">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
-        <a class="btn btn-secondary" href="#project-folder-triage-cli">Latest Utility</a>
+        <a class="btn btn-secondary" href="#project-windows-autostart-auditor">Latest Utility</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </div>
       <div class="quick-picks" aria-label="Recommended starting projects">
         <span>Open first:</span>
+        <a href="#project-windows-autostart-auditor">Windows Autostart Auditor</a>
         <a href="#project-folder-triage-cli">Folder Triage CLI</a>
         <a href="#project-change-risk-sentry">Change Risk Sentry</a>
-        <a href="https://github.com/abhikhur27/cache-policy-simulator" target="_blank" rel="noreferrer">Cache Policy Analyzer</a>
       </div>
     </section>
 
     <section id="projects" class="container">
       <div class="section-head">
         <p class="eyebrow">Projects</p>
-        <p class="section-copy">Start with the standalone utilities and research tools. Smaller browser-only builds are grouped below instead of mixed into the first scan.</p>
+        <p class="section-copy">Start with a short first-pass set, then scan the broader standalone utilities and research tools below. Smaller browser-only builds stay grouped separately.</p>
       </div>
 
-      <div class="project-grid">
-        <article id="project-folder-triage-cli" class="project-card featured-card">
+      <div class="project-grid featured-grid">
+        <article id="project-windows-autostart-auditor" class="project-card featured-card">
           <header>
             <span class="project-chip">New</span>
+            <h3>Windows Autostart Auditor</h3>
+          </header>
+          <p>Scans Run keys, startup folders, and scheduled tasks, then ranks risky autostart entries for cleanup.</p>
+          <p class="stack">C#, .NET, Windows Utility</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/windows-autostart-auditor" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/windows-autostart-auditor#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article id="project-folder-triage-cli" class="project-card featured-card">
+          <header>
+            <span class="project-chip">Utility</span>
             <h3>Folder Triage CLI</h3>
           </header>
           <p>Scans a directory tree, ranks large and stale files, flags probable duplicates, and exports a cleanup brief.</p>
@@ -117,6 +130,14 @@
             <a href="https://github.com/abhikhur27/warframe-auction-market#readme" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
+      </div>
+
+      <div class="section-head subsection-head">
+        <p class="eyebrow">More Standalone Work</p>
+        <p class="section-copy">Utilities, finance tooling, and applied ML work that still belongs in the main portfolio scan.</p>
+      </div>
+
+      <div class="project-grid">
 
         <article class="project-card pinned-card">
           <header>

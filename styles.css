@@ -225,6 +225,10 @@ h3 {
   margin-top: 2.4rem;
 }
 
+.subsection-head {
+  margin-top: 1.5rem;
+}
+
 .secondary-grid {
   margin-top: 1.1rem;
 }
@@ -347,6 +351,10 @@ section[id] {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.featured-grid {
+  margin-bottom: 1.4rem;
 }
 
 .project-card {
