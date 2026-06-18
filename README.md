@@ -32,6 +32,7 @@ Main personal site for curated project demos.
 
 - `https://github.com/abhikhur27/course-grade-allocator`
 - `https://github.com/abhikhur27/change-risk-sentry`
+- `https://github.com/abhikhur27/dataset-split-auditor`
 - `https://github.com/abhikhur27/deadline-calendar-builder`
 - `https://github.com/abhikhur27/path-shadow-auditor`
 - `https://github.com/abhikhur27/windows-autostart-auditor`
