@@ -48,27 +48,40 @@
       </div>
       <div class="intro-actions">
         <a class="btn btn-primary" href="#projects">Browse Projects</a>
-        <a class="btn btn-secondary" href="#project-dataset-split-auditor">Latest Utility</a>
+        <a class="btn btn-secondary" href="#project-incident-handoff-builder">Latest Utility</a>
         <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </div>
       <div class="quick-picks" aria-label="Recommended starting projects">
         <span>Open first:</span>
+        <a href="#project-incident-handoff-builder">Incident Handoff Builder</a>
         <a href="#project-dataset-split-auditor">Dataset Split Auditor</a>
         <a href="#project-windows-autostart-auditor">Windows Autostart Auditor</a>
-        <a href="#project-folder-triage-cli">Folder Triage CLI</a>
       </div>
     </section>
 
     <section id="projects" class="container">
       <div class="section-head">
         <p class="eyebrow">Projects</p>
-        <p class="section-copy">Start with a short first-pass set, then scan the broader standalone utilities and research tools below. Smaller browser-only builds stay grouped separately.</p>
+        <p class="section-copy">Start with four sharp first-pass utilities, then move into the broader standalone tools and research work below. Smaller browser-only builds stay grouped separately.</p>
       </div>
 
       <div class="project-grid featured-grid">
-        <article id="project-dataset-split-auditor" class="project-card featured-card">
+        <article id="project-incident-handoff-builder" class="project-card featured-card">
           <header>
             <span class="project-chip">New</span>
+            <h3>Incident Handoff Builder</h3>
+          </header>
+          <p>Turns raw outage notes into a readable handoff brief with timeline, ownership, and next-action coverage.</p>
+          <p class="stack">HTML, CSS, JavaScript, Incident Workflow Tool</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/incident-handoff-builder" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/incident-handoff-builder#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article id="project-dataset-split-auditor" class="project-card featured-card">
+          <header>
+            <span class="project-chip">Utility</span>
             <h3>Dataset Split Auditor</h3>
           </header>
           <p>Checks train, test, and validation CSV splits for leakage, duplicate IDs, temporal overlap, and label skew.</p>
@@ -79,22 +92,9 @@
           </div>
         </article>
 
-        <article id="project-path-shadow-auditor" class="project-card featured-card">
-          <header>
-            <span class="project-chip">Utility</span>
-            <h3>Path Shadow Auditor</h3>
-          </header>
-          <p>Audits Windows PATH ordering, flags duplicate or missing entries, and shows which command copies are being shadowed.</p>
-          <p class="stack">PowerShell, Windows, CLI Environment Utility</p>
-          <div class="card-actions">
-            <a href="https://github.com/abhikhur27/path-shadow-auditor" target="_blank" rel="noreferrer">Code</a>
-            <a href="https://github.com/abhikhur27/path-shadow-auditor#readme" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
         <article id="project-windows-autostart-auditor" class="project-card featured-card">
           <header>
-            <span class="project-chip">New</span>
+            <span class="project-chip">Utility</span>
             <h3>Windows Autostart Auditor</h3>
           </header>
           <p>Scans Run keys, startup folders, and scheduled tasks, then ranks risky autostart entries for cleanup.</p>
@@ -175,6 +175,19 @@
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/change-risk-sentry" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/change-risk-sentry#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <header>
+            <span class="project-chip">Utility</span>
+            <h3>Path Shadow Auditor</h3>
+          </header>
+          <p>Audits Windows PATH ordering, flags duplicate or missing entries, and shows which command copies are being shadowed.</p>
+          <p class="stack">PowerShell, Windows, CLI Environment Utility</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/path-shadow-auditor" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/path-shadow-auditor#readme" target="_blank" rel="noreferrer">Docs</a>
           </div>
         </article>
 
