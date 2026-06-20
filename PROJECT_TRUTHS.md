@@ -17,6 +17,7 @@ These are the non-negotiable truths for this portfolio.
 - Do not add extra homepage hero taglines, category slogans, or decorative project-section headlines unless explicitly requested.
 - Do not add homepage filtering chips, tabs, or category controls unless they are clearly necessary.
 - Default homepage project browsing should be a simple list/grid of projects, not a navigation system.
+- Preserve the existing more personal bio paragraph unless I explicitly ask to change or remove it.
 
 ## Content truths
 
