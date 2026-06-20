@@ -385,10 +385,6 @@ section[id] {
   gap: 1rem;
 }
 
-.featured-grid {
-  margin-bottom: 1.4rem;
-}
-
 .project-card {
   display: flex;
   min-height: 100%;
@@ -406,10 +402,6 @@ section[id] {
 .pinned-card {
   border-color: rgba(183, 240, 123, 0.48);
   background: rgba(20, 33, 43, 0.98);
-}
-
-.featured-card {
-  border-color: rgba(243, 179, 91, 0.52);
 }
 
 .pin-badge {
@@ -439,7 +431,6 @@ section[id] {
   margin-top: 0.1rem;
 }
 
-.project-chip,
 .pin-badge {
   display: inline-flex;
   align-items: center;
