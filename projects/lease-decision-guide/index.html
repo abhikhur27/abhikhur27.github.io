@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lease Decision Guide</title>
+  <meta name="description" content="Compare apartment lease offers by true monthly cost, move-in cash, commute drag, and flexibility risk.">
+  <meta property="og:title" content="Lease Decision Guide">
+  <meta property="og:description" content="Practical browser tool for ranking lease offers beyond sticker rent.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <a class="back-link" href="../../index.html">Back to portfolio</a>
+      <p class="eyebrow">Housing Decision Tool</p>
+      <h1>Lease Decision Guide</h1>
+      <p class="lead">Rank apartment offers by true monthly cost, move-in cash, commute drag, and flexibility risk instead of trusting sticker rent alone.</p>
+      <div class="hero-actions">
+        <button id="load-sample" type="button">Load Sample Offers</button>
+        <button id="copy-brief" type="button">Copy Decision Brief</button>
+      </div>
+      <p id="status" class="status">Loaded with a starter comparison set.</p>
+    </section>
+
+    <section class="panel assumptions">
+      <div class="panel-head">
+        <h2>Assumptions</h2>
+        <p>Keep the model simple and explicit.</p>
+      </div>
+      <div class="field-grid">
+        <label>
+          Commute value ($/hour)
+          <input id="commute-value" type="number" min="0" step="1" value="18">
+        </label>
+        <label>
+          Round trips per week
+          <input id="trips-per-week" type="number" min="0" step="1" value="5">
+        </label>
+        <label>
+          Flexibility risk weight ($/month)
+          <input id="risk-weight" type="number" min="0" step="5" value="45">
+        </label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Lease Offers</h2>
+        <p>Enter realistic cash and commute details for each option.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Offer</th>
+              <th>Rent</th>
+              <th>Months</th>
+              <th>Move-in Cash</th>
+              <th>Monthly Extras</th>
+              <th>Concession Credit</th>
+              <th>Round-trip Commute (min)</th>
+              <th>Risk Flags</th>
+            </tr>
+          </thead>
+          <tbody id="offer-body"></tbody>
+        </table>
+      </div>
+      <div class="hero-actions">
+        <button id="add-offer" type="button">Add Offer</button>
+        <button id="recalculate" type="button">Recalculate</button>
+      </div>
+    </section>
+
+    <section class="panel summary-panel">
+      <div class="summary-grid">
+        <article>
+          <h3>Best Fit</h3>
+          <p id="winner-name">-</p>
+        </article>
+        <article>
+          <h3>True Monthly</h3>
+          <p id="winner-cost">-</p>
+        </article>
+        <article>
+          <h3>Cash Due Now</h3>
+          <p id="winner-cash">-</p>
+        </article>
+        <article>
+          <h3>Biggest Trap</h3>
+          <p id="trap-summary">-</p>
+        </article>
+      </div>
+      <div id="decision-summary" class="callout"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Ranked Results</h2>
+        <p>The score combines hard cost with explicit flexibility penalties.</p>
+      </div>
+      <div id="results" class="results"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
