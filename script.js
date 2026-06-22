@@ -3,10 +3,34 @@ const nav = document.getElementById('site-nav');
 const highlightedClass = 'highlighted';
 
 if (navToggle && nav) {
+  const closeNav = () => {
+    navToggle.setAttribute('aria-expanded', 'false');
+    nav.classList.remove('open');
+  };
+
   navToggle.addEventListener('click', () => {
     const expanded = navToggle.getAttribute('aria-expanded') === 'true';
     navToggle.setAttribute('aria-expanded', String(!expanded));
     nav.classList.toggle('open', !expanded);
+  });
+
+  nav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeNav);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeNav();
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!nav.classList.contains('open')) return;
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    if (!nav.contains(target) && !navToggle.contains(target)) {
+      closeNav();
+    }
   });
 }
 
