@@ -43,6 +43,10 @@ function highlightTargetCard() {
   if (!targetId) return;
   const target = document.getElementById(targetId);
   if (!target || !target.classList.contains('project-card')) return;
+  const disclosure = target.closest('details');
+  if (disclosure) {
+    disclosure.open = true;
+  }
   target.classList.add(highlightedClass);
 }
 

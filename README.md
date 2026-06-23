@@ -42,12 +42,14 @@ Main personal site for curated project demos.
 - `https://github.com/abhikhur27/cache-policy-simulator`
 - `https://github.com/abhikhur27/context-constellation-rag`
 - `https://github.com/abhikhur27/lower-48-warlines`
+- `https://github.com/abhikhur27/pdf-annotation-digest`
 
 ## Technical Design
 
 - `index.html`: semantic structure for hero, curated project index, and a small writing lane.
 - `styles.css`: shared visual system for the portfolio homepage.
 - `script.js`: pinned-project ordering and mobile nav behavior.
+- hash-linked cards inside collapsed sections now auto-open their parent disclosure for direct navigation.
 - homepage browser-only section now stays collapsed by default so the first scan stays utility-first.
 - `projects/json-shape-diff-studio`: static JSON comparison utility for schema and payload drift.
 - `projects/csv-column-profiler`: static CSV QA tool for column-shape checks, null pressure, and duplicate-row detection.
