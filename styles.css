@@ -385,6 +385,58 @@ section[id] {
   gap: 1rem;
 }
 
+.spotlight-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.9fr);
+  gap: 1rem;
+  margin: 1.25rem 0 1rem;
+}
+
+.spotlight-card,
+.spotlight-list a {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(16, 24, 32, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.spotlight-card {
+  padding: 1.2rem;
+}
+
+.spotlight-card h2 {
+  margin-bottom: 0.7rem;
+  font-size: 2.35rem;
+}
+
+.spotlight-card p:last-of-type {
+  max-width: 55ch;
+  color: var(--muted);
+}
+
+.spotlight-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.spotlight-list a {
+  display: flex;
+  align-items: center;
+  min-height: 100%;
+  padding: 1rem;
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.spotlight-list a:hover,
+.spotlight-list a:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(183, 240, 123, 0.48);
+  background: rgba(20, 33, 43, 0.98);
+}
+
 .project-card {
   display: flex;
   min-height: 100%;
@@ -559,6 +611,10 @@ section[id] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .spotlight-panel {
+    grid-template-columns: 1fr;
+  }
+
   .writing-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -632,6 +688,10 @@ section[id] {
 
   .project-grid {
     grid-template-columns: 1fr;
+  }
+
+  .spotlight-card h2 {
+    font-size: 2rem;
   }
 
   .writing-grid {
