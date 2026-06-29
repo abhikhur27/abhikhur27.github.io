@@ -31,6 +31,7 @@ Main personal site for curated project demos.
 ## Standalone Project Repositories
 
 - `https://github.com/abhikhur27/course-grade-allocator`
+- `https://github.com/abhikhur27/build-failure-brief`
 - `https://github.com/abhikhur27/change-risk-sentry`
 - `https://github.com/abhikhur27/incident-handoff-builder`
 - `https://github.com/abhikhur27/dataset-split-auditor`
