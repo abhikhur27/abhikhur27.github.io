@@ -34,6 +34,34 @@ if (navToggle && nav) {
   });
 }
 
+const sectionLinks = Array.from(document.querySelectorAll('.site-nav a[href^="#"]'));
+const observedSections = sectionLinks
+  .map((link) => document.querySelector(link.getAttribute('href')))
+  .filter((section) => section instanceof HTMLElement);
+
+if (sectionLinks.length && observedSections.length && 'IntersectionObserver' in window) {
+  const setCurrentSection = (id) => {
+    sectionLinks.forEach((link) => {
+      link.classList.toggle('is-current', link.getAttribute('href') === `#${id}`);
+    });
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+      if (visible?.target?.id) {
+        setCurrentSection(visible.target.id);
+      }
+    },
+    { rootMargin: '-25% 0px -55% 0px', threshold: [0.2, 0.45, 0.7] }
+  );
+
+  observedSections.forEach((section) => observer.observe(section));
+  setCurrentSection(window.location.hash.replace('#', '') || observedSections[0].id);
+}
+
 function highlightTargetCard() {
   document.querySelectorAll(`.${highlightedClass}`).forEach((card) => {
     card.classList.remove(highlightedClass);
