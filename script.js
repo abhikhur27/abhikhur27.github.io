@@ -38,6 +38,11 @@ const sectionLinks = Array.from(document.querySelectorAll('.site-nav a[href^="#"
 const observedSections = sectionLinks
   .map((link) => document.querySelector(link.getAttribute('href')))
   .filter((section) => section instanceof HTMLElement);
+const projectSearchInput = document.getElementById('project-search-input');
+const projectSearchClearBtn = document.getElementById('project-search-clear');
+const projectSearchStatus = document.getElementById('project-search-status');
+const projectCards = Array.from(document.querySelectorAll('.project-card'));
+const browserProjectsDisclosure = document.querySelector('.project-disclosure');
 
 if (sectionLinks.length && observedSections.length && 'IntersectionObserver' in window) {
   const setCurrentSection = (id) => {
@@ -80,3 +85,48 @@ function highlightTargetCard() {
 
 window.addEventListener('hashchange', highlightTargetCard);
 highlightTargetCard();
+
+function applyProjectSearch(query) {
+  const normalized = query.trim().toLowerCase();
+  let visibleCount = 0;
+  let hiddenBrowserMatches = 0;
+
+  projectCards.forEach((card) => {
+    const haystack = (card.textContent || '').toLowerCase();
+    const matches = !normalized || haystack.includes(normalized);
+    card.hidden = !matches;
+    if (matches) {
+      visibleCount += 1;
+      if (browserProjectsDisclosure?.contains(card)) {
+        hiddenBrowserMatches += 1;
+      }
+    }
+  });
+
+  if (browserProjectsDisclosure instanceof HTMLDetailsElement) {
+    browserProjectsDisclosure.open = Boolean(normalized && hiddenBrowserMatches);
+  }
+
+  if (projectSearchStatus) {
+    if (!normalized) {
+      projectSearchStatus.textContent = 'Showing all projects.';
+    } else if (visibleCount === 0) {
+      projectSearchStatus.textContent = `No projects matched "${query.trim()}".`;
+    } else {
+      projectSearchStatus.textContent = `Showing ${visibleCount} project${visibleCount === 1 ? '' : 's'} for "${query.trim()}".`;
+    }
+  }
+}
+
+projectSearchInput?.addEventListener('input', () => {
+  applyProjectSearch(projectSearchInput.value);
+});
+
+projectSearchClearBtn?.addEventListener('click', () => {
+  if (!projectSearchInput) return;
+  projectSearchInput.value = '';
+  applyProjectSearch('');
+  projectSearchInput.focus();
+});
+
+applyProjectSearch('');
