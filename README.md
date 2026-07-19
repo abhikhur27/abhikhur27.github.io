@@ -34,6 +34,7 @@ Main personal site for curated project demos.
 - `https://github.com/abhikhur27/drawdown-window-analyzer`
 - `https://github.com/abhikhur27/calendar-conflict-scout`
 - `https://github.com/abhikhur27/build-failure-brief`
+- `https://github.com/abhikhur27/shell-history-risk-auditor`
 - `https://github.com/abhikhur27/change-risk-sentry`
 - `https://github.com/abhikhur27/incident-handoff-builder`
 - `https://github.com/abhikhur27/dataset-split-auditor`
