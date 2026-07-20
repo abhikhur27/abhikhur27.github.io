@@ -30,6 +30,7 @@ Main personal site for curated project demos.
 
 ## Standalone Project Repositories
 
+- `https://github.com/abhikhur27/focus-window-audit`
 - `https://github.com/abhikhur27/course-grade-allocator`
 - `https://github.com/abhikhur27/drawdown-window-analyzer`
 - `https://github.com/abhikhur27/calendar-conflict-scout`
