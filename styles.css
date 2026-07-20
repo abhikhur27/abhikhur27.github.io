@@ -366,6 +366,10 @@ section[id] {
   gap: 1rem;
 }
 
+.project-grid > .project-disclosure {
+  grid-column: 1 / -1;
+}
+
 .project-card {
   display: flex;
   min-height: 100%;

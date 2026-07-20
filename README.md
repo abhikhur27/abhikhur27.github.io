@@ -34,6 +34,7 @@ Main personal site for curated project demos.
 - `https://github.com/abhikhur27/drawdown-window-analyzer`
 - `https://github.com/abhikhur27/calendar-conflict-scout`
 - `https://github.com/abhikhur27/build-failure-brief`
+- `https://github.com/abhikhur27/correlation-regime-brief`
 - `https://github.com/abhikhur27/shell-history-risk-auditor`
 - `https://github.com/abhikhur27/change-risk-sentry`
 - `https://github.com/abhikhur27/incident-handoff-builder`
@@ -51,6 +52,7 @@ Main personal site for curated project demos.
 ## Technical Design
 
 - `index.html`: semantic structure for hero, curated project index, and a small writing lane.
+- homepage utility software is now split between a tighter first-pass grid and a collapsed "more utilities" section.
 - `styles.css`: shared visual system for the portfolio homepage.
 - `script.js`: pinned-project ordering and mobile nav behavior.
 - hash-linked cards inside collapsed sections now auto-open their parent disclosure for direct navigation.
