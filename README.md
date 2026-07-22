@@ -49,6 +49,7 @@ Main personal site for curated project demos.
 - `https://github.com/abhikhur27/context-constellation-rag`
 - `https://github.com/abhikhur27/lower-48-warlines`
 - `https://github.com/abhikhur27/pdf-annotation-digest`
+- `https://github.com/abhikhur27/workspace-branch-watch`
 
 ## Technical Design
 
