@@ -50,6 +50,7 @@ Main personal site for curated project demos.
 - `https://github.com/abhikhur27/lower-48-warlines`
 - `https://github.com/abhikhur27/pdf-annotation-digest`
 - `https://github.com/abhikhur27/workspace-branch-watch`
+- `https://github.com/abhikhur27/shortcut-target-auditor`
 
 ## Technical Design
 
