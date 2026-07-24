@@ -360,6 +360,24 @@ section[id] {
   color: var(--muted);
 }
 
+.browse-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.browse-strip a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0.55rem 0.85rem;
+  color: var(--muted);
+  border: 1px dashed rgba(183, 240, 123, 0.36);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.03);
+  text-decoration: none;
+}
+
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -613,6 +631,10 @@ section[id] {
 
   .project-grid {
     grid-template-columns: 1fr;
+  }
+
+  .browse-strip {
+    justify-content: center;
   }
 
   .writing-grid {

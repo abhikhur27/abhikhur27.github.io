@@ -59,10 +59,28 @@
     <section id="projects" class="container">
       <div class="section-head">
         <p class="eyebrow">Projects</p>
-        <p class="section-copy">Newest installable utilities stay visible first. Extra utilities and browser-native work stay collapsed so the first scan stays easy to trust.</p>
+        <p class="section-copy">Newest installable utilities stay visible first, with the larger catalog still one click away.</p>
+        <div class="browse-strip" aria-label="Project section jumps">
+          <a href="#project-bookmark-health-brief">Newest utility</a>
+          <a href="#more-utilities">More utilities</a>
+          <a href="#browser-projects">Browser projects</a>
+        </div>
       </div>
 
       <div class="project-grid">
+        <article id="project-bookmark-health-brief" class="project-card">
+          <header>
+            <span class="pin-badge">New</span>
+            <h3>Bookmark Health Brief</h3>
+          </header>
+          <p>Audits Chrome or Edge bookmark exports for duplicate links, risky URL schemes, empty folders, and optional broken-link checks.</p>
+          <p class="stack">Python, CLI, Bookmark Workflow Utility</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/bookmark-health-brief" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/bookmark-health-brief#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article id="project-shortcut-target-auditor" class="project-card">
           <header>
             <span class="pin-badge">New</span>
@@ -263,7 +281,7 @@
           </div>
         </article>
 
-        <details class="project-disclosure">
+        <details id="more-utilities" class="project-disclosure">
           <summary>Open more utility software (14)</summary>
           <div class="project-grid secondary-grid">
         <article id="project-folder-triage-cli" class="project-card">
@@ -438,7 +456,7 @@
 
       </div>
 
-      <details class="project-disclosure secondary-head">
+      <details id="browser-projects" class="project-disclosure secondary-head">
         <summary>Open browser projects (12)</summary>
       <div class="project-grid secondary-grid">
         <article class="project-card">
