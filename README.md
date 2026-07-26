@@ -33,9 +33,11 @@ Main personal site for curated project demos.
 - `https://github.com/abhikhur27/portfolio-utility-suite`
 - `https://github.com/abhikhur27/warframe-auction-market`
 - `https://github.com/abhikhur27/applied-ml-signal-lab`
+- `https://github.com/abhikhur27/bogglebot`
 - `https://github.com/abhikhur27/context-constellation-rag`
 - `https://github.com/abhikhur27/cache-policy-simulator`
 - `https://github.com/abhikhur27/lower-48-warlines`
+- `https://brick-brick.org`
 
 ## Technical Design
 

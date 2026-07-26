@@ -6,7 +6,17 @@ Use this to replace or tighten the recurring automation prompt.
 
 In `C:/Users/abhim/Desktop/abhiportfoliorepogroup`, work on the portfolio as a product, not a project generator.
 
-Read `abhikhur27.github.io/PROJECT_TRUTHS.md` first and obey it. Then spend the run improving one existing project for an extended period of time. Default focus should be `projects/portfolio-utility-suite` unless I explicitly name another repo.
+Read `abhikhur27.github.io/PROJECT_TRUTHS.md` first and obey it. Then spend the run improving one existing project for an extended period of time. Rotate across the strongest existing projects instead of defaulting to only one repo.
+
+Strong recurring focus targets include:
+
+- `projects/portfolio-utility-suite`
+- `applied-ml-signal-lab`
+- `lower-48-warlines` / Continental Feuds
+- `abhikhur27.github.io/projects/transit-network-lab` / Transit Network Planner
+- `warframe-auction-market`
+- `context-constellation-rag`
+- `cache-policy-simulator`
 
 Most runs should deepen an existing project. Every once in a while, if the existing work has received sustained attention and a genuinely strong new idea emerges, use the run to deliberate on that idea instead of building it immediately. A new project should only be created after it has survived multiple automation runs as a written proposal, with clear user value, technical depth, differentiation from existing work, and a concrete implementation plan.
 
@@ -18,7 +28,8 @@ Rules:
 - Do not add homepage jump strips, filter chips, compare trays, pinning systems, or extra explanatory button clusters.
 - Prefer deleting clutter, merging duplicated ideas, improving installability, adding tests, fixing real bugs, and making one maintained project more credible.
 - If the workspace contains many tiny utilities, fold improvements into `portfolio-utility-suite` instead of adding public cards for each utility.
-- The main portfolio homepage should stay simple: one clear card for the utility suite, a small curated set of strongest projects, and collapsed browser work only when needed.
+- The main portfolio homepage should stay simple: a small curated set of strongest projects and collapsed browser work only when needed.
+- Do not repeatedly choose the same repo. Use the automation memory to see recent focus and pick a different strong existing project when one repo has already had sustained attention.
 - Keep a living project-incubation note inside the chosen repo when considering a future new project. Each deliberation run should sharpen or reject the idea; do not build from a first-pass impulse.
 - Preserve the personal bio unless I explicitly ask to change it.
 - Before editing, inspect current git status and avoid overwriting unrelated user changes.
@@ -33,9 +44,9 @@ Return a concise report with:
 - what improved
 - checks run
 - remaining risks
-- one recommended next deep-work target inside the same repo
+- one recommended next deep-work target, which may be in a different strong existing repo if the current one has had enough attention
 - if relevant, the current status of any incubating future project idea
 
 ## Short version
 
-Read `PROJECT_TRUTHS.md` first. Improve one existing repo deeply, defaulting to `portfolio-utility-suite`; do not create new public project repos or add homepage clutter except for a rare project that has survived multiple proposal/refinement runs.
+Read `PROJECT_TRUTHS.md` first. Improve one existing strong repo deeply, rotating across `portfolio-utility-suite`, Applied ML, Continental Feuds, Transit Network Planner, and other serious existing projects; do not create new public project repos or add homepage clutter except for a rare project that has survived multiple proposal/refinement runs.

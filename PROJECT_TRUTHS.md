@@ -49,7 +49,7 @@ These are the non-negotiable truths for this portfolio.
 - A rare new standalone project is acceptable only after it has been deliberated across multiple runs and is clearly stronger than another small utility, browser demo, or portfolio gimmick.
 - A smaller number of sharper, more believable projects is better than a huge pile of same-family experiments.
 - The current public repo intentionally keeps only a small curated set of internal subprojects.
-- Future automation runs should prioritize sustained improvements to one practical repo, especially `portfolio-utility-suite`, over adding more public project surfaces.
+- Future automation runs should prioritize sustained improvements to one practical repo at a time, rotating across strong existing projects such as `portfolio-utility-suite`, `applied-ml-signal-lab`, `lower-48-warlines`, and `projects/transit-network-lab`.
 - WebGL/Three.js work is welcome when useful, but should be one option among many platforms, not the default path.
 
 ## Automation truths
