@@ -59,18 +59,29 @@
     <section id="projects" class="container">
       <div class="section-head">
         <p class="eyebrow">Projects</p>
-        <p class="section-copy">Newest installable utilities stay visible first, with the larger catalog still one click away.</p>
+        <p class="section-copy">Practical utility software stays visible first. The larger catalog is still one click away.</p>
         <div class="browse-strip" aria-label="Project section jumps">
-          <a href="#project-bookmark-health-brief">Newest utility</a>
           <a href="#more-utilities">More utilities</a>
           <a href="#browser-projects">Browser projects</a>
         </div>
       </div>
 
       <div class="project-grid">
+        <article id="project-zip-risk-auditor" class="project-card">
+          <header>
+            <span class="pin-badge">Latest build</span>
+            <h3>Zip Risk Auditor</h3>
+          </header>
+          <p>Scans `.zip` archives for path traversal entries, suspicious expansion ratios, encrypted payloads, duplicate paths, and nested archives before extraction.</p>
+          <p class="stack">Rust, CLI, Archive Safety Utility</p>
+          <div class="card-actions">
+            <a href="https://github.com/abhikhur27/zip-risk-auditor" target="_blank" rel="noreferrer">Code</a>
+            <a href="https://github.com/abhikhur27/zip-risk-auditor#readme" target="_blank" rel="noreferrer">Docs</a>
+          </div>
+        </article>
+
         <article id="project-bookmark-health-brief" class="project-card">
           <header>
-            <span class="pin-badge">New</span>
             <h3>Bookmark Health Brief</h3>
           </header>
           <p>Audits Chrome or Edge bookmark exports for duplicate links, risky URL schemes, empty folders, and optional broken-link checks.</p>
@@ -83,7 +94,6 @@
 
         <article id="project-shortcut-target-auditor" class="project-card">
           <header>
-            <span class="pin-badge">New</span>
             <h3>Shortcut Target Auditor</h3>
           </header>
           <p>Scans Windows shortcut folders for broken `.lnk` and `.url` targets, duplicate launch points, startup entries, and risky network-backed shortcuts.</p>
@@ -96,7 +106,6 @@
 
         <article id="project-focus-window-audit" class="project-card">
           <header>
-            <span class="pin-badge">New</span>
             <h3>Focus Window Audit</h3>
           </header>
           <p>Samples the active foreground window on Windows and turns a coding or study session into a focus report with churn, longest-block, and top-app summaries.</p>
@@ -109,7 +118,6 @@
 
         <article id="project-correlation-regime-brief" class="project-card">
           <header>
-            <span class="pin-badge">New</span>
             <h3>Correlation Regime Brief</h3>
           </header>
           <p>Turns return-series CSVs into a rolling-correlation brief so you can see when diversification weakens and pairs start moving together.</p>
@@ -122,7 +130,6 @@
 
         <article id="project-workspace-branch-watch" class="project-card">
           <header>
-            <span class="pin-badge">New</span>
             <h3>Workspace Branch Watch</h3>
           </header>
           <p>Scans a folder of git repositories and surfaces dirty worktrees, upstream drift, and stale repos before a push or a new work session.</p>
@@ -135,7 +142,6 @@
 
         <article id="project-shell-history-risk-auditor" class="project-card">
           <header>
-            <span class="pin-badge">New</span>
             <h3>Shell History Risk Auditor</h3>
           </header>
           <p>Scans PowerShell, Bash, Zsh, Fish, and Nushell history files for destructive commands, inline secrets, and remote-script execution habits.</p>
@@ -148,7 +154,6 @@
 
         <article id="project-citation-gap-auditor" class="project-card">
           <header>
-            <span class="pin-badge">New</span>
             <h3>Citation Gap Auditor</h3>
           </header>
           <p>Scans markdown research notes for uncited claim-heavy passages so literature reviews and slide decks do not inherit unsupported assertions.</p>
@@ -161,7 +166,6 @@
 
         <article id="project-drawdown-window-analyzer" class="project-card">
           <header>
-            <span class="pin-badge">New</span>
             <h3>Drawdown Window Analyzer</h3>
           </header>
           <p>Turns an equity-curve CSV into a concrete drawdown brief with worst peak-to-trough windows, recovery lag, volatility, and exportable reports.</p>
