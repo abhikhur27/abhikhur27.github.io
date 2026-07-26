@@ -46,6 +46,7 @@ These are the non-negotiable truths for this portfolio.
 - Automation should actively favor high-quality standalone repos in those lanes over adding another browser demo variation.
 - New work should usually deepen an existing maintained repo instead of creating another standalone repository.
 - Small CLI utilities belong in `portfolio-utility-suite` by default unless there is a strong reason they need independent lifecycle, packaging, or branding.
+- A rare new standalone project is acceptable only after it has been deliberated across multiple runs and is clearly stronger than another small utility, browser demo, or portfolio gimmick.
 - A smaller number of sharper, more believable projects is better than a huge pile of same-family experiments.
 - The current public repo intentionally keeps only a small curated set of internal subprojects.
 - Future automation runs should prioritize sustained improvements to one practical repo, especially `portfolio-utility-suite`, over adding more public project surfaces.
@@ -62,5 +63,6 @@ These are the non-negotiable truths for this portfolio.
 - Avoid "AI-slop game" style projects unless there is clear functional use and technical depth.
 - Before creating a new project, check whether it is actually distinct from existing work.
 - Before creating a new repo, assume the answer is no and look for a way to improve, merge, or retire existing work first.
+- If a new-project idea appears promising, write or refine an incubation note first; build it only after the idea survives repeated scrutiny.
 - Before publishing anything, ask: would a stranger immediately understand what this is and why it exists?
 - If GitHub pinned repos change, homepage project ordering should reflect that priority when it does not create self-referential clutter.
