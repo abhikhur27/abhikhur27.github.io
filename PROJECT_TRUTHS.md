@@ -44,10 +44,11 @@ These are the non-negotiable truths for this portfolio.
 - Non-browser repos are a priority direction when they are substantive and applied.
 - Strong non-browser lanes include applied machine learning, quantitative finance research tooling, and quantum-computing-adjacent experiments with real technical depth.
 - Automation should actively favor high-quality standalone repos in those lanes over adding another browser demo variation.
-- Every new serious project should be created in its own standalone repository by default, not only as a folder inside this portfolio repo.
+- New work should usually deepen an existing maintained repo instead of creating another standalone repository.
+- Small CLI utilities belong in `portfolio-utility-suite` by default unless there is a strong reason they need independent lifecycle, packaging, or branding.
 - A smaller number of sharper, more believable projects is better than a huge pile of same-family experiments.
 - The current public repo intentionally keeps only a small curated set of internal subprojects.
-- Future automation runs should prioritize non-HTML repos with practical use: Rust, C++, Python, PHP, or similarly substantive stacks.
+- Future automation runs should prioritize sustained improvements to one practical repo, especially `portfolio-utility-suite`, over adding more public project surfaces.
 - WebGL/Three.js work is welcome when useful, but should be one option among many platforms, not the default path.
 
 ## Automation truths
@@ -60,5 +61,6 @@ These are the non-negotiable truths for this portfolio.
 - Treat "button budget" as a quality gate. If a new button is not clearly essential to the core workflow, remove it or keep it behind a dev-only path.
 - Avoid "AI-slop game" style projects unless there is clear functional use and technical depth.
 - Before creating a new project, check whether it is actually distinct from existing work.
+- Before creating a new repo, assume the answer is no and look for a way to improve, merge, or retire existing work first.
 - Before publishing anything, ask: would a stranger immediately understand what this is and why it exists?
 - If GitHub pinned repos change, homepage project ordering should reflect that priority when it does not create self-referential clutter.

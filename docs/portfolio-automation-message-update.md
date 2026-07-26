@@ -4,26 +4,33 @@ Use this to replace or tighten the recurring automation prompt.
 
 ## Recommended update
 
-In `C:/Users/abhim/Desktop/abhiportfoliorepogroup`, scan every git repo in the workspace and make meaningful portfolio-quality improvements, but follow these rules strictly:
+In `C:/Users/abhim/Desktop/abhiportfoliorepogroup`, work on the portfolio as a product, not a project generator.
 
-- Read `PROJECT_TRUTHS.md` in `abhikhur27.github.io` first and obey it.
-- Prioritize clarity, honesty, and ease of navigation over adding more portfolio mechanics.
-- Do not publish placeholders, templates, fake shelves, or unfinished sections on the main branch.
-- Do not add compare trays, pinning systems, route composers, or similar meta-navigation unless explicitly requested.
-- Do not add panel-heavy "coach / lens / pressure / confidence" dashboard clutter unless the user explicitly asks for that depth.
-- When simplifying existing apps, remove verbose explanatory panel stacks and keep only the controls plus primary output/results.
-- Enforce a button budget on project pages. Keep only core actions visible by default; move secondary export/share/debug actions out of the primary surface unless explicitly requested.
-- Label projects honestly. If a project is browser-based, say so clearly in the UI and avoid implying native systems-language implementations.
-- In the main portfolio repo, prefer simplifying the homepage and improving project clarity over adding more dense homepage features.
-- If a project is low-quality or too similar to an existing project family, remove it from the public tree or fold the idea into an anthology.
-- Only add a new project if it is genuinely distinct and portfolio-worthy. Prefer useful software, utilities, or workflow tools over another variation of an existing simulation family.
-- Strong future directions: Windows utilities, AMC-related tools, installable apps, and other software people could actually use.
-- Keep everything static/GitHub Pages compatible unless the repo already has a different setup.
-- Run relevant sanity checks where available.
-- For every modified repo, stage changes, create a clear conventional commit message, detect the default branch, and push to origin.
-- Do not commit secrets or credentials.
-- Return a report with repos touched, commit hashes, checks run, remaining risks, and whether the changes made the portfolio simpler or more useful.
+Read `abhikhur27.github.io/PROJECT_TRUTHS.md` first and obey it. Then spend the run improving one existing project for an extended period of time. Default focus should be `projects/portfolio-utility-suite` unless I explicitly name another repo.
+
+Rules:
+
+- Do not create a new standalone repo.
+- Do not add another small one-off CLI, browser demo, dashboard, simulator, lab, playground, or portfolio gimmick.
+- Do not add homepage jump strips, filter chips, compare trays, pinning systems, or extra explanatory button clusters.
+- Prefer deleting clutter, merging duplicated ideas, improving installability, adding tests, fixing real bugs, and making one maintained project more credible.
+- If the workspace contains many tiny utilities, fold improvements into `portfolio-utility-suite` instead of adding public cards for each utility.
+- The main portfolio homepage should stay simple: one clear card for the utility suite, a small curated set of strongest projects, and collapsed browser work only when needed.
+- Preserve the personal bio unless I explicitly ask to change it.
+- Before editing, inspect current git status and avoid overwriting unrelated user changes.
+- Run meaningful checks for the repo you touch.
+- Stage, commit with a clear conventional commit message, detect the default branch, and push to origin.
+- Do not commit secrets, credentials, generated binaries, build outputs, or local artifacts.
+
+Return a concise report with:
+
+- repo touched
+- commit hash
+- what improved
+- checks run
+- remaining risks
+- one recommended next deep-work target inside the same repo
 
 ## Short version
 
-Read `PROJECT_TRUTHS.md` first. Simplify the portfolio, remove confusing or placeholder content, label browser demos honestly, and bias new work toward real useful utilities rather than more portfolio meta-features.
+Read `PROJECT_TRUTHS.md` first. Improve one existing repo deeply, defaulting to `portfolio-utility-suite`; do not create new public project repos or add homepage clutter.

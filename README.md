@@ -30,33 +30,17 @@ Main personal site for curated project demos.
 
 ## Standalone Project Repositories
 
-- `https://github.com/abhikhur27/focus-window-audit`
-- `https://github.com/abhikhur27/course-grade-allocator`
-- `https://github.com/abhikhur27/drawdown-window-analyzer`
-- `https://github.com/abhikhur27/calendar-conflict-scout`
-- `https://github.com/abhikhur27/build-failure-brief`
-- `https://github.com/abhikhur27/correlation-regime-brief`
-- `https://github.com/abhikhur27/shell-history-risk-auditor`
-- `https://github.com/abhikhur27/change-risk-sentry`
-- `https://github.com/abhikhur27/incident-handoff-builder`
-- `https://github.com/abhikhur27/dataset-split-auditor`
-- `https://github.com/abhikhur27/deadline-calendar-builder`
-- `https://github.com/abhikhur27/path-shadow-auditor`
-- `https://github.com/abhikhur27/windows-autostart-auditor`
-- `https://github.com/abhikhur27/trade-journal-normalizer`
-- `https://github.com/abhikhur27/portfolio-risk-rebalancer`
-- `https://github.com/abhikhur27/cache-policy-simulator`
+- `https://github.com/abhikhur27/portfolio-utility-suite`
+- `https://github.com/abhikhur27/warframe-auction-market`
+- `https://github.com/abhikhur27/applied-ml-signal-lab`
 - `https://github.com/abhikhur27/context-constellation-rag`
+- `https://github.com/abhikhur27/cache-policy-simulator`
 - `https://github.com/abhikhur27/lower-48-warlines`
-- `https://github.com/abhikhur27/pdf-annotation-digest`
-- `https://github.com/abhikhur27/workspace-branch-watch`
-- `https://github.com/abhikhur27/shortcut-target-auditor`
-- `https://github.com/abhikhur27/zip-risk-auditor`
 
 ## Technical Design
 
 - `index.html`: semantic structure for hero, curated project index, and a small writing lane.
-- homepage utility software is now split between a tighter first-pass grid and a collapsed "more utilities" section.
+- homepage utility software is consolidated behind one maintained utility-suite card instead of many tiny CLI cards.
 - `styles.css`: shared visual system for the portfolio homepage.
 - `script.js`: pinned-project ordering and mobile nav behavior.
 - hash-linked cards inside collapsed sections now auto-open their parent disclosure for direct navigation.
