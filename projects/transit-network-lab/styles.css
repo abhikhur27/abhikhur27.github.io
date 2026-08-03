@@ -157,6 +157,32 @@ button.primary {
   word-break: break-word;
 }
 
+.resilience-card {
+  margin-top: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #171e2d;
+  padding: 0.55rem;
+}
+
+.resilience-card h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.resilience-card .helper-note {
+  margin-top: 0.35rem;
+}
+
+.resilience-line {
+  margin: 0.28rem 0 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.84rem;
+  color: var(--text);
+}
+
 .line-editor {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

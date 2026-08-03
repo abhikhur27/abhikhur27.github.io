@@ -8,6 +8,9 @@ const stopsEl = document.getElementById('metric-stops');
 const transfersEl = document.getElementById('metric-transfers');
 const distanceEl = document.getElementById('metric-distance');
 const stepsEl = document.getElementById('route-steps');
+const resilienceSummaryEl = document.getElementById('resilience-summary');
+const resilienceBackupEl = document.getElementById('resilience-backup');
+const resilienceWeakLinkEl = document.getElementById('resilience-weak-link');
 
 const newStopInput = document.getElementById('new-stop-name');
 const addStopButton = document.getElementById('add-stop');
@@ -301,13 +304,17 @@ function renderLegend() {
   legendEl.innerHTML = entries.join('');
 }
 
-function buildAdjacency() {
+function buildAdjacency(excludedSegmentIds = new Set()) {
   const adjacency = new Map();
   stations.forEach((station) => {
     adjacency.set(station.id, []);
   });
 
   segments.forEach((segment) => {
+    if (excludedSegmentIds.has(segment.id)) {
+      return;
+    }
+
     const terrainInfo = segmentTerrainInfo(segment);
     if (terrainInfo.blocked) {
       return;
@@ -342,10 +349,10 @@ function stateKey(stationId, line) {
   return `${stationId}|${line || 'none'}`;
 }
 
-function computeRoute(startId, endId) {
+function computeRoute(startId, endId, options = {}) {
   if (!startId || !endId || startId === endId) return null;
 
-  const adjacency = buildAdjacency();
+  const adjacency = buildAdjacency(options.excludedSegmentIds || new Set());
   const startKey = stateKey(startId, null);
 
   const distances = new Map([[startKey, 0]]);
@@ -425,6 +432,7 @@ function renderMetrics(route) {
     transfersEl.textContent = '-';
     distanceEl.textContent = '-';
     stepsEl.innerHTML = '';
+    renderResilience(null, null);
     return;
   }
 
@@ -444,6 +452,117 @@ function renderMetrics(route) {
       )}${transferText}${terrainText})</li>`;
     })
     .join('');
+
+  renderResilience(analyzeRouteResilience(route), route);
+}
+
+function formatDeltaMinutes(delta) {
+  if (!Number.isFinite(delta) || delta <= 0) return 'no added delay';
+  return `+${delta}m`;
+}
+
+function formatTransferDelta(delta) {
+  if (!delta) return '';
+  const absDelta = Math.abs(delta);
+  const label = absDelta === 1 ? 'transfer' : 'transfers';
+  return delta > 0 ? `, +${absDelta} ${label}` : `, -${absDelta} ${label}`;
+}
+
+function segmentDisplayName(segment) {
+  const fromName = stationById(segment.from)?.name || segment.from;
+  const toName = stationById(segment.to)?.name || segment.to;
+  return `${fromName} -> ${toName}`;
+}
+
+function analyzeRouteResilience(route) {
+  if (!route || !route.segments.length) {
+    return null;
+  }
+
+  let bestBackup = null;
+  let weakestLink = null;
+  let disconnectedCount = 0;
+
+  route.segments.forEach((segment) => {
+    const alternate = computeRoute(route.startId, route.endId, {
+      excludedSegmentIds: new Set([segment.id]),
+    });
+    const delay = alternate ? alternate.totalMinutes - route.totalMinutes : Number.POSITIVE_INFINITY;
+    const disruption = {
+      segment,
+      alternate,
+      delay,
+    };
+
+    if (alternate) {
+      if (!bestBackup || alternate.totalMinutes < bestBackup.alternate.totalMinutes) {
+        bestBackup = disruption;
+      }
+    } else {
+      disconnectedCount += 1;
+    }
+
+    if (
+      !weakestLink ||
+      disruption.delay > weakestLink.delay ||
+      (disruption.delay === weakestLink.delay &&
+        !disruption.alternate &&
+        Boolean(weakestLink.alternate))
+    ) {
+      weakestLink = disruption;
+    }
+  });
+
+  return {
+    bestBackup,
+    weakestLink,
+    disconnectedCount,
+    routeSegmentCount: route.segments.length,
+  };
+}
+
+function renderResilience(analysis, route) {
+  if (!analysis) {
+    resilienceSummaryEl.textContent = 'Compute a route to inspect the strongest fallback path.';
+    resilienceBackupEl.textContent = 'Backup: -';
+    resilienceWeakLinkEl.textContent = 'Weak link: -';
+    return;
+  }
+
+  const intactCount = analysis.routeSegmentCount - analysis.disconnectedCount;
+  resilienceSummaryEl.textContent =
+    analysis.disconnectedCount > 0
+      ? `${analysis.disconnectedCount} of ${analysis.routeSegmentCount} route links fully break this trip if lost.`
+      : `Every route link has at least one fallback path. ${intactCount} of ${analysis.routeSegmentCount} links reroute successfully.`;
+
+  if (!analysis.bestBackup || !analysis.bestBackup.alternate) {
+    resilienceBackupEl.textContent = 'Backup: none available if any route link fails.';
+  } else {
+    const backup = analysis.bestBackup;
+    const transferDelta = backup.alternate.transferCount - route.transferCount;
+    const transferText = formatTransferDelta(transferDelta);
+    resilienceBackupEl.textContent = `Backup: if ${segmentDisplayName(backup.segment)} fails, reroute in ${backup.alternate.totalMinutes}m (${formatDeltaMinutes(
+      backup.delay
+    )}${transferText}).`;
+  }
+
+  if (!analysis.weakestLink) {
+    resilienceWeakLinkEl.textContent = 'Weak link: -';
+    return;
+  }
+
+  if (!analysis.weakestLink.alternate) {
+    resilienceWeakLinkEl.textContent = `Weak link: losing ${segmentDisplayName(
+      analysis.weakestLink.segment
+    )} disconnects the trip entirely.`;
+    return;
+  }
+
+  const extraTransfers = analysis.weakestLink.alternate.transferCount - route.transferCount;
+  const extraTransferText = formatTransferDelta(extraTransfers).replace(',', ' and');
+  resilienceWeakLinkEl.textContent = `Weak link: losing ${segmentDisplayName(
+    analysis.weakestLink.segment
+  )} forces ${formatDeltaMinutes(analysis.weakestLink.delay)}${extraTransferText}.`;
 }
 
 function activeEdgeSet(route) {
