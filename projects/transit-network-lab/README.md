@@ -1,12 +1,12 @@
 ﻿# Transit Network Lab
 
-Interactive transit systems editor and optimization playground.
+Interactive transit network editor with policy-aware routing and outage tradeoff analysis.
 
 ## Features
 
 - Drag-and-drop stop positions with live route recomputation.
-- Dynamic transfer-aware shortest-path routing.
-- Resilience brief that finds the best fallback path and the weakest route segment for the current trip.
+- Policy-aware routing for fastest, fewer-transfer, or most resilient trip plans.
+- Resilience brief that measures cumulative closure exposure, strongest fallback path, and weakest route segment for the current trip.
 - Add new stops.
 - Add custom line segments with configurable color and speed.
 - Route metrics (time, stops, transfers) update in real time.

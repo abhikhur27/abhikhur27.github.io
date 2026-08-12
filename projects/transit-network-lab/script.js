@@ -2,6 +2,8 @@
 const endSelect = document.getElementById('end-station');
 const runButton = document.getElementById('run-route');
 const statusEl = document.getElementById('status');
+const objectiveSelect = document.getElementById('route-objective');
+const routePolicySummaryEl = document.getElementById('route-policy-summary');
 
 const minutesEl = document.getElementById('metric-minutes');
 const stopsEl = document.getElementById('metric-stops');
@@ -9,6 +11,7 @@ const transfersEl = document.getElementById('metric-transfers');
 const distanceEl = document.getElementById('metric-distance');
 const stepsEl = document.getElementById('route-steps');
 const resilienceSummaryEl = document.getElementById('resilience-summary');
+const resilienceExposureEl = document.getElementById('resilience-exposure');
 const resilienceBackupEl = document.getElementById('resilience-backup');
 const resilienceWeakLinkEl = document.getElementById('resilience-weak-link');
 
@@ -50,6 +53,12 @@ const transferPenaltyMinutes = 2;
 const riverPenaltyMinutes = 3;
 const SCORE_KEY = 'transit_lab_score';
 const STREAK_KEY = 'transit_lab_streak';
+const OBJECTIVE_KEY = 'transit_lab_objective';
+const ROUTE_OBJECTIVES = {
+  fastest: { label: 'Fastest', sortKey: ['minutes', 'transfers', 'riskExposure', 'distance'] },
+  transfers: { label: 'Fewer transfers', sortKey: ['transfers', 'minutes', 'riskExposure', 'distance'] },
+  resilient: { label: 'Most resilient', sortKey: ['riskExposure', 'minutes', 'transfers', 'distance'] },
+};
 
 let stationCounter = 0;
 let segmentCounter = 0;
@@ -95,13 +104,21 @@ let draggingStationId = null;
 let dragMoved = false;
 let editMode = 'drag';
 let challengeTimerId = null;
+let currentRouteBundle = null;
+let routeRiskCache = { signature: '', index: new Map() };
 
 let challengeScore = Number(localStorage.getItem(SCORE_KEY) || '0');
 let challengeStreak = Number(localStorage.getItem(STREAK_KEY) || '0');
 let challenge = null;
+let routeObjective = localStorage.getItem(OBJECTIVE_KEY) || 'fastest';
+
+if (!ROUTE_OBJECTIVES[routeObjective]) {
+  routeObjective = 'fastest';
+}
 
 challengeScoreEl.textContent = String(challengeScore);
 challengeStreakEl.textContent = String(challengeStreak);
+objectiveSelect.value = routeObjective;
 
 function nextSegmentId() {
   segmentCounter += 1;
@@ -122,6 +139,10 @@ function clamp(value, min, max) {
 
 function randomBetween(min, max) {
   return min + Math.random() * (max - min);
+}
+
+function selectedObjective() {
+  return ROUTE_OBJECTIVES[routeObjective] ? routeObjective : 'fastest';
 }
 
 function makeStationId(name) {
@@ -252,8 +273,23 @@ function segmentMinutes(segment) {
   return Math.max(1, Math.round(distance / lineInfo.speed + 1)) + terrainInfo.riverHits * riverPenaltyMinutes;
 }
 
+function routeRiskSignature() {
+  return JSON.stringify({
+    stations: stations.map((station) => [station.id, station.x, station.y]),
+    segments: segments.map((segment) => [segment.id, segment.from, segment.to, segment.line, Math.round(segment.curve || 0)]),
+    terrain: terrain.map((shape) => Object.values(shape)),
+    lines: Object.entries(lineCatalog)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([name, info]) => [name, info.color, info.speed]),
+  });
+}
+
 function formatDistance(distance) {
   return `${Math.round(distance)} px`;
+}
+
+function formatExposureMinutes(exposure) {
+  return `${Math.round(exposure)}m`;
 }
 
 function syncRouteSelects() {
@@ -304,8 +340,43 @@ function renderLegend() {
   legendEl.innerHTML = entries.join('');
 }
 
-function buildAdjacency(excludedSegmentIds = new Set()) {
+function getSegmentRiskIndex() {
+  const signature = routeRiskSignature();
+  if (routeRiskCache.signature === signature) {
+    return routeRiskCache.index;
+  }
+
+  const index = new Map();
+  segments.forEach((segment) => {
+    const directMinutes = segmentMinutes(segment);
+    const alternate = computeRouteCore(segment.from, segment.to, {
+      objective: 'fastest',
+      excludedSegmentIds: new Set([segment.id]),
+      includeRisk: false,
+    });
+
+    if (!alternate) {
+      index.set(segment.id, {
+        closurePenalty: directMinutes + 18,
+        disconnected: true,
+      });
+      return;
+    }
+
+    const reconnectDelay = Math.max(0, alternate.totalMinutes - directMinutes);
+    index.set(segment.id, {
+      closurePenalty: reconnectDelay + alternate.transferCount * 2,
+      disconnected: false,
+    });
+  });
+
+  routeRiskCache = { signature, index };
+  return index;
+}
+
+function buildAdjacency(excludedSegmentIds = new Set(), options = {}) {
   const adjacency = new Map();
+  const riskIndex = options.includeRisk === false ? new Map() : getSegmentRiskIndex();
   stations.forEach((station) => {
     adjacency.set(station.id, []);
   });
@@ -330,6 +401,7 @@ function buildAdjacency(excludedSegmentIds = new Set()) {
       minutes: time,
       distance,
       terrainPenalty: terrainInfo.riverHits * riverPenaltyMinutes,
+      riskPenalty: riskIndex.get(segment.id)?.closurePenalty || 0,
     });
     adjacency.get(segment.to).push({
       ...segment,
@@ -339,6 +411,7 @@ function buildAdjacency(excludedSegmentIds = new Set()) {
       minutes: time,
       distance,
       terrainPenalty: terrainInfo.riverHits * riverPenaltyMinutes,
+      riskPenalty: riskIndex.get(segment.id)?.closurePenalty || 0,
     });
   });
 
@@ -349,22 +422,42 @@ function stateKey(stationId, line) {
   return `${stationId}|${line || 'none'}`;
 }
 
-function computeRoute(startId, endId, options = {}) {
+function metricsToScore(metrics, objective) {
+  const config = ROUTE_OBJECTIVES[objective] || ROUTE_OBJECTIVES.fastest;
+  return config.sortKey.map((field) => metrics[field]);
+}
+
+function compareScores(left, right) {
+  for (let i = 0; i < Math.max(left.length, right.length); i += 1) {
+    const delta = (left[i] || 0) - (right[i] || 0);
+    if (delta !== 0) {
+      return delta;
+    }
+  }
+  return 0;
+}
+
+function computeRouteCore(startId, endId, options = {}) {
   if (!startId || !endId || startId === endId) return null;
 
-  const adjacency = buildAdjacency(options.excludedSegmentIds || new Set());
+  const objective = options.objective || 'fastest';
+  const adjacency = buildAdjacency(options.excludedSegmentIds || new Set(), {
+    includeRisk: options.includeRisk !== false,
+  });
   const startKey = stateKey(startId, null);
+  const startMetrics = { minutes: 0, transfers: 0, distance: 0, riskExposure: 0 };
+  const startScore = metricsToScore(startMetrics, objective);
 
-  const distances = new Map([[startKey, 0]]);
+  const distances = new Map([[startKey, startScore]]);
   const previous = new Map();
-  const queue = [{ key: startKey, stationId: startId, line: null, cost: 0 }];
+  const queue = [{ key: startKey, stationId: startId, line: null, score: startScore, metrics: startMetrics }];
   let bestEndState = null;
 
   while (queue.length) {
-    queue.sort((a, b) => a.cost - b.cost);
+    queue.sort((a, b) => compareScores(a.score, b.score));
     const current = queue.shift();
 
-    if (current.cost > distances.get(current.key)) continue;
+    if (compareScores(current.score, distances.get(current.key)) > 0) continue;
 
     if (current.stationId === endId) {
       bestEndState = current;
@@ -374,11 +467,17 @@ function computeRoute(startId, endId, options = {}) {
     const neighbors = adjacency.get(current.stationId) || [];
     neighbors.forEach((edge) => {
       const transferCost = current.line && current.line !== edge.line ? transferPenaltyMinutes : 0;
-      const newCost = current.cost + edge.minutes + transferCost;
+      const nextMetrics = {
+        minutes: current.metrics.minutes + edge.minutes + transferCost,
+        transfers: current.metrics.transfers + (transferCost > 0 ? 1 : 0),
+        distance: current.metrics.distance + edge.distance,
+        riskExposure: current.metrics.riskExposure + (edge.riskPenalty || 0),
+      };
+      const nextScore = metricsToScore(nextMetrics, objective);
       const nextKey = stateKey(edge.to, edge.line);
 
-      if (!distances.has(nextKey) || newCost < distances.get(nextKey)) {
-        distances.set(nextKey, newCost);
+      if (!distances.has(nextKey) || compareScores(nextScore, distances.get(nextKey)) < 0) {
+        distances.set(nextKey, nextScore);
         previous.set(nextKey, {
           prevKey: current.key,
           id: edge.id,
@@ -389,9 +488,10 @@ function computeRoute(startId, endId, options = {}) {
           distance: edge.distance,
           transferCost,
           terrainPenalty: edge.terrainPenalty || 0,
+          riskPenalty: edge.riskPenalty || 0,
         });
 
-        queue.push({ key: nextKey, stationId: edge.to, line: edge.line, cost: newCost });
+        queue.push({ key: nextKey, stationId: edge.to, line: edge.line, score: nextScore, metrics: nextMetrics });
       }
     });
   }
@@ -413,25 +513,85 @@ function computeRoute(startId, endId, options = {}) {
   const stationPath = [startId, ...routeSegments.map((segment) => segment.to)];
   const transferCount = routeSegments.reduce((count, segment) => count + (segment.transferCost > 0 ? 1 : 0), 0);
   const totalDistance = routeSegments.reduce((sum, segment) => sum + segment.distance, 0);
+  const totalRiskExposure = routeSegments.reduce((sum, segment) => sum + (segment.riskPenalty || 0), 0);
 
   return {
     startId,
     endId,
-    totalMinutes: bestEndState.cost,
+    objective,
+    objectiveLabel: ROUTE_OBJECTIVES[objective]?.label || ROUTE_OBJECTIVES.fastest.label,
+    totalMinutes: bestEndState.metrics.minutes,
     transferCount,
     stationPath,
     segments: routeSegments,
     totalDistance,
+    totalRiskExposure,
   };
 }
 
-function renderMetrics(route) {
+function computeRoute(startId, endId, options = {}) {
+  return computeRouteCore(startId, endId, {
+    ...options,
+    objective: options.objective || selectedObjective(),
+  });
+}
+
+function computeRouteBundle(startId, endId) {
+  const fastest = computeRoute(startId, endId, { objective: 'fastest' });
+  const transfers = computeRoute(startId, endId, { objective: 'transfers' });
+  const resilient = computeRoute(startId, endId, { objective: 'resilient' });
+
+  return {
+    fastest,
+    transfers,
+    resilient,
+    activeRoute: { fastest, transfers, resilient }[selectedObjective()] || fastest,
+  };
+}
+
+function renderPolicySummary(bundle) {
+  if (!bundle || !bundle.activeRoute) {
+    routePolicySummaryEl.textContent = 'Compute a route to compare time, transfer, and outage tradeoffs.';
+    return;
+  }
+
+  const route = bundle.activeRoute;
+  if (route.objective === 'fastest') {
+    const resilientDelta = bundle.resilient ? bundle.resilient.totalMinutes - route.totalMinutes : 0;
+    const exposureDrop = bundle.resilient ? route.totalRiskExposure - bundle.resilient.totalRiskExposure : 0;
+    routePolicySummaryEl.textContent = bundle.resilient
+      ? `Fastest policy active. Most resilient alternative adds ${Math.max(0, resilientDelta)}m and cuts closure exposure by ${formatExposureMinutes(
+          Math.max(0, exposureDrop)
+        )}.`
+      : 'Fastest policy active.';
+    return;
+  }
+
+  if (route.objective === 'transfers') {
+    const fastestDelta = bundle.fastest ? route.totalMinutes - bundle.fastest.totalMinutes : 0;
+    routePolicySummaryEl.textContent = bundle.fastest
+      ? `Low-transfer policy active. It uses ${route.transferCount} transfers and costs ${Math.max(0, fastestDelta)}m versus the fastest option.`
+      : 'Low-transfer policy active.';
+    return;
+  }
+
+  const fastestDelta = bundle.fastest ? route.totalMinutes - bundle.fastest.totalMinutes : 0;
+  const exposureDrop = bundle.fastest ? bundle.fastest.totalRiskExposure - route.totalRiskExposure : 0;
+  routePolicySummaryEl.textContent = bundle.fastest
+    ? `Resilience policy active. It adds ${Math.max(0, fastestDelta)}m versus fastest and lowers closure exposure by ${formatExposureMinutes(
+        Math.max(0, exposureDrop)
+      )}.`
+    : 'Resilience policy active.';
+}
+
+function renderMetrics(route, bundle) {
   if (!route) {
     minutesEl.textContent = '-';
     stopsEl.textContent = '-';
     transfersEl.textContent = '-';
     distanceEl.textContent = '-';
     stepsEl.innerHTML = '';
+    renderPolicySummary(null);
     renderResilience(null, null);
     return;
   }
@@ -453,6 +613,7 @@ function renderMetrics(route) {
     })
     .join('');
 
+  renderPolicySummary(bundle);
   renderResilience(analyzeRouteResilience(route), route);
 }
 
@@ -486,6 +647,7 @@ function analyzeRouteResilience(route) {
   route.segments.forEach((segment) => {
     const alternate = computeRoute(route.startId, route.endId, {
       excludedSegmentIds: new Set([segment.id]),
+      objective: route.objective,
     });
     const delay = alternate ? alternate.totalMinutes - route.totalMinutes : Number.POSITIVE_INFINITY;
     const disruption = {
@@ -524,12 +686,14 @@ function analyzeRouteResilience(route) {
 function renderResilience(analysis, route) {
   if (!analysis) {
     resilienceSummaryEl.textContent = 'Compute a route to inspect the strongest fallback path.';
+    resilienceExposureEl.textContent = 'Exposure: -';
     resilienceBackupEl.textContent = 'Backup: -';
     resilienceWeakLinkEl.textContent = 'Weak link: -';
     return;
   }
 
   const intactCount = analysis.routeSegmentCount - analysis.disconnectedCount;
+  resilienceExposureEl.textContent = `Exposure: ${formatExposureMinutes(route.totalRiskExposure)} cumulative closure delay across the chosen path.`;
   resilienceSummaryEl.textContent =
     analysis.disconnectedCount > 0
       ? `${analysis.disconnectedCount} of ${analysis.routeSegmentCount} route links fully break this trip if lost.`
@@ -793,20 +957,21 @@ function rerouteAndRender(autoMode) {
   const startId = startSelect.value;
   const endId = endSelect.value;
 
-  currentRoute = computeRoute(startId, endId);
-  renderMetrics(currentRoute);
+  currentRouteBundle = computeRouteBundle(startId, endId);
+  currentRoute = currentRouteBundle.activeRoute;
+  renderMetrics(currentRoute, currentRouteBundle);
   renderMap(currentRoute);
   setChallengePanel(currentRoute);
   updateSelectionLabels();
 
   if (!currentRoute) {
     statusEl.textContent = 'No valid route for current network.';
-  } else if (!autoMode) {
+  } else {
     const startName = stationById(startId)?.name || startId;
     const endName = stationById(endId)?.name || endId;
     const networkDistance = segments.reduce((sum, segment) => sum + segmentDistance(segment), 0);
 
-    statusEl.textContent = `Fastest route from ${startName} to ${endName}. Network distance: ${formatDistance(networkDistance)}.`;
+    statusEl.textContent = `${currentRoute.objectiveLabel} route from ${startName} to ${endName}. Network distance: ${formatDistance(networkDistance)}.`;
   }
 
   evaluateChallenge(currentRoute);
@@ -1263,6 +1428,11 @@ deleteSelectedSegmentButton.addEventListener('click', () => {
 
 startSelect.addEventListener('change', () => rerouteAndRender(true));
 endSelect.addEventListener('change', () => rerouteAndRender(true));
+objectiveSelect.addEventListener('change', () => {
+  routeObjective = objectiveSelect.value;
+  localStorage.setItem(OBJECTIVE_KEY, routeObjective);
+  rerouteAndRender(false);
+});
 
 segmentCurveInput.addEventListener('input', () => {
   if (!selectedSegmentId) return;
@@ -1308,7 +1478,7 @@ syncRouteSelects();
 renderLegend();
 setMode('drag');
 rerouteAndRender(true);
-statusEl.textContent = 'Drag stops to live-update distance, travel time, and transfers.';
+statusEl.textContent = 'Drag stops to live-update travel time, transfers, and outage exposure.';
 challengeTextEl.textContent = 'Press "New Challenge" to generate a terrain-aware optimization goal.';
 setChallengePanel(currentRoute);
 updateSelectionLabels();

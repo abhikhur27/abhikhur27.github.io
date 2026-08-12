@@ -28,8 +28,17 @@
           Destination
           <select id="end-station"></select>
         </label>
+        <label>
+          Objective
+          <select id="route-objective">
+            <option value="fastest">Fastest</option>
+            <option value="transfers">Fewer transfers</option>
+            <option value="resilient">Most resilient</option>
+          </select>
+        </label>
         <button id="run-route" class="primary" type="button">Compute Route</button>
         <p id="status" class="status" aria-live="polite"></p>
+        <p id="route-policy-summary" class="policy-note">Fastest policy active.</p>
 
         <div class="metrics">
           <article><h3>Total</h3><p id="metric-minutes">-</p></article>
@@ -43,6 +52,7 @@
         <div class="resilience-card">
           <h3>Resilience Brief</h3>
           <p id="resilience-summary" class="helper-note">Compute a route to inspect the strongest fallback path.</p>
+          <p id="resilience-exposure" class="resilience-line">Exposure: -</p>
           <p id="resilience-backup" class="resilience-line">Backup: -</p>
           <p id="resilience-weak-link" class="resilience-line">Weak link: -</p>
         </div>
