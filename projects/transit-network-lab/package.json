@@ -1,0 +1,9 @@
+{
+  "name": "transit-network-planner",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "check": "node --check transit-routing.js && node --check script.js",
+    "test": "node --test tests/*.test.js"
+  }
+}

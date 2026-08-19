@@ -1,4 +1,4 @@
-﻿# Transit Network Lab
+# Transit Network Planner
 
 Interactive transit network editor with policy-aware routing and outage tradeoff analysis.
 
@@ -11,6 +11,14 @@ Interactive transit network editor with policy-aware routing and outage tradeoff
 - Add custom line segments with configurable color and speed.
 - Route metrics (time, stops, transfers) update in real time.
 - Optimization mode with challenge goals and persistent score.
+- Deterministic routing regression fixtures that prove the three policies diverge and recompute correctly after closures.
+
+## Verification
+
+```bash
+npm run check
+npm test
+```
 
 ## Local run
 

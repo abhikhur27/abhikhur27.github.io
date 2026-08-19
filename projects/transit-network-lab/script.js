@@ -49,17 +49,17 @@ const challengeStreakEl = document.getElementById('challenge-streak');
 const networkSvg = document.getElementById('network');
 const legendEl = document.getElementById('line-legend');
 
+const {
+  ROUTE_OBJECTIVES,
+  computeRoute: computeNetworkRoute,
+  computeRouteBundle: computeNetworkRouteBundle,
+  computeSegmentRiskIndex,
+} = window.TransitRouting;
 const transferPenaltyMinutes = 2;
 const riverPenaltyMinutes = 3;
 const SCORE_KEY = 'transit_lab_score';
 const STREAK_KEY = 'transit_lab_streak';
 const OBJECTIVE_KEY = 'transit_lab_objective';
-const ROUTE_OBJECTIVES = {
-  fastest: { label: 'Fastest', sortKey: ['minutes', 'transfers', 'riskExposure', 'distance'] },
-  transfers: { label: 'Fewer transfers', sortKey: ['transfers', 'minutes', 'riskExposure', 'distance'] },
-  resilient: { label: 'Most resilient', sortKey: ['riskExposure', 'minutes', 'transfers', 'distance'] },
-};
-
 let stationCounter = 0;
 let segmentCounter = 0;
 let terrainCounter = 0;
@@ -346,187 +346,39 @@ function getSegmentRiskIndex() {
     return routeRiskCache.index;
   }
 
-  const index = new Map();
-  segments.forEach((segment) => {
-    const directMinutes = segmentMinutes(segment);
-    const alternate = computeRouteCore(segment.from, segment.to, {
-      objective: 'fastest',
-      excludedSegmentIds: new Set([segment.id]),
-      includeRisk: false,
-    });
-
-    if (!alternate) {
-      index.set(segment.id, {
-        closurePenalty: directMinutes + 18,
-        disconnected: true,
-      });
-      return;
-    }
-
-    const reconnectDelay = Math.max(0, alternate.totalMinutes - directMinutes);
-    index.set(segment.id, {
-      closurePenalty: reconnectDelay + alternate.transferCount * 2,
-      disconnected: false,
-    });
-  });
+  const index = computeSegmentRiskIndex(routingNetwork(), { transferPenaltyMinutes });
 
   routeRiskCache = { signature, index };
   return index;
 }
 
-function buildAdjacency(excludedSegmentIds = new Set(), options = {}) {
-  const adjacency = new Map();
-  const riskIndex = options.includeRisk === false ? new Map() : getSegmentRiskIndex();
-  stations.forEach((station) => {
-    adjacency.set(station.id, []);
-  });
-
-  segments.forEach((segment) => {
-    if (excludedSegmentIds.has(segment.id)) {
-      return;
-    }
-
-    const terrainInfo = segmentTerrainInfo(segment);
-    if (terrainInfo.blocked) {
-      return;
-    }
-
-    const time = segmentMinutes(segment);
-    const distance = segmentDistance(segment);
-
-    adjacency.get(segment.from).push({
-      ...segment,
-      id: segment.id,
-      to: segment.to,
-      minutes: time,
-      distance,
-      terrainPenalty: terrainInfo.riverHits * riverPenaltyMinutes,
-      riskPenalty: riskIndex.get(segment.id)?.closurePenalty || 0,
-    });
-    adjacency.get(segment.to).push({
-      ...segment,
-      id: segment.id,
-      from: segment.to,
-      to: segment.from,
-      minutes: time,
-      distance,
-      terrainPenalty: terrainInfo.riverHits * riverPenaltyMinutes,
-      riskPenalty: riskIndex.get(segment.id)?.closurePenalty || 0,
-    });
-  });
-
-  return adjacency;
-}
-
-function stateKey(stationId, line) {
-  return `${stationId}|${line || 'none'}`;
-}
-
-function metricsToScore(metrics, objective) {
-  const config = ROUTE_OBJECTIVES[objective] || ROUTE_OBJECTIVES.fastest;
-  return config.sortKey.map((field) => metrics[field]);
-}
-
-function compareScores(left, right) {
-  for (let i = 0; i < Math.max(left.length, right.length); i += 1) {
-    const delta = (left[i] || 0) - (right[i] || 0);
-    if (delta !== 0) {
-      return delta;
-    }
-  }
-  return 0;
+function routingNetwork() {
+  return {
+    stations: stations.map((station) => station.id),
+    segments: segments.map((segment) => {
+      const terrainInfo = segmentTerrainInfo(segment);
+      return {
+        id: segment.id,
+        from: segment.from,
+        to: segment.to,
+        line: segment.line,
+        minutes: segmentMinutes(segment),
+        distance: segmentDistance(segment),
+        terrainPenalty: terrainInfo.riverHits * riverPenaltyMinutes,
+        blocked: terrainInfo.blocked,
+      };
+    }),
+  };
 }
 
 function computeRouteCore(startId, endId, options = {}) {
-  if (!startId || !endId || startId === endId) return null;
-
-  const objective = options.objective || 'fastest';
-  const adjacency = buildAdjacency(options.excludedSegmentIds || new Set(), {
-    includeRisk: options.includeRisk !== false,
+  const includeRisk = options.includeRisk !== false;
+  return computeNetworkRoute(routingNetwork(), startId, endId, {
+    ...options,
+    includeRisk,
+    riskIndex: includeRisk ? getSegmentRiskIndex() : undefined,
+    transferPenaltyMinutes,
   });
-  const startKey = stateKey(startId, null);
-  const startMetrics = { minutes: 0, transfers: 0, distance: 0, riskExposure: 0 };
-  const startScore = metricsToScore(startMetrics, objective);
-
-  const distances = new Map([[startKey, startScore]]);
-  const previous = new Map();
-  const queue = [{ key: startKey, stationId: startId, line: null, score: startScore, metrics: startMetrics }];
-  let bestEndState = null;
-
-  while (queue.length) {
-    queue.sort((a, b) => compareScores(a.score, b.score));
-    const current = queue.shift();
-
-    if (compareScores(current.score, distances.get(current.key)) > 0) continue;
-
-    if (current.stationId === endId) {
-      bestEndState = current;
-      break;
-    }
-
-    const neighbors = adjacency.get(current.stationId) || [];
-    neighbors.forEach((edge) => {
-      const transferCost = current.line && current.line !== edge.line ? transferPenaltyMinutes : 0;
-      const nextMetrics = {
-        minutes: current.metrics.minutes + edge.minutes + transferCost,
-        transfers: current.metrics.transfers + (transferCost > 0 ? 1 : 0),
-        distance: current.metrics.distance + edge.distance,
-        riskExposure: current.metrics.riskExposure + (edge.riskPenalty || 0),
-      };
-      const nextScore = metricsToScore(nextMetrics, objective);
-      const nextKey = stateKey(edge.to, edge.line);
-
-      if (!distances.has(nextKey) || compareScores(nextScore, distances.get(nextKey)) < 0) {
-        distances.set(nextKey, nextScore);
-        previous.set(nextKey, {
-          prevKey: current.key,
-          id: edge.id,
-          from: edge.from,
-          to: edge.to,
-          line: edge.line,
-          minutes: edge.minutes,
-          distance: edge.distance,
-          transferCost,
-          terrainPenalty: edge.terrainPenalty || 0,
-          riskPenalty: edge.riskPenalty || 0,
-        });
-
-        queue.push({ key: nextKey, stationId: edge.to, line: edge.line, score: nextScore, metrics: nextMetrics });
-      }
-    });
-  }
-
-  if (!bestEndState) return null;
-
-  const routeSegments = [];
-  let cursor = bestEndState.key;
-
-  while (cursor !== startKey) {
-    const step = previous.get(cursor);
-    if (!step) break;
-    routeSegments.push(step);
-    cursor = step.prevKey;
-  }
-
-  routeSegments.reverse();
-
-  const stationPath = [startId, ...routeSegments.map((segment) => segment.to)];
-  const transferCount = routeSegments.reduce((count, segment) => count + (segment.transferCost > 0 ? 1 : 0), 0);
-  const totalDistance = routeSegments.reduce((sum, segment) => sum + segment.distance, 0);
-  const totalRiskExposure = routeSegments.reduce((sum, segment) => sum + (segment.riskPenalty || 0), 0);
-
-  return {
-    startId,
-    endId,
-    objective,
-    objectiveLabel: ROUTE_OBJECTIVES[objective]?.label || ROUTE_OBJECTIVES.fastest.label,
-    totalMinutes: bestEndState.metrics.minutes,
-    transferCount,
-    stationPath,
-    segments: routeSegments,
-    totalDistance,
-    totalRiskExposure,
-  };
 }
 
 function computeRoute(startId, endId, options = {}) {
@@ -537,16 +389,11 @@ function computeRoute(startId, endId, options = {}) {
 }
 
 function computeRouteBundle(startId, endId) {
-  const fastest = computeRoute(startId, endId, { objective: 'fastest' });
-  const transfers = computeRoute(startId, endId, { objective: 'transfers' });
-  const resilient = computeRoute(startId, endId, { objective: 'resilient' });
-
-  return {
-    fastest,
-    transfers,
-    resilient,
-    activeRoute: { fastest, transfers, resilient }[selectedObjective()] || fastest,
-  };
+  return computeNetworkRouteBundle(routingNetwork(), startId, endId, {
+    objective: selectedObjective(),
+    riskIndex: getSegmentRiskIndex(),
+    transferPenaltyMinutes,
+  });
 }
 
 function renderPolicySummary(bundle) {

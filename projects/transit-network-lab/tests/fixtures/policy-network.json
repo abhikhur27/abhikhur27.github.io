@@ -1,0 +1,12 @@
+{
+  "stations": ["A", "B", "C", "D", "E", "X"],
+  "segments": [
+    { "id": "fast-1", "from": "A", "to": "X", "line": "red", "minutes": 2, "distance": 2, "closurePenalty": 10 },
+    { "id": "fast-2", "from": "X", "to": "D", "line": "blue", "minutes": 2, "distance": 2, "closurePenalty": 10 },
+    { "id": "steady-1", "from": "A", "to": "B", "line": "green", "minutes": 4, "distance": 4, "closurePenalty": 5 },
+    { "id": "steady-2", "from": "B", "to": "D", "line": "green", "minutes": 4, "distance": 4, "closurePenalty": 5 },
+    { "id": "safe-1", "from": "A", "to": "C", "line": "gold", "minutes": 3, "distance": 3, "closurePenalty": 0 },
+    { "id": "safe-2", "from": "C", "to": "E", "line": "gold", "minutes": 3, "distance": 3, "closurePenalty": 0 },
+    { "id": "safe-3", "from": "E", "to": "D", "line": "gold", "minutes": 3, "distance": 3, "closurePenalty": 0 }
+  ]
+}
