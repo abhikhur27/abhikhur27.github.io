@@ -30,10 +30,11 @@ Main personal site for curated project demos.
 
 ## Standalone Project Repositories
 
-- `https://github.com/abhikhur27/portfolio-utility-suite`
-- `https://github.com/abhikhur27/warframe-auction-market`
-- `https://github.com/abhikhur27/applied-ml-signal-lab`
+- `https://socksthegecko.com`
 - `https://github.com/abhikhur27/bogglebot`
+- `https://github.com/abhikhur27/warframe-auction-market`
+- `https://github.com/abhikhur27/portfolio-utility-suite`
+- `https://github.com/abhikhur27/applied-ml-signal-lab`
 - `https://github.com/abhikhur27/context-constellation-rag`
 - `https://github.com/abhikhur27/cache-policy-simulator`
 - `https://github.com/abhikhur27/lower-48-warlines`
@@ -44,7 +45,7 @@ Main personal site for curated project demos.
 - `index.html`: semantic structure for hero, curated project index, and a small writing lane.
 - homepage utility software is consolidated behind one maintained utility-suite card instead of many tiny CLI cards.
 - `styles.css`: shared visual system for the portfolio homepage.
-- `script.js`: pinned-project ordering and mobile nav behavior.
+- `script.js`: mobile navigation, active-section state, and direct-card hash handling.
 - hash-linked cards inside collapsed sections now auto-open their parent disclosure for direct navigation.
 - homepage browser-only section now stays collapsed by default so the first scan stays utility-first.
 - `projects/json-shape-diff-studio`: static JSON comparison utility for schema and payload drift.

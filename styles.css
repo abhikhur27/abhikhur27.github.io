@@ -382,11 +382,6 @@ section[id] {
   background: rgba(20, 33, 43, 0.98);
 }
 
-.pinned-card {
-  border-color: rgba(183, 240, 123, 0.48);
-  background: rgba(20, 33, 43, 0.98);
-}
-
 .pin-badge {
   display: inline-flex;
   width: fit-content;
