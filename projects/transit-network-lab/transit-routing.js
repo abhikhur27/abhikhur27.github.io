@@ -224,11 +224,94 @@
     return { fastest, transfers, resilient, activeRoute: { fastest, transfers, resilient }[objective] };
   }
 
+  function reachableStations(adjacency, startId) {
+    const visited = new Set();
+    const queue = [startId];
+
+    while (queue.length) {
+      const stationId = queue.shift();
+      if (visited.has(stationId)) continue;
+      visited.add(stationId);
+      (adjacency.get(stationId) || []).forEach((edge) => {
+        if (!visited.has(edge.to)) queue.push(edge.to);
+      });
+    }
+
+    return visited;
+  }
+
+  function connectedPairCount(adjacency, stationIds) {
+    let pairCount = 0;
+    stationIds.forEach((stationId, index) => {
+      const reachable = reachableStations(adjacency, stationId);
+      for (let otherIndex = index + 1; otherIndex < stationIds.length; otherIndex += 1) {
+        if (reachable.has(stationIds[otherIndex])) pairCount += 1;
+      }
+    });
+    return pairCount;
+  }
+
+  function analyzeNetworkReliability(network, options = {}) {
+    const baseExcluded = normalizedIdSet(options.excludedSegmentIds);
+    const stationIds = [...new Set((network.stations || []).map((station) => (typeof station === 'string' ? station : station.id)))]
+      .filter(Boolean)
+      .sort((left, right) => String(left).localeCompare(String(right)));
+    const totalPossiblePairCount = (stationIds.length * (stationIds.length - 1)) / 2;
+    const baselineAdjacency = buildAdjacency(network, { ...options, excludedSegmentIds: baseExcluded, includeRisk: false });
+    const baselineConnectedPairCount = connectedPairCount(baselineAdjacency, stationIds);
+    const activeSegments = (network.segments || [])
+      .filter((segment) => !segment.blocked && !baseExcluded.has(segment.id))
+      .filter((segment) => baselineAdjacency.has(segment.from) && baselineAdjacency.has(segment.to))
+      .slice()
+      .sort((left, right) => String(left.id).localeCompare(String(right.id)));
+
+    const segmentOutages = activeSegments.map((segment) => {
+      const excludedSegmentIds = new Set(baseExcluded);
+      excludedSegmentIds.add(segment.id);
+      const outageAdjacency = buildAdjacency(network, { ...options, excludedSegmentIds, includeRisk: false });
+      const retainedPairCount = connectedPairCount(outageAdjacency, stationIds);
+      const lostPairCount = Math.max(0, baselineConnectedPairCount - retainedPairCount);
+      return {
+        segmentId: segment.id,
+        from: segment.from,
+        to: segment.to,
+        retainedPairCount,
+        lostPairCount,
+        retainedPairRatio: baselineConnectedPairCount > 0 ? retainedPairCount / baselineConnectedPairCount : 1,
+      };
+    });
+
+    const criticalOutages = segmentOutages.filter((outage) => outage.lostPairCount > 0);
+    const worstOutage = segmentOutages
+      .slice()
+      .sort((left, right) => right.lostPairCount - left.lostPairCount || left.segmentId.localeCompare(right.segmentId))[0] || null;
+    const averageRetainedPairRatio = segmentOutages.length
+      ? segmentOutages.reduce((sum, outage) => sum + outage.retainedPairRatio, 0) / segmentOutages.length
+      : 1;
+
+    return {
+      stationCount: stationIds.length,
+      activeSegmentCount: activeSegments.length,
+      totalPossiblePairCount,
+      baselineConnectedPairCount,
+      baselineCoverageRatio: totalPossiblePairCount > 0 ? baselineConnectedPairCount / totalPossiblePairCount : 1,
+      baselineConnected: baselineConnectedPairCount === totalPossiblePairCount,
+      criticalSegmentCount: criticalOutages.length,
+      servedPairsNMinusOnePass: criticalOutages.length === 0,
+      nMinusOnePass: baselineConnectedPairCount === totalPossiblePairCount && criticalOutages.length === 0,
+      minimumRetainedPairRatio: worstOutage ? worstOutage.retainedPairRatio : 1,
+      averageRetainedPairRatio,
+      worstOutage,
+      segmentOutages,
+    };
+  }
+
   return {
     DISCONNECTED_PENALTY_MINUTES,
     ROUTE_OBJECTIVES,
     TRANSFER_PENALTY_MINUTES,
     compareScores,
+    analyzeNetworkReliability,
     computeRoute,
     computeRouteBundle,
     computeSegmentRiskIndex,

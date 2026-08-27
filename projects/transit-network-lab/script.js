@@ -37,28 +37,18 @@ const addRiverButton = document.getElementById('add-river');
 const clearTerrainButton = document.getElementById('clear-terrain');
 const randomCityButton = document.getElementById('random-city');
 
-const newChallengeButton = document.getElementById('new-challenge');
-const challengeTextEl = document.getElementById('challenge-text');
-const challengeTargetEl = document.getElementById('challenge-target');
-const challengeCurrentEl = document.getElementById('challenge-current');
-const challengeEditsEl = document.getElementById('challenge-edits');
-const challengeTimerEl = document.getElementById('challenge-timer');
-const challengeScoreEl = document.getElementById('challenge-score');
-const challengeStreakEl = document.getElementById('challenge-streak');
-
 const networkSvg = document.getElementById('network');
 const legendEl = document.getElementById('line-legend');
 
 const {
   ROUTE_OBJECTIVES,
+  analyzeNetworkReliability,
   computeRoute: computeNetworkRoute,
   computeRouteBundle: computeNetworkRouteBundle,
   computeSegmentRiskIndex,
 } = window.TransitRouting;
 const transferPenaltyMinutes = 2;
 const riverPenaltyMinutes = 3;
-const SCORE_KEY = 'transit_lab_score';
-const STREAK_KEY = 'transit_lab_streak';
 const OBJECTIVE_KEY = 'transit_lab_objective';
 let stationCounter = 0;
 let segmentCounter = 0;
@@ -103,21 +93,16 @@ let connectAnchorId = null;
 let draggingStationId = null;
 let dragMoved = false;
 let editMode = 'drag';
-let challengeTimerId = null;
 let currentRouteBundle = null;
 let routeRiskCache = { signature: '', index: new Map() };
+let networkReliabilityCache = { signature: '', analysis: null };
 
-let challengeScore = Number(localStorage.getItem(SCORE_KEY) || '0');
-let challengeStreak = Number(localStorage.getItem(STREAK_KEY) || '0');
-let challenge = null;
 let routeObjective = localStorage.getItem(OBJECTIVE_KEY) || 'fastest';
 
 if (!ROUTE_OBJECTIVES[routeObjective]) {
   routeObjective = 'fastest';
 }
 
-challengeScoreEl.textContent = String(challengeScore);
-challengeStreakEl.textContent = String(challengeStreak);
 objectiveSelect.value = routeObjective;
 
 function nextSegmentId() {
@@ -135,6 +120,11 @@ function segmentById(id) {
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
+}
+
+function escapeHtml(value) {
+  const entities = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  return String(value).replace(/[&<>"']/g, (character) => entities[character]);
 }
 
 function randomBetween(min, max) {
@@ -296,7 +286,7 @@ function syncRouteSelects() {
   const previousStart = startSelect.value;
   const previousEnd = endSelect.value;
 
-  const options = stations.map((station) => `<option value="${station.id}">${station.name}</option>`).join('');
+  const options = stations.map((station) => `<option value="${station.id}">${escapeHtml(station.name)}</option>`).join('');
   startSelect.innerHTML = options;
   endSelect.innerHTML = options;
 
@@ -327,7 +317,7 @@ function syncRouteSelects() {
 function lineBadge(lineName) {
   const line = lineCatalog[lineName];
   if (!line) return '';
-  return `<span><i style="background:${line.color}"></i>${lineName.toUpperCase()} (${line.speed}px/min)</span>`;
+  return `<span><i style="background:${line.color}"></i>${escapeHtml(lineName.toUpperCase())} (${line.speed}px/min)</span>`;
 }
 
 function renderLegend() {
@@ -350,6 +340,17 @@ function getSegmentRiskIndex() {
 
   routeRiskCache = { signature, index };
   return index;
+}
+
+function getNetworkReliability() {
+  const signature = routeRiskSignature();
+  if (networkReliabilityCache.signature === signature) {
+    return networkReliabilityCache.analysis;
+  }
+
+  const analysis = analyzeNetworkReliability(routingNetwork());
+  networkReliabilityCache = { signature, analysis };
+  return analysis;
 }
 
 function routingNetwork() {
@@ -439,7 +440,7 @@ function renderMetrics(route, bundle) {
     distanceEl.textContent = '-';
     stepsEl.innerHTML = '';
     renderPolicySummary(null);
-    renderResilience(null, null);
+    renderResilience(null, null, getNetworkReliability());
     return;
   }
 
@@ -454,14 +455,14 @@ function renderMetrics(route, bundle) {
       const toName = stationById(segment.to)?.name || segment.to;
       const transferText = segment.transferCost > 0 ? ` +${segment.transferCost}m transfer` : '';
       const terrainText = segment.terrainPenalty > 0 ? ` +${segment.terrainPenalty}m water` : '';
-      return `<li>${fromName} -> ${toName} via ${segment.line.toUpperCase()} (${segment.minutes}m, ${formatDistance(
+      return `<li>${escapeHtml(fromName)} -> ${escapeHtml(toName)} via ${escapeHtml(segment.line.toUpperCase())} (${segment.minutes}m, ${formatDistance(
         segment.distance
       )}${transferText}${terrainText})</li>`;
     })
     .join('');
 
   renderPolicySummary(bundle);
-  renderResilience(analyzeRouteResilience(route), route);
+  renderResilience(analyzeRouteResilience(route), route, getNetworkReliability());
 }
 
 function formatDeltaMinutes(delta) {
@@ -530,21 +531,27 @@ function analyzeRouteResilience(route) {
   };
 }
 
-function renderResilience(analysis, route) {
+function renderResilience(analysis, route, networkReliability) {
+  const networkCoverage = Math.round((networkReliability?.minimumRetainedPairRatio ?? 1) * 100);
+  const baselineCoverage = Math.round((networkReliability?.baselineCoverageRatio ?? 1) * 100);
+  const criticalLabel = networkReliability?.criticalSegmentCount === 1 ? 'link' : 'links';
+
+  if (networkReliability && !networkReliability.baselineConnected) {
+    resilienceSummaryEl.textContent = `Network starts partially disconnected: ${baselineCoverage}% station-pair coverage; ${networkReliability.criticalSegmentCount} additional critical ${criticalLabel}.`;
+  } else if (networkReliability?.nMinusOnePass) {
+    resilienceSummaryEl.textContent = 'Network N-1 check passes: every station pair remains connected after any single link failure.';
+  } else if (networkReliability) {
+    resilienceSummaryEl.textContent = `Network N-1 check fails: ${networkReliability.criticalSegmentCount} critical ${criticalLabel}; worst outage retains ${networkCoverage}% of station pairs.`;
+  }
+
   if (!analysis) {
-    resilienceSummaryEl.textContent = 'Compute a route to inspect the strongest fallback path.';
     resilienceExposureEl.textContent = 'Exposure: -';
     resilienceBackupEl.textContent = 'Backup: -';
     resilienceWeakLinkEl.textContent = 'Weak link: -';
     return;
   }
 
-  const intactCount = analysis.routeSegmentCount - analysis.disconnectedCount;
   resilienceExposureEl.textContent = `Exposure: ${formatExposureMinutes(route.totalRiskExposure)} cumulative closure delay across the chosen path.`;
-  resilienceSummaryEl.textContent =
-    analysis.disconnectedCount > 0
-      ? `${analysis.disconnectedCount} of ${analysis.routeSegmentCount} route links fully break this trip if lost.`
-      : `Every route link has at least one fallback path. ${intactCount} of ${analysis.routeSegmentCount} links reroute successfully.`;
 
   if (!analysis.bestBackup || !analysis.bestBackup.alternate) {
     resilienceBackupEl.textContent = 'Backup: none available if any route link fails.';
@@ -633,7 +640,11 @@ function renderMap(route) {
       if (selectedSegmentId === segment.id) classes.push('selected');
       if (segmentTerrainInfo(segment).blocked) classes.push('blocked');
 
-      return `<path class="${classes.join(' ')}" d="${segmentPathD(segment)}" stroke="${line.color}" data-segment-id="${segment.id}" />`;
+      const fromName = stationById(segment.from)?.name || segment.from;
+      const toName = stationById(segment.to)?.name || segment.to;
+      return `<path class="${classes.join(' ')}" d="${segmentPathD(segment)}" stroke="${line.color}" data-segment-id="${segment.id}" role="button" tabindex="0" aria-label="${escapeHtml(
+        `${segment.line} connection from ${fromName} to ${toName}`
+      )}" />`;
     })
     .join('');
 
@@ -646,8 +657,10 @@ function renderMap(route) {
 
       return `
         <g>
-          <circle class="${classes.join(' ')}" cx="${station.x}" cy="${station.y}" r="13" data-station-id="${station.id}"></circle>
-          <text class="station-label" x="${station.x + 16}" y="${station.y + 4}">${station.name}</text>
+          <circle class="${classes.join(' ')}" cx="${station.x}" cy="${station.y}" r="13" data-station-id="${station.id}" role="button" tabindex="0" aria-label="${escapeHtml(
+            `Select ${station.name} stop`
+          )}"></circle>
+          <text class="station-label" x="${station.x + 16}" y="${station.y + 4}">${escapeHtml(station.name)}</text>
         </g>
       `;
     })
@@ -660,12 +673,22 @@ function renderMap(route) {
       event.stopPropagation();
       handleSegmentInteraction(line.dataset.segmentId);
     });
+    line.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      handleSegmentInteraction(line.dataset.segmentId);
+    });
   });
 
   Array.from(networkSvg.querySelectorAll('[data-station-id]')).forEach((circle) => {
     circle.addEventListener('pointerdown', (event) => {
       event.stopPropagation();
       handleStationInteraction(circle.dataset.stationId, event.pointerId, circle);
+    });
+    circle.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      handleStationInteraction(circle.dataset.stationId, null, circle);
     });
   });
 }
@@ -675,110 +698,6 @@ function svgCoordinates(event) {
   point.x = event.clientX;
   point.y = event.clientY;
   return point.matrixTransform(networkSvg.getScreenCTM().inverse());
-}
-
-function clearChallengeTimer() {
-  if (challengeTimerId) {
-    clearInterval(challengeTimerId);
-    challengeTimerId = null;
-  }
-}
-
-function timeLeftSeconds() {
-  if (!challenge) return 0;
-  const elapsed = (Date.now() - challenge.startedAt) / 1000;
-  return Math.max(0, challenge.timeLimitSec - elapsed);
-}
-
-function setChallengePanel(route) {
-  if (!challenge) {
-    challengeTargetEl.textContent = '-';
-    challengeCurrentEl.textContent = '-';
-    challengeEditsEl.textContent = '-';
-    challengeTimerEl.textContent = '-';
-    return;
-  }
-
-  challengeTargetEl.textContent = `<= ${challenge.targetMinutes}m | <= ${challenge.maxTransfers} transfers`;
-
-  if (route && route.startId === challenge.startId && route.endId === challenge.endId) {
-    challengeCurrentEl.textContent = `${route.totalMinutes}m | ${route.transferCount} transfers`;
-  } else {
-    challengeCurrentEl.textContent = 'Select challenge pair';
-  }
-
-  const editsLeft = Math.max(0, challenge.editBudget - challenge.editsUsed);
-  challengeEditsEl.textContent = String(editsLeft);
-  challengeTimerEl.textContent = `${timeLeftSeconds().toFixed(0)}s`;
-}
-
-function markChallengeFailed(reason) {
-  if (!challenge || challenge.completed || challenge.failed) return;
-
-  challenge.failed = true;
-  challengeStreak = 0;
-  localStorage.setItem(STREAK_KEY, String(challengeStreak));
-  challengeStreakEl.textContent = String(challengeStreak);
-
-  challengeTextEl.textContent = `Challenge failed: ${reason}. Generate a new challenge to retry.`;
-  clearChallengeTimer();
-  setChallengePanel(currentRoute);
-}
-
-function markChallengeSolved(route) {
-  if (!challenge || challenge.completed || challenge.failed) return;
-
-  challenge.completed = true;
-  challengeScore += 1;
-  challengeStreak += 1;
-
-  localStorage.setItem(SCORE_KEY, String(challengeScore));
-  localStorage.setItem(STREAK_KEY, String(challengeStreak));
-
-  challengeScoreEl.textContent = String(challengeScore);
-  challengeStreakEl.textContent = String(challengeStreak);
-
-  challengeTextEl.textContent = `Solved in ${route.totalMinutes}m with ${route.transferCount} transfers using ${challenge.editsUsed}/${challenge.editBudget} edits.`;
-  clearChallengeTimer();
-  setChallengePanel(route);
-}
-
-function evaluateChallenge(route) {
-  if (!challenge || challenge.completed || challenge.failed || !route) {
-    return;
-  }
-
-  if (timeLeftSeconds() <= 0) {
-    markChallengeFailed('time expired');
-    return;
-  }
-
-  if (challenge.editsUsed > challenge.editBudget) {
-    markChallengeFailed('edit budget exceeded');
-    return;
-  }
-
-  if (route.startId !== challenge.startId || route.endId !== challenge.endId) {
-    return;
-  }
-
-  const solved = route.totalMinutes <= challenge.targetMinutes && route.transferCount <= challenge.maxTransfers;
-  if (solved) {
-    markChallengeSolved(route);
-  }
-}
-
-function registerEdit(editLabel) {
-  if (!challenge || challenge.completed || challenge.failed) {
-    return;
-  }
-
-  challenge.editsUsed += 1;
-  editorStatusEl.textContent = `${editLabel}. Challenge edits used: ${challenge.editsUsed}/${challenge.editBudget}.`;
-
-  if (challenge.editsUsed > challenge.editBudget) {
-    markChallengeFailed('edit budget exceeded');
-  }
 }
 
 function setMode(mode) {
@@ -808,7 +727,6 @@ function rerouteAndRender(autoMode) {
   currentRoute = currentRouteBundle.activeRoute;
   renderMetrics(currentRoute, currentRouteBundle);
   renderMap(currentRoute);
-  setChallengePanel(currentRoute);
   updateSelectionLabels();
 
   if (!currentRoute) {
@@ -821,7 +739,6 @@ function rerouteAndRender(autoMode) {
     statusEl.textContent = `${currentRoute.objectiveLabel} route from ${startName} to ${endName}. Network distance: ${formatDistance(networkDistance)}.`;
   }
 
-  evaluateChallenge(currentRoute);
 }
 
 function cleanupUnusedLines() {
@@ -846,7 +763,6 @@ function removeRouteSegmentById(segmentId, fromDeleteMode = false) {
 
   cleanupUnusedLines();
   renderLegend();
-  registerEdit('Removed route connection');
   rerouteAndRender(true);
 
   editorStatusEl.textContent = fromDeleteMode
@@ -884,16 +800,11 @@ function removeSelectedStop() {
   syncRouteSelects();
   renderLegend();
 
-  if (challenge && (challenge.startId === stopId || challenge.endId === stopId)) {
-    markChallengeFailed('a challenge stop was deleted');
-  }
-
   selectedStopId = null;
   selectedSegmentId = null;
   connectAnchorId = null;
 
   editorStatusEl.textContent = `Deleted stop: ${removedName}.`;
-  registerEdit('Deleted stop');
   rerouteAndRender(true);
 }
 
@@ -917,7 +828,6 @@ function addStop() {
   newStopInput.value = '';
   editorStatusEl.textContent = `Added stop: ${rawName}.`;
 
-  registerEdit('Added stop');
   rerouteAndRender(true);
 }
 
@@ -930,7 +840,6 @@ function addObstacle() {
     rx: randomBetween(35, 70),
     ry: randomBetween(25, 60),
   });
-  registerEdit('Added obstacle');
   rerouteAndRender(true);
 }
 
@@ -943,7 +852,6 @@ function addLake() {
     rx: randomBetween(45, 90),
     ry: randomBetween(30, 74),
   });
-  registerEdit('Added lake');
   rerouteAndRender(true);
 }
 
@@ -958,13 +866,11 @@ function addRiver() {
     curve: randomBetween(-130, 130),
     width: randomBetween(14, 24),
   });
-  registerEdit('Added river');
   rerouteAndRender(true);
 }
 
 function clearTerrain() {
   terrain.length = 0;
-  registerEdit('Cleared terrain');
   rerouteAndRender(true);
 }
 
@@ -974,8 +880,6 @@ function randomLineName() {
 }
 
 function randomCity() {
-  clearChallengeTimer();
-  challenge = null;
   stations.length = 0;
   segments.length = 0;
   terrain.length = 0;
@@ -1076,8 +980,6 @@ function randomCity() {
   renderLegend();
   rerouteAndRender(true);
   editorStatusEl.textContent = 'Generated random city with terrain and curved routes.';
-  challengeTextEl.textContent = 'Random city generated. Press "New Challenge" for a fresh optimization goal.';
-  setChallengePanel(currentRoute);
 }
 
 function createRouteSegment(from, to) {
@@ -1117,7 +1019,6 @@ function createRouteSegment(from, to) {
   selectedSegmentId = newSegment.id;
 
   renderLegend();
-  registerEdit('Added route connection');
   rerouteAndRender(true);
 
   editorStatusEl.textContent = `Connected ${stationById(from)?.name} and ${stationById(to)?.name} on ${lineName.toUpperCase()}.`;
@@ -1130,6 +1031,11 @@ function handleStationInteraction(stationId, pointerId, element) {
   updateSelectionLabels();
 
   if (editMode === 'drag') {
+    if (pointerId === null) {
+      editorStatusEl.textContent = `${stationById(stationId)?.name || 'Stop'} selected. Pointer drag changes its position.`;
+      renderMap(currentRoute);
+      return;
+    }
     draggingStationId = stationId;
     dragMoved = false;
     element.setPointerCapture(pointerId);
@@ -1177,83 +1083,8 @@ function handleSegmentInteraction(segmentId) {
   renderMap(currentRoute);
 }
 
-function randomPair() {
-  if (stations.length < 2) return null;
-  const first = Math.floor(Math.random() * stations.length);
-  let second = Math.floor(Math.random() * stations.length);
-
-  while (second === first) {
-    second = Math.floor(Math.random() * stations.length);
-  }
-
-  return [stations[first].id, stations[second].id];
-}
-
-function generateChallenge() {
-  clearChallengeTimer();
-
-  let pair = null;
-  let baseline = null;
-
-  for (let attempt = 0; attempt < 24; attempt += 1) {
-    pair = randomPair();
-    if (!pair) break;
-
-    baseline = computeRoute(pair[0], pair[1]);
-    if (baseline) break;
-  }
-
-  if (!pair || !baseline) {
-    challenge = null;
-    challengeTextEl.textContent = 'Challenge generation failed (network disconnected). Add route segments and retry.';
-    setChallengePanel(currentRoute);
-    return;
-  }
-
-  const [startId, endId] = pair;
-  const improvementTarget = 2 + Math.floor(Math.random() * 6);
-
-  challenge = {
-    startId,
-    endId,
-    baselineMinutes: baseline.totalMinutes,
-    targetMinutes: Math.max(4, baseline.totalMinutes - improvementTarget),
-    maxTransfers: Math.max(0, baseline.transferCount),
-    editBudget: 4 + Math.floor(Math.random() * 5),
-    editsUsed: 0,
-    timeLimitSec: 80 + Math.floor(Math.random() * 55),
-    startedAt: Date.now(),
-    completed: false,
-    failed: false,
-  };
-
-  startSelect.value = startId;
-  endSelect.value = endId;
-
-  challengeTextEl.textContent = `Challenge: ${stationById(startId).name} -> ${stationById(endId).name}. Improve ${baseline.totalMinutes}m to <= ${
-    challenge.targetMinutes
-  }m, keep transfers <= ${challenge.maxTransfers}, and finish within ${challenge.editBudget} edits.`;
-
-  challengeTimerId = setInterval(() => {
-    if (!challenge || challenge.completed || challenge.failed) {
-      clearChallengeTimer();
-      return;
-    }
-
-    if (timeLeftSeconds() <= 0) {
-      markChallengeFailed('time expired');
-      return;
-    }
-
-    setChallengePanel(currentRoute);
-  }, 320);
-
-  rerouteAndRender(true);
-}
-
 runButton.addEventListener('click', () => rerouteAndRender(false));
 addStopButton.addEventListener('click', addStop);
-newChallengeButton.addEventListener('click', generateChallenge);
 addObstacleButton.addEventListener('click', addObstacle);
 addLakeButton.addEventListener('click', addLake);
 addRiverButton.addEventListener('click', addRiver);
@@ -1286,7 +1117,6 @@ segmentCurveInput.addEventListener('input', () => {
   const segment = segmentById(selectedSegmentId);
   if (!segment) return;
   segment.curve = Number(segmentCurveInput.value);
-  registerEdit('Adjusted connection curvature');
   rerouteAndRender(true);
 });
 
@@ -1306,7 +1136,7 @@ networkSvg.addEventListener('pointermove', (event) => {
 
 networkSvg.addEventListener('pointerup', () => {
   if (draggingStationId && dragMoved) {
-    registerEdit('Moved stop');
+    editorStatusEl.textContent = `Moved ${stationById(draggingStationId)?.name || 'stop'}; route and reliability metrics updated.`;
   }
 
   draggingStationId = null;
@@ -1319,13 +1149,9 @@ networkSvg.addEventListener('pointerleave', () => {
   dragMoved = false;
 });
 
-window.addEventListener('beforeunload', clearChallengeTimer);
-
 syncRouteSelects();
 renderLegend();
 setMode('drag');
 rerouteAndRender(true);
 statusEl.textContent = 'Drag stops to live-update travel time, transfers, and outage exposure.';
-challengeTextEl.textContent = 'Press "New Challenge" to generate a terrain-aware optimization goal.';
-setChallengePanel(currentRoute);
 updateSelectionLabels();

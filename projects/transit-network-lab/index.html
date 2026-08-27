@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transit Network Planner | Route Editor + Optimization Mode</title>
+  <title>Transit Network Planner | Route Reliability Workbench</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
   <header class="container header">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
     <h1>Transit Network Planner</h1>
-    <p>Drag stops, edit lines, and optimize transfer-aware routes in real time.</p>
+    <p>Compare route policy tradeoffs and test a network against single-link failures.</p>
   </header>
 
   <main class="container layout">
@@ -50,7 +50,7 @@
         <ol id="route-steps" class="steps"></ol>
 
         <div class="resilience-card">
-          <h3>Resilience Brief</h3>
+          <h3>Reliability Brief</h3>
           <p id="resilience-summary" class="helper-note">Compute a route to inspect the strongest fallback path.</p>
           <p id="resilience-exposure" class="resilience-line">Exposure: -</p>
           <p id="resilience-backup" class="resilience-line">Backup: -</p>
@@ -77,11 +77,11 @@
         <div class="line-editor">
           <label>
             Line Name
-            <input id="line-name" type="text" value="indigo">
+            <input id="line-name" type="text" value="teal">
           </label>
           <label>
             Line Color
-            <input id="line-color" type="color" value="#7c3aed">
+            <input id="line-color" type="color" value="#0f766e">
           </label>
           <label>
             Speed (px/min)
@@ -102,38 +102,25 @@
           </div>
         </div>
 
-        <p id="editor-status" class="status"></p>
+        <p id="editor-status" class="status" aria-live="polite"></p>
       </article>
 
       <article class="block">
-        <h2>Terrain + RNG</h2>
+        <h2>Network Conditions</h2>
         <div class="terrain-actions">
           <button id="add-obstacle" type="button">Add Obstacle</button>
           <button id="add-lake" type="button">Add Lake</button>
           <button id="add-river" type="button">Add River</button>
           <button id="clear-terrain" type="button">Clear Terrain</button>
-          <button id="random-city" class="primary" type="button">Generate Random City</button>
+          <button id="random-city" class="primary" type="button">Generate Test Network</button>
         </div>
-        <p class="helper-note">Obstacle/lake crossings are blocked. River crossings add route penalties.</p>
-      </article>
-
-      <article class="block">
-        <h2>Optimization Mode</h2>
-        <p id="challenge-text">Press "New Challenge" to generate an optimization goal.</p>
-        <button id="new-challenge" type="button">New Challenge</button>
-        <div class="challenge-metrics">
-          <article><h3>Target</h3><p id="challenge-target">-</p></article>
-          <article><h3>Current</h3><p id="challenge-current">-</p></article>
-          <article><h3>Edits Left</h3><p id="challenge-edits">-</p></article>
-          <article><h3>Timer</h3><p id="challenge-timer">-</p></article>
-        </div>
-        <p class="score">Solved: <span id="challenge-score">0</span> | Streak: <span id="challenge-streak">0</span></p>
+        <p class="helper-note">Obstacle and lake crossings close links. River crossings add travel time.</p>
       </article>
     </section>
 
     <section class="panel map-panel">
       <h2>Interactive Map (drag any stop)</h2>
-      <svg id="network" class="network" viewBox="0 0 840 520" aria-label="Transit network editor"></svg>
+      <svg id="network" class="network" viewBox="0 0 840 520" role="group" aria-label="Transit network editor"></svg>
       <div id="line-legend" class="legend"></div>
     </section>
   </main>

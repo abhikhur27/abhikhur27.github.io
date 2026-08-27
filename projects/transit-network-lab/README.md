@@ -1,17 +1,17 @@
 # Transit Network Planner
 
-Interactive transit network editor with policy-aware routing and outage tradeoff analysis.
+Interactive transit network editor with policy-aware routing and deterministic single-link failure analysis.
 
 ## Features
 
 - Drag-and-drop stop positions with live route recomputation.
 - Policy-aware routing for fastest, fewer-transfer, or most resilient trip plans.
-- Resilience brief that measures cumulative closure exposure, strongest fallback path, and weakest route segment for the current trip.
+- Network-wide N-1 reliability check that measures how many served station pairs survive every single-link outage and identifies critical links.
+- Route reliability brief that measures cumulative closure exposure, strongest fallback path, and weakest route segment for the current trip.
 - Add new stops.
 - Add custom line segments with configurable color and speed.
 - Route metrics (time, stops, transfers) update in real time.
-- Optimization mode with challenge goals and persistent score.
-- Deterministic routing regression fixtures that prove the three policies diverge and recompute correctly after closures.
+- Deterministic routing and reliability fixtures that prove the three policies diverge, recompute correctly after closures, and identify the outage with the largest service loss.
 
 ## Verification
 

@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { computeRouteBundle, computeSegmentRiskIndex } = require('../transit-routing.js');
+const { analyzeNetworkReliability, computeRouteBundle, computeSegmentRiskIndex } = require('../transit-routing.js');
 
 const fixturePath = path.join(__dirname, 'fixtures', 'policy-network.json');
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
@@ -87,4 +87,77 @@ test('closure exposure distinguishes a bridge from a segment with a fallback', (
     segments: [{ id: 'only-link', from: 'A', to: 'B', line: 'one', minutes: 3, distance: 3 }],
   });
   assert.deepEqual(isolated.get('only-link'), { closurePenalty: 21, disconnected: true });
+});
+
+test('network reliability passes a fully redundant network', () => {
+  const reliability = analyzeNetworkReliability(fixture);
+
+  assert.equal(reliability.baselineConnectedPairCount, 15);
+  assert.equal(reliability.criticalSegmentCount, 0);
+  assert.equal(reliability.nMinusOnePass, true);
+  assert.equal(reliability.minimumRetainedPairRatio, 1);
+  assert.equal(reliability.segmentOutages.length, fixture.segments.length);
+});
+
+test('network reliability identifies the link with the largest service loss', () => {
+  const reliability = analyzeNetworkReliability({
+    stations: ['A', 'B', 'C', 'D', 'E'],
+    segments: [
+      { id: 'west-1', from: 'A', to: 'B', line: 'west', minutes: 2 },
+      { id: 'west-2', from: 'A', to: 'B', line: 'relief', minutes: 3 },
+      { id: 'trunk', from: 'B', to: 'C', line: 'trunk', minutes: 2 },
+      { id: 'east-1', from: 'C', to: 'D', line: 'east', minutes: 2 },
+      { id: 'east-2', from: 'D', to: 'E', line: 'east', minutes: 2 },
+      { id: 'east-relief', from: 'C', to: 'E', line: 'relief', minutes: 4 }
+    ]
+  });
+
+  assert.equal(reliability.baselineConnectedPairCount, 10);
+  assert.equal(reliability.criticalSegmentCount, 1);
+  assert.equal(reliability.nMinusOnePass, false);
+  assert.deepEqual(reliability.worstOutage, {
+    segmentId: 'trunk',
+    from: 'B',
+    to: 'C',
+    retainedPairCount: 4,
+    lostPairCount: 6,
+    retainedPairRatio: 0.4,
+  });
+});
+
+test('network reliability measures outages against existing service, not impossible pairs', () => {
+  const reliability = analyzeNetworkReliability({
+    stations: ['A', 'B', 'C', 'D'],
+    segments: [
+      { id: 'ab-1', from: 'A', to: 'B', line: 'one', minutes: 2 },
+      { id: 'ab-2', from: 'A', to: 'B', line: 'two', minutes: 3 },
+      { id: 'cd', from: 'C', to: 'D', line: 'three', minutes: 2 }
+    ]
+  });
+
+  assert.equal(reliability.totalPossiblePairCount, 6);
+  assert.equal(reliability.baselineConnectedPairCount, 2);
+  assert.equal(reliability.baselineCoverageRatio, 1 / 3);
+  assert.equal(reliability.baselineConnected, false);
+  assert.equal(reliability.nMinusOnePass, false);
+  assert.equal(reliability.criticalSegmentCount, 1);
+  assert.equal(reliability.worstOutage.segmentId, 'cd');
+  assert.equal(reliability.worstOutage.retainedPairRatio, 0.5);
+});
+
+test('a disconnected network cannot pass N-1 even when each component has redundant links', () => {
+  const reliability = analyzeNetworkReliability({
+    stations: ['A', 'B', 'C', 'D'],
+    segments: [
+      { id: 'ab-1', from: 'A', to: 'B', line: 'one', minutes: 2 },
+      { id: 'ab-2', from: 'A', to: 'B', line: 'two', minutes: 3 },
+      { id: 'cd-1', from: 'C', to: 'D', line: 'one', minutes: 2 },
+      { id: 'cd-2', from: 'C', to: 'D', line: 'two', minutes: 3 }
+    ]
+  });
+
+  assert.equal(reliability.baselineConnected, false);
+  assert.equal(reliability.criticalSegmentCount, 0);
+  assert.equal(reliability.servedPairsNMinusOnePass, true);
+  assert.equal(reliability.nMinusOnePass, false);
 });

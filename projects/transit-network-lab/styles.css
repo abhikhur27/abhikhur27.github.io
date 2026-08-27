@@ -1,11 +1,12 @@
 ﻿:root {
-  --bg: #090b10;
-  --surface: #12161f;
-  --surface-alt: #171d2b;
-  --text: #eef1f7;
-  --muted: #a3adc2;
-  --border: #2a3344;
-  --accent: #d7defe;
+  --bg: #0b1014;
+  --surface: #11191f;
+  --surface-alt: #162128;
+  --text: #edf3f5;
+  --muted: #a5b4bc;
+  --border: #30434d;
+  --accent: #8bc4d2;
+  --focus: #f0c66c;
 }
 
 * { box-sizing: border-box; }
@@ -52,7 +53,7 @@ h1 {
 
 .panel {
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 5px;
   background: var(--surface);
 }
 
@@ -65,7 +66,7 @@ h1 {
 
 .block {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 4px;
   background: var(--surface-alt);
   padding: 0.75rem;
   width: 100%;
@@ -89,8 +90,8 @@ button {
 select,
 input {
   border: 1px solid var(--border);
-  border-radius: 9px;
-  background: #1a2233;
+  border-radius: 3px;
+  background: #18262e;
   color: var(--text);
   padding: 0.42rem;
 }
@@ -98,8 +99,8 @@ input {
 button {
   margin-top: 0.7rem;
   border: 1px solid var(--border);
-  border-radius: 9px;
-  background: #1f2a41;
+  border-radius: 3px;
+  background: #1b3039;
   color: var(--text);
   padding: 0.45rem 0.7rem;
   cursor: pointer;
@@ -110,6 +111,14 @@ button.primary {
   color: #0e1320;
   border-color: transparent;
   font-weight: 700;
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+.network:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .status {
@@ -133,7 +142,7 @@ button.primary {
 
 .metrics article {
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 3px;
   padding: 0.45rem;
   background: #171e2d;
 }
@@ -166,7 +175,7 @@ button.primary {
 .resilience-card {
   margin-top: 0.75rem;
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 3px;
   background: #171e2d;
   padding: 0.55rem;
 }
@@ -226,7 +235,7 @@ button.primary {
 .selection-card {
   margin-top: 0.65rem;
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 3px;
   background: #171e2d;
   padding: 0.5rem;
 }
@@ -269,37 +278,6 @@ button.primary {
   margin-top: 0;
 }
 
-.score {
-  margin: 0.55rem 0 0;
-  color: var(--muted);
-}
-
-.challenge-metrics {
-  margin-top: 0.7rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.42rem;
-}
-
-.challenge-metrics article {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #171e2d;
-  padding: 0.45rem;
-}
-
-.challenge-metrics h3 {
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-}
-
-.challenge-metrics p {
-  margin: 0.2rem 0 0;
-  font-family: "JetBrains Mono", monospace;
-}
-
 .map-panel {
   padding: 0.95rem;
   min-width: 0;
@@ -309,7 +287,7 @@ button.primary {
   margin-top: 0.55rem;
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 3px;
   background: #0f1420;
   touch-action: none;
 }
@@ -347,7 +325,12 @@ button.primary {
 .edge.selected {
   stroke-width: 12;
   opacity: 1;
-  filter: drop-shadow(0 0 4px rgba(215, 222, 254, 0.65));
+}
+
+.edge:focus-visible {
+  stroke-width: 12;
+  opacity: 1;
+  outline: none;
 }
 
 .edge.blocked {
@@ -373,6 +356,12 @@ button.primary {
   stroke-width: 3;
 }
 
+.station:focus-visible {
+  stroke: var(--focus);
+  stroke-width: 4;
+  outline: none;
+}
+
 .station.dragging {
   cursor: grabbing;
 }
@@ -393,7 +382,7 @@ button.primary {
 
 .legend span {
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 3px;
   padding: 0.24rem 0.55rem;
   font-size: 0.78rem;
   color: var(--muted);
