@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { analyzeNetworkReliability, computeRouteBundle, computeSegmentRiskIndex } = require('../transit-routing.js');
+const { analyzeNetworkReliability, computeRoute, computeRouteBundle, computeSegmentRiskIndex } = require('../transit-routing.js');
 
 const fixturePath = path.join(__dirname, 'fixtures', 'policy-network.json');
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
@@ -93,10 +93,40 @@ test('network reliability passes a fully redundant network', () => {
   const reliability = analyzeNetworkReliability(fixture);
 
   assert.equal(reliability.baselineConnectedPairCount, 15);
+  assert.equal(reliability.baselineTotalJourneyMinutes, 79);
   assert.equal(reliability.criticalSegmentCount, 0);
   assert.equal(reliability.nMinusOnePass, true);
   assert.equal(reliability.minimumRetainedPairRatio, 1);
   assert.equal(reliability.segmentOutages.length, fixture.segments.length);
+});
+
+test('network reliability quantifies delay even when every outage preserves connectivity', () => {
+  const reliability = analyzeNetworkReliability(fixture);
+  let routeByRouteBaselineMinutes = 0;
+  fixture.stations.forEach((from, index) => {
+    fixture.stations.slice(index + 1).forEach((to) => {
+      routeByRouteBaselineMinutes += computeRoute(fixture, from, to, {
+        objective: 'fastest',
+        includeRisk: false,
+      }).totalMinutes;
+    });
+  });
+
+  assert.equal(reliability.nMinusOnePass, true);
+  assert.equal(reliability.baselineTotalJourneyMinutes, routeByRouteBaselineMinutes);
+  assert.equal(reliability.serviceImpactSegmentCount, 7);
+  assert.equal(reliability.worstOutage.segmentId, 'safe-2');
+  assert.equal(reliability.worstOutage.lostPairCount, 0);
+  assert.equal(reliability.worstOutage.delayedPairCount, 3);
+  assert.equal(reliability.worstOutage.totalAddedMinutes, 23);
+  assert.equal(reliability.worstOutage.averageDelayMinutes, 23 / 3);
+  assert.deepEqual(reliability.worstOutage.worstDelayPair, {
+    from: 'C',
+    to: 'E',
+    baselineMinutes: 3,
+    outageMinutes: 16,
+    addedMinutes: 13,
+  });
 });
 
 test('network reliability identifies the link with the largest service loss', () => {
@@ -115,14 +145,13 @@ test('network reliability identifies the link with the largest service loss', ()
   assert.equal(reliability.baselineConnectedPairCount, 10);
   assert.equal(reliability.criticalSegmentCount, 1);
   assert.equal(reliability.nMinusOnePass, false);
-  assert.deepEqual(reliability.worstOutage, {
-    segmentId: 'trunk',
-    from: 'B',
-    to: 'C',
-    retainedPairCount: 4,
-    lostPairCount: 6,
-    retainedPairRatio: 0.4,
-  });
+  assert.equal(reliability.worstOutage.segmentId, 'trunk');
+  assert.equal(reliability.worstOutage.from, 'B');
+  assert.equal(reliability.worstOutage.to, 'C');
+  assert.equal(reliability.worstOutage.retainedPairCount, 4);
+  assert.equal(reliability.worstOutage.lostPairCount, 6);
+  assert.equal(reliability.worstOutage.retainedPairRatio, 0.4);
+  assert.equal(reliability.worstOutage.affectedPairCount, 6);
 });
 
 test('network reliability measures outages against existing service, not impossible pairs', () => {
@@ -158,6 +187,7 @@ test('a disconnected network cannot pass N-1 even when each component has redund
 
   assert.equal(reliability.baselineConnected, false);
   assert.equal(reliability.criticalSegmentCount, 0);
+  assert.equal(reliability.serviceImpactSegmentCount, 2);
   assert.equal(reliability.servedPairsNMinusOnePass, true);
   assert.equal(reliability.nMinusOnePass, false);
 });

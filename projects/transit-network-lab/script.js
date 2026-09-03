@@ -342,9 +342,12 @@ function getSegmentRiskIndex() {
   return index;
 }
 
-function getNetworkReliability() {
+function getNetworkReliability({ allowStale = false } = {}) {
   const signature = routeRiskSignature();
   if (networkReliabilityCache.signature === signature) {
+    return networkReliabilityCache.analysis;
+  }
+  if (allowStale && networkReliabilityCache.analysis) {
     return networkReliabilityCache.analysis;
   }
 
@@ -462,7 +465,7 @@ function renderMetrics(route, bundle) {
     .join('');
 
   renderPolicySummary(bundle);
-  renderResilience(analyzeRouteResilience(route), route, getNetworkReliability());
+  renderResilience(analyzeRouteResilience(route), route, getNetworkReliability({ allowStale: Boolean(draggingStationId) }));
 }
 
 function formatDeltaMinutes(delta) {
@@ -535,13 +538,21 @@ function renderResilience(analysis, route, networkReliability) {
   const networkCoverage = Math.round((networkReliability?.minimumRetainedPairRatio ?? 1) * 100);
   const baselineCoverage = Math.round((networkReliability?.baselineCoverageRatio ?? 1) * 100);
   const criticalLabel = networkReliability?.criticalSegmentCount === 1 ? 'link' : 'links';
+  const worstOutage = networkReliability?.worstOutage;
+  const delayedPairLabel = worstOutage?.delayedPairCount === 1 ? 'station pair' : 'station pairs';
+  const averageDelay = Number((worstOutage?.averageDelayMinutes || 0).toFixed(1));
 
   if (networkReliability && !networkReliability.baselineConnected) {
     resilienceSummaryEl.textContent = `Network starts partially disconnected: ${baselineCoverage}% station-pair coverage; ${networkReliability.criticalSegmentCount} additional critical ${criticalLabel}.`;
   } else if (networkReliability?.nMinusOnePass) {
-    resilienceSummaryEl.textContent = 'Network N-1 check passes: every station pair remains connected after any single link failure.';
+    resilienceSummaryEl.textContent = worstOutage?.delayedPairCount
+      ? `N-1 connectivity passes. The worst outage, ${segmentDisplayName(worstOutage)}, delays ${worstOutage.delayedPairCount} ${delayedPairLabel} by ${averageDelay}m on average.`
+      : 'N-1 connectivity passes with no added journey time after any single link failure.';
   } else if (networkReliability) {
-    resilienceSummaryEl.textContent = `Network N-1 check fails: ${networkReliability.criticalSegmentCount} critical ${criticalLabel}; worst outage retains ${networkCoverage}% of station pairs.`;
+    const survivingDelay = worstOutage?.delayedPairCount
+      ? ` Surviving affected trips add ${averageDelay}m on average.`
+      : '';
+    resilienceSummaryEl.textContent = `N-1 connectivity fails: ${networkReliability.criticalSegmentCount} critical ${criticalLabel}; the worst outage retains ${networkCoverage}% of station pairs.${survivingDelay}`;
   }
 
   if (!analysis) {

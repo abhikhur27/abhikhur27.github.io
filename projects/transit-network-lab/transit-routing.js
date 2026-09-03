@@ -224,41 +224,93 @@
     return { fastest, transfers, resilient, activeRoute: { fastest, transfers, resilient }[objective] };
   }
 
-  function reachableStations(adjacency, startId) {
-    const visited = new Set();
-    const queue = [startId];
+  function computeFastestTimes(adjacency, startId, transferPenaltyMinutes) {
+    const startKey = stateKey(startId, null);
+    const startMetrics = { minutes: 0, transfers: 0, distance: 0, riskExposure: 0 };
+    const startScore = metricsToScore(startMetrics, 'fastest');
+    const best = new Map([[startKey, { score: startScore, pathKey: '' }]]);
+    const fastestByStation = new Map();
+    const queue = [{ key: startKey, stationId: startId, line: null, metrics: startMetrics, score: startScore, pathKey: '' }];
 
     while (queue.length) {
-      const stationId = queue.shift();
-      if (visited.has(stationId)) continue;
-      visited.add(stationId);
-      (adjacency.get(stationId) || []).forEach((edge) => {
-        if (!visited.has(edge.to)) queue.push(edge.to);
+      queue.sort((left, right) => compareScores([...left.score, left.pathKey, left.key], [...right.score, right.pathKey, right.key]));
+      const current = queue.shift();
+      const currentBest = best.get(current.key);
+      if (!currentBest || compareScores([...current.score, current.pathKey], [...currentBest.score, currentBest.pathKey]) > 0) continue;
+
+      const stationBest = fastestByStation.get(current.stationId);
+      if (!stationBest || compareScores([...current.score, current.pathKey], [...stationBest.score, stationBest.pathKey]) < 0) {
+        fastestByStation.set(current.stationId, {
+          minutes: current.metrics.minutes,
+          score: current.score,
+          pathKey: current.pathKey,
+        });
+      }
+
+      (adjacency.get(current.stationId) || []).forEach((edge) => {
+        const transferCost = current.line && current.line !== edge.line ? transferPenaltyMinutes : 0;
+        const nextMetrics = {
+          minutes: current.metrics.minutes + edge.minutes + transferCost,
+          transfers: current.metrics.transfers + (transferCost > 0 ? 1 : 0),
+          distance: current.metrics.distance + edge.distance,
+          riskExposure: 0,
+        };
+        const nextScore = metricsToScore(nextMetrics, 'fastest');
+        const nextKey = stateKey(edge.to, edge.line);
+        const nextPathKey = current.pathKey ? `${current.pathKey}>${edge.id}:${edge.to}` : `${edge.id}:${edge.to}`;
+        const candidate = { score: nextScore, pathKey: nextPathKey };
+        const incumbent = best.get(nextKey);
+
+        if (!incumbent || compareScores([...candidate.score, candidate.pathKey], [...incumbent.score, incumbent.pathKey]) < 0) {
+          best.set(nextKey, candidate);
+          queue.push({
+            key: nextKey,
+            stationId: edge.to,
+            line: edge.line,
+            metrics: nextMetrics,
+            score: nextScore,
+            pathKey: nextPathKey,
+          });
+        }
       });
     }
 
-    return visited;
+    return new Map([...fastestByStation].map(([stationId, result]) => [stationId, result.minutes]));
   }
 
-  function connectedPairCount(adjacency, stationIds) {
-    let pairCount = 0;
+  function stationPairKey(left, right) {
+    return JSON.stringify([String(left), String(right)]);
+  }
+
+  function computeJourneyTimeMatrix(adjacency, stationIds, transferPenaltyMinutes) {
+    const journeys = new Map();
     stationIds.forEach((stationId, index) => {
-      const reachable = reachableStations(adjacency, stationId);
+      const fastestTimes = computeFastestTimes(adjacency, stationId, transferPenaltyMinutes);
       for (let otherIndex = index + 1; otherIndex < stationIds.length; otherIndex += 1) {
-        if (reachable.has(stationIds[otherIndex])) pairCount += 1;
+        const otherId = stationIds[otherIndex];
+        const minutes = fastestTimes.get(otherId);
+        if (minutes === undefined) continue;
+        journeys.set(stationPairKey(stationId, otherId), {
+          from: stationId,
+          to: otherId,
+          minutes,
+        });
       }
     });
-    return pairCount;
+    return journeys;
   }
 
   function analyzeNetworkReliability(network, options = {}) {
     const baseExcluded = normalizedIdSet(options.excludedSegmentIds);
+    const transferPenaltyMinutes = Number(options.transferPenaltyMinutes ?? TRANSFER_PENALTY_MINUTES);
     const stationIds = [...new Set((network.stations || []).map((station) => (typeof station === 'string' ? station : station.id)))]
       .filter(Boolean)
       .sort((left, right) => String(left).localeCompare(String(right)));
     const totalPossiblePairCount = (stationIds.length * (stationIds.length - 1)) / 2;
     const baselineAdjacency = buildAdjacency(network, { ...options, excludedSegmentIds: baseExcluded, includeRisk: false });
-    const baselineConnectedPairCount = connectedPairCount(baselineAdjacency, stationIds);
+    const baselineJourneys = computeJourneyTimeMatrix(baselineAdjacency, stationIds, transferPenaltyMinutes);
+    const baselineConnectedPairCount = baselineJourneys.size;
+    const baselineTotalJourneyMinutes = [...baselineJourneys.values()].reduce((sum, journey) => sum + journey.minutes, 0);
     const activeSegments = (network.segments || [])
       .filter((segment) => !segment.blocked && !baseExcluded.has(segment.id))
       .filter((segment) => baselineAdjacency.has(segment.from) && baselineAdjacency.has(segment.to))
@@ -269,7 +321,39 @@
       const excludedSegmentIds = new Set(baseExcluded);
       excludedSegmentIds.add(segment.id);
       const outageAdjacency = buildAdjacency(network, { ...options, excludedSegmentIds, includeRisk: false });
-      const retainedPairCount = connectedPairCount(outageAdjacency, stationIds);
+      const outageJourneys = computeJourneyTimeMatrix(outageAdjacency, stationIds, transferPenaltyMinutes);
+      let retainedPairCount = 0;
+      let delayedPairCount = 0;
+      let totalAddedMinutes = 0;
+      let maxAddedMinutes = 0;
+      let worstDelayPair = null;
+      let worstDelayPairKey = '';
+
+      baselineJourneys.forEach((baseline, key) => {
+        const outage = outageJourneys.get(key);
+        if (!outage) return;
+        retainedPairCount += 1;
+        const addedMinutes = Math.max(0, outage.minutes - baseline.minutes);
+        if (addedMinutes <= 0) return;
+        delayedPairCount += 1;
+        totalAddedMinutes += addedMinutes;
+        if (
+          !worstDelayPair ||
+          addedMinutes > worstDelayPair.addedMinutes ||
+          (addedMinutes === worstDelayPair.addedMinutes && key.localeCompare(worstDelayPairKey) < 0)
+        ) {
+          maxAddedMinutes = addedMinutes;
+          worstDelayPairKey = key;
+          worstDelayPair = {
+            from: baseline.from,
+            to: baseline.to,
+            baselineMinutes: baseline.minutes,
+            outageMinutes: outage.minutes,
+            addedMinutes,
+          };
+        }
+      });
+
       const lostPairCount = Math.max(0, baselineConnectedPairCount - retainedPairCount);
       return {
         segmentId: segment.id,
@@ -278,13 +362,26 @@
         retainedPairCount,
         lostPairCount,
         retainedPairRatio: baselineConnectedPairCount > 0 ? retainedPairCount / baselineConnectedPairCount : 1,
+        delayedPairCount,
+        affectedPairCount: lostPairCount + delayedPairCount,
+        totalAddedMinutes,
+        averageAddedMinutes: retainedPairCount > 0 ? totalAddedMinutes / retainedPairCount : 0,
+        averageDelayMinutes: delayedPairCount > 0 ? totalAddedMinutes / delayedPairCount : 0,
+        maxAddedMinutes,
+        worstDelayPair,
       };
     });
 
     const criticalOutages = segmentOutages.filter((outage) => outage.lostPairCount > 0);
     const worstOutage = segmentOutages
       .slice()
-      .sort((left, right) => right.lostPairCount - left.lostPairCount || left.segmentId.localeCompare(right.segmentId))[0] || null;
+      .sort(
+        (left, right) =>
+          right.lostPairCount - left.lostPairCount ||
+          right.totalAddedMinutes - left.totalAddedMinutes ||
+          right.maxAddedMinutes - left.maxAddedMinutes ||
+          left.segmentId.localeCompare(right.segmentId)
+      )[0] || null;
     const averageRetainedPairRatio = segmentOutages.length
       ? segmentOutages.reduce((sum, outage) => sum + outage.retainedPairRatio, 0) / segmentOutages.length
       : 1;
@@ -294,12 +391,18 @@
       activeSegmentCount: activeSegments.length,
       totalPossiblePairCount,
       baselineConnectedPairCount,
+      baselineTotalJourneyMinutes,
       baselineCoverageRatio: totalPossiblePairCount > 0 ? baselineConnectedPairCount / totalPossiblePairCount : 1,
       baselineConnected: baselineConnectedPairCount === totalPossiblePairCount,
       criticalSegmentCount: criticalOutages.length,
+      serviceImpactSegmentCount: segmentOutages.filter((outage) => outage.affectedPairCount > 0).length,
       servedPairsNMinusOnePass: criticalOutages.length === 0,
       nMinusOnePass: baselineConnectedPairCount === totalPossiblePairCount && criticalOutages.length === 0,
       minimumRetainedPairRatio: worstOutage ? worstOutage.retainedPairRatio : 1,
+      maximumAverageDelayMinutes: segmentOutages.reduce(
+        (maximum, outage) => Math.max(maximum, outage.averageDelayMinutes),
+        0
+      ),
       averageRetainedPairRatio,
       worstOutage,
       segmentOutages,
