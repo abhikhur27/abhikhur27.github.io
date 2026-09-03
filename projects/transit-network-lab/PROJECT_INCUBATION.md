@@ -1,7 +1,9 @@
 # Route Ledger — Project Incubation
 
-Status: **proposal, deliberation run 1 of at least 3**  
-Started: 2026-09-03  
+Status: **proposal, deliberation run 1 of at least 3**
+
+Started: 2026-09-03
+
 Build authorization: **not granted yet**
 
 ## Decision so far
