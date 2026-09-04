@@ -333,4 +333,3 @@ Provisional total: **19/30 — one final evidence run, lean reject unless hit ra
 - Found strong overlap from `gtfs-semantic-diff`, narrowing the product to saved-trip evaluation and notice delivery.
 - Marked public fixture reuse as blocked because DART publishes no feed-specific license on the feed page.
 - Next decision: quantify notice hit rate across six versions and three journeys, find one broken-transfer case, and require three-user demand plus rights clarity. Otherwise reject the standalone project.
-
