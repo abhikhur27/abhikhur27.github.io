@@ -1,6 +1,6 @@
 # Route Ledger — Project Incubation
 
-Status: **proposal, deliberation run 1 of at least 3**
+Status: **proposal, deliberation run 2 of at least 3**
 
 Started: 2026-09-03
 
@@ -8,9 +8,9 @@ Build authorization: **not granted yet**
 
 ## Decision so far
 
-Keep the idea alive for a second deliberation run. Do not create a repository or begin implementation yet.
+Keep the idea alive for one final evidence run. Do not create a repository or begin implementation yet.
 
-Route Ledger is currently the strongest new-project hypothesis because it combines a concrete local user problem with backend, data, reliability, and product depth that the portfolio does not yet show. It still has to prove that schedule revisions create meaningful saved-trip changes often enough to justify a product.
+The real-feed test proved that DART publishes future-effective schedule changes with rider-visible timing shifts, but it did not find a change in the two UTD-relevant journeys tested. A mature open-source semantic GTFS diff also reduces the novelty of the proposed core. Route Ledger now survives only as a saved-trip impact and notification product, not as a general feed-diff tool. Promotion depends on a measurable recurring-trip hit rate, user demand, and clear rights for public fixtures.
 
 ## One-sentence product test
 
@@ -35,6 +35,48 @@ Sources:
 - [DART fixed-route schedule and archive](https://www.dart.org/about/about-dart/fixed-route-schedule)
 - [Canonical GTFS Schedule reference](https://gtfs.org/documentation/schedule/reference/)
 - [GTFS overview](https://gtfs.org/documentation/overview/)
+
+## Run 2 evidence from real DART feeds
+
+Run 2 downloaded and inspected four official DART archives without committing the source data:
+
+| Feed | Published role | Effective range | SHA-256 |
+| --- | --- | --- | --- |
+| `V711-215-216-20260720` | archived revision | 2026-07-20 through 2026-09-13 | `99310c4d92e34353c2e1642bd141f6a1939c4647a1128de5b1e67a80129f5702` |
+| `V716-215-216-20260720` | archived revision | 2026-07-20 through 2026-09-13 | `f123dd5ef3f3fd27d501338ea4b39f6561222220a60407a6645a6dcc9b1b0c31` |
+| `V720-215-216-20260818` | current active archive on September 4 | 2026-08-18 through 2026-09-13 | `44546ff87dad8e2e2d74bb2e9cd1965b2b2be97a6be3beacc951c6f9187dcd3c` |
+| `V731-218-216-20260914` | file served by DART's stable latest URL | 2026-09-14 through 2026-09-20 | `ee49e086c286daafba9f92a63bd5f36341ea1e67bc46e67cae49df278daea35d` |
+
+The DART archive dashboard still identified `V720` as the active version while the stable latest URL already served future-effective `V731`. This is useful product evidence: a consumer can discover the next schedule before it becomes current, but ingestion must model **published**, **effective**, and **active** as separate states.
+
+### Identity and false-positive findings
+
+| Comparison | Stop ID overlap | Route ID overlap | Trip ID overlap | Semantic route overlap | Rider-facing finding on a representative Tuesday |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `V711` -> `V716` | 100% | 100% | 98.84% | 100% | Five Blue Line trips gained a missing headsign; endpoint times were unchanged |
+| `V716` -> `V720` | 99.66% | 100% | 84.47% | 100% | Route 233 changed its headsign; several routes changed intermediate `stop_times` detail without changing endpoints |
+| `V720` -> `V731` | 99.97% | 3.95% | 1.87% | 100% | Six routes changed endpoint-time signatures despite near-total route/trip ID churn |
+
+Raw primary-key or row diffs are therefore not a viable product. A major signup can replace almost every route and trip ID while preserving all 92 route identities, and an intermediate-stop representation change can look like 164 changed Route 883W trips even when every endpoint departure and arrival stays the same.
+
+### A useful semantic diff exists
+
+Between `V720` and future-effective `V731`, a weekday Route 003 trip from CBD West Transit Center to SMU/Mockingbird Station moves from `04:30-04:56` to `04:35-05:01`. The five-minute shift is small but rider-visible and available before the new feed becomes active. Other representative Route 109 trips arrive four minutes earlier, while Routes 22, 108, 237, and 238 also contain endpoint timing changes.
+
+This satisfies the narrow data gate that two real snapshots can produce a useful itinerary change. It does not establish that any given commuter is affected often enough to subscribe.
+
+### UTD-relevant trip result
+
+Two Tuesday journey sets were compared across all four feed versions:
+
+- Route 883E, CityLine/Bush Station to University Parkway Circle: all 65 weekday departures and 20-minute endpoint timings stayed identical.
+- Route 883W, University Parkway Circle to Frankford at Osage Plaza: all 81 weekday departures and 16-minute endpoint timings stayed identical.
+
+`V720` temporarily omitted many intermediate Route 883W stop rows and `V731` restored them, but the saved-trip endpoint result did not change. A row-level alert would have been noisy; a semantic journey alert should correctly remain silent.
+
+### Source-rights constraint
+
+The feed page calls GTFS an open specification but does not publish a feed-specific reuse license. DART's [site-wide legal notice](https://www.dart.org/about/public-access-information/legal-notices) says commercial use of site materials requires written permission and does not grant redistribution rights. Until DART clarifies the feed license, a public repository should retain source URLs, hashes, and derived findings only. Checked-in tests must use hand-authored synthetic GTFS fixtures or explicitly permission-cleared data.
 
 ## Core workflow
 
@@ -103,7 +145,7 @@ This is one deployable service plus a database for the first release. Kubernetes
 
 The first implementation plan must include:
 
-- Checked-in, redistribution-safe miniature GTFS fixtures with two meaningful schedule versions.
+- Checked-in synthetic miniature GTFS fixtures with two meaningful schedule versions; use DART-derived rows only after redistribution rights are explicit.
 - A raw-feed provenance record: source URL, fetched timestamp, effective range, byte size, and SHA-256.
 - Idempotent ingest: processing the same archive twice creates no duplicate version or notices.
 - Transactional activation: a partially parsed feed never becomes current.
@@ -162,17 +204,23 @@ The AMC/theater connection was distinctive, but [DCP-o-matic already performs ex
 
 Leakage-safe, baseline-aware model promotion remains a strong extension for `applied-ml-signal-lab`, but it is not a separate product yet. [MLflow already supports candidate-versus-baseline metric validation](https://mlflow.org/docs/latest/ml/evaluation), so a standalone tool would need evidence that the time-series policy is valuable beyond the existing repo.
 
-## Competitive questions still open
+## Competitive findings from run 2
 
-Run 2 must investigate whether Google Maps, Transit, agency alert systems, or open-source GTFS tools already provide saved-trip **version-to-version** impact notices. General service alerts and current-trip routing do not count as the same job, but an existing exact solution would weaken the proposal.
+- [Google Maps](https://support.google.com/maps/answer/10271256) can save a frequent transit trip and surface current directions, ETA, and agency alerts. Its official help does not document an old-versus-new timetable comparison or a pre-effective itinerary-change notice.
+- [Transit](https://help.transitapp.com/article/96-get-notifications-about-disruptions-on-your-line) sends line-level notifications when an agency publishes a service alert. Its [GO workflow](https://help.transitapp.com/article/549-how-to-use-go) guides a trip leaving within 60 minutes. Neither official workflow documents persistent origin/destination/time constraints evaluated across static schedule versions.
+- DART already shares real-time service changes with Google Maps and Transit. Route Ledger must not claim that ordinary disruption alerts are missing.
+- [`gtfs-semantic-diff`](https://github.com/niyalist/gtfs-semantic-diff) is a substantial direct overlap: it performs cross-version identity matching and emits 41 categories of semantic route, pattern, timetable, stop, calendar, fare, and metadata changes. A new generic GTFS diff engine would not be differentiated.
+- [Transitland](https://www.transit.land/documentation/concepts/static-gtfs-feed-versions/) already archives and identifies feed versions, but it is infrastructure rather than a saved-trip notification product, and historic downloads depend on plan and source-license rules.
 
-Run 2 must also download at least two official DART archive versions and answer:
+The remaining wedge is narrower and clearer: evaluate a rider's saved constraints against an incoming effective schedule, explain only the itinerary impact, and deduplicate one advance notice. The project should reuse or interoperate with existing parsing/diff work where practical rather than presenting feed comparison itself as novel.
 
-- Do route/trip/stop identifiers remain stable enough to compare?
-- How often do schedule versions produce material itinerary changes?
-- Can an archive's effective date be inferred reliably?
-- Is a UTD-relevant trip changed in any recent pair of feeds?
-- Are the source terms compatible with storing small derived fixtures and hashes?
+## Questions still open for run 3
+
+- Across six consecutive DART versions, how many of three representative recurring journeys receive a material notice?
+- Can a version shift make a real transfer infeasible, rather than only move a one-seat ride by a few minutes?
+- Will at least three commuters actually save a recurring origin/destination/time constraint for advance notices?
+- Does DART provide a feed-specific license or written reuse guidance that permits public derived fixtures and a deployed service?
+- Can the MVP stay focused if semantic feed comparison is delegated to an existing component?
 
 ## Build plan if the idea survives
 
@@ -212,6 +260,20 @@ The idea may become a standalone repository only after all of these are true:
 5. The project cannot be delivered honestly as an extension of the static Transit Network Planner.
 6. The first release can be completed as one service, one database, and one small UI within a bounded development cycle.
 7. There is a credible deployment and demo path that does not depend on paid or private APIs.
+8. Feed reuse and public-fixture rights are explicit enough for an open repository and deployed demo.
+
+## Gate state after run 2
+
+| Gate | State | Evidence |
+| --- | --- | --- |
+| Three deliberation runs | pending | Two runs recorded |
+| Useful real semantic diff | passed | Route 003 moves five minutes in `V731` before its effective date |
+| Exact incumbent overlap | provisional pass | No documented exact saved-trip revision notice; generic semantic diff is already solved |
+| Three-user demand | blocked | No user validation yet |
+| Separate from Transit Network Planner | passed | Different data, runtime, user verb, and notification payoff |
+| Bounded first release | pending | Narrow workflow is plausible; integration with existing diff tooling needs a decision |
+| Public deployment path | provisional pass | Public feed URL exists; operational rights are not yet clear |
+| Reuse and fixture rights | blocked | No feed-specific license found |
 
 ## Kill criteria
 
@@ -238,6 +300,19 @@ Reject or fold the idea into the existing transit project if any of these occur:
 
 Provisional total: **22/30 — continue incubating, do not build**.
 
+## Incubation score — run 2
+
+| Criterion | Score | Current evidence |
+| --- | ---: | --- |
+| Clear user value | 3/5 | A real five-minute future shift exists; both UTD-relevant journeys stayed unchanged |
+| Technical depth | 4/5 | Saved-constraint evaluation and reliable notices remain deep; generic semantic diff already exists |
+| Portfolio differentiation | 4/5 | Strong backend/product gap filler, though it reuses the transit domain |
+| Data feasibility | 3/5 | Official archives and effective dates work; representation noise and reuse rights add risk |
+| Competitive differentiation | 2/5 | Incumbents cover saved trips and alerts separately, and open source covers semantic feed diff |
+| Bounded delivery | 3/5 | One-service scope is possible only if feed diffing is not rebuilt as a second product |
+
+Provisional total: **19/30 — one final evidence run, lean reject unless hit rate and user demand improve**.
+
 ## Deliberation log
 
 ### Run 1 — 2026-09-03
@@ -248,3 +323,14 @@ Provisional total: **22/30 — continue incubating, do not build**.
 - Distinguished it from the existing Transit Network Planner across user verb, data, time, failure, runtime, and payoff.
 - Rejected two crowded standalone ideas and kept model-promotion work inside the existing ML repo.
 - Next decision: validate historical feed behavior and exact competitor overlap before changing the status.
+
+### Run 2 — 2026-09-04
+
+- Downloaded and hashed three archived DART feeds plus the future-effective feed already served by the stable latest URL.
+- Proved that route/trip primary keys can churn almost completely while all semantic route identities remain stable.
+- Found a real five-minute Route 003 schedule shift available before its effective date.
+- Verified that two UTD-relevant Route 883 journey sets remain unchanged, including a false-positive intermediate-stop representation change.
+- Found strong overlap from `gtfs-semantic-diff`, narrowing the product to saved-trip evaluation and notice delivery.
+- Marked public fixture reuse as blocked because DART publishes no feed-specific license on the feed page.
+- Next decision: quantify notice hit rate across six versions and three journeys, find one broken-transfer case, and require three-user demand plus rights clarity. Otherwise reject the standalone project.
+
