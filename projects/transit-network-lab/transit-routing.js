@@ -282,6 +282,112 @@
     return JSON.stringify([String(left), String(right)]);
   }
 
+  function normalizedDemandPairs(network, stationIds, options = {}) {
+    const stationSet = new Set(stationIds);
+    const source = Object.prototype.hasOwnProperty.call(options, 'demands') ? options.demands : network.demands;
+    const demands = (Array.isArray(source) ? source : [])
+      .map((demand, sourceIndex) => ({
+        id: String(demand?.id || `demand-${sourceIndex + 1}`),
+        from: String(demand?.from || ''),
+        to: String(demand?.to || ''),
+        riders: Number(demand?.riders),
+      }))
+      .filter(
+        (demand) =>
+          demand.from &&
+          demand.to &&
+          demand.from !== demand.to &&
+          stationSet.has(demand.from) &&
+          stationSet.has(demand.to) &&
+          Number.isFinite(demand.riders) &&
+          demand.riders > 0
+      )
+      .sort((left, right) =>
+        compareScores(
+          [left.id, left.from, left.to, left.riders],
+          [right.id, right.from, right.to, right.riders]
+        )
+      );
+
+    return demands.map((demand, index) => ({ ...demand, key: `${demand.id}|${index}` }));
+  }
+
+  function finiteSegmentCapacity(segment) {
+    const capacity = Number(segment.capacity);
+    return Number.isFinite(capacity) && capacity > 0 ? capacity : null;
+  }
+
+  function analyzeDemandAssignment(network, demands, options = {}) {
+    const excludedSegmentIds = normalizedIdSet(options.excludedSegmentIds);
+    const transferPenaltyMinutes = Number(options.transferPenaltyMinutes ?? TRANSFER_PENALTY_MINUTES);
+    const stationSet = new Set(
+      (network.stations || []).map((station) => (typeof station === 'string' ? station : station.id)).filter(Boolean)
+    );
+    const segmentLoads = new Map();
+    const demandResults = new Map();
+    let servedDemandRiders = 0;
+    let passengerMinutes = 0;
+
+    demands.forEach((demand) => {
+      const route = computeRouteCore(network, demand.from, demand.to, {
+        objective: 'fastest',
+        excludedSegmentIds,
+        includeRisk: false,
+        transferPenaltyMinutes,
+      });
+      demandResults.set(demand.key, { demand, route });
+      if (!route) return;
+
+      servedDemandRiders += demand.riders;
+      passengerMinutes += demand.riders * route.totalMinutes;
+      route.segments.forEach((segment) => {
+        segmentLoads.set(segment.id, (segmentLoads.get(segment.id) || 0) + demand.riders);
+      });
+    });
+
+    const capacitySegments = (network.segments || [])
+      .filter((segment) => !segment.blocked && !excludedSegmentIds.has(segment.id))
+      .filter((segment) => stationSet.has(segment.from) && stationSet.has(segment.to))
+      .map((segment) => ({ segment, capacity: finiteSegmentCapacity(segment) }))
+      .filter((entry) => entry.capacity !== null);
+    const overloadedSegments = capacitySegments
+      .map(({ segment, capacity }) => {
+        const load = segmentLoads.get(segment.id) || 0;
+        return {
+          segmentId: segment.id,
+          from: segment.from,
+          to: segment.to,
+          load,
+          capacity,
+          overflowRiders: Math.max(0, load - capacity),
+          utilizationRatio: load / capacity,
+        };
+      })
+      .filter((entry) => entry.overflowRiders > 0)
+      .sort(
+        (left, right) =>
+          right.overflowRiders - left.overflowRiders ||
+          right.utilizationRatio - left.utilizationRatio ||
+          left.segmentId.localeCompare(right.segmentId)
+      );
+
+    return {
+      demandResults,
+      segmentLoads,
+      servedDemandRiders,
+      lostDemandRiders: demands.reduce((sum, demand) => sum + demand.riders, 0) - servedDemandRiders,
+      passengerMinutes,
+      capacitySegmentCount: capacitySegments.length,
+      overloadedSegments,
+      overloadedSegmentCount: overloadedSegments.length,
+      overflowRiderSegments: overloadedSegments.reduce((sum, entry) => sum + entry.overflowRiders, 0),
+      maximumUtilizationRatio: capacitySegments.reduce((maximum, { segment, capacity }) => {
+        const load = segmentLoads.get(segment.id) || 0;
+        return Math.max(maximum, load / capacity);
+      }, 0),
+    };
+  }
+
   function computeJourneyTimeMatrix(adjacency, stationIds, transferPenaltyMinutes) {
     const journeys = new Map();
     stationIds.forEach((stationId, index) => {
@@ -311,6 +417,15 @@
     const baselineJourneys = computeJourneyTimeMatrix(baselineAdjacency, stationIds, transferPenaltyMinutes);
     const baselineConnectedPairCount = baselineJourneys.size;
     const baselineTotalJourneyMinutes = [...baselineJourneys.values()].reduce((sum, journey) => sum + journey.minutes, 0);
+    const demands = normalizedDemandPairs(network, stationIds, options);
+    const totalDemandRiders = demands.reduce((sum, demand) => sum + demand.riders, 0);
+    const baselineDemand = analyzeDemandAssignment(network, demands, {
+      excludedSegmentIds: baseExcluded,
+      transferPenaltyMinutes,
+    });
+    const baselineOverflowBySegment = new Map(
+      baselineDemand.overloadedSegments.map((entry) => [entry.segmentId, entry.overflowRiders])
+    );
     const activeSegments = (network.segments || [])
       .filter((segment) => !segment.blocked && !baseExcluded.has(segment.id))
       .filter((segment) => baselineAdjacency.has(segment.from) && baselineAdjacency.has(segment.to))
@@ -322,12 +437,19 @@
       excludedSegmentIds.add(segment.id);
       const outageAdjacency = buildAdjacency(network, { ...options, excludedSegmentIds, includeRisk: false });
       const outageJourneys = computeJourneyTimeMatrix(outageAdjacency, stationIds, transferPenaltyMinutes);
+      const outageDemand = analyzeDemandAssignment(network, demands, {
+        excludedSegmentIds,
+        transferPenaltyMinutes,
+      });
       let retainedPairCount = 0;
       let delayedPairCount = 0;
       let totalAddedMinutes = 0;
       let maxAddedMinutes = 0;
       let worstDelayPair = null;
       let worstDelayPairKey = '';
+      let lostDemandRiders = 0;
+      let delayedDemandRiders = 0;
+      let totalAddedPassengerMinutes = 0;
 
       baselineJourneys.forEach((baseline, key) => {
         const outage = outageJourneys.get(key);
@@ -354,6 +476,30 @@
         }
       });
 
+      baselineDemand.demandResults.forEach((baselineResult, key) => {
+        if (!baselineResult.route) return;
+        const outageResult = outageDemand.demandResults.get(key);
+        if (!outageResult?.route) {
+          lostDemandRiders += baselineResult.demand.riders;
+          return;
+        }
+
+        const addedMinutes = Math.max(0, outageResult.route.totalMinutes - baselineResult.route.totalMinutes);
+        if (addedMinutes <= 0) return;
+        delayedDemandRiders += baselineResult.demand.riders;
+        totalAddedPassengerMinutes += baselineResult.demand.riders * addedMinutes;
+      });
+
+      const additionalOverflowRiderSegments = outageDemand.overloadedSegments.reduce((sum, entry) => {
+        return sum + Math.max(0, entry.overflowRiders - (baselineOverflowBySegment.get(entry.segmentId) || 0));
+      }, 0);
+      const newlyOverloadedSegmentCount = outageDemand.overloadedSegments.filter(
+        (entry) => !baselineOverflowBySegment.has(entry.segmentId)
+      ).length;
+      const capacityImpactSegmentCount = outageDemand.overloadedSegments.filter(
+        (entry) => entry.overflowRiders > (baselineOverflowBySegment.get(entry.segmentId) || 0)
+      ).length;
+
       const lostPairCount = Math.max(0, baselineConnectedPairCount - retainedPairCount);
       return {
         segmentId: segment.id,
@@ -369,11 +515,22 @@
         averageDelayMinutes: delayedPairCount > 0 ? totalAddedMinutes / delayedPairCount : 0,
         maxAddedMinutes,
         worstDelayPair,
+        affectedDemandRiders: lostDemandRiders + delayedDemandRiders,
+        lostDemandRiders,
+        delayedDemandRiders,
+        totalAddedPassengerMinutes,
+        overloadedSegmentCount: outageDemand.overloadedSegmentCount,
+        newlyOverloadedSegmentCount,
+        capacityImpactSegmentCount,
+        overflowRiderSegments: outageDemand.overflowRiderSegments,
+        additionalOverflowRiderSegments,
+        maximumUtilizationRatio: outageDemand.maximumUtilizationRatio,
+        overloadedSegments: outageDemand.overloadedSegments,
       };
     });
 
     const criticalOutages = segmentOutages.filter((outage) => outage.lostPairCount > 0);
-    const worstOutage = segmentOutages
+    const worstConnectivityOutage = segmentOutages
       .slice()
       .sort(
         (left, right) =>
@@ -382,9 +539,29 @@
           right.maxAddedMinutes - left.maxAddedMinutes ||
           left.segmentId.localeCompare(right.segmentId)
       )[0] || null;
+    const worstPassengerOutage = demands.length
+      ? segmentOutages
+          .slice()
+          .sort(
+            (left, right) =>
+              right.affectedDemandRiders - left.affectedDemandRiders ||
+              right.lostDemandRiders - left.lostDemandRiders ||
+              right.additionalOverflowRiderSegments - left.additionalOverflowRiderSegments ||
+              right.totalAddedPassengerMinutes - left.totalAddedPassengerMinutes ||
+              right.maximumUtilizationRatio - left.maximumUtilizationRatio ||
+              right.lostPairCount - left.lostPairCount ||
+              right.totalAddedMinutes - left.totalAddedMinutes ||
+              left.segmentId.localeCompare(right.segmentId)
+          )[0] || null
+      : null;
+    const worstOutage = worstPassengerOutage || worstConnectivityOutage;
     const averageRetainedPairRatio = segmentOutages.length
       ? segmentOutages.reduce((sum, outage) => sum + outage.retainedPairRatio, 0) / segmentOutages.length
       : 1;
+    const minimumRetainedPairRatio = segmentOutages.reduce(
+      (minimum, outage) => Math.min(minimum, outage.retainedPairRatio),
+      1
+    );
 
     return {
       stationCount: stationIds.length,
@@ -398,12 +575,25 @@
       serviceImpactSegmentCount: segmentOutages.filter((outage) => outage.affectedPairCount > 0).length,
       servedPairsNMinusOnePass: criticalOutages.length === 0,
       nMinusOnePass: baselineConnectedPairCount === totalPossiblePairCount && criticalOutages.length === 0,
-      minimumRetainedPairRatio: worstOutage ? worstOutage.retainedPairRatio : 1,
+      minimumRetainedPairRatio,
       maximumAverageDelayMinutes: segmentOutages.reduce(
         (maximum, outage) => Math.max(maximum, outage.averageDelayMinutes),
         0
       ),
       averageRetainedPairRatio,
+      hasDemandModel: demands.length > 0,
+      demandPairCount: demands.length,
+      totalDemandRiders,
+      baselineServedDemandRiders: baselineDemand.servedDemandRiders,
+      baselineLostDemandRiders: baselineDemand.lostDemandRiders,
+      baselinePassengerMinutes: baselineDemand.passengerMinutes,
+      capacitySegmentCount: baselineDemand.capacitySegmentCount,
+      baselineOverloadedSegmentCount: baselineDemand.overloadedSegmentCount,
+      baselineOverflowRiderSegments: baselineDemand.overflowRiderSegments,
+      baselineMaximumUtilizationRatio: baselineDemand.maximumUtilizationRatio,
+      baselineOverloadedSegments: baselineDemand.overloadedSegments,
+      worstConnectivityOutage,
+      worstPassengerOutage,
       worstOutage,
       segmentOutages,
     };

@@ -7,6 +7,8 @@ const { analyzeNetworkReliability, computeRoute, computeRouteBundle, computeSegm
 
 const fixturePath = path.join(__dirname, 'fixtures', 'policy-network.json');
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+const passengerFixturePath = path.join(__dirname, 'fixtures', 'passenger-capacity-network.json');
+const passengerFixture = JSON.parse(fs.readFileSync(passengerFixturePath, 'utf8'));
 const riskIndex = new Map(fixture.segments.map((segment) => [segment.id, { closurePenalty: segment.closurePenalty }]));
 
 function segmentIds(route) {
@@ -190,4 +192,86 @@ test('a disconnected network cannot pass N-1 even when each component has redund
   assert.equal(reliability.serviceImpactSegmentCount, 2);
   assert.equal(reliability.servedPairsNMinusOnePass, true);
   assert.equal(reliability.nMinusOnePass, false);
+});
+
+test('passenger demand and relief capacity change which outage is operationally worst', () => {
+  const unweighted = analyzeNetworkReliability({ ...passengerFixture, demands: [] });
+  const reliability = analyzeNetworkReliability(passengerFixture);
+
+  assert.equal(unweighted.worstOutage.segmentId, 'connector');
+  assert.equal(reliability.worstConnectivityOutage.segmentId, 'connector');
+  assert.equal(reliability.worstPassengerOutage.segmentId, 'high-direct');
+  assert.equal(reliability.worstOutage.segmentId, 'high-direct');
+
+  assert.deepEqual(
+    {
+      demandPairs: reliability.demandPairCount,
+      demandRiders: reliability.totalDemandRiders,
+      baselineServedRiders: reliability.baselineServedDemandRiders,
+      baselineLostRiders: reliability.baselineLostDemandRiders,
+      baselineOverloadedLinks: reliability.baselineOverloadedSegmentCount,
+    },
+    {
+      demandPairs: 3,
+      demandRiders: 196,
+      baselineServedRiders: 196,
+      baselineLostRiders: 0,
+      baselineOverloadedLinks: 0,
+    }
+  );
+
+  assert.deepEqual(
+    {
+      affectedRiders: reliability.worstPassengerOutage.affectedDemandRiders,
+      delayedRiders: reliability.worstPassengerOutage.delayedDemandRiders,
+      lostRiders: reliability.worstPassengerOutage.lostDemandRiders,
+      addedPassengerMinutes: reliability.worstPassengerOutage.totalAddedPassengerMinutes,
+      newOverloads: reliability.worstPassengerOutage.newlyOverloadedSegmentCount,
+      capacityImpactLinks: reliability.worstPassengerOutage.capacityImpactSegmentCount,
+      additionalOverflowRiderSegments: reliability.worstPassengerOutage.additionalOverflowRiderSegments,
+    },
+    {
+      affectedRiders: 181,
+      delayedRiders: 181,
+      lostRiders: 0,
+      addedPassengerMinutes: 362,
+      newOverloads: 2,
+      capacityImpactLinks: 2,
+      additionalOverflowRiderSegments: 122,
+    }
+  );
+  assert.deepEqual(
+    reliability.worstPassengerOutage.overloadedSegments.map((segment) => ({
+      id: segment.segmentId,
+      load: segment.load,
+      capacity: segment.capacity,
+      overflow: segment.overflowRiders,
+    })),
+    [
+      { id: 'high-relief-1', load: 181, capacity: 120, overflow: 61 },
+      { id: 'high-relief-2', load: 181, capacity: 120, overflow: 61 },
+    ]
+  );
+
+  const reordered = analyzeNetworkReliability({
+    stations: [...passengerFixture.stations].reverse(),
+    segments: [...passengerFixture.segments].reverse(),
+    demands: [...passengerFixture.demands].reverse(),
+  });
+  assert.deepEqual(
+    {
+      passengerOutage: reordered.worstPassengerOutage.segmentId,
+      connectivityOutage: reordered.worstConnectivityOutage.segmentId,
+      affectedRiders: reordered.worstPassengerOutage.affectedDemandRiders,
+      riderMinutes: reordered.worstPassengerOutage.totalAddedPassengerMinutes,
+      overflow: reordered.worstPassengerOutage.additionalOverflowRiderSegments,
+    },
+    {
+      passengerOutage: 'high-direct',
+      connectivityOutage: 'connector',
+      affectedRiders: 181,
+      riderMinutes: 362,
+      overflow: 122,
+    }
+  );
 });

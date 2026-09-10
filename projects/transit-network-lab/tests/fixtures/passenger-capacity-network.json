@@ -1,0 +1,15 @@
+{
+  "stations": ["A", "B", "C", "D", "X"],
+  "segments": [
+    { "id": "high-direct", "from": "A", "to": "D", "line": "rapid", "minutes": 2, "capacity": 220 },
+    { "id": "high-relief-1", "from": "A", "to": "X", "line": "rapid", "minutes": 2, "capacity": 120 },
+    { "id": "high-relief-2", "from": "X", "to": "D", "line": "rapid", "minutes": 2, "capacity": 120 },
+    { "id": "connector", "from": "D", "to": "B", "line": "feeder", "minutes": 2, "capacity": 40 },
+    { "id": "local", "from": "B", "to": "C", "line": "local", "minutes": 2, "capacity": 30 }
+  ],
+  "demands": [
+    { "id": "peak-core", "from": "A", "to": "D", "riders": 180 },
+    { "id": "local", "from": "B", "to": "C", "riders": 15 },
+    { "id": "cross-network", "from": "A", "to": "C", "riders": 1 }
+  ]
+}

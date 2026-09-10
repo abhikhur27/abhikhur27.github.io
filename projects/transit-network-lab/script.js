@@ -49,6 +49,7 @@ const {
 } = window.TransitRouting;
 const transferPenaltyMinutes = 2;
 const riverPenaltyMinutes = 3;
+const defaultSegmentCapacity = 180;
 const OBJECTIVE_KEY = 'transit_lab_objective';
 let stationCounter = 0;
 let segmentCounter = 0;
@@ -66,12 +67,20 @@ const stations = [
 ];
 
 const lineCatalog = {
-  blue: { color: '#2563eb', speed: 24 },
-  red: { color: '#dc2626', speed: 21 },
-  green: { color: '#16a34a', speed: 22 },
+  blue: { color: '#2563eb', speed: 24, capacity: 320 },
+  red: { color: '#dc2626', speed: 21, capacity: 260 },
+  green: { color: '#16a34a', speed: 22, capacity: 260 },
 };
 
 const terrain = [];
+const travelDemands = [
+  { id: 'union-airport', from: 'UN', to: 'AP', riders: 180 },
+  { id: 'museum-harbor', from: 'MU', to: 'HA', riders: 140 },
+  { id: 'tech-stadium', from: 'TE', to: 'ST', riders: 110 },
+  { id: 'museum-riverfront', from: 'MU', to: 'RI', riders: 90 },
+  { id: 'union-harbor', from: 'UN', to: 'HA', riders: 80 },
+  { id: 'tech-airport', from: 'TE', to: 'AP', riders: 120 },
+];
 
 const segments = [
   { id: nextSegmentId(), from: 'UN', to: 'CE', line: 'blue' },
@@ -266,11 +275,19 @@ function segmentMinutes(segment) {
 function routeRiskSignature() {
   return JSON.stringify({
     stations: stations.map((station) => [station.id, station.x, station.y]),
-    segments: segments.map((segment) => [segment.id, segment.from, segment.to, segment.line, Math.round(segment.curve || 0)]),
+    segments: segments.map((segment) => [
+      segment.id,
+      segment.from,
+      segment.to,
+      segment.line,
+      Math.round(segment.curve || 0),
+      Number(segment.capacity ?? lineCatalog[segment.line]?.capacity ?? defaultSegmentCapacity),
+    ]),
+    demands: travelDemands.map((demand) => [demand.id, demand.from, demand.to, demand.riders]),
     terrain: terrain.map((shape) => Object.values(shape)),
     lines: Object.entries(lineCatalog)
       .sort(([left], [right]) => left.localeCompare(right))
-      .map(([name, info]) => [name, info.color, info.speed]),
+      .map(([name, info]) => [name, info.color, info.speed, info.capacity]),
   });
 }
 
@@ -317,7 +334,9 @@ function syncRouteSelects() {
 function lineBadge(lineName) {
   const line = lineCatalog[lineName];
   if (!line) return '';
-  return `<span><i style="background:${line.color}"></i>${escapeHtml(lineName.toUpperCase())} (${line.speed}px/min)</span>`;
+  return `<span><i style="background:${line.color}"></i>${escapeHtml(lineName.toUpperCase())} (${line.speed}px/min, ${
+    line.capacity || defaultSegmentCapacity
+  } riders)</span>`;
 }
 
 function renderLegend() {
@@ -359,6 +378,7 @@ function getNetworkReliability({ allowStale = false } = {}) {
 function routingNetwork() {
   return {
     stations: stations.map((station) => station.id),
+    demands: travelDemands.map((demand) => ({ ...demand })),
     segments: segments.map((segment) => {
       const terrainInfo = segmentTerrainInfo(segment);
       return {
@@ -368,6 +388,7 @@ function routingNetwork() {
         line: segment.line,
         minutes: segmentMinutes(segment),
         distance: segmentDistance(segment),
+        capacity: Number(segment.capacity ?? lineCatalog[segment.line]?.capacity ?? defaultSegmentCapacity),
         terrainPenalty: terrainInfo.riverHits * riverPenaltyMinutes,
         blocked: terrainInfo.blocked,
       };
@@ -542,7 +563,44 @@ function renderResilience(analysis, route, networkReliability) {
   const delayedPairLabel = worstOutage?.delayedPairCount === 1 ? 'station pair' : 'station pairs';
   const averageDelay = Number((worstOutage?.averageDelayMinutes || 0).toFixed(1));
 
-  if (networkReliability && !networkReliability.baselineConnected) {
+  if (networkReliability?.hasDemandModel && worstOutage) {
+    const impactParts = [];
+    if (worstOutage.lostDemandRiders > 0) {
+      impactParts.push(`strands ${Math.round(worstOutage.lostDemandRiders).toLocaleString()} riders`);
+    }
+    if (worstOutage.delayedDemandRiders > 0) {
+      impactParts.push(
+        `adds ${Math.round(worstOutage.totalAddedPassengerMinutes).toLocaleString()} passenger-minutes for ${Math.round(
+          worstOutage.delayedDemandRiders
+        ).toLocaleString()} riders`
+      );
+    }
+    if (worstOutage.additionalOverflowRiderSegments > 0) {
+      const overloadLabel = worstOutage.capacityImpactSegmentCount === 1 ? 'link' : 'links';
+      impactParts.push(
+        `pushes ${worstOutage.capacityImpactSegmentCount} relief ${overloadLabel} above capacity by ${Math.round(
+          worstOutage.additionalOverflowRiderSegments
+        ).toLocaleString()} rider-segments`
+      );
+    }
+    const passengerImpact = impactParts.length ? impactParts.join('; ') : 'does not affect the modeled peak trips';
+    const baselineCapacityWarning = networkReliability.baselineOverloadedSegmentCount
+      ? ` Baseline demand already exceeds ${networkReliability.baselineOverloadedSegmentCount} link capacities by ${Math.round(
+          networkReliability.baselineOverflowRiderSegments
+        ).toLocaleString()} rider-segments.`
+      : '';
+    const baselineDemandGap = networkReliability.baselineLostDemandRiders
+      ? ` ${Math.round(networkReliability.baselineLostDemandRiders).toLocaleString()} modeled riders already lack a route.`
+      : '';
+    const connectivityPosture = !networkReliability.baselineConnected
+      ? `Network starts partially disconnected at ${baselineCoverage}% station-pair coverage.${baselineDemandGap}`
+      : networkReliability.nMinusOnePass
+        ? 'N-1 connectivity passes.'
+        : `N-1 connectivity fails with ${networkReliability.criticalSegmentCount} critical ${criticalLabel}.`;
+    resilienceSummaryEl.textContent = `${connectivityPosture} Worst passenger outage, ${segmentDisplayName(
+      worstOutage
+    )}, ${passengerImpact}.${baselineCapacityWarning}`;
+  } else if (networkReliability && !networkReliability.baselineConnected) {
     resilienceSummaryEl.textContent = `Network starts partially disconnected: ${baselineCoverage}% station-pair coverage; ${networkReliability.criticalSegmentCount} additional critical ${criticalLabel}.`;
   } else if (networkReliability?.nMinusOnePass) {
     resilienceSummaryEl.textContent = worstOutage?.delayedPairCount
@@ -806,6 +864,11 @@ function removeSelectedStop() {
       segments.splice(i, 1);
     }
   }
+  for (let i = travelDemands.length - 1; i >= 0; i -= 1) {
+    if (travelDemands[i].from === stopId || travelDemands[i].to === stopId) {
+      travelDemands.splice(i, 1);
+    }
+  }
 
   cleanupUnusedLines();
   syncRouteSelects();
@@ -894,12 +957,13 @@ function randomCity() {
   stations.length = 0;
   segments.length = 0;
   terrain.length = 0;
+  travelDemands.length = 0;
 
   const palette = {
-    blue: { color: '#2563eb', speed: 24 },
-    red: { color: '#dc2626', speed: 21 },
-    green: { color: '#16a34a', speed: 22 },
-    amber: { color: '#d97706', speed: 20 },
+    blue: { color: '#2563eb', speed: 24, capacity: 240 },
+    red: { color: '#dc2626', speed: 21, capacity: 220 },
+    green: { color: '#16a34a', speed: 22, capacity: 220 },
+    amber: { color: '#d97706', speed: 20, capacity: 180 },
   };
   Object.keys(lineCatalog).forEach((line) => delete lineCatalog[line]);
   Object.assign(lineCatalog, palette);
@@ -911,6 +975,15 @@ function randomCity() {
       name: `Stop ${i + 1}`,
       x: randomBetween(88, 812),
       y: randomBetween(86, 492),
+    });
+  }
+
+  for (let i = 0; i < Math.min(4, Math.floor(count / 2)); i += 1) {
+    travelDemands.push({
+      id: `generated-demand-${i + 1}`,
+      from: stations[i].id,
+      to: stations[count - i - 1].id,
+      riders: 60 + i * 30,
     });
   }
 
@@ -1024,7 +1097,11 @@ function createRouteSegment(from, to) {
     return false;
   }
 
-  lineCatalog[lineName] = { color, speed };
+  lineCatalog[lineName] = {
+    color,
+    speed,
+    capacity: lineCatalog[lineName]?.capacity || defaultSegmentCapacity,
+  };
   const newSegment = { id: nextSegmentId(), from, to, line: lineName, curve: randomBetween(-32, 32) };
   segments.push(newSegment);
   selectedSegmentId = newSegment.id;
