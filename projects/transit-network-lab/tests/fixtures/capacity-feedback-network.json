@@ -1,0 +1,26 @@
+{
+  "equalSplit": {
+    "stations": ["A", "B", "C", "D"],
+    "segments": [
+      { "id": "blue-1", "from": "A", "to": "B", "line": "blue", "minutes": 2, "distance": 2, "capacity": 100 },
+      { "id": "blue-2", "from": "B", "to": "D", "line": "blue", "minutes": 2, "distance": 2, "capacity": 100 },
+      { "id": "green-1", "from": "A", "to": "C", "line": "green", "minutes": 2, "distance": 2, "capacity": 100 },
+      { "id": "green-2", "from": "C", "to": "D", "line": "green", "minutes": 2, "distance": 2, "capacity": 100 }
+    ],
+    "demands": [
+      { "id": "peak", "from": "A", "to": "D", "riders": 120 }
+    ]
+  },
+  "capacityFeedback": {
+    "stations": ["A", "B", "C", "D"],
+    "segments": [
+      { "id": "rapid-1", "from": "A", "to": "B", "line": "rapid", "minutes": 2, "distance": 2, "capacity": 80 },
+      { "id": "rapid-2", "from": "B", "to": "D", "line": "rapid", "minutes": 2, "distance": 2, "capacity": 80 },
+      { "id": "relief-1", "from": "A", "to": "C", "line": "relief", "minutes": 3, "distance": 3, "capacity": 100 },
+      { "id": "relief-2", "from": "C", "to": "D", "line": "relief", "minutes": 3, "distance": 3, "capacity": 100 }
+    ],
+    "demands": [
+      { "id": "peak", "from": "A", "to": "D", "riders": 120 }
+    ]
+  }
+}

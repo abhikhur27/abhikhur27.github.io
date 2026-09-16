@@ -3,12 +3,21 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { analyzeNetworkReliability, computeRoute, computeRouteBundle, computeSegmentRiskIndex } = require('../transit-routing.js');
+const {
+  analyzeNetworkReliability,
+  assignPassengerDemand,
+  computeEqualFastestRoutes,
+  computeRoute,
+  computeRouteBundle,
+  computeSegmentRiskIndex,
+} = require('../transit-routing.js');
 
 const fixturePath = path.join(__dirname, 'fixtures', 'policy-network.json');
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
 const passengerFixturePath = path.join(__dirname, 'fixtures', 'passenger-capacity-network.json');
 const passengerFixture = JSON.parse(fs.readFileSync(passengerFixturePath, 'utf8'));
+const feedbackFixturePath = path.join(__dirname, 'fixtures', 'capacity-feedback-network.json');
+const feedbackFixture = JSON.parse(fs.readFileSync(feedbackFixturePath, 'utf8'));
 const riskIndex = new Map(fixture.segments.map((segment) => [segment.id, { closurePenalty: segment.closurePenalty }]));
 
 function segmentIds(route) {
@@ -68,6 +77,77 @@ test('routing remains deterministic when input segment order changes', () => {
   ['fastest', 'transfers', 'resilient'].forEach((objective) => {
     assert.deepEqual(segmentIds(reordered[objective]), segmentIds(original[objective]));
   });
+});
+
+test('equal fastest routes split passenger demand without depending on segment order', () => {
+  const routeSet = computeEqualFastestRoutes(feedbackFixture.equalSplit, 'A', 'D');
+  assert.deepEqual(routeSet.map(segmentIds), [
+    ['blue-1', 'blue-2'],
+    ['green-1', 'green-2'],
+  ]);
+
+  const assignment = assignPassengerDemand(feedbackFixture.equalSplit);
+  assert.equal(assignment.equalRouteSplitDemandPairCount, 1);
+  assert.equal(assignment.capacityReroutedDemandRiders, 0);
+  assert.equal(assignment.overloadedSegmentCount, 0);
+  assert.deepEqual(
+    [...assignment.segmentLoads].sort(([left], [right]) => left.localeCompare(right)),
+    [
+      ['blue-1', 60],
+      ['blue-2', 60],
+      ['green-1', 60],
+      ['green-2', 60],
+    ]
+  );
+
+  const reordered = assignPassengerDemand({
+    ...feedbackFixture.equalSplit,
+    segments: [...feedbackFixture.equalSplit.segments].reverse(),
+  });
+  assert.deepEqual(
+    [...reordered.segmentLoads].sort(([left], [right]) => left.localeCompare(right)),
+    [...assignment.segmentLoads].sort(([left], [right]) => left.localeCompare(right))
+  );
+});
+
+test('capacity feedback diverts only overflow riders onto the fastest viable relief route', () => {
+  const unmanaged = assignPassengerDemand(feedbackFixture.capacityFeedback, { capacityFeedbackPasses: 0 });
+  const assignment = assignPassengerDemand(feedbackFixture.capacityFeedback);
+  const demandResult = [...assignment.demandResults.values()][0];
+
+  assert.equal(unmanaged.overloadedSegmentCount, 2);
+  assert.equal(unmanaged.overflowRiderSegments, 80);
+  assert.equal(unmanaged.capacityReroutedDemandRiders, 0);
+  assert.equal(assignment.capacityFeedbackPassCount, 1);
+  assert.equal(assignment.capacityReroutedDemandPairCount, 1);
+  assert.equal(assignment.capacityReroutedDemandRiders, 40);
+  assert.equal(assignment.overloadedSegmentCount, 0);
+  assert.equal(assignment.passengerMinutes, 560);
+  assert.deepEqual(
+    [...assignment.segmentLoads].sort(([left], [right]) => left.localeCompare(right)),
+    [
+      ['rapid-1', 80],
+      ['rapid-2', 80],
+      ['relief-1', 40],
+      ['relief-2', 40],
+    ]
+  );
+  assert.deepEqual(
+    demandResult.routeShares.map((allocation) => ({
+      route: segmentIds(allocation.route),
+      riders: allocation.riders,
+    })),
+    [
+      { route: ['rapid-1', 'rapid-2'], riders: 80 },
+      { route: ['relief-1', 'relief-2'], riders: 40 },
+    ]
+  );
+  assert.equal(demandResult.averageMinutes, 560 / 120);
+
+  const reliability = analyzeNetworkReliability(feedbackFixture.capacityFeedback);
+  assert.equal(reliability.worstPassengerOutage.segmentId, 'rapid-1');
+  assert.equal(reliability.worstPassengerOutage.delayedDemandRiders, 80);
+  assert.equal(reliability.worstPassengerOutage.totalAddedPassengerMinutes, 160);
 });
 
 test('closure exposure distinguishes a bridge from a segment with a fallback', () => {

@@ -592,6 +592,19 @@ function renderResilience(analysis, route, networkReliability) {
     const baselineDemandGap = networkReliability.baselineLostDemandRiders
       ? ` ${Math.round(networkReliability.baselineLostDemandRiders).toLocaleString()} modeled riders already lack a route.`
       : '';
+    const assignmentParts = [];
+    if (networkReliability.baselineEqualRouteSplitDemandPairCount > 0) {
+      const pairLabel = networkReliability.baselineEqualRouteSplitDemandPairCount === 1 ? 'pair' : 'pairs';
+      assignmentParts.push(
+        `splits ${networkReliability.baselineEqualRouteSplitDemandPairCount} demand ${pairLabel} across equal-time paths`
+      );
+    }
+    if (networkReliability.baselineCapacityReroutedDemandRiders > 0) {
+      assignmentParts.push(
+        `diverts ${Math.round(networkReliability.baselineCapacityReroutedDemandRiders).toLocaleString()} riders from saturated shortest paths`
+      );
+    }
+    const baselineAssignment = assignmentParts.length ? ` Baseline assignment ${assignmentParts.join(' and ')}.` : '';
     const connectivityPosture = !networkReliability.baselineConnected
       ? `Network starts partially disconnected at ${baselineCoverage}% station-pair coverage.${baselineDemandGap}`
       : networkReliability.nMinusOnePass
@@ -599,7 +612,7 @@ function renderResilience(analysis, route, networkReliability) {
         : `N-1 connectivity fails with ${networkReliability.criticalSegmentCount} critical ${criticalLabel}.`;
     resilienceSummaryEl.textContent = `${connectivityPosture} Worst passenger outage, ${segmentDisplayName(
       worstOutage
-    )}, ${passengerImpact}.${baselineCapacityWarning}`;
+    )}, ${passengerImpact}.${baselineCapacityWarning}${baselineAssignment}`;
   } else if (networkReliability && !networkReliability.baselineConnected) {
     resilienceSummaryEl.textContent = `Network starts partially disconnected: ${baselineCoverage}% station-pair coverage; ${networkReliability.criticalSegmentCount} additional critical ${criticalLabel}.`;
   } else if (networkReliability?.nMinusOnePass) {
