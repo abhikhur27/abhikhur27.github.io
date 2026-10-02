@@ -31,7 +31,6 @@ Main personal site for curated project demos.
 ## Standalone Project Repositories
 
 - `https://gridiron-dex.com`
-- `https://github.com/abhikhur27/gridirondex`
 - `https://socksthegecko.com`
 - `https://github.com/abhikhur27/bogglebot`
 - `https://github.com/abhikhur27/warframe-auction-market`
