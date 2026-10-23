@@ -3,29 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abhi Khurana | Projects</title>
-  <meta name="description" content="Curated portfolio of practical software and technical projects.">
+  <title>Abhimanyu Khurana | Software &amp; Research</title>
+  <meta name="description" content="Computer Science and Mathematics at UT Dallas. Software, research, and working project deliverables by Abhimanyu Khurana.">
   <meta property="og:title" content="Abhi Khurana | Projects">
-  <meta property="og:description" content="Curated portfolio of practical software and technical projects.">
+  <meta property="og:description" content="Software, research, and working project deliverables. Computer Science + Mathematics at UT Dallas.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://abhikhur27.github.io/">
   <meta property="og:image" content="https://abhikhur27.github.io/preview-image.png">
-  <meta name="theme-color" content="#0a0c10">
+  <meta name="theme-color" content="#111110">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portfolio.css">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="site-header" id="top">
     <div class="header-inner container">
-      <a class="brand" href="#top" aria-label="Go to top">Abhi / Projects</a>
+      <a class="brand" href="#top" aria-label="Go to top">abhi khurana</a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
       <nav id="site-nav" class="site-nav" aria-label="Primary">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="assets/Abhimanyu_Khurana_Resume.pdf">Resume <span aria-hidden="true">↗</span></a>
         <a href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </div>
@@ -38,12 +41,13 @@
       </div>
       <div class="about-panel">
         <h1>Abhimanyu Khurana</h1>
+        <p class="identity-line">Computer Science + Mathematics at UT Dallas</p>
         <p class="lead">
-          I build practical software with a focus on useful workflows, clear execution, and technical depth.
+          I build software, explore mathematical ideas, and test what works.
         </p>
         <p class="about-copy">
-          I'm a Computer Science student at UT Dallas building tools across Python, C++, JavaScript, and applied ML.
-          My portfolio prioritizes projects that are production-minded, defensible in interviews, and strong enough to ship.
+          I'm pursuing a double degree in Computer Science and Mathematics. My work spans football tools,
+          event-market research, and software that makes everyday workflows less manual.
         </p>
         <p class="about-copy">
           Outside of code, I'm an avid Bears fan, video game lover, guitarist, and gardener. I also like getting my hands
@@ -51,14 +55,36 @@
         </p>
       </div>
       <div class="intro-actions">
-        <a class="btn btn-primary" href="#projects">Browse Projects</a>
-        <a class="btn btn-secondary" href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="btn" href="assets/Abhimanyu_Khurana_Resume.pdf">Read my resume ↗</a>
+        <a class="btn" href="mailto:abhimanyukhurana007@gmail.com">Say hello ↗</a>
+        <a class="btn" href="https://www.linkedin.com/in/abhimanyu-khurana-64821b185/">LinkedIn ↗</a>
       </div>
+    </section>
+
+    <section id="experience" class="container experience-section" aria-labelledby="experience-title">
+      <h2 id="experience-title" class="index-label">Experience</h2>
+      <article class="experience-row">
+        <div class="row-heading"><h3>RADA</h3><span>UT Dallas · Current</span></div>
+        <p class="role">Undergraduate Researcher</p>
+        <p>Working on quantum Bayesian optimization (QBO), at the intersection of mathematics, optimization, and computing.</p>
+      </article>
+      <article class="experience-row">
+        <div class="row-heading"><h3>Securin</h3><span>Jul. to Sep. 2024</span></div>
+        <p class="role">Software Engineer Intern</p>
+        <p>Built an internal CVE tracking application with PostgreSQL, secure REST APIs, search and filtering, and remediation workflows. Containerized the application with Docker for handoff.</p>
+      </article>
+      <article class="experience-row">
+        <div class="row-heading"><h3>BrickBrick</h3><span>Sep. 2025 to present</span></div>
+        <p class="role">Co-Founder</p>
+        <p>Translate client needs into websites, workflow automations, and portals, from requirements through implementation.</p>
+        <a class="evidence-link" href="https://brick-brick.org">Visit BrickBrick ↗</a>
+      </article>
     </section>
 
     <section id="projects" class="container">
       <div class="section-head">
-        <p class="eyebrow">Projects</p>
+        <h2 class="index-label">Selected projects</h2>
+        <p class="section-copy">Working tools, experiments, and the things they produce.</p>
       </div>
 
       <div class="project-grid">
@@ -68,6 +94,7 @@
           </header>
           <p>Interactive football playbook with 105 audited concepts, editable route design, deterministic defensive simulation, and full-drive progression.</p>
           <p class="stack">React, TypeScript, SVG Geometry, Playwright</p>
+          <p class="deliverable"><strong>Try it:</strong> Build a play, edit routes, and run a drive in the live interactive playbook.</p>
           <div class="card-actions">
             <a href="https://gridiron-dex.com" target="_blank" rel="noreferrer">Open website</a>
             <a href="https://github.com/abhikhur27/gridirondex" target="_blank" rel="noreferrer">Code</a>
@@ -81,6 +108,7 @@
           </header>
           <p>Live leopard gecko camera with day and night feeds, rolling 15-second clips, and a solar-aware enclosure schedule.</p>
           <p class="stack">Python, FastAPI, FFmpeg, HLS.js</p>
+          <p class="deliverable"><strong>See it:</strong> Live day/night camera feeds and rolling video clips.</p>
           <div class="card-actions">
             <a href="https://socksthegecko.com" target="_blank" rel="noreferrer">Open website</a>
           </div>
@@ -93,6 +121,7 @@
           </header>
           <p>Single-file Boggle and Word Hunt solver with visual path tracing and touch-friendly flow.</p>
           <p class="stack">HTML, Tailwind CSS, JavaScript, Browser Demo</p>
+          <p class="deliverable"><strong>Output:</strong> Found words and visual paths through a board.</p>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/bogglebot" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/bogglebot#readme" target="_blank" rel="noreferrer">Docs</a>
@@ -106,6 +135,7 @@
           </header>
           <p>Ranks flip opportunities by spread, ROI, freshness, liquidity, and execution confidence.</p>
           <p class="stack">Node.js, Express, JavaScript</p>
+          <p class="deliverable"><strong>Output:</strong> A ranked opportunity table with spread, freshness, and liquidity checks.</p>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/warframe-auction-market" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/warframe-auction-market#readme" target="_blank" rel="noreferrer">Docs</a>
@@ -119,6 +149,7 @@
           </header>
           <p>Consolidated home for the small CLI utilities: Windows audits, research helpers, student workflows, finance tools, log triage, and repo hygiene checks.</p>
           <p class="stack">Python, Rust, PowerShell, C++, Go, C#, Java, Node.js</p>
+          <p class="deliverable"><strong>Deliverable:</strong> Runnable command-line utilities with documented inputs and outputs.</p>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/portfolio-utility-suite" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/portfolio-utility-suite#readme" target="_blank" rel="noreferrer">Docs</a>
@@ -131,9 +162,10 @@
           </header>
           <p>Tests probabilistic market models with chronological walk-forward evaluation, held-out calibration, and reproducible synthetic data.</p>
           <p class="stack">Python, scikit-learn, Probability Calibration</p>
+          <p class="deliverable"><strong>Public deliverables:</strong> Reproducible synthetic-data experiments and evaluation methodology. Private trading data and returns stay private.</p>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/settlement-aware-bitcoin-event-market-research-engine" target="_blank" rel="noreferrer">Code</a>
-            <a href="https://github.com/abhikhur27/settlement-aware-bitcoin-event-market-research-engine#readme" target="_blank" rel="noreferrer">Docs</a>
+            <a href="https://github.com/abhikhur27/settlement-aware-bitcoin-event-market-research-engine#readme" target="_blank" rel="noreferrer">Run the public experiment ↗</a>
           </div>
         </article>
 
@@ -143,6 +175,7 @@
           </header>
           <p>Market-regime classifier with feature engineering and walk-forward evaluation.</p>
           <p class="stack">Python, scikit-learn, pandas</p>
+          <p class="deliverable"><strong>Outputs:</strong> Confusion matrices, calibration tables, baseline comparisons, and walk-forward evaluation reports.</p>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/applied-ml-signal-lab" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/applied-ml-signal-lab#readme" target="_blank" rel="noreferrer">Docs</a>
@@ -155,6 +188,7 @@
           </header>
           <p>Local retrieval workflow with hybrid search, evidence grouping, conflict checks, and benchmarked source contracts.</p>
           <p class="stack">Python, Retrieval, Evaluation</p>
+          <p class="deliverable"><strong>Outputs:</strong> Citation-grounded answers, evidence maps, and a repeatable retrieval evaluation report.</p>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/context-constellation-rag" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/context-constellation-rag#readme" target="_blank" rel="noreferrer">Docs</a>
@@ -167,6 +201,13 @@
           </header>
           <p>Compares FIFO, LRU, and offline OPT across multi-phase traces to support deployable cache-policy decisions.</p>
           <p class="stack">C++, Deterministic Workload Analysis</p>
+          <p class="deliverable"><strong>Outputs:</strong> CSV, JSON, and Markdown comparisons of FIFO, LRU, and offline OPT across access traces.</p>
+          <details class="result-preview"><summary>Inspect a sample result</summary>
+            <p>Bundled 36-access synthetic trace, capacity 3. This is a reproducible example, not a production benchmark.</p>
+            <table><caption>Cache hits and misses on the same trace</caption><thead><tr><th scope="col">Policy</th><th scope="col">Hits</th><th scope="col">Misses</th></tr></thead><tbody><tr><th scope="row">FIFO</th><td>16</td><td>20</td></tr><tr><th scope="row">LRU</th><td>18</td><td>18</td></tr><tr><th scope="row">Offline OPT</th><td>23</td><td>13</td></tr></tbody></table>
+            <p>OPT sees future accesses and is only an offline comparison, not a deployable policy.</p>
+            <a class="evidence-link" href="assets/cache-policy-example.csv" download>Download the actual CSV ↗</a>
+          </details>
           <div class="card-actions">
             <a href="https://github.com/abhikhur27/cache-policy-simulator" target="_blank" rel="noreferrer">Code</a>
             <a href="https://github.com/abhikhur27/cache-policy-simulator#readme" target="_blank" rel="noreferrer">Docs</a>
@@ -175,13 +216,13 @@
 
         <article class="project-card">
           <header>
-            <h3>Brick-Brick</h3>
+            <h3>Event-Driven Personal Operations Platform</h3>
           </header>
-          <p>Builds business and founder websites, AI workflow automations, and client/team portals.</p>
-          <p class="stack">Web Development, AI Automation, Client Portals</p>
+          <p>A private integration system for email, calendars, tasks, and notes, with durable job state and receipt-gated actions.</p>
+          <p class="stack">Python, APIs, SQLite, Browser Automation</p>
+          <p class="deliverable"><strong>Public deliverable:</strong> An architecture walkthrough showing event intake, deduplication, worker state, and action receipts. No personal data or credentials.</p>
           <div class="card-actions">
-            <a href="https://brick-brick.org" target="_blank" rel="noreferrer">Open</a>
-            <a href="https://brick-brick.org" target="_blank" rel="noreferrer">Website</a>
+            <a href="projects/personal-operations/index.html">Read the architecture ↗</a>
           </div>
         </article>
       </div>
@@ -329,6 +370,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>Abhimanyu Khurana 2026</p>
+      <a href="assets/Abhimanyu_Khurana_Resume.pdf">Resume ↗</a>
     </div>
   </footer>
 

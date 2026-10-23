@@ -1,0 +1,4 @@
+capacity,policy,hits,misses,cold_misses,reload_misses,evictions,hit_rate,online_choice,lru_hit_delta,unique_keys,reuse_rate,hottest_key,hottest_key_count
+3,FIFO,16,20,8,12,17,0.4444,LRU,2,8,0.7778,1,8
+3,LRU,18,18,8,10,15,0.5000,LRU,2,8,0.7778,1,8
+3,OPT,23,13,8,5,10,0.6389,LRU,2,8,0.7778,1,8

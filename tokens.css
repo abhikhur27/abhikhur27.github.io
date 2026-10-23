@@ -1,0 +1,21 @@
+:root {
+  --bg: #111110;
+  --panel: #171716;
+  --panel-soft: #20201e;
+  --text: #ecece6;
+  --muted: #a7a7a0;
+  --line: #343431;
+  --accent: #a0c79a;
+  --accent-strong: #c3e0be;
+  --warm: #b9b9b0;
+  --shadow: none;
+  --radius: 0;
+  --font-body: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-label: "IBM Plex Mono", Consolas, monospace;
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --content-width: 800px;
+}
