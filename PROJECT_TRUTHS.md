@@ -4,6 +4,11 @@ These are the non-negotiable truths for this portfolio.
 
 ## Homepage truths
 
+- Keep the approved dark engineering-index direction: near-black background, a narrow reading column, muted green links, and no decorative card grid.
+- Preserve the existing personal photograph and personal bio. Keep the face visible when cropping responsively.
+- Keep a working, current one-page resume link in the navigation and introduction.
+- State the dual degree in Computer Science and Mathematics. Include current undergraduate research in RADA on quantum Bayesian optimization (QBO) without inventing dates, publications, or results.
+- Each selected project must identify a concrete deliverable. Prefer a live tool, real sample output, downloadable artifact, or reproducible documented experiment. Never fabricate benchmark results or expose private trading data and returns.
 - The homepage must be easy to understand on a first visit.
 - Browsing projects is more important than clever portfolio mechanics.
 - If a section makes the site harder to navigate, it should be removed or simplified.
