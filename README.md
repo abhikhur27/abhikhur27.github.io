@@ -4,7 +4,7 @@ Main personal site for curated project demos.
 
 ## Live Site
 
-- URL: `https://abhikhur27.github.io/`
+- URL: `https://abhikhur.com/`
 
 ## Current Direction
 

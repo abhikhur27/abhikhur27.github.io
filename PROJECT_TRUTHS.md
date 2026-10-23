@@ -4,6 +4,7 @@ These are the non-negotiable truths for this portfolio.
 
 ## Homepage truths
 
+- Use `https://abhikhur.com` as the canonical portfolio URL in metadata, resumes, and future public references. The GitHub Pages hostname is only a redirect alias; actual GitHub repository URLs remain unchanged.
 - Keep the approved dark engineering-index direction: near-black background, a narrow reading column, muted green links, and no decorative card grid.
 - Preserve the existing personal photograph and personal bio. Keep the face visible when cropping responsively.
 - Keep a working, current one-page resume link in the navigation and introduction.
