@@ -21,6 +21,7 @@ These are the non-negotiable truths for this portfolio.
 - Keep portfolio cards and section copy short. If a card needs a paragraph to be understood, the copy is too dense.
 - Write visible copy in Abhi's plain, professional voice. Show what a project does through concrete descriptions, examples, and links; do not label these "Deliverable" or "Public deliverable". Avoid corporate jargon and boilerplate privacy-boundary sections. Keep actual privacy protections in place without turning them into promotional copy.
 - Apply that voice throughout project pages, including instructions, controls, generated explanations, and introductory documentation. Explain what someone enters, what the project does, and what they can learn from the result. Keep useful technical terms and real limitations, explained in ordinary language. Do not invent personal stories, usage, or results to make the writing sound natural.
+- Do not use em dashes. Keep the latest approved copy as the baseline: use short sentences, ordinary punctuation, and concrete language instead of corporate phrasing. Routine maintenance is not permission to redesign the site or rewrite its voice.
 - Default to low-clutter layouts with fewer controls and less on-page text.
 - Do not add extra homepage hero taglines, category slogans, or decorative project-section headlines unless explicitly requested.
 - Do not add homepage filtering chips, tabs, or category controls unless they are clearly necessary.
@@ -35,6 +36,7 @@ These are the non-negotiable truths for this portfolio.
 - If a project is unfinished, confusing, or not portfolio-ready, it should stay off the homepage.
 - If a project is a weak standalone but has one useful mechanic, fold the idea into an anthology instead of keeping a separate public folder.
 - Rollback Call (`rollback-call`), Incident Handoff Builder (`incident-handoff-builder`), Lease Decision Guide (`projects/lease-decision-guide`), and CSV Quality Checker (`projects/csv-column-profiler`) are retired from portfolio selection as of October 26, 2026. Preserve their source and repository history; do not relist, rename, reskin, or recreate them as new portfolio projects. A useful isolated mechanic may be reused inside a genuinely substantial maintained product without a new public project card.
+- Renamed or reskinned stand-ins for those same filler workflows are also banned. A new title, setting, framework, or expanded description does not make a rejected project eligible again.
 - Existing source code, an attractive screenshot, or an old automation recommendation is not evidence that a project deserves a public listing. Apply the same quality gate to old and new work.
 
 ## Project-labeling truths
@@ -77,6 +79,7 @@ These are the non-negotiable truths for this portfolio.
 ## Automation truths
 
 - Default to simplification, clarity, and honesty.
+- Before publishing, review changed visible copy and project listings against the latest approved plain, professional voice and the retirement rules. Check for em dashes, corporate wording, invented stories/results, and retired links or stand-ins. Do not restore rejected copy from old prompts or memory.
 - Execute portfolio automation only on desktop `ABHIONEMILLION`, never on laptop `ABHIKHUR` or another laptop. Keep duplicate laptop jobs paused. Required repositories, runtimes, dependencies, fixtures, and authorized integrations must be available on the desktop; do not make laptop execution or laptop-local files a prerequisite. Report missing desktop prerequisites instead of silently falling back to the laptop.
 - The October 26, 2026 retirement and strong-project evidence gate override older project lists, incubation notes, automation memory recommendations, and generic instructions to add small utilities. Never resurrect a retired listing to satisfy a rotation or publishing quota.
 - Work directly on the current/default branch, normally `main`, unless the owner explicitly requests isolation or a pull request. Never create or push `codex/*` branches.

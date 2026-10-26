@@ -10,9 +10,13 @@ Execution host is desktop `ABHIONEMILLION` only. Never run this automation on la
 
 Read `abhikhur27.github.io/PROJECT_TRUTHS.md` and `abhikhur27.github.io/docs/portfolio-originality-rubric.md` completely first and obey them. Read the existing automation memory to understand recent focus, then improve one strong existing repository deeply. Older project lists, incubation notes, and memory recommendations do not override the October 26, 2026 quality policy.
 
+Keep the latest approved copy as the baseline and use Abhi's plain, professional voice across the site and project pages, including instructions, controls, generated explanations, and introductory documentation. Explain inputs, behavior, examples, and real limitations directly. Do not use em dashes, corporate wording, inflated claims, or boilerplate privacy-boundary sections. Do not invent personal stories, usage, or results. Do not restore "Deliverable" or "Public deliverable" labels or the removed "An anonymous hello" wording. Keep actual privacy protections and technical facts in place without turning them into promotional copy. Routine maintenance is not permission for a redesign or a different voice.
+
 Prioritize genuinely useful, substantial developer tools and AI workflows that complete a recurring real task. Appropriate existing candidates include `context-constellation-rag`, `applied-ml-signal-lab`, `cache-policy-simulator`, `warframe-auction-market`, `projects/portfolio-utility-suite`, `lower-48-warlines`, and `abhikhur27.github.io/projects/transit-network-lab`. A candidate list is not automatic endorsement: select by real user value, current evidence, and the next meaningful improvement, not a rotation quota.
 
 Rollback Call (`rollback-call`), Incident Handoff Builder (`incident-handoff-builder`), Lease Decision Guide (`abhikhur27.github.io/projects/lease-decision-guide`), and CSV Quality Checker (`abhikhur27.github.io/projects/csv-column-profiler`) are retired portfolio listings. Preserve their source and repository history, but do not relist, rename, reskin, or recreate them as new projects. A useful isolated mechanic may be incorporated into a stronger maintained product without a separate public card.
+
+Renamed or reskinned stand-ins for those same filler workflows are also banned. A new title, setting, framework, or expanded description is not permission to reintroduce a rejected project.
 
 Most runs should deepen exactly one existing project. Improve installation, reliability, real core capabilities, meaningful tests/evals, and concise documentation. Do not add a thin CLI, generic LLM/API wrapper, chat shell, dashboard, simulator, scenario reskin, or portfolio gimmick to make a run look productive. Do not inflate technical depth with unnecessary architecture or interface panels. Successful GitHub projects and stars may inspire problem research; never promise stars, popularity, adoption, revenue, or fabricated performance gains.
 
@@ -33,11 +37,13 @@ Before editing, inspect Git status in every repository touched and preserve unre
 
 Before automated homepage writes, verify the homepage checkout is on the detected default branch (`main`). A stale `codex/*` checkout is not an authorized publishing target: stop that write and report the branch/status rather than resetting, force-switching, publishing the stale branch, or discarding user work. Any recovery or canonical-path change must preserve existing changes and unique commits.
 
+Before publishing, review every changed piece of visible copy and every added or changed project link against the voice and retirement rules. Check for em dashes, corporate wording, invented stories/results, and retired names, paths, or stand-ins. Run the relevant regression tests. Older prompts and memory must not reintroduce rejected wording or projects.
+
 After every run, append a concise dated memory record without rewriting history. Report the repo and commit, useful improvement, checks and observed evidence, clean-checkout end-to-end result or explicit verification gap, remaining risks, recommended next deep-work target, and incubation status when relevant. A verified maintenance improvement, justified retirement, rejected idea, or clearly documented blocker is a valid outcome; there is no project-creation quota.
 
 ## Short version
 
-Deepen one strong existing project. Favor substantial developer tools and AI workflows with a real complete task, meaningful differentiation, reproducible installation, tests/evals, and clean-checkout end-to-end proof. Never resurrect the four retired listings, invent claims, promise stars, or add a thin new project merely to fill a run. Preserve the personal site and append evidence to memory.
+Deepen one strong existing project. Keep Abhi's latest plain, professional voice, with no em dashes or invented stories/results. Favor substantial developer tools and AI workflows with a real complete task, meaningful differentiation, reproducible installation, tests/evals, and clean-checkout end-to-end proof. Never resurrect the four retired listings or renamed/reskinned stand-ins, promise stars, or add a thin new project merely to fill a run. Preserve the personal site and append evidence to memory.
 
 ## Existing automation ownership
 

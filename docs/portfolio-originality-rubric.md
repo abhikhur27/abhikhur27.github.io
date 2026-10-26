@@ -6,6 +6,12 @@ Apply this to existing listings, automation focus choices, and new proposals. A 
 
 As of October 26, 2026, do not select or relist Rollback Call (`rollback-call`), Incident Handoff Builder (`incident-handoff-builder`), Lease Decision Guide (`projects/lease-decision-guide`), or CSV Quality Checker (`projects/csv-column-profiler`). Preserve the source and repository history. A rename, reskin, new framework, or expanded description does not undo this decision. Reuse a genuinely useful mechanic only inside a stronger maintained product, without a separate project listing.
 
+Renamed or reskinned stand-ins for those same filler workflows are also banned. Do not fill a vacated listing with a cosmetic replacement.
+
+## Voice check
+
+Keep the latest approved copy as the baseline and use Abhi's plain, professional voice across pages, controls, generated explanations, and introductory documentation. Explain the input, behavior, example output, and real limitations directly. Do not use em dashes, corporate phrasing, inflated claims, or boilerplate privacy-boundary sections. Do not invent personal stories, usage, or results. Keep actual privacy protections and useful technical detail; do not turn them into promotional copy. A maintenance run is not permission for a redesign or a new voice.
+
 ## Hard gates
 
 Every gate must have concrete evidence before a project is described as portfolio-ready:
