@@ -41,7 +41,7 @@ export function createVisitorMark({ button, count, status, storage, randomUUID, 
     if (!Number.isSafeInteger(value) || value < 0) throw new Error('Invalid count');
     // A slow initial read must not replace a newer write receipt.
     latestCount = Math.max(latestCount, value);
-    count.textContent = `${latestCount.toLocaleString('en-US')} ${latestCount === 1 ? 'mark' : 'marks'}`;
+    count.textContent = `${latestCount.toLocaleString('en-US')} ${latestCount === 1 ? 'person was' : 'people were'} here`;
   }
 
   async function call(method, body) {

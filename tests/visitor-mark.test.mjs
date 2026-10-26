@@ -29,7 +29,7 @@ function setup({ initial, blocked = false, request } = {}) {
 test('loads the real shared count without generating an identifier or incrementing', async () => {
   const env = setup();
   await env.counter.load();
-  assert.equal(env.count.textContent, '5 marks');
+  assert.equal(env.count.textContent, '5 people were here');
   assert.equal(env.calls[0][1].method, 'GET');
   assert.equal(env.values.has(storageKey), false);
   assert.equal(env.button.disabled, false);
@@ -63,7 +63,7 @@ test('failed POST retains the same identifier for a safe retry', async () => {
   assert.match(env.status.textContent, /Couldn't confirm/);
   await env.counter.mark();
   assert.equal(env.calls[0][1].body, env.calls[1][1].body);
-  assert.equal(env.count.textContent, '1 mark');
+  assert.equal(env.count.textContent, '1 person was here');
 });
 
 test('does not claim success from an invalid or unconfirmed receipt', async () => {
@@ -81,7 +81,7 @@ test('storage denial keeps public read available, but prevents repeatable writes
   await env.counter.mark();
   assert.equal(env.calls.length, 1);
   assert.equal(env.button.disabled, true);
-  assert.equal(env.count.textContent, '5 marks');
+  assert.equal(env.count.textContent, '5 people were here');
   assert.match(env.status.textContent, /Allow browser storage/);
 });
 
@@ -93,7 +93,7 @@ test('concurrent clicks are serialized', async () => {
   assert.equal(env.calls.length, 1);
   finish({ ok: true, json: async () => ({ count: 6, marked: true }) });
   await first;
-  assert.equal(env.count.textContent, '6 marks');
+  assert.equal(env.count.textContent, '6 people were here');
 });
 
 test('a delayed GET cannot roll back a confirmed count', async () => {
@@ -105,7 +105,7 @@ test('a delayed GET cannot roll back a confirmed count', async () => {
   await env.counter.mark();
   finishRead({ ok: true, json: async () => ({ count: 9 }) });
   await read;
-  assert.equal(env.count.textContent, '10 marks');
+  assert.equal(env.count.textContent, '10 people were here');
 });
 
 test('rate limits and outages are visible, never displayed as zero or success', async () => {
