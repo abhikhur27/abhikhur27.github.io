@@ -1,5 +1,7 @@
 # Lease Decision Guide
 
+Portfolio status (October 26, 2026): retired from public selection. This source is retained for reference, not endorsed as a portfolio-ready project. Do not relist or reskin it through automation.
+
 Practical browser tool for comparing apartment lease offers beyond sticker rent.
 
 ## What it does

@@ -1,0 +1,5 @@
+project_id = "abhikhur-portfolio"
+
+[functions.visitor-marks]
+# Modern publishable keys are not JWTs; index.ts checks the apikey itself.
+verify_jwt = false

@@ -134,7 +134,7 @@
             <span class="pin-badge">Pinned on GitHub</span>
             <h3>Warframe Arbitrage Market Scanner</h3>
           </header>
-          <p>Ranks flip opportunities by spread, ROI, freshness, liquidity, and execution confidence.</p>
+          <p>Finds item-trading opportunities on warframe.market, a third-party player marketplace for the video game Warframe. Ranks potential flips by spread, freshness, and liquidity.</p>
           <p class="stack">Node.js, Express, JavaScript</p>
           <p class="deliverable"><strong>Output:</strong> A ranked opportunity table with spread, freshness, and liquidity checks.</p>
           <div class="card-actions">
@@ -228,57 +228,8 @@
         </article>
       </div>
       <details id="browser-projects" class="project-disclosure secondary-head">
-        <summary>Open browser projects (11)</summary>
+        <summary>Open browser projects (7)</summary>
       <div class="project-grid secondary-grid">
-        <article class="project-card">
-          <header>
-            <span class="pin-badge">New</span>
-            <h3>Rollback Call</h3>
-          </header>
-          <p>Browser decision game about making release rollback calls under pressure when dashboards are noisy, users are hurting, and everyone wants a simpler answer.</p>
-          <p class="stack">HTML, CSS, JavaScript, Browser Decision Game</p>
-          <div class="card-actions">
-            <a href="https://github.com/abhikhur27/rollback-call" target="_blank" rel="noreferrer">Code</a>
-            <a href="https://github.com/abhikhur27/rollback-call#readme" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <header>
-            <h3>Incident Handoff Builder</h3>
-          </header>
-          <p>Turns raw outage notes into a readable shift handoff brief with timeline, ownership, and next-action coverage.</p>
-          <p class="stack">HTML, CSS, JavaScript, Incident Workflow Tool</p>
-          <div class="card-actions">
-            <a href="https://github.com/abhikhur27/incident-handoff-builder" target="_blank" rel="noreferrer">Code</a>
-            <a href="https://github.com/abhikhur27/incident-handoff-builder#readme" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <header>
-            <h3>Lease Decision Guide</h3>
-          </header>
-          <p>Compares apartment offers by true monthly cost, move-in cash, commute drag, and flexibility risk.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="./projects/lease-decision-guide/index.html" target="_blank" rel="noreferrer">Open</a>
-            <a href="./projects/lease-decision-guide/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <header>
-            <h3>CSV Quality Checker</h3>
-          </header>
-          <p>Checks CSV fields, nulls, duplicates, and mixed types before import.</p>
-          <p class="stack">HTML, CSS, JavaScript</p>
-          <div class="card-actions">
-            <a href="./projects/csv-column-profiler/index.html" target="_blank" rel="noreferrer">Open</a>
-            <a href="./projects/csv-column-profiler/README.md" target="_blank" rel="noreferrer">Docs</a>
-          </div>
-        </article>
-
         <article class="project-card">
           <header>
             <h3>SQL Index Advisor</h3>
@@ -370,11 +321,23 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>Abhimanyu Khurana 2026</p>
-      <a href="assets/Abhimanyu_Khurana_Resume.pdf">Resume ↗</a>
+      <div class="footer-credits">
+        <p>Abhimanyu Khurana 2026</p>
+        <a href="assets/Abhimanyu_Khurana_Resume.pdf">Resume ↗</a>
+      </div>
+      <div class="visitor-mark" id="visitor-mark">
+        <div class="visitor-mark-row">
+          <button class="visitor-mark-button" id="visitor-mark-button" type="button" aria-pressed="false" aria-describedby="visitor-mark-privacy" disabled>I was here</button>
+          <p id="visitor-mark-count" class="visitor-mark-count">Loading shared count…</p>
+        </div>
+        <p id="visitor-mark-status" class="visitor-mark-status" role="status" aria-live="polite"></p>
+        <p id="visitor-mark-privacy" class="visitor-mark-privacy">An anonymous hello. One mark per browser, no name or sign-in.</p>
+        <noscript><p>Enable JavaScript to leave a mark and see the shared count.</p></noscript>
+      </div>
     </div>
   </footer>
 
   <script src="script.js"></script>
+  <script type="module" src="visitor-mark.mjs"></script>
 </body>
 </html>

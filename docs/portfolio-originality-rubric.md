@@ -1,70 +1,39 @@
-# Portfolio Originality Rubric
+# Portfolio Quality and Originality Rubric
 
-Use this before building any new portfolio project.
+Apply this to existing listings, automation focus choices, and new proposals. A small collection of substantial, useful, verifiable projects is the goal. Shipping another project is not a goal by itself.
 
-## Hard Gates
+## Retired listings
 
-A project should fail immediately if any of these are true:
+As of October 26, 2026, do not select or relist Rollback Call (`rollback-call`), Incident Handoff Builder (`incident-handoff-builder`), Lease Decision Guide (`projects/lease-decision-guide`), or CSV Quality Checker (`projects/csv-column-profiler`). Preserve the source and repository history. A rename, reskin, new framework, or expanded description does not undo this decision. Reuse a genuinely useful mechanic only inside a stronger maintained product, without a separate project listing.
 
-- The core sentence is basically "it lets you tweak inputs and view a chart."
-- The main interaction is drag/drop or sliders, but nothing surprising happens after you use them.
-- A screenshot of the interface explains almost the entire idea.
-- The project could be replaced by a notebook plot, dashboard, or static blog post without losing much.
-- The "insight" is already obvious before using it.
-- It is mostly the same project skeleton as an existing portfolio piece with only a new setting, skin, or story wrapper.
+## Hard gates
 
-## Positive Signals
+Every gate must have concrete evidence before a project is described as portfolio-ready:
 
-A project is worth building when several of these are true:
+1. **Useful problem:** Name the target user, the recurring task or failure, and the actual input-to-output workflow. Explain what useful work the deliverable completes.
+2. **Substantial differentiation:** Compare with existing tools and the portfolio's current work. Identify the nontrivial capability, implementation, or demonstrated workflow improvement. New nouns, a different dataset, a model/API wrapper, or a polished screenshot are insufficient.
+3. **Complete product path:** The core workflow must work beyond a canned happy-path demo, with validation, actionable errors, and appropriate recovery. State unsupported cases and real operational boundaries.
+4. **Installability and reproducibility:** Include prerequisites, setup/install commands, a minimal example, redistributable sample inputs, expected outputs, and dependency/environment details. An evaluator must be able to reproduce the result without private data or undocumented local state.
+5. **Tests and evaluation:** Automate core-logic, invalid-input, regression, and failure-path checks. For AI workflows, include a reproducible evaluation set, a simpler baseline, relevant quality and failure metrics, and evidence that the model improves the workflow. Include cost/latency or privacy limits when relevant. Do not treat one plausible generated answer as an evaluation.
+6. **Clean-checkout end-to-end proof:** In a fresh environment, follow the documented setup and run one realistic input through the actual entry point to its output. Record the commit, commands, environment, observed result, and limitations. A unit-test pass, syntax check, screenshot, or mocked model alone does not prove the full workflow. If credentials or upstream access block a necessary live check, mark that part unverified and do not claim the gate passed.
+7. **Truthful presentation:** Separate measured results from hypotheses. Do not invent users, production deployments, integrations, adoption, benchmarks, returns, or research outcomes. A visitor should immediately understand the actual deliverable and implementation.
 
-- It solves a real workflow problem someone might actually reuse.
-- It can become a utility, installer, CLI, desktop app, or practical browser tool rather than only a portfolio artifact.
-- It gives the user a new role, constraint, or decision to inhabit.
-- It has a mechanic, loop, or system that creates tension.
-- Different choices lead to meaningfully different outcomes.
-- The payoff is experiential, not just visual.
-- Someone can describe it without saying "visualizer," "dashboard," or "playground."
-- It teaches something through consequence, not just annotation.
+Missing evidence means improve the existing work or keep it off the homepage. A quiet run that documents a blocker or removes clutter is better than an unsupported launch.
 
-## Preferred Project Shapes
+## Preferred direction
 
-- Useful Windows utilities, small desktop apps, and command-line tools
-- AMC/workflow helpers that automate real repetitive tasks
-- Practical browser tools that save time or reduce mistakes
-- Small simulation games with pressure and tradeoffs
-- Weird tools with a strong point of view
-- Interactive essays where the interface changes the argument
-- Systems toys with emergent behavior
-- Decision labs where the user must commit under uncertainty
+Favor substantial developer tools and AI workflows that people could reuse: reliable local tooling, reproducible code/data workflows, engineering diagnostics with actionable results, or evidence-backed AI assistance integrated into a complete task. Applied ML, quantitative research tooling, quantum-computing-adjacent experiments, and useful Windows/productivity software are suitable when they clear the same gates.
 
-## Duplicate Check
+Prefer maintaining a strong existing repository over starting another. Small utility improvements belong inside an appropriate maintained product, not a new card or repo. Do not pad the portfolio with generic chat interfaces, CRUD shells, prompt collections, one-file validators, dashboard variations, or scenario reskins.
 
-Before building, compare the idea against existing portfolio families.
+Popular GitHub projects may inspire investigation of real problems and engineering choices. Stars are a discovery signal, not proof of quality or a promised outcome. Never promise popularity, adoption, or stars, and do not copy a project merely because it is popular.
 
-- If it belongs to an established family, it must introduce a genuinely new mechanic, not just a new scenario.
-- "Same mechanic, different campus problem" is not enough.
-- "Same round-based choice game, different nouns" is not enough.
-- A new project in an existing family should clear at least two of these:
-  - different player verb
-  - different failure mode
-  - different information structure
-  - different time pressure model
-  - different payoff loop
-- If it fails that test, fold it into an anthology or expand the strongest existing version instead of building a new standalone project.
+## Duplication and incubation
 
-## Suspicious Project Shapes
+Before a new proposal, list the closest existing tools and portfolio projects. Explain the concrete gap and why extending an existing repository is inadequate. If the distinction is cosmetic or the workflow could be replaced by a short script, static explanation, or existing tool with little loss, reject or merge the idea.
 
-- Parameter sweep labs
-- Generic data explorers
-- Canvas drag/drop editors with no real stakes
-- Standard CRUD apps with a pretty skin
-- Coursework demos that stop at "look, it animates"
-- Re-skinning an existing decision lab with a new campus system and calling it a new project
+A rare new standalone project must survive multiple dated proposal/refinement runs. The incubation note must contain the user/problem evidence, alternatives, nontrivial differentiation, scoped workflow, implementation plan, install path, test/eval plan, and clean-checkout acceptance commands. Rejection is a valid conclusion. Incubation does not waive the evidence gate or authorize a public listing before implementation is verified.
 
-## One-Sentence Test
+## Run record
 
-Before building, the project should pass this test:
-
-> Would a smart stranger say "that is a specific idea" rather than "that is another interactive chart"?
-
-If the answer is no, reframe it until the mechanism is sharper.
+For each meaningful improvement, record the repository and commit, the user-facing capability improved, the commands/checks and observed results, any unmet gate or remaining risk, and the next highest-value deep-work target. Rotate among credible existing work without reviving weak projects just to vary the name.

@@ -61,8 +61,18 @@ h1 { font-size: clamp(1.35rem, 4vw, 1.75rem); }
 .project-disclosure summary:hover, .project-disclosure summary:focus-visible { background: none; border: 0; }
 .project-card.highlighted { animation: none; outline: 1px solid var(--accent); outline-offset: 8px; }
 .site-footer { border: 0; background: none; padding: 0 0 var(--space-lg); }
-.footer-inner { padding-top: var(--space-md); border-top: 1px solid var(--line); font: 400 0.78rem/1.8 var(--font-label); }
+.footer-inner { display: block; padding-top: var(--space-md); border-top: 1px solid var(--line); font: 400 0.78rem/1.8 var(--font-label); }
 .footer-inner a { color: var(--accent); }
+.footer-credits { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-sm); }
+.visitor-mark { margin-top: var(--space-md); }
+.visitor-mark-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-sm); }
+.visitor-mark-button { min-height: 44px; padding: 0.6rem 1rem; border: 1px solid var(--line); border-radius: 0; background: none; color: var(--accent); font: 400 0.8rem/1.5 var(--font-label); cursor: pointer; }
+.visitor-mark-button:hover:not(:disabled), .visitor-mark-button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-strong); background: var(--panel); }
+.visitor-mark-button:disabled { cursor: default; }
+.visitor-mark-button:disabled:not([aria-pressed="true"]) { color: var(--muted); }
+.visitor-mark-count { color: var(--text); font-variant-numeric: tabular-nums; }
+.visitor-mark-status, .visitor-mark-privacy { color: var(--muted); margin: 0.5rem 0 0; font-size: 0.72rem; }
+.visitor-mark-status:empty { display: none; }
 section[id] { scroll-margin-top: 1rem; }
 @media (max-width: 700px) {
   .container { width: calc(100% - 2.5rem); }

@@ -1,5 +1,7 @@
 # CSV Column Profiler
 
+Portfolio status (October 26, 2026): the CSV Quality Checker listing is retired. This source is retained for reference, not endorsed as a portfolio-ready project. Do not relist or reskin it through automation.
+
 Static browser utility for profiling pasted CSV data before import, modeling, or dashboard work.
 
 ## Features

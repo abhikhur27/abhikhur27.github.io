@@ -1,0 +1,31 @@
+name: Portfolio checks
+
+on:
+  push:
+    paths:
+      - "index.html"
+      - "visitor-*.mjs"
+      - "tests/**"
+      - "supabase/**"
+      - ".github/workflows/portfolio-checks.yml"
+  pull_request:
+    paths:
+      - "index.html"
+      - "visitor-*.mjs"
+      - "tests/**"
+      - "supabase/**"
+      - ".github/workflows/portfolio-checks.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: node --test tests/*.test.mjs supabase/tests/handler.test.mjs
