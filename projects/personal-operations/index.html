@@ -1,10 +1,44 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Personal Operations Platform | Abhimanyu Khurana</title><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../../portfolio.css"></head>
-<body><main class="container" style="padding-block:3rem"><a class="evidence-link" href="../../">← Back to portfolio</a>
-<h1>Event-Driven Personal Operations Platform</h1><p class="identity-line">Private application · Public architecture walkthrough</p>
-<p class="lead">A system for turning incoming information into trackable actions across email, calendars, tasks, and notes.</p>
-<section class="experience-row"><h2 class="index-label">The workflow</h2><p>Incoming event → normalize → deduplicate → resolve context → queue action → verify receipt</p><p>Deterministic workers handle repeated polling and structured actions. Model-assisted reasoning is reserved for interpretation and drafting, not a replacement for an action receipt.</p></section>
-<section class="experience-row"><h2 class="index-label">What the system produces</h2><ul><li>Normalized inbox and calendar events with stable source identities.</li><li>Durable queues for application and personal workflows.</li><li>Drafted communications grounded in approved context.</li><li>Recorded action receipts, delivery state, and retryable failures.</li></ul></section>
-<section class="experience-row"><h2 class="index-label">Engineering decisions</h2><p>SQLite retains job history and leases. A single scheduler owns recurring work. Idempotency checks distinguish a requested action from a completed action and prevent a retry from becoming a duplicate submission.</p><p>Notification delivery is tracked separately from event intake, so an email can be saved even when a messaging service is temporarily unavailable.</p></section>
-<section class="experience-row"><h2 class="index-label">Privacy boundary</h2><p>This page describes architecture, not live operating status. Production records, credentials, resident information, and personal messages are not published. The application remains private.</p></section>
-<a class="evidence-link" href="../../assets/Abhimanyu_Khurana_Resume.pdf">Read my resume ↗</a></main></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Personal Operations Platform | Abhimanyu Khurana</title>
+  <meta name="description" content="How I connect my email, calendar, tasks, and notes, keep track of background jobs, and check that actions went through.">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../portfolio.css">
+</head>
+<body>
+  <main class="container" style="padding-block:3rem">
+    <a class="evidence-link" href="../../">← Back to portfolio</a>
+    <h1>Event-Driven Personal Operations Platform</h1>
+    <p class="identity-line">Python · SQLite · Email and calendar APIs</p>
+    <p class="lead">I built this to handle the repetitive work around my email, calendar, tasks, and notes.</p>
+
+    <section class="experience-row">
+      <h2 class="index-label">From an email to a task</h2>
+      <p>When an email or calendar update comes in, the system picks out the details and checks whether it has seen them before. It then works out what needs to happen next, such as creating a task or preparing a reply.</p>
+      <p>The work goes into a queue. An action is only marked done after the app handling it confirms the change.</p>
+    </section>
+
+    <section class="experience-row">
+      <h2 class="index-label">What I use it for</h2>
+      <ul>
+        <li>Keeping track of messages and calendar changes across connected accounts.</li>
+        <li>Drafting replies using the conversation and details I've already provided.</li>
+        <li>Checking what was sent, saved, or is still waiting for another attempt.</li>
+        <li>Running reminders on my desktop so closing my laptop doesn't stop them.</li>
+      </ul>
+    </section>
+
+    <section class="experience-row">
+      <h2 class="index-label">Keeping track when something fails</h2>
+      <p>SQLite stores the job history, so a restart doesn't wipe out what the system was doing. One scheduler runs the recurring jobs. Before retrying an action, the system checks whether it already went through.</p>
+      <p>Saving an incoming email and sending me an alert are separate steps. If the alert fails, the email is still saved and the alert can be tried again.</p>
+      <p>Background scripts handle repeated checks and routine actions. AI helps interpret messages and draft replies; the system still checks the result before marking the work done.</p>
+    </section>
+
+    <a class="evidence-link" href="../../assets/Abhimanyu_Khurana_Resume.pdf">Read my resume ↗</a>
+  </main>
+</body>
+</html>

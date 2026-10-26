@@ -71,7 +71,7 @@ h1 { font-size: clamp(1.35rem, 4vw, 1.75rem); }
 .visitor-mark-button:disabled { cursor: default; }
 .visitor-mark-button:disabled:not([aria-pressed="true"]) { color: var(--muted); }
 .visitor-mark-count { color: var(--text); font-variant-numeric: tabular-nums; }
-.visitor-mark-status, .visitor-mark-privacy { color: var(--muted); margin: 0.5rem 0 0; font-size: 0.72rem; }
+.visitor-mark-status { color: var(--muted); margin: 0.5rem 0 0; font-size: 0.72rem; }
 .visitor-mark-status:empty { display: none; }
 section[id] { scroll-margin-top: 1rem; }
 @media (max-width: 700px) {

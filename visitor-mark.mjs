@@ -41,7 +41,7 @@ export function createVisitorMark({ button, count, status, storage, randomUUID, 
     if (!Number.isSafeInteger(value) || value < 0) throw new Error('Invalid count');
     // A slow initial read must not replace a newer write receipt.
     latestCount = Math.max(latestCount, value);
-    count.textContent = `${latestCount.toLocaleString('en-US')} anonymous ${latestCount === 1 ? 'mark' : 'marks'}`;
+    count.textContent = `${latestCount.toLocaleString('en-US')} ${latestCount === 1 ? 'mark' : 'marks'}`;
   }
 
   async function call(method, body) {
@@ -70,10 +70,10 @@ export function createVisitorMark({ button, count, status, storage, randomUUID, 
       status.textContent = record?.marked ? 'Thanks for stopping by.' : '';
     } catch {
       count.textContent = 'Shared count unavailable';
-      status.textContent = 'The counter is taking a break. Please try again later.';
+      status.textContent = "Couldn't load the count. Please try again later.";
     } finally {
       if (!storageAvailable) {
-        status.textContent = 'Allow browser storage to leave one anonymous mark. You can still see the shared count.';
+        status.textContent = 'Allow browser storage to use this button.';
       }
       renderButton();
     }
@@ -107,8 +107,8 @@ export function createVisitorMark({ button, count, status, storage, randomUUID, 
       status.textContent = 'Thanks for stopping by.';
     } catch (error) {
       status.textContent = error.rateLimited
-        ? 'Too many marks from this network. Please try again later.'
-        : "Couldn't confirm your mark. Try again; retries won't add duplicates.";
+        ? 'Too many marks at once. Please try again later.'
+        : "Couldn't confirm your mark. Please try again.";
     } finally {
       busy = false;
       renderButton();

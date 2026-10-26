@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { visitorConfig } from '../visitor-config.mjs';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const operations = await readFile(new URL('../projects/personal-operations/index.html', import.meta.url), 'utf8');
 
 test('the four retired projects stay off the homepage', () => {
   for (const name of ['Rollback Call', 'Incident Handoff Builder', 'Lease Decision Guide', 'CSV Quality Checker']) {
@@ -32,4 +33,14 @@ test('visitor feature is accessible, public-key-only, and the personal content r
   assert.match(html, /src="preview-image.png"/);
   assert.match(html, /href="assets\/Abhimanyu_Khurana_Resume.pdf"/);
   assert.match(html, /rel="canonical" href="https:\/\/abhikhur.com\//);
+});
+
+test('project examples stay visible without corporate labels or privacy boilerplate', () => {
+  const visibleCopy = html.replace(/<[^>]*>/g, ' ');
+  assert.doesNotMatch(visibleCopy, /\bdeliverables?\b/i);
+  assert.doesNotMatch(html, /An anonymous hello|visitor-mark-privacy/);
+  assert.doesNotMatch(operations, /Privacy boundary|Production records|Public architecture walkthrough|idempotency|receipt-gated|deterministic workers/i);
+  assert.equal([...html.matchAll(/class="deliverable"/g)].length, 10);
+  assert.match(operations, /SQLite stores the job history/);
+  assert.match(operations, /Before retrying an action/);
 });

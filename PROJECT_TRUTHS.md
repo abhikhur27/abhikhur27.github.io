@@ -19,6 +19,7 @@ These are the non-negotiable truths for this portfolio.
 - Keep visual styling clean and restrained; do not ship gradient-heavy "AI-generated" looking surfaces as the default UI.
 - Prefer flat backgrounds, clear contrast, and readable spacing over decorative visual effects.
 - Keep portfolio cards and section copy short. If a card needs a paragraph to be understood, the copy is too dense.
+- Write visible copy in Abhi's plain, professional voice. Show what a project does through concrete descriptions, examples, and links; do not label these "Deliverable" or "Public deliverable". Avoid corporate jargon and boilerplate privacy-boundary sections. Keep actual privacy protections in place without turning them into promotional copy.
 - Default to low-clutter layouts with fewer controls and less on-page text.
 - Do not add extra homepage hero taglines, category slogans, or decorative project-section headlines unless explicitly requested.
 - Do not add homepage filtering chips, tabs, or category controls unless they are clearly necessary.
