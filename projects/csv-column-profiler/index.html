@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSV Column Profiler</title>
-  <meta name="description" content="Static CSV profiling tool for column type inference, null pressure, duplicate rows, and quick QA briefs.">
+  <meta name="description" content="Paste a CSV to check column types, missing values, and duplicate rows before importing it.">
   <meta property="og:title" content="CSV Column Profiler">
   <meta property="og:description" content="Profile pasted CSV data before import, modeling, or dashboard work.">
   <meta property="og:type" content="website">
@@ -18,12 +18,12 @@
 <body>
   <header class="container hero">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
-    <p class="eyebrow">Static data utility</p>
+    <p class="eyebrow">Browser CSV tool</p>
     <h1>CSV Column Profiler</h1>
-    <p class="lead">Paste CSV data, infer column shape, spot mixed types and null-heavy fields, and export a compact QA brief before the file reaches a loader or notebook.</p>
+    <p class="lead">Paste a CSV to see which columns have mixed types or missing values. Check for duplicate rows, then copy or download the results before importing the file.</p>
     <section class="demo-strip" aria-label="Suggested demo path">
-      <strong>Demo path:</strong>
-      <span>Load sample data -> inspect flagged columns -> copy the profiling brief.</span>
+      <strong>Try it:</strong>
+      <span>Load the sample, check the flagged columns, then copy the summary.</span>
     </section>
   </header>
 
@@ -32,7 +32,7 @@
       <div class="panel-head">
         <div>
           <h2>Input</h2>
-          <p class="section-copy">Supports quoted values, commas inside fields, and quick delimiter overrides.</p>
+          <p class="section-copy">Handles quoted values and commas inside fields. You can also choose the separator.</p>
         </div>
         <div class="action-row">
           <button id="load-sample-btn" type="button">Load Sample</button>
@@ -63,7 +63,7 @@
 
       <div class="action-row stack">
         <button id="analyze-btn" class="primary" type="button">Analyze CSV</button>
-        <button id="copy-brief-btn" type="button">Copy Profiling Brief</button>
+        <button id="copy-brief-btn" type="button">Copy Summary</button>
         <button id="export-report-btn" type="button">Export Report</button>
       </div>
       <p id="status-text" class="status" aria-live="polite">Paste CSV data or load the sample dataset.</p>
@@ -92,11 +92,11 @@
       <section class="insight-panel">
         <div class="panel-head">
           <div>
-            <h2>Import Readiness</h2>
-            <p class="section-copy">One compact judgment on whether the file looks clean enough for downstream work.</p>
+            <h2>Things to check</h2>
+            <p class="section-copy">These checks flag common data issues. They do not guarantee that a file is ready to import.</p>
           </div>
         </div>
-        <p id="readiness-summary" class="summary-callout">Analyze a dataset to score its current QA posture.</p>
+        <p id="readiness-summary" class="summary-callout">Analyze a CSV to check for missing values, mixed types, and duplicates.</p>
         <ul id="issue-list" class="issue-list">
           <li>No issues yet. Run an analysis first.</li>
         </ul>
@@ -106,7 +106,7 @@
         <div class="panel-head">
           <div>
             <h2>Column Profiles</h2>
-            <p class="section-copy">Columns are ranked by risk so mixed or sparse fields surface first.</p>
+            <p class="section-copy">Columns with mixed types or more missing values appear first.</p>
           </div>
         </div>
         <div class="table-wrap">
@@ -115,14 +115,14 @@
               <tr>
                 <th>Column</th>
                 <th>Type</th>
-                <th>Null %</th>
+                <th>Missing %</th>
                 <th>Unique %</th>
                 <th>Samples</th>
                 <th>Watch-out</th>
               </tr>
             </thead>
             <tbody id="profile-body">
-              <tr><td colspan="6" class="empty">Analyze a CSV to inspect column-level profiles.</td></tr>
+              <tr><td colspan="6" class="empty">Analyze a CSV to see the results for each column.</td></tr>
             </tbody>
           </table>
         </div>

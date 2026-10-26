@@ -1,10 +1,10 @@
 # SQL Index Advisor
 
-Practical browser tool that inspects a SQL query and proposes candidate index definitions with rationale.
+Paste a SQL query and the columns in your table to get `CREATE INDEX` statements to test. Each suggestion explains which part of the query led to it.
 
-## Why it exists
+## How it works
 
-Index tuning is often done by intuition first and `EXPLAIN` later. This tool gives a quick, transparent first-pass recommendation based on `WHERE`, `JOIN`, `GROUP BY`, and `ORDER BY` patterns.
+The tool uses simple text-matching rules to find table columns in `WHERE`, `JOIN`, `GROUP BY`, and `ORDER BY`. It combines those columns into possible indexes. It does not connect to a database or run the query.
 
 ## Features
 
@@ -12,7 +12,7 @@ Index tuning is often done by intuition first and `EXPLAIN` later. This tool giv
 - Detects join key usage from `JOIN ... ON`.
 - Detects sort/group columns from `ORDER BY` and `GROUP BY`.
 - Generates candidate `CREATE INDEX` statements.
-- Scores recommendations with clear tradeoff notes.
+- Ranks suggestions with a rule-based score. The score does not measure a speed improvement.
 - Includes a join-heavy sample query preset.
 
 ## Usage
@@ -20,11 +20,12 @@ Index tuning is often done by intuition first and `EXPLAIN` later. This tool giv
 1. Enter a table name.
 2. Enter available columns for that table.
 3. Paste a SQL query.
-4. Click `Analyze Query`.
-5. Copy candidate index DDL into your migration workflow.
+4. Click `Check query`.
+5. Review a suggested statement, then test it with your database's query planner before putting it in a migration.
 
 ## Scope and limits
 
-- Heuristic-driven suggestions only; always validate with your DB planner (`EXPLAIN`, `ANALYZE`).
-- Does not model cardinality, selectivity, or write amplification costs.
-- Best suited for quick triage and interview/portfolio walkthroughs.
+- Suggestions are starting points. Validate them with your database planner (`EXPLAIN`, `ANALYZE`).
+- The parser uses text matching rather than a full SQL grammar, so complex queries and aliases can be missed or misread.
+- It does not know how many rows a table has, how selective a filter is, which indexes already exist, or how much extra work an index adds to writes.
+- If it finds no query columns, it suggests the first table column as a fallback. That alone is not evidence that the index will help.

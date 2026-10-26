@@ -17,17 +17,17 @@ const cases = [
     decisions: [
       {
         label: 'Approve instant exchange',
-        note: 'Protect trust fast and convert the case into a product-fix signal instead of a support war.',
+        note: 'Replace the faulty headset and reduce the time spent on the support request.',
         effect: { trust: 12, abuse: -4, support: -8, margin: -7 },
       },
       {
         label: 'Offer store credit first',
-        note: 'Preserve some margin, but risk teaching the customer that obvious defects still need negotiation.',
+        note: 'Keep the sale as store credit, although the customer asked for a replacement.',
         effect: { trust: -4, abuse: 2, support: 6, margin: 3 },
       },
       {
         label: 'Escalate for engineering review',
-        note: 'You gather more certainty, but you are also asking the customer to wait through internal caution.',
+        note: 'Get another review of the fault while the customer waits.',
         effect: { trust: -6, abuse: -2, support: 9, margin: 5 },
       },
     ],
@@ -42,25 +42,25 @@ const cases = [
       'Support notes show no prior claims on the serial',
     ],
     stakes: {
-      trust: 'Moderate social trust issue',
+      trust: 'The gift recipient wants a usable return option',
       abuse: 'Medium because receipt is missing',
-      support: 'Fast rule clarity keeps this queue moving',
-      margin: 'Refund versus exchange changes loss shape',
+      support: 'A clear answer avoids repeated support messages',
+      margin: 'A refund costs more cash than an exchange',
     },
     decisions: [
       {
         label: 'Approve store credit with serial verification',
-        note: 'You preserve some discipline while still rewarding a clean unopened return.',
+        note: 'Verify the serial number and offer credit for the unopened device.',
         effect: { trust: 8, abuse: -1, support: -4, margin: 4 },
       },
       {
         label: 'Deny without receipt',
-        note: 'The rule is clear, but it teaches the queue that unopened gifts still get punished by paperwork gaps.',
+        note: 'Apply the receipt requirement even though the device is unopened.',
         effect: { trust: -10, abuse: -5, support: 3, margin: 8 },
       },
       {
         label: 'Allow exchange only',
-        note: 'You keep revenue in-system, but the recipient may feel boxed into inventory they did not choose.',
+        note: 'Offer a different product instead of returning the money.',
         effect: { trust: 2, abuse: -2, support: -1, margin: 6 },
       },
     ],
@@ -75,25 +75,25 @@ const cases = [
       'The crack might be design-related, not abuse-related',
     ],
     stakes: {
-      trust: 'High public precedent pressure',
+      trust: 'Other buyers are following the public complaint',
       abuse: 'Medium because wear complicates fault',
       support: 'A bad ruling creates repeat contacts and quote screenshots',
-      margin: 'Exception cost is visible but brand damage may cost more',
+      margin: 'A replacement costs money; denying it may upset other buyers',
     },
     decisions: [
       {
         label: 'Grant one-time exception replacement',
-        note: 'You absorb some abuse risk to stop a public trust spiral and gather field-failure evidence.',
+        note: 'Replace the worn device as an exception and inspect the reported crack.',
         effect: { trust: 10, abuse: 6, support: -5, margin: -8 },
       },
       {
         label: 'Offer discounted replacement',
-        note: 'You split the burden, but the customer may read the compromise as half-belief in the defect.',
+        note: 'Share the replacement cost with the buyer while the cause remains unclear.',
         effect: { trust: 1, abuse: 1, support: 4, margin: 2 },
       },
       {
         label: 'Deny as wear and tear',
-        note: 'You defend the written policy while risking a louder public narrative about evasive support.',
+        note: 'Treat the damage as normal wear. The buyer may continue the public complaint.',
         effect: { trust: -12, abuse: -4, support: 8, margin: 7 },
       },
     ],
@@ -108,25 +108,25 @@ const cases = [
       'Chargeback threat mentioned in chat',
     ],
     stakes: {
-      trust: 'Low incremental trust upside',
-      abuse: 'High risk of teaching the wrong customers the loophole',
-      support: 'A messy escalation will consume senior time',
+      trust: 'Another approval may do little to change this relationship',
+      abuse: 'Repeated claims and missing accessories need checking',
+      support: 'A disputed decision may need a senior review',
       margin: 'Potential direct abuse loss is high',
     },
     decisions: [
       {
         label: 'Require mail-in inspection',
-        note: 'You slow the case down, but you force evidence before another high-value exception lands.',
+        note: 'Inspect the device before deciding on another high-value return.',
         effect: { trust: -2, abuse: -8, support: 5, margin: 7 },
       },
       {
         label: 'Approve immediately to avoid escalation',
-        note: 'You buy short-term calm while telling the queue that pressure still works against weak evidence.',
+        note: 'Close the request quickly despite the unclear fault and previous returns.',
         effect: { trust: 3, abuse: 10, support: -3, margin: -10 },
       },
       {
         label: 'Deny and cite missing accessories',
-        note: 'The rule is defensible, but a hard denial may amplify chargeback and manual review work.',
+        note: 'Apply the accessories requirement. The customer may dispute the charge.',
         effect: { trust: -7, abuse: -4, support: 7, margin: 8 },
       },
     ],
@@ -138,28 +138,28 @@ const cases = [
       'Bulk order with visible campus use case',
       'Issue is yours, not customer-caused',
       'Timing is tight before the event',
-      'A clean logistics fix could preserve a long-term buyer',
+      'The group may order again if the shipment is corrected',
     ],
     stakes: {
       trust: 'High because the buyer may place future group orders',
       abuse: 'Very low',
-      support: 'Fast clarity prevents ten parallel tickets',
+      support: 'One answer can prevent ten separate support requests',
       margin: 'Shipping speed becomes the main cost, not the refund itself',
     },
     decisions: [
       {
         label: 'Expedite exchange and cover return labels',
-        note: 'You spend money fast, but you protect the obvious long-term relationship and reduce support duplication.',
+        note: 'Pay for faster shipping to correct the wrong-color shipment before the event.',
         effect: { trust: 11, abuse: -3, support: -7, margin: -6 },
       },
       {
         label: 'Offer partial refund to keep the shipment',
-        note: 'This saves logistics pain, but the buyer still eats a product mismatch you caused.',
+        note: 'Offer a discount if the group can use the wrong-color devices.',
         effect: { trust: -1, abuse: 0, support: 2, margin: 4 },
       },
       {
         label: 'Ask the org to wait for standard replacement timing',
-        note: 'This protects shipping cost but quietly tells the customer your internal cadence matters more than their event.',
+        note: 'Use standard shipping even though the replacements may miss the event.',
         effect: { trust: -9, abuse: -2, support: 8, margin: 6 },
       },
     ],
@@ -171,7 +171,7 @@ const cases = [
       'Return is within the written window',
       'No defect evidence',
       'Device condition is clean and complete',
-      'This is a policy philosophy case more than a fraud case',
+      'The question is whether to honor a return for a working product',
     ],
     stakes: {
       trust: 'Moderate if the promise is genuine',
@@ -182,17 +182,17 @@ const cases = [
     decisions: [
       {
         label: 'Honor the full refund',
-        note: 'You treat the written promise as real and keep policy trust intact.',
+        note: 'Accept the return within the stated window.',
         effect: { trust: 9, abuse: 4, support: -4, margin: -8 },
       },
       {
         label: 'Offer exchange or credit only',
-        note: 'You preserve some margin while quietly rewriting the promise after purchase.',
+        note: 'Keep the money as store credit even though the request is within the return window.',
         effect: { trust: -3, abuse: 0, support: 3, margin: 5 },
       },
       {
         label: 'Charge a restocking fee',
-        note: 'You keep some discipline, but the queue now learns that “allowed” still comes with friction.',
+        note: 'Refund part of the purchase and keep a restocking fee.',
         effect: { trust: -6, abuse: -1, support: 4, margin: 6 },
       },
     ],
@@ -315,55 +315,55 @@ function renderPolicyBoards() {
   const exceptionCount = state.decisions.filter((item) => item.label.includes('Approve') || item.label.includes('exception')).length;
   const denialCount = state.decisions.filter((item) => item.label.includes('Deny')).length;
   const policyMode = state.trust >= 62 && state.margin < 48
-    ? 'Trust-forward queue'
+    ? 'More generous returns'
     : state.margin >= 62 && state.trust < 48
-      ? 'Discipline-forward queue'
-      : 'Balanced but contested queue';
+      ? 'Stricter cost control'
+      : 'Mixed return choices';
 
   policyTitleEl.textContent = policyMode;
-  policySummaryEl.textContent = `Trust is ${scoreRead(state.trust)} while margin discipline is ${scoreRead(state.margin)}. Abuse pressure reads ${scoreRead(state.abuse, true)} and support load reads ${scoreRead(state.support, true)}.`;
+  policySummaryEl.textContent = `Customer trust: ${scoreRead(state.trust)}. Cost control: ${scoreRead(state.margin)}. Fraud-risk result: ${scoreRead(state.abuse, true)}. Support-workload result: ${scoreRead(state.support, true)}.`;
   policyWatchEl.textContent = state.trust < 40
-    ? 'Customers are starting to learn that the written promise bends against them under pressure.'
+    ? 'Customer trust is below 40 in this run.'
     : state.margin < 40
-      ? 'The queue feels generous, but abuse and precedent risk are getting easier to justify later.'
-      : 'The queue is still defensible, but one more lopsided ruling could snap the posture into a stronger identity.';
+      ? 'Cost control is below 40 in this run.'
+      : 'Trust and cost control are both at 40 or higher.';
 
   precedentTitleEl.textContent = state.decisions.length
     ? `${exceptionCount} exception-style ruling${exceptionCount === 1 ? '' : 's'} vs ${denialCount} hard denial${denialCount === 1 ? '' : 's'}`
     : 'No precedent yet';
   precedentSummaryEl.textContent = state.decisions.length
-    ? `The queue now expects ${exceptionCount > denialCount ? 'flexibility' : denialCount > exceptionCount ? 'strict proof' : 'case-by-case judgment'} because those are the rulings you have repeated most.`
-    : 'Repeated exceptions or denials will change what the later cases can defend.';
+    ? `Your decisions lean toward ${exceptionCount > denialCount ? 'exceptions' : denialCount > exceptionCount ? 'denials' : 'an equal count of exceptions and denials'}.`
+    : 'Make a decision to start the count.';
   precedentWatchEl.textContent = state.decisions.length
-    ? 'Consistency helps only if the precedent still matches the facts of the next case in line.'
-    : 'The first few rulings matter disproportionately because they set the emotional contract for the rest of the queue.';
+    ? 'This count summarizes your choices. It does not change later cases.'
+    : 'All six cases use fixed choices and score changes.';
 
   if (state.index < cases.length) {
     verdictTitleEl.textContent = 'Queue still in progress';
-    verdictSummaryEl.textContent = 'Finish the remaining cases to turn the full ruling set into a policy verdict.';
-    verdictWatchEl.textContent = 'Watch for the score you are saving and the score you are quietly spending.';
+    verdictSummaryEl.textContent = 'Finish the remaining cases to see the combined result.';
+    verdictWatchEl.textContent = 'Higher trust and cost control help the final score. Lower fraud risk and workload help too.';
     return;
   }
 
   const total = state.trust + state.margin + (100 - state.abuse) + (100 - state.support);
   const verdict =
     total >= 230
-      ? 'Defensible launch policy'
+      ? 'Higher combined score'
       : total >= 185
-        ? 'Conditional policy win'
-        : 'Policy drift under pressure';
+        ? 'Middle combined score'
+        : 'Lower combined score';
   verdictTitleEl.textContent = verdict;
-  verdictSummaryEl.textContent = `Final read: trust ${state.trust}, abuse pressure ${state.abuse}, support load ${state.support}, margin discipline ${state.margin}.`;
+  verdictSummaryEl.textContent = `Final scores: trust ${state.trust}, fraud risk ${state.abuse}, support workload ${state.support}, cost control ${state.margin}.`;
   verdictWatchEl.textContent = total >= 230
-    ? 'You protected both customer dignity and operator sanity without making abuse the easiest route in the room.'
+    ? 'Your combined score reached at least 230 under the game rules.'
     : total >= 185
-      ? 'The queue is survivable, but one metric is clearly subsidizing the others.'
-      : 'The rulings solved individual cases, but the overall return contract became harder to defend.';
+      ? 'Your combined score was between 185 and 229 under the game rules.'
+      : 'Your combined score was below 185 under the game rules.';
 }
 
 function renderLog() {
   if (!state.decisions.length) {
-    decisionLogEl.innerHTML = '<li>No rulings yet. The queue is waiting for its first precedent.</li>';
+    decisionLogEl.innerHTML = '<li>Your decisions will appear here.</li>';
     return;
   }
 
@@ -385,13 +385,13 @@ function renderFinishedState() {
   caseSummaryEl.textContent = 'You have ruled on every queued case. Restart the launch queue or copy the policy brief.';
   caseFactsEl.innerHTML = `
     <li>Trust ended at ${state.trust}.</li>
-    <li>Abuse pressure ended at ${state.abuse}.</li>
+    <li>Fraud risk ended at ${state.abuse}.</li>
     <li>Support load ended at ${state.support}.</li>
-    <li>Margin discipline ended at ${state.margin}.</li>
+    <li>Cost control ended at ${state.margin}.</li>
   `;
   stakeMapEl.innerHTML = '';
   decisionGridEl.innerHTML = '';
-  statusLineEl.textContent = 'Queue closed. Copy the brief to capture the policy story you just wrote.';
+  statusLineEl.textContent = 'All six cases are complete. Copy the results or restart to try other choices.';
 }
 
 function applyDecision(decisionIndex) {
@@ -419,16 +419,16 @@ function buildSessionBrief() {
     '',
     `Cases resolved: ${Math.min(state.index, cases.length)} / ${cases.length}`,
     `Trust: ${state.trust}`,
-    `Abuse pressure: ${state.abuse}`,
+    `Fraud risk: ${state.abuse}`,
     `Support load: ${state.support}`,
-    `Margin discipline: ${state.margin}`,
+    `Cost control: ${state.margin}`,
     '',
-    `Policy read: ${policyTitleEl.textContent}`,
+    `Choices so far: ${policyTitleEl.textContent}`,
     `Policy summary: ${policySummaryEl.textContent}`,
-    `Precedent pressure: ${precedentTitleEl.textContent}`,
+    `Exceptions and denials: ${precedentTitleEl.textContent}`,
     `Queue verdict: ${verdictTitleEl.textContent}`,
     '',
-    'Ruling tape:',
+    'Decision log:',
     ...state.decisions.map((item, index) => `${index + 1}. ${item.caseTitle} -> ${item.label}`),
   ].join('\n');
 }
@@ -441,7 +441,7 @@ restartBtn.addEventListener('click', () => {
 copyBriefBtn.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(buildSessionBrief());
-    statusLineEl.textContent = 'Copied the current tribunal brief.';
+    statusLineEl.textContent = 'Copied the current results.';
   } catch {
     statusLineEl.textContent = 'Clipboard copy failed in this environment.';
   }

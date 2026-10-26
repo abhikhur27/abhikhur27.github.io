@@ -15,9 +15,9 @@ const decisionSummaryEl = document.getElementById('decision-summary');
 const resultsEl = document.getElementById('results');
 
 const riskOptions = [
-  { key: 'strict', label: 'Strict renewal risk', weight: 1 },
-  { key: 'sublet', label: 'Weak sublet flexibility', weight: 1 },
-  { key: 'maintenance', label: 'Maintenance trust issue', weight: 2 },
+  { key: 'strict', label: 'Concern about renewal terms', weight: 1 },
+  { key: 'sublet', label: 'Limited subletting options', weight: 1 },
+  { key: 'maintenance', label: 'Maintenance concerns (counts twice)', weight: 2 },
 ];
 
 const sampleOffers = [
@@ -145,12 +145,12 @@ function renderResults() {
   winnerNameEl.textContent = winner.name;
   winnerCostEl.textContent = formatMoney(winner.trueMonthly);
   winnerCashEl.textContent = formatMoney(winner.moveInCash);
-  trapSummaryEl.textContent = `${hiddenCostLeader.name}: ${formatMoney(hiddenCostLeader.commuteCost + hiddenCostLeader.riskPenalty)}/mo hidden drag`;
+  trapSummaryEl.textContent = `${hiddenCostLeader.name}: ${formatMoney(hiddenCostLeader.commuteCost + hiddenCostLeader.riskPenalty)}/mo for time and concerns`;
 
   decisionSummaryEl.innerHTML = `
-    <strong>${winner.name}</strong> is the current winner because its effective monthly cost is ${formatMoney(winner.trueMonthly)}
-    ${runnerUp ? `, beating ${runnerUp.name} by ${formatMoney(runnerUp.trueMonthly - winner.trueMonthly)}/month.` : '.'}
-    ${winner.moveInCash > 1800 ? `<span class="warning">Watch the move-in cash hit.</span>` : 'Its upfront cash hit stays relatively contained.'}
+    <strong>${winner.name}</strong> has the lowest monthly estimate at ${formatMoney(winner.trueMonthly)}.
+    ${runnerUp ? `That is ${formatMoney(runnerUp.trueMonthly - winner.trueMonthly)}/month below ${runnerUp.name} with your current assumptions.` : ''}
+    ${winner.moveInCash > 1800 ? `<span class="warning">Move-in cash is above $1,800.</span>` : 'Move-in cash is $1,800 or less.'}
   `;
 
   resultsEl.innerHTML = results
@@ -160,16 +160,16 @@ function renderResults() {
           <div class="result-head">
             <div>
               <h3>${index + 1}. ${result.name}</h3>
-              <p class="result-notes">Sticker rent ${formatMoney(result.rent)} over ${result.months} months.</p>
+              <p class="result-notes">Advertised rent ${formatMoney(result.rent)} over ${result.months} months.</p>
             </div>
             <div class="result-money">${formatMoney(result.trueMonthly)}/mo</div>
           </div>
           <div class="result-metrics">
             <span class="result-pill">Move-in cash ${formatMoney(result.moveInCash)}</span>
-            <span class="result-pill">Commute drag ${formatMoney(result.commuteCost)}/mo</span>
+            <span class="result-pill">Commute time estimate ${formatMoney(result.commuteCost)}/mo</span>
             <span class="result-pill">Monthly extras ${formatMoney(result.monthlyExtras)}</span>
-            <span class="result-pill">Concession relief ${formatMoney(result.concessionMonthly)}/mo</span>
-            <span class="result-pill">Risk penalty ${formatMoney(result.riskPenalty)}/mo</span>
+            <span class="result-pill">Lease discount ${formatMoney(result.concessionMonthly)}/mo</span>
+            <span class="result-pill">Lease concerns estimate ${formatMoney(result.riskPenalty)}/mo</span>
           </div>
         </article>
       `
@@ -237,11 +237,11 @@ function buildDecisionBrief() {
     'Lease Decision Guide',
     '',
     `Generated: ${new Date().toLocaleString()}`,
-    `Winner: ${results[0].name} at ${formatMoney(results[0].trueMonthly)}/mo true monthly cost`,
+    `Lowest estimate: ${results[0].name} at ${formatMoney(results[0].trueMonthly)}/mo using the current assumptions`,
     '',
     ...results.map(
       (result, index) =>
-        `${index + 1}. ${result.name} | true monthly ${formatMoney(result.trueMonthly)} | move-in cash ${formatMoney(result.moveInCash)} | commute drag ${formatMoney(result.commuteCost)}/mo | risk penalty ${formatMoney(result.riskPenalty)}/mo`
+        `${index + 1}. ${result.name} | monthly estimate ${formatMoney(result.trueMonthly)} | move-in cash ${formatMoney(result.moveInCash)} | commute time estimate ${formatMoney(result.commuteCost)}/mo | lease concerns estimate ${formatMoney(result.riskPenalty)}/mo`
     ),
   ].join('\n');
 }
@@ -260,7 +260,7 @@ loadSampleButton.addEventListener('click', loadSampleOffers);
 copyBriefButton.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(buildDecisionBrief());
-    setStatus('Copied the lease decision brief.');
+    setStatus('Copied the lease comparison.');
   } catch (error) {
     setStatus('Clipboard copy failed in this environment.');
   }

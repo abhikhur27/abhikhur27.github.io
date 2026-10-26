@@ -11,18 +11,19 @@
 </head>
 <body>
   <header class="container header">
-    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <a class="back-link" href="../../index.html">Back to portfolio</a>
     <h1>Market Regime Monte Carlo Lab</h1>
-    <p>Stress-test position sizing under bull/bear regime shifts with Monte Carlo simulation and drawdown analytics.</p>
+    <p>Run hundreds of simulated investment paths that switch between rising and falling markets. Change how much is invested to see how that affects growth and losses. The results come from your assumptions, not live market data.</p>
   </header>
 
   <main class="container layout">
     <section class="panel controls">
-      <h2>Simulation Setup</h2>
+      <h2>Set up a simulation</h2>
+      <p>Bull and bear are the model's two market states. Drift is the average daily return you assume; volatility controls how widely daily returns vary.</p>
       <div class="preset-row" role="group" aria-label="Scenario presets">
         <button type="button" class="preset" data-preset="balanced">Balanced</button>
-        <button type="button" class="preset" data-preset="trend">Trend Following</button>
-        <button type="button" class="preset" data-preset="stress">Stress Regime</button>
+        <button type="button" class="preset" data-preset="trend">Longer rising markets</button>
+        <button type="button" class="preset" data-preset="stress">Harsher falling markets</button>
       </div>
 
       <label>
@@ -31,7 +32,7 @@
       </label>
 
       <label>
-        Horizon (trading days): <span id="horizon-label">252</span>
+        Length (trading days): <span id="horizon-label">252</span>
         <input id="horizon" type="range" min="60" max="756" step="21" value="252">
       </label>
 
@@ -56,38 +57,40 @@
       </label>
 
       <label>
-        P(Bull stays Bull): <span id="p-bull-label">92</span>%
+        Chance a bull day stays bull: <span id="p-bull-label">92</span>%
         <input id="p-bull" type="range" min="70" max="99" step="1" value="92">
       </label>
 
       <label>
-        P(Bear stays Bear): <span id="p-bear-label">82</span>%
+        Chance a bear day stays bear: <span id="p-bear-label">82</span>%
         <input id="p-bear" type="range" min="55" max="97" step="1" value="82">
       </label>
 
       <label>
-        Sizing policy
+        How to size the investment
         <select id="sizing-policy">
-          <option value="fixed">Fixed fraction</option>
-          <option value="vol_target">Volatility target</option>
-          <option value="drawdown">Drawdown-aware sizing</option>
+          <option value="fixed">Keep exposure fixed</option>
+          <option value="vol_target">Reduce exposure as volatility rises</option>
+          <option value="drawdown">Reduce exposure after losses</option>
         </select>
       </label>
 
       <label>
-        Baseline exposure (%): <span id="exposure-label">100</span>
+        Starting exposure (%): <span id="exposure-label">100</span>
         <input id="exposure" type="range" min="35" max="190" step="5" value="100">
       </label>
+      <p>At 100% exposure, a market move passes through at its full size. At 50%, its effect is halved. Above 100%, gains and losses are amplified.</p>
 
       <div class="button-row">
-        <button id="run" class="primary" type="button">Run Simulation</button>
-        <button id="reroll" type="button">Randomize Inputs</button>
+        <button id="run" class="primary" type="button">Run simulation</button>
+        <button id="reroll" type="button">Try random settings</button>
       </div>
       <p id="status" class="status" aria-live="polite">Ready.</p>
     </section>
 
     <section class="panel output">
-      <h2>Path Envelope</h2>
+      <h2>Simulated returns over time</h2>
+      <p>Every path starts at 100. The median is the middle result at each day; the other lines mark the 10th and 90th percentiles.</p>
       <canvas id="path-chart" width="900" height="420" aria-label="Monte Carlo equity chart"></canvas>
       <div class="legend">
         <span><i class="legend-line line-p10"></i>10th percentile</span>
@@ -95,32 +98,33 @@
         <span><i class="legend-line line-p90"></i>90th percentile</span>
       </div>
       <div class="legend-actions">
-        <button id="toggle-paths" type="button">Show All Paths</button>
+        <button id="toggle-paths" type="button">Show example paths</button>
       </div>
 
       <div class="metrics" role="list" aria-label="Simulation metrics">
         <article role="listitem">
-          <h3>Median CAGR</h3>
+          <h3>Median annualized growth</h3>
           <p id="metric-cagr">-</p>
         </article>
         <article role="listitem">
-          <h3>Worst Drawdown</h3>
+          <h3>Largest peak-to-low loss</h3>
           <p id="metric-drawdown">-</p>
         </article>
         <article role="listitem">
-          <h3>Loss Probability</h3>
+          <h3>Paths ending at a loss</h3>
           <p id="metric-loss">-</p>
         </article>
         <article role="listitem">
-          <h3>Avg Regime Switches</h3>
+          <h3>Average market-state changes</h3>
           <p id="metric-switches">-</p>
         </article>
       </div>
+      <p>Annualized growth converts the median final return to a 252-trading-day rate. The peak-to-low loss is the largest drop from an earlier high in any simulated path.</p>
 
-      <h2>Distribution Snapshot</h2>
+      <h2>Final returns</h2>
       <div id="distribution" class="distribution" aria-label="Final return distribution"></div>
 
-      <h2>Interpretation</h2>
+      <h2>Reading this run</h2>
       <p id="insight" class="insight"></p>
     </section>
   </main>

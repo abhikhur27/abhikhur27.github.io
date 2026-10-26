@@ -1,10 +1,10 @@
 # Systems Decision Labs
 
-Unified operations game built from the portfolio's repeated campus and infrastructure decision-lab pattern.
+A browser game with seven fictional scenarios about campus services and infrastructure.
 
 ## Core idea
 
-This is no longer just an anthology page. It is one shared game engine with multiple scenario packs:
+The scenarios share the same scoring and three-round structure:
 
 - incident response
 - transit detours
@@ -16,20 +16,14 @@ This is no longer just an anthology page. It is one shared game engine with mult
 
 Each pack uses the same core loop:
 
-1. read the operating situation
-2. choose one irreversible response
-3. watch trust, throughput, resilience, and team load move
-4. finish with a scenario debrief
+1. Read the situation.
+2. Choose one of three responses.
+3. See the changes to public trust, work completed, recovery capacity, and staff workload.
+4. Review the final scores.
 
-## Why this replaced the separate cards
+## How the game works
 
-The old portfolio state had too many near-duplicate projects:
-
-- same round-based choice mechanic
-- same resource-triage framing
-- same broad campus/infrastructure tone
-
-Grouping them into one playable project makes the portfolio more honest and tighter. The mechanic is now clearly one system with multiple contexts, instead of seven separate "new" games that all rhyme too closely.
+The seven scenarios were combined because they use the same choice-and-score mechanic. Each response has fixed score changes, and scores stay between 0 and 100. The final summary follows thresholds in the code. These are made-up game rules, not models of real service performance or staffing needs.
 
 ## Files
 

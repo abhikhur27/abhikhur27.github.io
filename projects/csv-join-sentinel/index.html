@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSV Join Sentinel</title>
-  <meta name="description" content="Static browser tool for diagnosing CSV join failures, duplicate keys, and unmatched rows before analysis or reporting work.">
+  <meta name="description" content="Compare two CSVs to find duplicate IDs and unmatched rows, then preview how they join together.">
   <meta property="og:title" content="CSV Join Sentinel">
-  <meta property="og:description" content="Inspect join keys, row mismatches, and cardinality risk across two pasted CSV datasets.">
+  <meta property="og:description" content="Find duplicate IDs and unmatched rows before combining two CSVs.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#0f1720">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +17,9 @@
 <body>
   <header class="container hero">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
-    <p class="eyebrow">Workflow Tool</p>
+    <p class="eyebrow">Browser CSV tool</p>
     <h1>CSV Join Sentinel</h1>
-    <p class="lead">Paste two CSV or TSV datasets, pick their keys, and catch duplicate-key blowups or orphaned rows before the join gets trusted.</p>
+    <p class="lead">Paste two CSVs and choose the columns that match their rows. See which IDs are missing or repeated, then preview the combined table.</p>
   </header>
 
   <main class="container layout">
@@ -68,21 +68,21 @@
         </label>
       </div>
 
-      <p id="status" class="status" aria-live="polite">Paste two datasets or load the sample to inspect join health.</p>
+      <p id="status" class="status" aria-live="polite">Paste two datasets or load the sample to check how they join.</p>
     </section>
 
     <section class="panel summary-panel">
       <h2>Join Summary</h2>
       <div class="summary-grid">
-        <article><h3>Join posture</h3><p id="join-posture">-</p></article>
+        <article><h3>Key matches</h3><p id="join-posture">-</p></article>
         <article><h3>Matched keys</h3><p id="matched-keys">-</p></article>
         <article><h3>Left only</h3><p id="left-only">-</p></article>
         <article><h3>Right only</h3><p id="right-only">-</p></article>
         <article><h3>Left duplicates</h3><p id="left-duplicates">-</p></article>
         <article><h3>Right duplicates</h3><p id="right-duplicates">-</p></article>
       </div>
-      <div id="risk-board" class="note">Analyze a join to turn row counts into a concrete risk call.</div>
-      <div id="schema-board" class="note">Schema overlap and missing-column warnings will appear here.</div>
+      <div id="risk-board" class="note">Analyze a join to check for duplicate keys and missing matches.</div>
+      <div id="schema-board" class="note">Shared column names and columns unique to each file will appear here.</div>
     </section>
 
     <section class="panel">

@@ -20,6 +20,7 @@ These are the non-negotiable truths for this portfolio.
 - Prefer flat backgrounds, clear contrast, and readable spacing over decorative visual effects.
 - Keep portfolio cards and section copy short. If a card needs a paragraph to be understood, the copy is too dense.
 - Write visible copy in Abhi's plain, professional voice. Show what a project does through concrete descriptions, examples, and links; do not label these "Deliverable" or "Public deliverable". Avoid corporate jargon and boilerplate privacy-boundary sections. Keep actual privacy protections in place without turning them into promotional copy.
+- Apply that voice throughout project pages, including instructions, controls, generated explanations, and introductory documentation. Explain what someone enters, what the project does, and what they can learn from the result. Keep useful technical terms and real limitations, explained in ordinary language. Do not invent personal stories, usage, or results to make the writing sound natural.
 - Default to low-clutter layouts with fewer controls and less on-page text.
 - Do not add extra homepage hero taglines, category slogans, or decorative project-section headlines unless explicitly requested.
 - Do not add homepage filtering chips, tabs, or category controls unless they are clearly necessary.

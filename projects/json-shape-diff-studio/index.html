@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JSON Shape Diff Studio</title>
-  <meta name="description" content="Static JSON diff tool for comparing payload shape, path coverage, and type drift.">
+  <meta name="description" content="Compare two JSON documents to find added fields, removed fields, and changes in types or values.">
   <meta property="og:title" content="JSON Shape Diff Studio">
-  <meta property="og:description" content="Compare two JSON payloads, isolate added or removed paths, and catch type drift before it ships.">
+  <meta property="og:description" content="Paste two JSON documents and see which fields, types, and values changed.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://abhikhur.com/projects/json-shape-diff-studio/">
   <meta name="theme-color" content="#10141a">
@@ -18,13 +18,13 @@
 <body>
   <header class="hero shell">
     <a class="back-link" href="../../index.html">Back to portfolio</a>
-    <p class="eyebrow">Static browser utility</p>
+    <p class="eyebrow">Browser tool</p>
     <h1>JSON Shape Diff Studio</h1>
-    <p class="lead">Compare two JSON payloads, spot added or removed paths, and catch type drift before an API or config change turns into a bug hunt.</p>
+    <p class="lead">Paste two versions of an API response or config file to see what changed. It flags added and removed fields, changed values, and type changes, like a number becoming a string.</p>
     <div class="hero-actions">
       <button id="compare-btn" class="primary" type="button">Compare JSON</button>
-      <button id="copy-summary-btn" type="button">Copy Summary</button>
-      <button id="swap-btn" type="button">Swap Sides</button>
+      <button id="copy-summary-btn" type="button">Copy summary</button>
+      <button id="swap-btn" type="button">Swap sides</button>
     </div>
   </header>
 
@@ -49,8 +49,8 @@
     <section class="panel summary-panel">
       <div class="panel-head stacked">
         <div>
-          <h2>Diff Summary</h2>
-          <p id="summary-text">Load the samples or paste your own payloads to inspect path-level changes.</p>
+          <h2>Changes at a glance</h2>
+          <p id="summary-text">Try an example or paste your own JSON to compare the fields.</p>
         </div>
         <label class="filter-control" for="change-filter">
           Filter changes
@@ -79,7 +79,7 @@
           <p id="removed-count">0</p>
         </article>
         <article role="listitem">
-          <h3>Type drift</h3>
+          <h3>Type changed</h3>
           <p id="type-count">0</p>
         </article>
         <article role="listitem">
@@ -87,7 +87,7 @@
           <p id="value-count">0</p>
         </article>
         <article role="listitem">
-          <h3>Stable</h3>
+          <h3>Unchanged</h3>
           <p id="unchanged-count">0</p>
         </article>
       </div>
@@ -96,8 +96,8 @@
     <section class="panel results-panel">
       <div class="panel-head stacked">
         <div>
-          <h2>Path Diff</h2>
-          <p>Container nodes and leaf values are both included so schema drift is visible, not just the last primitive value.</p>
+          <h2>Field-by-field comparison</h2>
+          <p>Each path points to a field or array item. Objects and arrays appear too, so you can see when their type or size changes. Long text is shortened in the preview; this is a quick structural check, not a complete text comparison.</p>
         </div>
       </div>
 
@@ -107,14 +107,14 @@
             <tr>
               <th>Path</th>
               <th>Status</th>
-              <th>Left</th>
-              <th>Right</th>
+              <th>Left type</th>
+              <th>Right type</th>
               <th>Preview</th>
             </tr>
           </thead>
           <tbody id="diff-body">
             <tr>
-              <td colspan="5" class="empty-row">No diff yet.</td>
+              <td colspan="5" class="empty-row">Compare the JSON to see changes here.</td>
             </tr>
           </tbody>
         </table>

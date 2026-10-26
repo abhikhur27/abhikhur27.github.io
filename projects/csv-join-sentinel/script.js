@@ -136,12 +136,12 @@ function summarizeDuplicates(grouped) {
 function classifyRisk(report) {
   const duplicatePressure = report.leftDuplicateGroups.length + report.rightDuplicateGroups.length;
   if (duplicatePressure >= 3) {
-    return 'High risk: duplicate keys can multiply rows and silently distort aggregates.';
+    return 'Several keys are repeated. Matching repeated keys can multiply rows and change totals.';
   }
   if (report.leftOnlyKeys.length || report.rightOnlyKeys.length) {
-    return 'Medium risk: unmatched keys will drop or hollow out records depending on join mode.';
+    return 'Some keys have no match. Depending on the join mode, those rows may be left out or have empty fields.';
   }
-  return 'Low risk: keys mostly align and duplicate pressure looks contained.';
+  return 'All keys have a match, and fewer than three duplicate-key groups were found. Check the duplicate counts before using the result.';
 }
 
 function prefixRightRow(row, leftHeaders) {
@@ -254,10 +254,10 @@ function analyzeJoin() {
 
   const posture =
     leftDuplicateGroups.length || rightDuplicateGroups.length
-      ? 'Many-to-many pressure'
+      ? 'Repeated keys found'
       : leftOnlyKeys.length || rightOnlyKeys.length
         ? 'Partial key overlap'
-        : 'Clean one-to-one / one-to-many posture';
+        : 'Unique keys match on both sides';
 
   joinPostureEl.textContent = posture;
   matchedKeysEl.textContent = String(matchedKeys.length);
@@ -317,7 +317,7 @@ async function copySummary() {
     'CSV Join Sentinel Summary',
     `Mode: ${appState.lastReport.joinMode}`,
     `Keys: ${appState.lastReport.leftKey} -> ${appState.lastReport.rightKey}`,
-    `Posture: ${joinPostureEl.textContent}`,
+    `Key matches: ${joinPostureEl.textContent}`,
     `Matched keys: ${matchedKeysEl.textContent}`,
     `Left only: ${leftOnlyEl.textContent}`,
     `Right only: ${rightOnlyEl.textContent}`,

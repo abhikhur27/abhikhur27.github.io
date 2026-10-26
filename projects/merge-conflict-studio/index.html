@@ -12,9 +12,9 @@
 <body>
   <header class="header container">
     <a class="back-link" href="../../index.html">Back to Portfolio</a>
-    <p class="eyebrow">Developer Workflow Game</p>
+    <p class="eyebrow">Browser coding exercise</p>
     <h1>Merge Conflict Studio</h1>
-    <p class="lede">Resolve realistic three-way merge conflicts, keep the right behaviors alive, and score whether your final merge would actually ship.</p>
+    <p class="lede">Practice combining changes from two Git branches. Read the original file and both edits, write a merged version, and check it against the example's requirements.</p>
   </header>
 
   <main class="container layout">
@@ -32,12 +32,12 @@
       <p id="scenario-summary" class="summary-copy"></p>
 
       <section class="checklist-panel">
-        <h3>Merge Constraints</h3>
+        <h3>What to keep</h3>
         <div id="constraint-list" class="constraint-list"></div>
       </section>
 
       <section class="playbook-panel">
-        <h3>Branch Intent</h3>
+        <h3>What each branch changes</h3>
         <div class="intent-grid">
           <article>
             <strong>Base</strong>
@@ -99,10 +99,10 @@
         <textarea id="resolution-editor" spellcheck="false" aria-label="Resolution editor"></textarea>
 
         <div class="button-row actions-row">
-          <button id="score-resolution" class="primary" type="button">Score Resolution</button>
+          <button id="score-resolution" class="primary" type="button">Check Merge</button>
           <button id="show-answer" type="button">Reveal Reference Merge</button>
         </div>
-        <p id="status" class="status" aria-live="polite">Blend the conflict and then score it against the scenario constraints.</p>
+        <p id="status" class="status" aria-live="polite">Edit the merged file, then check for the required text. This exercise does not run or compile your code.</p>
       </section>
 
       <section class="results-grid">

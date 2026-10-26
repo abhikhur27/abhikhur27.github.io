@@ -1,10 +1,10 @@
 # Merge Conflict Studio
 
-Static project for practicing three-way merge resolution with realistic frontend workflow conflicts.
+Browser exercises for combining changes from two Git branches.
 
 ## Idea
 
-Instead of visualizing git data, this project puts the user in the role of an engineer resolving a conflicted file under concrete behavioral constraints:
+Each example shows a common original file and two edited versions. Write a merged version that keeps the required changes:
 
 - keep accessibility improvements
 - preserve analytics or timeout behavior
@@ -19,11 +19,9 @@ Instead of visualizing git data, this project puts the user in the role of an en
 - Constraint-based scoring with pass/fail review notes
 - Reference merge reveal for studying the correct resolution
 
-## Why it clears the originality bar
+## What the checks tell you
 
-- The user inhabits a specific role: shipping reviewer, not passive observer.
-- Different decisions lead to materially different review outcomes.
-- The value comes from consequence and synthesis, not from a chart or dashboard.
+The score checks whether specific text appears and how many lines match the reference merge. It does not parse, compile, or execute your code. A high score is useful feedback for the exercise, not proof that the result works.
 
 ## Tech
 

@@ -62,48 +62,48 @@ function buildRecommendations(tableName, tableColumns, queryPattern) {
 
   if (where.length > 0) {
     candidates.push({
-      name: 'Filter Index',
+      name: 'Index for filters',
       columns: where,
       score: Math.min(90, 60 + where.length * 10),
-      why: `Targets WHERE filtering on ${where.join(', ')}.`,
+      why: `These columns appear in WHERE: ${where.join(', ')}. Test whether indexing them helps the database find matching rows.`,
     });
   }
 
   if (where.length > 0 && orderBy.length > 0) {
     const composite = uniq([...where, ...orderBy]);
     candidates.push({
-      name: 'Filter + Sort Composite',
+      name: 'Combined filter and sort index',
       columns: composite,
       score: Math.min(96, 72 + composite.length * 6),
-      why: `Supports WHERE filtering and ORDER BY on one access path.`,
+      why: `Puts the WHERE and ORDER BY columns in one index. The database may be able to use it for both filtering and sorting.`,
     });
   }
 
   if (join.length > 0) {
     candidates.push({
-      name: 'Join Key Index',
+      name: 'Index for joins',
       columns: join,
       score: Math.min(92, 68 + join.length * 8),
-      why: `Reduces lookup cost for JOIN predicates using ${join.join(', ')}.`,
+      why: `These columns appear in a JOIN condition: ${join.join(', ')}. An index may help the database match rows between tables.`,
     });
   }
 
   if (groupBy.length > 0) {
     candidates.push({
-      name: 'Grouping Index',
+      name: 'Index for grouping',
       columns: groupBy,
       score: Math.min(88, 64 + groupBy.length * 7),
-      why: `Improves grouping path for GROUP BY columns.`,
+      why: `These columns appear in GROUP BY. Test whether their index order helps the database group rows.`,
     });
   }
 
   const fallbackColumns = where.length ? where : tableColumns.slice(0, 1);
   if (!candidates.length && fallbackColumns.length) {
     candidates.push({
-      name: 'Baseline Access Index',
+      name: 'First-column suggestion',
       columns: fallbackColumns,
       score: 55,
-      why: 'No obvious filter/sort keys found. Baseline index may still aid point lookups.',
+      why: 'The tool did not find filter, join, or sort columns. This fallback uses the first table column; the query alone does not establish that an index would help.',
     });
   }
 

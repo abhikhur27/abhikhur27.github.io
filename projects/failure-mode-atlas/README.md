@@ -1,6 +1,6 @@
 # Failure Mode Atlas
 
-Static incident-response sandbox that turns observed signals into ranked failure-mode hypotheses and next diagnostic actions.
+A browser troubleshooting exercise. Choose symptoms in an example outage to compare four possible causes and read suggested checks.
 
 ## What it does
 
@@ -11,16 +11,12 @@ Static incident-response sandbox that turns observed signals into ranked failure
   - Dependency degradation
   - Configuration drift
   - Data integrity fault
-- Surfaces the exact clues contributing to each ranking.
-- Generates a concrete next-action sequence for the current highest-confidence hypothesis.
+- Shows the symptoms contributing points to each cause.
+- Lists checks for the cause with the highest point total.
 
-## Why it belongs in the portfolio
+## How the ranking works
 
-This project is meant to show systems thinking, not just frontend polish. The main value is the decision model:
-
-- separate symptoms from root-cause families
-- assign weighted evidence rather than binary labels
-- turn ranking output into operator-facing next steps
+Each symptom has hand-set weights for one or more causes. The page adds those weights and sorts by the total. The scores are not measured probabilities, and the app does not connect to real monitoring data. This is an exercise in comparing symptoms, not a procedure for managing real outages.
 
 ## Files
 

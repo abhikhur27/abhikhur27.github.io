@@ -423,7 +423,7 @@ function computeRouteBundle(startId, endId) {
 
 function renderPolicySummary(bundle) {
   if (!bundle || !bundle.activeRoute) {
-    routePolicySummaryEl.textContent = 'Compute a route to compare time, transfer, and outage tradeoffs.';
+    routePolicySummaryEl.textContent = 'Find a route to compare travel time, transfers, and the effect of closures.';
     return;
   }
 
@@ -432,28 +432,28 @@ function renderPolicySummary(bundle) {
     const resilientDelta = bundle.resilient ? bundle.resilient.totalMinutes - route.totalMinutes : 0;
     const exposureDrop = bundle.resilient ? route.totalRiskExposure - bundle.resilient.totalRiskExposure : 0;
     routePolicySummaryEl.textContent = bundle.resilient
-      ? `Fastest policy active. Most resilient alternative adds ${Math.max(0, resilientDelta)}m and cuts closure exposure by ${formatExposureMinutes(
+      ? `Showing the fastest route. The lower-risk alternative adds ${Math.max(0, resilientDelta)}m and reduces the closure-delay score by ${formatExposureMinutes(
           Math.max(0, exposureDrop)
         )}.`
-      : 'Fastest policy active.';
+      : 'Showing the fastest route.';
     return;
   }
 
   if (route.objective === 'transfers') {
     const fastestDelta = bundle.fastest ? route.totalMinutes - bundle.fastest.totalMinutes : 0;
     routePolicySummaryEl.textContent = bundle.fastest
-      ? `Low-transfer policy active. It uses ${route.transferCount} transfers and costs ${Math.max(0, fastestDelta)}m versus the fastest option.`
-      : 'Low-transfer policy active.';
+      ? `This route uses ${route.transferCount} transfers and takes ${Math.max(0, fastestDelta)}m longer than the fastest option.`
+      : 'Showing the route with fewer transfers.';
     return;
   }
 
   const fastestDelta = bundle.fastest ? route.totalMinutes - bundle.fastest.totalMinutes : 0;
   const exposureDrop = bundle.fastest ? bundle.fastest.totalRiskExposure - route.totalRiskExposure : 0;
   routePolicySummaryEl.textContent = bundle.fastest
-    ? `Resilience policy active. It adds ${Math.max(0, fastestDelta)}m versus fastest and lowers closure exposure by ${formatExposureMinutes(
+    ? `This route adds ${Math.max(0, fastestDelta)}m compared with the fastest option and reduces the closure-delay score by ${formatExposureMinutes(
         Math.max(0, exposureDrop)
       )}.`
-    : 'Resilience policy active.';
+    : 'Showing the route with the lowest closure-delay score.';
 }
 
 function renderMetrics(route, bundle) {
@@ -570,7 +570,7 @@ function renderResilience(analysis, route, networkReliability) {
     }
     if (worstOutage.delayedDemandRiders > 0) {
       impactParts.push(
-        `adds ${Math.round(worstOutage.totalAddedPassengerMinutes).toLocaleString()} passenger-minutes for ${Math.round(
+        `adds ${Math.round(worstOutage.totalAddedPassengerMinutes).toLocaleString()} minutes of delay across ${Math.round(
           worstOutage.delayedDemandRiders
         ).toLocaleString()} riders`
       );
@@ -578,16 +578,16 @@ function renderResilience(analysis, route, networkReliability) {
     if (worstOutage.additionalOverflowRiderSegments > 0) {
       const overloadLabel = worstOutage.capacityImpactSegmentCount === 1 ? 'link' : 'links';
       impactParts.push(
-        `pushes ${worstOutage.capacityImpactSegmentCount} relief ${overloadLabel} above capacity by ${Math.round(
+        `overloads ${worstOutage.capacityImpactSegmentCount} alternate ${overloadLabel} by ${Math.round(
           worstOutage.additionalOverflowRiderSegments
-        ).toLocaleString()} rider-segments`
+        ).toLocaleString()} extra rider trips across connections`
       );
     }
     const passengerImpact = impactParts.length ? impactParts.join('; ') : 'does not affect the modeled peak trips';
     const baselineCapacityWarning = networkReliability.baselineOverloadedSegmentCount
-      ? ` Baseline demand already exceeds ${networkReliability.baselineOverloadedSegmentCount} link capacities by ${Math.round(
+      ? ` Before any closure, ${networkReliability.baselineOverloadedSegmentCount} connections are already over capacity by ${Math.round(
           networkReliability.baselineOverflowRiderSegments
-        ).toLocaleString()} rider-segments.`
+        ).toLocaleString()} rider trips across connections.`
       : '';
     const baselineDemandGap = networkReliability.baselineLostDemandRiders
       ? ` ${Math.round(networkReliability.baselineLostDemandRiders).toLocaleString()} modeled riders already lack a route.`
@@ -596,44 +596,44 @@ function renderResilience(analysis, route, networkReliability) {
     if (networkReliability.baselineEqualRouteSplitDemandPairCount > 0) {
       const pairLabel = networkReliability.baselineEqualRouteSplitDemandPairCount === 1 ? 'pair' : 'pairs';
       assignmentParts.push(
-        `splits ${networkReliability.baselineEqualRouteSplitDemandPairCount} demand ${pairLabel} across equal-time paths`
+        `shares riders between equally fast routes for ${networkReliability.baselineEqualRouteSplitDemandPairCount} trip ${pairLabel}`
       );
     }
     if (networkReliability.baselineCapacityReroutedDemandRiders > 0) {
       assignmentParts.push(
-        `diverts ${Math.round(networkReliability.baselineCapacityReroutedDemandRiders).toLocaleString()} riders from saturated shortest paths`
+        `moves ${Math.round(networkReliability.baselineCapacityReroutedDemandRiders).toLocaleString()} riders off crowded shortest routes`
       );
     }
-    const baselineAssignment = assignmentParts.length ? ` Baseline assignment ${assignmentParts.join(' and ')}.` : '';
+    const baselineAssignment = assignmentParts.length ? ` Before closures, the model ${assignmentParts.join(' and ')}.` : '';
     const connectivityPosture = !networkReliability.baselineConnected
-      ? `Network starts partially disconnected at ${baselineCoverage}% station-pair coverage.${baselineDemandGap}`
+      ? `Before closures, ${baselineCoverage}% of station pairs have a route.${baselineDemandGap}`
       : networkReliability.nMinusOnePass
-        ? 'N-1 connectivity passes.'
-        : `N-1 connectivity fails with ${networkReliability.criticalSegmentCount} critical ${criticalLabel}.`;
-    resilienceSummaryEl.textContent = `${connectivityPosture} Worst passenger outage, ${segmentDisplayName(
+        ? 'Every station pair stays connected if any one connection closes.'
+        : `Closing any of ${networkReliability.criticalSegmentCount} critical ${criticalLabel} leaves some station pairs without a route.`;
+    resilienceSummaryEl.textContent = `${connectivityPosture} The closure affecting the most modeled riders is ${segmentDisplayName(
       worstOutage
-    )}, ${passengerImpact}.${baselineCapacityWarning}${baselineAssignment}`;
+    )}. It ${passengerImpact}.${baselineCapacityWarning}${baselineAssignment}`;
   } else if (networkReliability && !networkReliability.baselineConnected) {
-    resilienceSummaryEl.textContent = `Network starts partially disconnected: ${baselineCoverage}% station-pair coverage; ${networkReliability.criticalSegmentCount} additional critical ${criticalLabel}.`;
+    resilienceSummaryEl.textContent = `Before closures, ${baselineCoverage}% of station pairs have a route. Closing any of ${networkReliability.criticalSegmentCount} critical ${criticalLabel} disconnects more pairs.`;
   } else if (networkReliability?.nMinusOnePass) {
     resilienceSummaryEl.textContent = worstOutage?.delayedPairCount
-      ? `N-1 connectivity passes. The worst outage, ${segmentDisplayName(worstOutage)}, delays ${worstOutage.delayedPairCount} ${delayedPairLabel} by ${averageDelay}m on average.`
-      : 'N-1 connectivity passes with no added journey time after any single link failure.';
+      ? `Every station pair stays connected after a single closure. Closing ${segmentDisplayName(worstOutage)} delays ${worstOutage.delayedPairCount} ${delayedPairLabel} by ${averageDelay}m on average.`
+      : 'Every station pair stays connected, with no added travel time, after any single connection closes.';
   } else if (networkReliability) {
     const survivingDelay = worstOutage?.delayedPairCount
-      ? ` Surviving affected trips add ${averageDelay}m on average.`
+      ? ` Trips that still have a route take ${averageDelay}m longer on average when delayed.`
       : '';
-    resilienceSummaryEl.textContent = `N-1 connectivity fails: ${networkReliability.criticalSegmentCount} critical ${criticalLabel}; the worst outage retains ${networkCoverage}% of station pairs.${survivingDelay}`;
+    resilienceSummaryEl.textContent = `The network has ${networkReliability.criticalSegmentCount} critical ${criticalLabel}. After the most disruptive closure, ${networkCoverage}% of previously connected station pairs still have a route.${survivingDelay}`;
   }
 
   if (!analysis) {
-    resilienceExposureEl.textContent = 'Exposure: -';
+    resilienceExposureEl.textContent = 'Closure-delay score: -';
     resilienceBackupEl.textContent = 'Backup: -';
     resilienceWeakLinkEl.textContent = 'Weak link: -';
     return;
   }
 
-  resilienceExposureEl.textContent = `Exposure: ${formatExposureMinutes(route.totalRiskExposure)} cumulative closure delay across the chosen path.`;
+  resilienceExposureEl.textContent = `Closure-delay score: ${formatExposureMinutes(route.totalRiskExposure)}. This adds the connection-level closure penalties along the route; it is not a forecast of the trip's delay.`;
 
   if (!analysis.bestBackup || !analysis.bestBackup.alternate) {
     resilienceBackupEl.textContent = 'Backup: none available if any route link fails.';
@@ -652,15 +652,15 @@ function renderResilience(analysis, route, networkReliability) {
   }
 
   if (!analysis.weakestLink.alternate) {
-    resilienceWeakLinkEl.textContent = `Weak link: losing ${segmentDisplayName(
+    resilienceWeakLinkEl.textContent = `Weak link: closing ${segmentDisplayName(
       analysis.weakestLink.segment
-    )} disconnects the trip entirely.`;
+    )} leaves this trip without a route.`;
     return;
   }
 
   const extraTransfers = analysis.weakestLink.alternate.transferCount - route.transferCount;
   const extraTransferText = formatTransferDelta(extraTransfers).replace(',', ' and');
-  resilienceWeakLinkEl.textContent = `Weak link: losing ${segmentDisplayName(
+  resilienceWeakLinkEl.textContent = `Weak link: closing ${segmentDisplayName(
     analysis.weakestLink.segment
   )} forces ${formatDeltaMinutes(analysis.weakestLink.delay)}${extraTransferText}.`;
 }
@@ -793,7 +793,7 @@ function setMode(mode) {
   if (mode === 'drag') {
     editorStatusEl.textContent = 'Drag mode active: drag stops directly on the map.';
   } else if (mode === 'connect') {
-    editorStatusEl.textContent = 'Connect mode active: click two stops to create a new segment.';
+    editorStatusEl.textContent = 'Click two stops to create a connection.';
   } else {
     editorStatusEl.textContent = 'Delete mode active: click a line to remove that connection.';
   }
@@ -812,7 +812,7 @@ function rerouteAndRender(autoMode) {
   updateSelectionLabels();
 
   if (!currentRoute) {
-    statusEl.textContent = 'No valid route for current network.';
+    statusEl.textContent = 'These stops do not have a route in the current network.';
   } else {
     const startName = stationById(startId)?.name || startId;
     const endName = stationById(endId)?.name || endId;
@@ -1076,7 +1076,7 @@ function randomCity() {
   syncRouteSelects();
   renderLegend();
   rerouteAndRender(true);
-  editorStatusEl.textContent = 'Generated random city with terrain and curved routes.';
+  editorStatusEl.textContent = 'Created an example city with stops, connections, and terrain.';
 }
 
 function createRouteSegment(from, to) {
@@ -1133,7 +1133,7 @@ function handleStationInteraction(stationId, pointerId, element) {
 
   if (editMode === 'drag') {
     if (pointerId === null) {
-      editorStatusEl.textContent = `${stationById(stationId)?.name || 'Stop'} selected. Pointer drag changes its position.`;
+      editorStatusEl.textContent = `${stationById(stationId)?.name || 'Stop'} selected. Drag it to move it.`;
       renderMap(currentRoute);
       return;
     }
@@ -1147,10 +1147,10 @@ function handleStationInteraction(stationId, pointerId, element) {
   if (editMode === 'connect') {
     if (!connectAnchorId) {
       connectAnchorId = stationId;
-      editorStatusEl.textContent = `Connect mode: anchor set to ${stationById(stationId)?.name}. Select a second stop.`;
+      editorStatusEl.textContent = `Starting at ${stationById(stationId)?.name}. Select the stop to connect it to.`;
     } else if (connectAnchorId === stationId) {
       connectAnchorId = null;
-      editorStatusEl.textContent = 'Connect mode: anchor cleared. Select a first stop.';
+      editorStatusEl.textContent = 'Selection cleared. Choose the first stop to connect.';
     } else {
       const added = createRouteSegment(connectAnchorId, stationId);
       connectAnchorId = null;
@@ -1254,5 +1254,5 @@ syncRouteSelects();
 renderLegend();
 setMode('drag');
 rerouteAndRender(true);
-statusEl.textContent = 'Drag stops to live-update travel time, transfers, and outage exposure.';
+statusEl.textContent = 'Drag a stop to update routes and travel times. Release it to refresh the network closure checks.';
 updateSelectionLabels();

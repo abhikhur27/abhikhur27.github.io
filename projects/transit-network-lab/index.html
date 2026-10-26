@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transit Network Planner | Route Reliability Workbench</title>
+  <title>Transit Network Planner</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -11,15 +11,15 @@
 </head>
 <body>
   <header class="container header">
-    <a class="back-link" href="../../index.html">Back to Portfolio</a>
+    <a class="back-link" href="../../index.html">Back to portfolio</a>
     <h1>Transit Network Planner</h1>
-    <p>Compare route policy tradeoffs and test peak demand against single-link failures.</p>
+    <p>Build a small transit network, plan trips, and see what happens when a connection closes. Compare faster routes with fewer transfers, then check which closures would delay or strand the most simulated riders.</p>
   </header>
 
   <main class="container layout">
     <section class="panel stack">
       <article class="block">
-        <h2>Route Planner</h2>
+        <h2>Plan a trip</h2>
         <label>
           Start
           <select id="start-station"></select>
@@ -29,19 +29,19 @@
           <select id="end-station"></select>
         </label>
         <label>
-          Objective
+          Choose a route by
           <select id="route-objective">
             <option value="fastest">Fastest</option>
             <option value="transfers">Fewer transfers</option>
-            <option value="resilient">Most resilient</option>
+            <option value="resilient">Lower closure-delay score</option>
           </select>
         </label>
-        <button id="run-route" class="primary" type="button">Compute Route</button>
+        <button id="run-route" class="primary" type="button">Find route</button>
         <p id="status" class="status" aria-live="polite"></p>
-        <p id="route-policy-summary" class="policy-note">Fastest policy active.</p>
+        <p id="route-policy-summary" class="policy-note">Showing the fastest route.</p>
 
         <div class="metrics">
-          <article><h3>Total</h3><p id="metric-minutes">-</p></article>
+          <article><h3>Travel time</h3><p id="metric-minutes">-</p></article>
           <article><h3>Stops</h3><p id="metric-stops">-</p></article>
           <article><h3>Transfers</h3><p id="metric-transfers">-</p></article>
           <article><h3>Distance</h3><p id="metric-distance">-</p></article>
@@ -50,18 +50,18 @@
         <ol id="route-steps" class="steps"></ol>
 
         <div class="resilience-card">
-          <h3>Reliability Brief</h3>
-          <p id="resilience-summary" class="helper-note">Compute a route to inspect the strongest fallback path.</p>
-          <p id="resilience-exposure" class="resilience-line">Exposure: -</p>
+          <h3>If a connection closes</h3>
+          <p id="resilience-summary" class="helper-note">Find a route to see its backup options and the network's worst single-connection closure.</p>
+          <p id="resilience-exposure" class="resilience-line">Closure-delay score: -</p>
           <p id="resilience-backup" class="resilience-line">Backup: -</p>
           <p id="resilience-weak-link" class="resilience-line">Weak link: -</p>
         </div>
       </article>
 
       <article class="block">
-        <h2>Network Editor</h2>
+        <h2>Edit the network</h2>
         <label>
-          New Stop Name
+          New stop name
           <input id="new-stop-name" type="text" placeholder="e.g. Midtown West">
         </label>
         <button id="add-stop" type="button">Add Stop</button>
@@ -72,19 +72,19 @@
           <button id="mode-delete" class="mode-btn" type="button">Delete Link</button>
         </div>
 
-        <p class="helper-note">Connect mode: click one stop, then another to create a segment. Delete mode: click a line on the map.</p>
+        <p class="helper-note">To connect stops, click one stop and then another. To delete a connection, choose Delete Link and click its line on the map.</p>
 
         <div class="line-editor">
           <label>
-            Line Name
+            Line name
             <input id="line-name" type="text" value="teal">
           </label>
           <label>
-            Line Color
+            Line color
             <input id="line-color" type="color" value="#0f766e">
           </label>
           <label>
-            Speed (px/min)
+            Speed (map pixels per minute)
             <input id="line-speed" type="number" min="8" max="60" value="24">
           </label>
         </div>
@@ -93,7 +93,7 @@
           <p>Selected stop: <span id="selected-stop-label">None</span></p>
           <p>Selected connection: <span id="selected-segment-label">None</span></p>
           <label>
-            Curvature
+            Bend in the selected line
             <input id="segment-curve" type="range" min="-120" max="120" step="2" value="0">
           </label>
           <div class="selection-actions">
@@ -106,7 +106,7 @@
       </article>
 
       <article class="block">
-        <h2>Network Conditions</h2>
+        <h2>Change the surroundings</h2>
         <div class="terrain-actions">
           <button id="add-obstacle" type="button">Add Obstacle</button>
           <button id="add-lake" type="button">Add Lake</button>
@@ -114,12 +114,12 @@
           <button id="clear-terrain" type="button">Clear Terrain</button>
           <button id="random-city" class="primary" type="button">Generate Test Network</button>
         </div>
-        <p class="helper-note">Obstacle and lake crossings close links. Peak demand splits across equal-time paths and diverts overflow to viable relief links.</p>
+        <p class="helper-note">Obstacles and lakes close connections that cross them. Simulated riders split between equally fast routes. When a connection is too crowded, the model tries alternate routes with room. The city and rider counts are examples, not real transit data.</p>
       </article>
     </section>
 
     <section class="panel map-panel">
-      <h2>Interactive Map (drag any stop)</h2>
+      <h2>Drag stops to change the map</h2>
       <svg id="network" class="network" viewBox="0 0 840 520" role="group" aria-label="Transit network editor"></svg>
       <div id="line-legend" class="legend"></div>
     </section>

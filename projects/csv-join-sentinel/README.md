@@ -1,26 +1,26 @@
 # CSV Join Sentinel
 
-Static browser tool for diagnosing CSV join failures before they contaminate analysis, reporting, or ad hoc data cleanup work.
+A browser tool for checking how two CSVs join together. It finds repeated IDs and missing matches, then shows a sample of the combined rows.
 
 ## What it does
 
 - Parses pasted CSV, TSV, or pipe-delimited text with quoted fields.
 - Lets you choose a left key, right key, and join mode.
-- Surfaces duplicate-key pressure on each side.
-- Counts matched keys plus left-only and right-only orphan keys.
+- Finds repeated keys on each side.
+- Counts matched keys and keys that appear in only one file.
 - Previews the joined output so row multiplication is visible before export.
-- Copies a concise join-risk summary for Slack, notes, or review handoff.
+- Copies a short summary of the matches and warnings.
 - Exports a JSON report with unmatched keys, duplicate groups, and a joined-row sample.
 
-## Why it exists
+## What to check
 
-Most broken joins are not syntax errors. They are quiet data-shape problems:
+Combining tables can change your results even when the code runs successfully:
 
 - duplicate IDs that explode row counts
 - mismatched keys that silently drop records
-- schema overlap that looks safe until fields collide
+- matching column names that need to be kept separate
 
-This tool makes those failure modes visible in one static page with no backend.
+The page checks those cases in your browser. The preview is limited to 12 rows, so use the counts and exported report as well as the preview.
 
 ## Local run
 

@@ -26,22 +26,22 @@ const scenarios = [
     id: 'incident',
     title: 'Incident Command Lab',
     tag: 'Network outage',
-    summary: 'Handle a university outage with crew limits, uncertain root cause, and visible stakeholder pressure.',
-    differentiator: 'Most about communications discipline and sequencing.',
+    summary: 'Handle a university network outage with limited staff and an unclear cause.',
+    differentiator: 'Decide when to send updates and which repair to attempt first.',
     rounds: [
       {
         title: 'Wireless core is unstable',
-        scene: 'Students are reporting outages across multiple buildings, but the NOC still cannot prove whether the fault is access-layer congestion or a collapsed upstream controller.',
-        tags: ['Partial telemetry', 'Leadership pressure', 'Fast rumor spread'],
+        scene: 'Students report outages in several buildings. The network team is still checking whether the problem is crowded local equipment or a failed central controller.',
+        tags: ['Incomplete monitoring data', 'Leaders want updates', 'Rumors spreading'],
         choices: [
           { label: 'Send a campus-wide caution notice immediately.', impact: { trust: 8, throughput: -4, resilience: 2, load: 5 } },
-          { label: 'Stay quiet until the fault tree is cleaner.', impact: { trust: -10, throughput: 5, resilience: 4, load: -2 } },
+          { label: 'Wait to send an update until the cause is clearer.', impact: { trust: -10, throughput: 5, resilience: 4, load: -2 } },
           { label: 'Split the team between diagnosis and faculty-facing updates.', impact: { trust: 4, throughput: 3, resilience: -3, load: 8 } },
         ],
       },
       {
         title: 'One building is failing harder',
-        scene: 'Engineering is fully dark while nearby halls are only degraded. Fixing the worst building first leaves the broader campus simmering.',
+        scene: 'Engineering has lost its network connection while nearby halls have slow service. Fixing Engineering first leaves the other buildings waiting.',
         tags: ['Uneven impact', 'Fairness tradeoff', 'Visible hotspot'],
         choices: [
           { label: 'Concentrate crews on the worst building.', impact: { trust: 2, throughput: 7, resilience: -2, load: 4 } },
@@ -66,7 +66,7 @@ const scenarios = [
     title: 'Detour Dispatch',
     tag: 'Transit operations',
     summary: 'Re-route a shuttle network through closures, surges, and accessibility constraints.',
-    differentiator: 'Most about coverage and rider trust under route disruption.',
+    differentiator: 'Choose which stops to cover when a detour slows the route.',
     rounds: [
       {
         title: 'A closure wipes out your clean loop',
@@ -74,13 +74,13 @@ const scenarios = [
         tags: ['Route break', 'Event spillover', 'Coverage risk'],
         choices: [
           { label: 'Protect accessibility stops even if headways get worse.', impact: { trust: 7, throughput: -7, resilience: 5, load: 4 } },
-          { label: 'Optimize the loop for speed and drop edge stops temporarily.', impact: { trust: -9, throughput: 9, resilience: -2, load: 1 } },
+          { label: 'Shorten the route and temporarily skip outlying stops.', impact: { trust: -9, throughput: 9, resilience: -2, load: 1 } },
           { label: 'Run a split pattern with extra dispatcher coordination.', impact: { trust: 4, throughput: 4, resilience: 2, load: 7 } },
         ],
       },
       {
         title: 'Drivers are losing the board',
-        scene: 'The detour map is changing faster than operators can internalize it, and mistakes are now compounding rider confusion.',
+        scene: 'The detour changes keep confusing drivers and riders. More changes could reduce the queues but create more mistakes.',
         tags: ['Operator fatigue', 'Confusing routing', 'Communication gap'],
         choices: [
           { label: 'Freeze the map and publish one simple rider pattern.', impact: { trust: 5, throughput: -3, resilience: 6, load: -2 } },
@@ -91,7 +91,7 @@ const scenarios = [
       {
         title: 'Event release hits all at once',
         scene: 'The event ends earlier than expected and a giant outbound wave forms faster than your staging plan assumed.',
-        tags: ['Burst demand', 'Queue legitimacy', 'Missed riders'],
+        tags: ['Sudden crowd', 'Fairness in the queue', 'Missed riders'],
         choices: [
           { label: 'Hold buses for full loads before departure.', impact: { trust: -4, throughput: 8, resilience: 1, load: 2 } },
           { label: 'Dispatch partially filled trips to calm visible queues.', impact: { trust: 7, throughput: -5, resilience: 3, load: 4 } },
@@ -105,7 +105,7 @@ const scenarios = [
     title: 'Campus Grid Blackout',
     tag: 'Energy resilience',
     summary: 'Operate a campus microgrid through a cascading blackout with batteries and critical-building priorities.',
-    differentiator: 'Most about infrastructure prioritization and reserve management.',
+    differentiator: 'Choose which buildings keep power and how much battery to save.',
     rounds: [
       {
         title: 'Main feeder is out',
@@ -119,17 +119,17 @@ const scenarios = [
       },
       {
         title: 'Battery decay is faster than planned',
-        scene: 'Your reserve curve is collapsing faster than the original runtime estimate, and you may only get one more major intervention.',
+        scene: 'The batteries are draining faster than expected. There may only be enough power left for one more major action.',
         tags: ['Battery burn', 'One-shot decision', 'Confidence collapse'],
         choices: [
-          { label: 'Conserve for a longer tail.', impact: { trust: -3, throughput: -4, resilience: 9, load: -1 } },
+          { label: 'Save battery power to keep essential systems running longer.', impact: { trust: -3, throughput: -4, resilience: 9, load: -1 } },
           { label: 'Spend reserves to recover the highest-traffic zone now.', impact: { trust: 7, throughput: 6, resilience: -8, load: 5 } },
           { label: 'Announce rolling restoration blocks.', impact: { trust: 5, throughput: 1, resilience: 4, load: 2 } },
         ],
       },
       {
         title: 'A second fault appears',
-        scene: 'While crews are stabilizing the first issue, a second downstream fault forces you to choose between deeper diagnosis and visible recovery.',
+        scene: 'A second fault appears while crews are still working on the first. You can investigate it, continue the first repair, or split the crew.',
         tags: ['Cascading fault', 'Crew stretch', 'Public patience'],
         choices: [
           { label: 'Finish the first restoration path before pivoting.', impact: { trust: 2, throughput: 5, resilience: -3, load: 4 } },
@@ -143,13 +143,13 @@ const scenarios = [
     id: 'patch',
     title: 'Patch Window Commander',
     tag: 'Patch night',
-    summary: 'Run a fragile maintenance night across multiple risk-heavy windows.',
-    differentiator: 'Most about change sequencing and security-vs-stability tradeoffs.',
+    summary: 'Decide which software updates to finish during a short maintenance window.',
+    differentiator: 'Compare the risk of delaying a security fix with the risk of breaking a working service.',
     rounds: [
       {
         title: 'The first window is already slipping',
         scene: 'Prechecks are slower than expected and the opening maintenance slot is shrinking while vulnerable services remain exposed.',
-        tags: ['Security pressure', 'Time loss', 'Precheck drag'],
+        tags: ['Unpatched services', 'Time running out', 'Slow checks'],
         choices: [
           { label: 'Cut scope and patch only the highest-risk systems.', impact: { trust: 1, throughput: 4, resilience: 6, load: -1 } },
           { label: 'Press on with the full original scope.', impact: { trust: -5, throughput: 7, resilience: -7, load: 8 } },
@@ -169,7 +169,7 @@ const scenarios = [
       {
         title: 'Dawn is coming',
         scene: 'You have one final slot before users wake up. You can squeeze in the last change, accept residual exposure, or hand off a partial state.',
-        tags: ['Residual risk', 'Operator fatigue', 'Morning blast radius'],
+        tags: ['Unfinished updates', 'Staff fatigue', 'Morning users affected'],
         choices: [
           { label: 'Ship the last change before sunrise.', impact: { trust: 1, throughput: 5, resilience: -6, load: 7 } },
           { label: 'Stop now and carry residual risk into the day.', impact: { trust: -3, throughput: -1, resilience: 6, load: -3 } },
@@ -182,8 +182,8 @@ const scenarios = [
     id: 'registration',
     title: 'Registration Rush Commander',
     tag: 'Registration launch',
-    summary: 'Keep a university registration launch standing through queue spikes and fairness pressure.',
-    differentiator: 'Most about legitimacy and timing under burst demand.',
+    summary: 'Handle queues and support requests when course registration opens.',
+    differentiator: 'Balance a faster queue with equal access for students.',
     rounds: [
       {
         title: 'The launch gate opens unevenly',
@@ -191,7 +191,7 @@ const scenarios = [
         tags: ['Fairness panic', 'Screenshot evidence', 'Burst demand'],
         choices: [
           { label: 'Pause new sessions and equalize the gate.', impact: { trust: 9, throughput: -8, resilience: 4, load: 3 } },
-          { label: 'Leave the gate open and prioritize raw throughput.', impact: { trust: -10, throughput: 9, resilience: -2, load: 2 } },
+          { label: 'Leave the gate open and keep processing as many requests as possible.', impact: { trust: -10, throughput: 9, resilience: -2, load: 2 } },
           { label: 'Publish a precise fairness explainer while leaving traffic flowing.', impact: { trust: 4, throughput: 2, resilience: 2, load: 5 } },
         ],
       },
@@ -202,7 +202,7 @@ const scenarios = [
         choices: [
           { label: 'Split support by issue type immediately.', impact: { trust: 5, throughput: 4, resilience: 1, load: 5 } },
           { label: 'Keep one queue so nobody feels deprioritized.', impact: { trust: 3, throughput: -5, resilience: 4, load: 3 } },
-          { label: 'Push policy questions out to async channels.', impact: { trust: -4, throughput: 6, resilience: 2, load: -1 } },
+          { label: 'Answer policy questions in follow-up messages.', impact: { trust: -4, throughput: 6, resilience: 2, load: -1 } },
         ],
       },
       {
@@ -221,8 +221,8 @@ const scenarios = [
     id: 'office-hours',
     title: 'Office Hours Overflow',
     tag: 'Teaching operations',
-    summary: 'Manage a CS help queue without collapsing fairness, comprehension, or TA stamina.',
-    differentiator: 'Most about line movement versus teaching depth.',
+    summary: 'Handle a long CS office-hours queue with limited teaching assistants.',
+    differentiator: 'Choose between helping more students and spending longer on a difficult question.',
     rounds: [
       {
         title: 'The room overloads immediately',
@@ -260,8 +260,8 @@ const scenarios = [
     id: 'dispatch',
     title: 'Midnight Dispatch Desk',
     tag: 'Systems fiction',
-    summary: 'Coordinate a fictional overnight city dispatch room where local triage decisions cascade across services.',
-    differentiator: 'Most about cross-system knock-on effects and narrative pressure.',
+    summary: 'Assign a small overnight team to several fictional city service problems.',
+    differentiator: 'Decide which requests can wait when several arrive at once.',
     rounds: [
       {
         title: 'The city starts noisy',
@@ -275,22 +275,22 @@ const scenarios = [
       },
       {
         title: 'A false signal wastes time',
-        scene: 'One event was exaggerated by bad intake, but discovering that cost precious attention while real queues kept moving.',
-        tags: ['Bad telemetry', 'Attention waste', 'Trust decay'],
+        scene: 'One report turned out to be exaggerated. Checking it took time away from other requests.',
+        tags: ['Incorrect report', 'Time lost', 'Trust falling'],
         choices: [
-          { label: 'Tighten intake verification before dispatching.', impact: { trust: 3, throughput: -5, resilience: 5, load: 2 } },
+          { label: 'Check reports more carefully before sending staff.', impact: { trust: 3, throughput: -5, resilience: 5, load: 2 } },
           { label: 'Accept some noise and preserve dispatch speed.', impact: { trust: -3, throughput: 5, resilience: -2, load: 3 } },
           { label: 'Assign a dedicated triage operator.', impact: { trust: 4, throughput: 1, resilience: 3, load: 6 } },
         ],
       },
       {
         title: 'The last hour gets weird',
-        scene: 'An unexpected late incident threatens to invalidate the careful balance you built across the shift.',
-        tags: ['Late shock', 'Fragile equilibrium', 'Fatigue'],
+        scene: 'A new incident arrives near the end of the shift, when the team has little time or energy left.',
+        tags: ['Late shock', 'Little room for another problem', 'Fatigue'],
         choices: [
-          { label: 'Spend your remaining slack to absorb it cleanly.', impact: { trust: 6, throughput: 1, resilience: -6, load: 7 } },
+          { label: 'Use the remaining staff time to handle it now.', impact: { trust: 6, throughput: 1, resilience: -6, load: 7 } },
           { label: 'Let lower-priority queues absorb the hit.', impact: { trust: -7, throughput: 4, resilience: 3, load: -1 } },
-          { label: 'Trigger a citywide simplification protocol.', impact: { trust: 2, throughput: -2, resilience: 6, load: 2 } },
+          { label: 'Switch city services to reduced operations.', impact: { trust: 2, throughput: -2, resilience: 6, load: 2 } },
         ],
       },
     ],
@@ -340,7 +340,7 @@ function renderScenarioMeta() {
   scenarioMetaEl.innerHTML = `
     <p><strong>${activeScenario.title}</strong></p>
     <p>${activeScenario.summary}</p>
-    <p>Distinct angle: ${activeScenario.differentiator}</p>
+    <p>${activeScenario.differentiator}</p>
     <p>Scenario length: ${activeScenario.rounds.length} rounds</p>
   `;
 }
@@ -348,8 +348,8 @@ function renderScenarioMeta() {
 function formatImpact(impact) {
   const labels = {
     trust: 'Trust',
-    throughput: 'Throughput',
-    resilience: 'Resilience',
+    throughput: 'Work completed',
+    resilience: 'Recovery capacity',
     load: 'Team Load',
   };
 
@@ -376,18 +376,18 @@ function renderLog() {
 function renderStatus() {
   const notes = [];
 
-  if (metrics.trust <= 40) notes.push('Trust is fragile. The system may still function, but people no longer believe the process is fair.');
-  else if (metrics.trust >= 78) notes.push('Trust is strong. Stakeholders can see the logic of your operating choices.');
-  else notes.push('Trust is holding, but one visibly unfair decision could tip it.');
+  if (metrics.trust <= 40) notes.push('Public trust is low in this run.');
+  else if (metrics.trust >= 78) notes.push('Public trust is high in this run.');
+  else notes.push('Public trust is in the middle range.');
 
-  if (metrics.throughput <= 40) notes.push('Throughput is dragging. The queue is becoming part of the problem.');
-  else if (metrics.throughput >= 78) notes.push('Flow is strong. The system is still moving even under stress.');
+  if (metrics.throughput <= 40) notes.push('The work-completed score is low. Requests are backing up in the scenario.');
+  else if (metrics.throughput >= 78) notes.push('The work-completed score is high.');
 
-  if (metrics.resilience <= 40) notes.push('You are consuming the system faster than it can recover.');
-  else if (metrics.resilience >= 78) notes.push('The system still has recovery capacity if another shock lands.');
+  if (metrics.resilience <= 40) notes.push('Little recovery capacity remains in the game.');
+  else if (metrics.resilience >= 78) notes.push('Recovery capacity is high.');
 
-  if (metrics.load >= 75) notes.push('Team load is high. You are solving the incident by leaning hard on staff capacity.');
-  else if (metrics.load <= 35) notes.push('Team load is manageable. You still have room for a slower, cleaner move if needed.');
+  if (metrics.load >= 75) notes.push('Staff workload is high in this run.');
+  else if (metrics.load <= 35) notes.push('Staff workload is low in this run.');
 
   statusCopyEl.innerHTML = notes.map((note) => `<p>${note}</p>`).join('');
 }
@@ -420,20 +420,20 @@ function showDebrief() {
   debriefEl.classList.remove('hidden');
 
   let title = 'Scenario stabilized.';
-  let summary = 'You kept the system legible enough to survive the run.';
+  let summary = 'Review the final scores to compare the tradeoffs in your three choices.';
 
   if (metrics.trust >= 75 && metrics.resilience >= 75) {
-    title = 'Strong operational finish.';
-    summary = 'You protected legitimacy and long-run recoverability instead of just chasing the next visible queue.';
+    title = 'High trust and recovery scores.';
+    summary = 'Trust and recovery capacity both ended at 75 or higher under the game rules.';
   } else if (metrics.throughput >= 75 && metrics.trust <= 45) {
-    title = 'Fast, but politically expensive.';
-    summary = 'You moved the system quickly, but people probably experienced the process as arbitrary or brutal.';
+    title = 'More work completed, lower trust.';
+    summary = 'Work completed reached 75 or higher while trust ended at 45 or lower.';
   } else if (metrics.load >= 78) {
-    title = 'You saved the system by overloading the team.';
-    summary = 'The run ended standing, but the operating model is not sustainable.';
+    title = 'High staff workload.';
+    summary = 'Staff workload ended at 78 or higher. Try a different set of choices to compare the result.';
   } else if (metrics.resilience <= 40) {
-    title = 'You spent too much system slack.';
-    summary = 'The run solved short-term pain by burning long-term recovery capacity.';
+    title = 'Low recovery capacity.';
+    summary = 'Recovery capacity ended at 40 or lower under the game rules.';
   }
 
   debriefTitleEl.textContent = title;
@@ -460,7 +460,7 @@ function applyChoice(choiceIndex) {
   renderStatus();
 
   if (currentRoundIndex >= activeScenario.rounds.length - 1) {
-    choiceListEl.innerHTML = '<p class="scene-copy">Scenario complete. Reset or switch packs to run another system through the same engine.</p>';
+    choiceListEl.innerHTML = '<p class="scene-copy">Scenario complete. Reset to try other choices, or pick another scenario.</p>';
     pressureTagsEl.innerHTML = '';
     showDebrief();
     return;
@@ -490,7 +490,7 @@ function resetRun() {
   debriefEl.classList.add('hidden');
   roundTitleEl.textContent = 'Choose a scenario pack';
   roundSceneEl.textContent =
-    'The combined game keeps the mechanic constant and changes the operating context. Pick a pack on the left to begin.';
+    'Pick a scenario on the left, then select Start Scenario.';
   pressureTagsEl.innerHTML = '';
   choiceListEl.innerHTML = '';
 }

@@ -1,23 +1,25 @@
 # Transit Network Planner
 
-Interactive transit network editor with policy-aware routing and deterministic, passenger-weighted single-link failure analysis.
+Build and edit a small transit map, plan a trip, and see how closing a connection affects the network. You can compare travel time, transfers, and a score based on the delay caused by individual closures.
 
-## Features
+## What it does
 
-- Drag-and-drop stop positions with live route recomputation.
-- Policy-aware routing for fastest, fewer-transfer, or most resilient trip plans.
-- Network-wide N-1 reliability check that measures connectivity loss and added all-pairs journey time for every single-link outage.
-- Peak origin-destination demand assignment with equal-time path splitting, per-link capacity, deterministic overflow diversion, stranded-rider counts, passenger-minute delay, and remaining overload detection.
-- Route reliability brief that measures cumulative closure exposure, strongest fallback path, and weakest route segment for the current trip.
-- Add new stops.
-- Add custom line segments with configurable color and speed.
-- Route metrics (time, stops, transfers) update in real time.
-- Dragging keeps route updates live and refreshes the heavier all-pairs outage analysis on pointer-up.
-- Deterministic routing and reliability fixtures that prove the three policies diverge, equal paths share demand, saturated shortest paths use viable relief capacity, and connectivity risk stays distinct from the outage that affects the most modeled riders.
+- Drag stops or add connections with a line name, color, and speed.
+- Find the fastest route, the route with fewer transfers, or the route with the lowest closure-delay score.
+- Close each connection in turn and check which station pairs lose their route or need a longer trip. This is often called an N-1 check.
+- Assign example riders to trips, split them between equally fast routes, and try moving overflow riders to alternatives with room.
+- Show backup routes, the weakest connection on your trip, stranded riders, and the total delay across riders.
+- Update routes while you drag. The more expensive network-wide closure checks refresh when you release the stop.
 
-The bundled city includes six peak demand pairs. Demand splits evenly across up to 16 equal fastest itineraries, then a bounded four-pass feedback step moves only overflow riders to the fastest alternate paths with residual capacity. The line legend shows the passenger capacity applied to each link. Generated test networks receive a smaller synthetic demand set and bounded default capacities.
+## How the rider model works
 
-The passenger-worst outage ranks affected riders first, then stranded riders, incremental over-capacity rider-segments, and added passenger-minutes after the same assignment feedback. The engine also retains the separate topology-worst outage so connectivity and demand conclusions remain auditable instead of being collapsed into one score. This is a deterministic stress model, not a calibrated ridership forecast or full equilibrium assignment.
+The example city has six pairs of stops with assigned rider counts. For each trip, riders split evenly across up to 16 equally fast routes. The model then makes up to four passes to move overflow riders onto the fastest alternatives that have spare capacity. The legend shows the capacity used for each connection. Generated cities get smaller example rider counts and default capacities.
+
+The worst closure for riders is ranked first by the number affected, then by riders stranded, additional crowding, and added delay. Added passenger-minutes means the sum of the delays across riders: 10 people delayed by 5 minutes is 50 passenger-minutes. Rider-segments count one rider crossing one connection, so the same person can count more than once on a multi-connection trip.
+
+The model also checks the closure that disconnects the most station pairs. That may be a different closure from the one affecting the most riders. The closure-delay score adds individual connection penalties along a route; it is a comparison score rather than a predicted delay.
+
+These are made-up networks and rider counts. The model gives the same result for the same network, but it is not fitted to real ridership and does not calculate a full traffic equilibrium.
 
 ## Verification
 
@@ -26,7 +28,7 @@ npm run check
 npm test
 ```
 
-GitHub Actions runs the same contracts on Node 20 and Node 22 whenever the project or its workflow changes.
+The tests cover routing choices, closures, equal-route demand splitting, capacity limits, and alternate routes. GitHub Actions runs them on Node 20 and Node 22 when the project or its workflow changes.
 
 ## Local run
 

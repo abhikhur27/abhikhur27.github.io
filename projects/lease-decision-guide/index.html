@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lease Decision Guide</title>
-  <meta name="description" content="Compare apartment lease offers by true monthly cost, move-in cash, commute drag, and flexibility risk.">
+  <meta name="description" content="Compare apartment rent, extra fees, discounts, and commute time using assumptions you can change.">
   <meta property="og:title" content="Lease Decision Guide">
   <meta property="og:description" content="Practical browser tool for ranking lease offers beyond sticker rent.">
   <meta property="og:type" content="website">
@@ -19,10 +19,10 @@
       <a class="back-link" href="../../index.html">Back to portfolio</a>
       <p class="eyebrow">Housing Decision Tool</p>
       <h1>Lease Decision Guide</h1>
-      <p class="lead">Rank apartment offers by true monthly cost, move-in cash, commute drag, and flexibility risk instead of trusting sticker rent alone.</p>
+      <p class="lead">Compare rent, fees, discounts, and commute time across apartments. Set what your time and lease concerns are worth to you, then see how those assumptions change the ranking.</p>
       <div class="hero-actions">
         <button id="load-sample" type="button">Load Sample Offers</button>
-        <button id="copy-brief" type="button">Copy Decision Brief</button>
+        <button id="copy-brief" type="button">Copy Comparison</button>
       </div>
       <p id="status" class="status">Loaded with a starter comparison set.</p>
     </section>
@@ -30,7 +30,7 @@
     <section class="panel assumptions">
       <div class="panel-head">
         <h2>Assumptions</h2>
-        <p>Keep the model simple and explicit.</p>
+        <p>These values turn travel time and lease concerns into comparison costs. They are your estimates, not bills.</p>
       </div>
       <div class="field-grid">
         <label>
@@ -42,7 +42,7 @@
           <input id="trips-per-week" type="number" min="0" step="1" value="5">
         </label>
         <label>
-          Flexibility risk weight ($/month)
+          Cost per lease concern ($/month)
           <input id="risk-weight" type="number" min="0" step="5" value="45">
         </label>
       </div>
@@ -62,9 +62,9 @@
               <th>Months</th>
               <th>Move-in Cash</th>
               <th>Monthly Extras</th>
-              <th>Concession Credit</th>
+              <th>Lease discount</th>
               <th>Round-trip Commute (min)</th>
-              <th>Risk Flags</th>
+              <th>Lease concerns</th>
             </tr>
           </thead>
           <tbody id="offer-body"></tbody>
@@ -79,11 +79,11 @@
     <section class="panel summary-panel">
       <div class="summary-grid">
         <article>
-          <h3>Best Fit</h3>
+          <h3>Lowest estimate</h3>
           <p id="winner-name">-</p>
         </article>
         <article>
-          <h3>True Monthly</h3>
+          <h3>Monthly estimate</h3>
           <p id="winner-cost">-</p>
         </article>
         <article>
@@ -91,7 +91,7 @@
           <p id="winner-cash">-</p>
         </article>
         <article>
-          <h3>Biggest Trap</h3>
+          <h3>Largest added estimate</h3>
           <p id="trap-summary">-</p>
         </article>
       </div>
@@ -101,7 +101,7 @@
     <section class="panel">
       <div class="panel-head">
         <h2>Ranked Results</h2>
-        <p>The score combines hard cost with explicit flexibility penalties.</p>
+        <p>Monthly estimate = rent + extras + your commute and concern estimates - the discount spread over the lease.</p>
       </div>
       <div id="results" class="results"></div>
     </section>

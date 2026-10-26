@@ -25,7 +25,7 @@ const scenarios = [
   {
     id: 'analytics-banner',
     title: 'Consent Banner Instrumentation',
-    summary: 'Your branch adds richer telemetry while the incoming branch adds accessibility and a softer banner. The merge must keep both.',
+    summary: 'Your branch tracks banner clicks. The other branch changes the wording and adds a screen-reader label. Keep both sets of changes.',
     intents: {
       base: 'Simple dismiss-only banner with no analytics and weak accessibility.',
       ours: 'Emit analytics when the banner is accepted or dismissed.',
@@ -88,11 +88,11 @@ export function renderBanner(root) {
   {
     id: 'fetch-client',
     title: 'Abortable Search Client',
-    summary: 'One branch adds timeout protection while the other fixes cache headers. The merged fetch helper must keep both behaviors without duplicating options.',
+    summary: 'One branch cancels requests after a timeout. The other adds a cache header. Combine them in one fetch call.',
     intents: {
       base: 'Single fetch helper with minimal headers.',
-      ours: 'Add timeout-based abort control so stale searches stop burning bandwidth.',
-      theirs: 'Normalize cache control headers for revalidation-safe GET requests.',
+      ours: 'Cancel requests that take longer than four seconds.',
+      theirs: 'Add a no-store header to the request.',
     },
     base: `export async function fetchResults(query) {
   const response = await fetch(\`/api/search?q=\${encodeURIComponent(query)}\`, {
@@ -155,7 +155,7 @@ export function renderBanner(root) {
   {
     id: 'status-pill',
     title: 'Status Pill Refactor',
-    summary: 'One branch makes status mapping explicit while the other makes the component readable to screen readers. Resolve it without regressing styling or semantics.',
+    summary: 'One branch maps each status to a CSS class. The other adds a screen-reader label. Keep the class mapping and the accessible text.',
     intents: {
       base: 'Status pill renders classes directly from a bare status string.',
       ours: 'Map statuses through a stable token object so styling is harder to break.',
@@ -240,8 +240,8 @@ function renderScenario() {
   scoreEl.textContent = '-';
   passedChecksEl.textContent = `0 / ${scenario.checks.length}`;
   lineMatchEl.textContent = '-';
-  statusEl.textContent = 'Blend the conflict and then score it against the scenario constraints.';
-  feedbackList.innerHTML = '<article class="feedback-card"><strong>Waiting on review</strong><p>Score the resolution to see which constraints still fail.</p></article>';
+  statusEl.textContent = 'Edit the merged file, then check for the required text. This exercise does not run or compile your code.';
+  feedbackList.innerHTML = '<article class="feedback-card"><strong>Ready to check</strong><p>Check the merge to see which required text is present.</p></article>';
   constraintList.innerHTML = scenario.checks
     .map((check) => `<article class="constraint-card"><strong>${check.label}</strong><p>${check.type === 'includes' ? `Resolution must include: ${check.value}` : `Resolution must avoid: ${check.value}`}</p></article>`)
     .join('');
@@ -259,7 +259,7 @@ function scoreResolution() {
     feedback.push({
       ok,
       title: check.label,
-      detail: ok ? 'Constraint preserved in the merged file.' : `Missing merge requirement: ${check.value}`,
+      detail: ok ? 'Required text found in the merged file.' : `Required text not found: ${check.value}`,
     });
   });
 
@@ -272,7 +272,7 @@ function scoreResolution() {
   scoreEl.textContent = `${score}%`;
   passedChecksEl.textContent = `${passed} / ${scenario.checks.length}`;
   lineMatchEl.textContent = `${lineMatch}%`;
-  statusEl.textContent = score >= 85 ? 'This merge would likely survive review.' : 'The merge still drops important branch behavior.';
+  statusEl.textContent = score >= 85 ? 'Most required text matches this example. Review the code yourself; these checks do not prove it works.' : 'Some required text is missing or differs from the reference. Check the notes below.';
   feedbackList.innerHTML = feedback
     .map((item) => `<article class="feedback-card ${item.ok ? 'pass' : 'fail'}"><strong>${item.ok ? 'Pass' : 'Fail'} | ${item.title}</strong><p>${item.detail}</p></article>`)
     .join('');
@@ -293,7 +293,7 @@ useTheirsButton.addEventListener('click', () => {
 });
 blendBothButton.addEventListener('click', () => {
   resolutionEditor.value = blendScenarioText(currentScenario());
-  statusEl.textContent = 'Built a naive blend. Now tighten it before scoring.';
+  statusEl.textContent = 'Combined the unique lines from both branches. Edit the result before checking it.';
 });
 resetResolutionButton.addEventListener('click', () => {
   resolutionEditor.value = currentScenario().base;

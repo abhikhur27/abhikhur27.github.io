@@ -155,10 +155,10 @@ function summarizeColumn(header, values, rowCount) {
 
   const watchParts = [];
   if (inferredType === 'mixed') watchParts.push('Mixed field types');
-  if (nullPct >= 0.3) watchParts.push('Null-heavy');
-  if (uniquePct <= 0.15 && nonEmpty.length >= 5) watchParts.push('Low-cardinality');
+  if (nullPct >= 0.3) watchParts.push('Many missing values');
+  if (uniquePct <= 0.15 && nonEmpty.length >= 5) watchParts.push('Few distinct values');
   if (!watchParts.length && details.length) watchParts.push(details.join(' | '));
-  if (!watchParts.length) watchParts.push('Looks stable');
+  if (!watchParts.length) watchParts.push('No issue flagged');
 
   const risk = inferredType === 'mixed' || nullPct >= 0.4 ? 'danger' : nullPct >= 0.2 ? 'warning' : 'ok';
 
@@ -215,16 +215,16 @@ function analyzeCsv() {
     issues.push(`Mixed-type columns: ${mixedColumns.map((profile) => profile.header).join(', ')}.`);
   }
   if (sparseColumns.length) {
-    issues.push(`Null-heavy columns: ${sparseColumns.map((profile) => profile.header).join(', ')}.`);
+    issues.push(`Columns with many missing values: ${sparseColumns.map((profile) => profile.header).join(', ')}.`);
   }
   if (duplicateRows > 0) {
     issues.push(`${duplicateRows} duplicate row${duplicateRows === 1 ? '' : 's'} detected.`);
   }
   if (!issues.length && lowCardinality.length) {
-    issues.push(`Stable categorical fields detected: ${lowCardinality.map((profile) => profile.header).join(', ')}.`);
+    issues.push(`Columns with few distinct values: ${lowCardinality.map((profile) => profile.header).join(', ')}.`);
   }
   if (!issues.length) {
-    issues.push('No major import blockers detected in the current sample.');
+    issues.push('These checks found no major issues in the current sample.');
   }
 
   lastProfile = {
@@ -283,12 +283,12 @@ function buildBrief() {
 
   const flagged = lastProfile.profiles.filter((profile) => profile.risk !== 'ok').slice(0, 4);
   const lines = [
-    'CSV Column Profiler Brief',
+    'CSV Column Profiler Summary',
     `Rows: ${lastProfile.rowCount}`,
     `Columns: ${lastProfile.columnCount}`,
     `Duplicate rows: ${lastProfile.duplicateRows}`,
     `Missing cells: ${lastProfile.missingCells}`,
-    `Primary read: ${lastProfile.issues[0]}`,
+    `First finding: ${lastProfile.issues[0]}`,
   ];
 
   if (flagged.length) {
@@ -305,9 +305,9 @@ async function copyBrief() {
   const brief = buildBrief();
   try {
     await navigator.clipboard.writeText(brief);
-    statusText.textContent = 'Copied the profiling brief.';
+    statusText.textContent = 'Copied the CSV summary.';
   } catch {
-    statusText.textContent = 'Clipboard copy failed for the profiling brief.';
+    statusText.textContent = 'Could not copy the CSV summary.';
   }
 }
 
@@ -345,10 +345,10 @@ function clearAll() {
   summaryColumns.textContent = '-';
   summaryDuplicates.textContent = '-';
   summaryMissing.textContent = '-';
-  readinessSummary.textContent = 'Analyze a dataset to score its current QA posture.';
+  readinessSummary.textContent = 'Analyze a CSV to check for missing values, mixed types, and duplicates.';
   issueList.innerHTML = '<li>No issues yet. Run an analysis first.</li>';
-  profileBody.innerHTML = '<tr><td colspan="6" class="empty">Analyze a CSV to inspect column-level profiles.</td></tr>';
-  statusText.textContent = 'Cleared the profiler workspace.';
+  profileBody.innerHTML = '<tr><td colspan="6" class="empty">Analyze a CSV to see the results for each column.</td></tr>';
+  statusText.textContent = 'Cleared the CSV and results.';
 }
 
 loadSampleBtn.addEventListener('click', () => {

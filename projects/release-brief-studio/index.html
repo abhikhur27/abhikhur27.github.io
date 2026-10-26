@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Release Brief Studio</title>
-  <meta name="description" content="Static release-communication workspace for turning raw changes into QA checklists, rollout briefs, rollback plans, and stakeholder updates.">
+  <meta name="description" content="Organize release notes, testing checks, and rollout instructions into summaries you can copy or share.">
   <meta property="og:title" content="Release Brief Studio">
   <meta property="og:description" content="Draft clearer release notes, QA checklists, and rollback plans from one browser-based release worksheet.">
   <meta property="og:type" content="website">
@@ -19,10 +19,10 @@
   <header class="container header">
     <a class="back-link" href="https://abhikhur.com/" target="_blank" rel="noreferrer">Back to Portfolio</a>
     <h1>Release Brief Studio</h1>
-    <p>Turn messy deployment notes into a clean release summary, QA checklist, rollback plan, and stakeholder update.</p>
+    <p>Enter what changed, what you tested, and how you plan to deploy it. The page formats those notes into summaries you can copy or share.</p>
     <section class="demo-strip" aria-label="Suggested demo path">
-      <strong>Demo path:</strong>
-      <span>Pick a preset - fill the release facts - copy the QA brief and stakeholder update.</span>
+      <strong>Try it:</strong>
+      <span>Load an example, edit the notes, then copy a summary or share the link.</span>
     </section>
   </header>
 
@@ -81,11 +81,11 @@ Keep prior import job version ready for rollback</textarea>
       </label>
 
       <div class="button-row">
-        <button id="preset-campus" type="button">Load Campus SaaS Preset</button>
-        <button id="preset-commerce" type="button">Load Commerce Hotfix Preset</button>
+        <button id="preset-campus" type="button">Load Campus Portal Example</button>
+        <button id="preset-commerce" type="button">Load Checkout Fix Example</button>
         <button id="copy-link" type="button">Copy Share Link</button>
       </div>
-      <p id="status" class="status" aria-live="polite">Ready to build a release brief.</p>
+      <p id="status" class="status" aria-live="polite">Edit the example notes to update the summaries. The share link includes everything you enter.</p>
     </section>
 
     <section class="panel">
@@ -95,17 +95,17 @@ Keep prior import job version ready for rollback</textarea>
       <h2>QA Checklist</h2>
       <div id="qa-board" class="board"></div>
 
-      <h2>Rollback Plan</h2>
+      <h2>Rollout and rollback notes</h2>
       <div id="rollback-board" class="board"></div>
 
-      <h2>Stakeholder Update</h2>
+      <h2>Team or customer update</h2>
       <div id="stakeholder-board" class="board"></div>
 
       <div class="button-row">
         <button id="copy-summary" type="button">Copy Summary</button>
         <button id="copy-qa" type="button">Copy QA Checklist</button>
-        <button id="copy-rollback" type="button">Copy Rollback Plan</button>
-        <button id="copy-stakeholder" type="button">Copy Stakeholder Update</button>
+        <button id="copy-rollback" type="button">Copy Rollout Notes</button>
+        <button id="copy-stakeholder" type="button">Copy Update</button>
       </div>
     </section>
   </main>

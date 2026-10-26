@@ -1,27 +1,30 @@
 # JSON Shape Diff Studio
 
-Static browser utility for comparing two JSON payloads and catching shape drift before an API or config change becomes a debugging problem.
+Compare two versions of a JSON document to see which fields were added, removed, or changed. It runs in the browser and includes examples of an API response and a config file.
 
 ## What it does
 
 - Compares two JSON documents entirely in the browser.
-- Tracks both container nodes and leaf values.
+- Lists fields and array items by path, including the objects and arrays that contain them.
 - Flags:
   - added paths
   - removed paths
   - type changes
   - same-type value changes
 - Filters the diff table by change type.
-- Copies a compact summary for PR notes or handoff messages.
+- Copies the change counts for a pull request or a message.
 
-## Why it belongs in the portfolio
+## When to use it
 
-This is a practical developer workflow tool, not another visualizer variant. It helps with:
+Paste an old version on the left and a new one on the right. This makes it easier to check:
 
-- API contract review
-- config migration checks
-- payload regression triage
-- quick schema sanity checks before deployment
+- whether an API field disappeared or changed type
+- which config values changed
+- whether an array gained or lost items
+
+## Limits
+
+Arrays are compared by position, so moving an item can look like several value changes. The tool compares the displayed previews, and strings longer than 42 characters are shortened. Two long strings with the same preview can therefore appear unchanged. Use a full text diff when you need to verify every character.
 
 ## Local run
 

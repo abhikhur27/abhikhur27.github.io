@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Return Window Tribunal</title>
-  <meta name="description" content="Rule on messy refund cases and watch how every exception changes trust, abuse pressure, support load, and margin discipline.">
+  <meta name="description" content="A browser game about handling six fictional return requests and comparing the tradeoffs of each choice.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,10 +15,10 @@
     <section class="hero">
       <p class="eyebrow">Policy Decision Game</p>
       <h1>Return Window Tribunal</h1>
-      <p class="lede">You are running returns policy during a messy hardware launch. Every ruling shifts customer trust, abuse pressure, support load, and margin discipline, and the queue remembers your precedents.</p>
+      <p class="lede">Handle six fictional return requests after a hardware launch. Decide who gets a refund, exchange, or review, then see how each choice changes the game's customer trust, fraud risk, workload, and cost scores.</p>
       <div class="hero-actions">
         <button id="restart-btn" type="button">Restart Queue</button>
-        <button id="copy-brief-btn" type="button">Copy Session Brief</button>
+        <button id="copy-brief-btn" type="button">Copy Results</button>
       </div>
     </section>
 
@@ -28,7 +28,7 @@
         <strong id="trust-score">50</strong>
       </article>
       <article>
-        <span>Abuse Pressure</span>
+        <span>Fraud risk</span>
         <strong id="abuse-score">50</strong>
       </article>
       <article>
@@ -36,7 +36,7 @@
         <strong id="support-score">50</strong>
       </article>
       <article>
-        <span>Margin Discipline</span>
+        <span>Cost control</span>
         <strong id="margin-score">50</strong>
       </article>
     </section>
@@ -57,7 +57,7 @@
             <ul id="case-facts" class="fact-list"></ul>
           </div>
           <div>
-            <h3>Stake map</h3>
+            <h3>Things to consider</h3>
             <div id="stake-map" class="stake-map"></div>
           </div>
         </div>
@@ -70,31 +70,31 @@
 
       <aside class="sidebar">
         <article class="panel insight-panel">
-          <p class="eyebrow">Policy Read</p>
+          <p class="eyebrow">Your choices so far</p>
           <h2 id="policy-title">Queue not judged yet</h2>
-          <p id="policy-summary" class="summary">A few rulings will turn the queue into a visible trust-versus-discipline posture.</p>
-          <p id="policy-watch" class="watch">The strongest sessions explain not just who got a refund, but which precedent the next customer now expects.</p>
+          <p id="policy-summary" class="summary">Your choices update four scores.</p>
+          <p id="policy-watch" class="watch">These are hand-set game scores, not predictions of customer behavior or financial results.</p>
         </article>
 
         <article class="panel insight-panel">
-          <p class="eyebrow">Precedent Pressure</p>
+          <p class="eyebrow">Exceptions and denials</p>
           <h2 id="precedent-title">No precedent yet</h2>
-          <p id="precedent-summary" class="summary">Repeated exceptions or denials will change what the later cases can defend.</p>
-          <p id="precedent-watch" class="watch">Consistency is useful until a brittle rule starts teaching customers the wrong lesson.</p>
+          <p id="precedent-summary" class="summary">The game counts the exceptions and denials you choose.</p>
+          <p id="precedent-watch" class="watch">The cases stay the same each run, so you can compare a different set of choices.</p>
         </article>
 
         <article class="panel insight-panel">
-          <p class="eyebrow">Queue Verdict</p>
+          <p class="eyebrow">Final results</p>
           <h2 id="verdict-title">Finish the queue</h2>
-          <p id="verdict-summary" class="summary">The final ruling set will resolve into a launch-era return policy posture.</p>
-          <p id="verdict-watch" class="watch">Look for the tradeoff you protected and the one you quietly taxed.</p>
+          <p id="verdict-summary" class="summary">Finish the six cases to see your combined scores.</p>
+          <p id="verdict-watch" class="watch">Compare which scores rose and which fell.</p>
         </article>
 
         <article class="panel log-panel">
           <div class="panel-head">
             <div>
               <p class="eyebrow">Decision Log</p>
-              <h2>Ruling Tape</h2>
+              <h2>Your decisions</h2>
             </div>
           </div>
           <ol id="decision-log" class="decision-log"></ol>

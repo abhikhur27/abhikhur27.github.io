@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Systems Decision Labs</title>
-  <meta name="description" content="One unified decision game with multiple campus and infrastructure scenario packs.">
+  <meta name="description" content="A browser game with seven fictional scenarios about outages, transit, power, and campus services.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -16,16 +16,16 @@
 
     <header class="hero">
       <div>
-        <p class="eyebrow">Unified Project</p>
+        <p class="eyebrow">Browser decision game</p>
         <h1>Systems Decision Labs</h1>
         <p class="lead">
-          One game engine, seven scenario packs. Instead of shipping the same choice-driven campus sim repeatedly,
-          this project makes the shared structure explicit and turns it into one configurable operations game.
+          Play through three decisions in one of seven fictional scenarios, from a campus outage to an overloaded help queue.
+          Each choice changes scores for public trust, work completed, recovery capacity, and staff workload.
         </p>
       </div>
       <div class="hero-callout">
-        <p class="eyebrow">Design Goal</p>
-        <p>Every scenario uses the same verbs: read the room, commit to a tradeoff, and absorb the downstream cost.</p>
+        <p class="eyebrow">How it works</p>
+        <p>Read the situation and choose a response. The scores use fixed game rules, so they illustrate tradeoffs rather than predict real results.</p>
       </div>
     </header>
 
@@ -35,11 +35,11 @@
         <h2 id="metric-trust">68</h2>
       </article>
       <article>
-        <p class="metric-label">Throughput</p>
+        <p class="metric-label">Work completed</p>
         <h2 id="metric-throughput">61</h2>
       </article>
       <article>
-        <p class="metric-label">Resilience</p>
+        <p class="metric-label">Recovery capacity</p>
         <h2 id="metric-resilience">72</h2>
       </article>
       <article>
@@ -68,7 +68,7 @@
           <h2 id="round-title">Choose a scenario pack</h2>
         </div>
         <p id="round-scene" class="scene-copy">
-          The combined game keeps the mechanic constant and changes the operating context. Pick a pack on the left to begin.
+          Pick a scenario on the left, then select Start Scenario.
         </p>
         <div id="pressure-tags" class="pressure-tags"></div>
         <div id="choice-list" class="choice-list"></div>
@@ -82,7 +82,7 @@
 
       <aside class="insights panel">
         <div class="section-head">
-          <p class="eyebrow">Ops Readout</p>
+          <p class="eyebrow">Current scores</p>
           <h2>Status</h2>
         </div>
         <div id="status-copy" class="status-copy"></div>

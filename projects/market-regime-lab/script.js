@@ -346,7 +346,7 @@ function drawChart() {
   ctx.fillStyle = '#8b9ab8';
   ctx.font = '11px JetBrains Mono';
   ctx.fillText('Start', margin.left - 10, height - 10);
-  ctx.fillText('Horizon', width - margin.right - 44, height - 10);
+  ctx.fillText('End', width - margin.right - 44, height - 10);
 }
 
 function animateChart() {
@@ -410,21 +410,21 @@ function renderMetrics(paths, config) {
   renderDistribution(finalsSorted);
 
   if (lossProbability > 0.45 || worstDrawdown > 0.55) {
-    insightEl.textContent = 'Regime exposure is fragile in this setup. The distribution shows substantial left-tail risk; consider lower baseline exposure or drawdown-aware sizing.';
+    insightEl.textContent = 'This run has a high share of losing paths or a large peak-to-low loss. Try reducing exposure and rerun it to compare. These are simulated outcomes under the settings above.';
     return;
   }
 
   if (annualized > 0.12 && lossProbability < 0.25) {
-    insightEl.textContent = 'This configuration balances upside and risk well. Median growth remains strong while downside probability is contained.';
+    insightEl.textContent = 'In this run, median annualized growth is above 12% and fewer than a quarter of paths finish at a loss. Those results depend on the return and market-switching assumptions above.';
     return;
   }
 
-  insightEl.textContent = 'The profile is mixed: downside risk is manageable, but CAGR is modest. Improve robustness by tightening bear volatility or increasing bull persistence.';
+  insightEl.textContent = 'Compare the middle result with the losing paths and the largest peak-to-low loss. Changing the assumed returns or switching probabilities changes the simulated market itself; it does not show that a strategy improved.';
 }
 
 function runSimulation() {
   runBtn.disabled = true;
-  statusEl.textContent = 'Running Monte Carlo paths...';
+  statusEl.textContent = 'Generating simulated return paths...';
 
   requestAnimationFrame(() => {
     const config = readConfig();
@@ -516,7 +516,7 @@ runBtn.addEventListener('click', runSimulation);
 rerollBtn.addEventListener('click', randomizeInputs);
 togglePathsBtn.addEventListener('click', () => {
   chartState.showAllPaths = !chartState.showAllPaths;
-  togglePathsBtn.textContent = chartState.showAllPaths ? 'Hide All Paths' : 'Show All Paths';
+  togglePathsBtn.textContent = chartState.showAllPaths ? 'Hide example paths' : 'Show example paths';
   drawChart();
 });
 

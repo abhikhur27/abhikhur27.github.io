@@ -215,7 +215,7 @@
     <header class="topbar">
       <div>
         <a class="back-link" href="../../index.html">Back to Portfolio</a>
-        <p class="eyebrow">Static systems sandbox</p>
+        <p class="eyebrow">Browser troubleshooting exercise</p>
       </div>
       <a class="back-link" href="./README.md">Read project notes</a>
     </header>
@@ -223,36 +223,36 @@
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow">Failure Mode Atlas</p>
-        <h1>Turn noisy incident clues into a ranked response path.</h1>
+        <h1>Compare possible causes of a service outage.</h1>
         <p>
-          Pick a scenario, toggle the signals you see in the system, and the atlas narrows likely failure families,
-          highlights the best next diagnostic moves, and explains which clues are actually doing the ranking.
+          Pick an example outage and select its symptoms. The page adds preset points to four possible causes,
+          shows which symptoms affected each score, and suggests things to check next.
         </p>
         <div class="stats">
           <article>
             <strong>4</strong>
-            <span>Failure families modeled</span>
+            <span>Possible causes</span>
           </article>
           <article>
             <strong>12</strong>
-            <span>Signals with weighted evidence</span>
+            <span>Symptoms to select</span>
           </article>
           <article>
             <strong>100%</strong>
-            <span>Static GitHub Pages compatible</span>
+            <span>Runs in the browser</span>
           </article>
         </div>
       </div>
       <div class="hero-summary">
         <p class="eyebrow">How to use it</p>
         <p class="muted">
-          Treat it like an operator briefing. Start with the incident scenario, mark only the signals you have actually observed,
-          and use the ranked actions as your first response sequence rather than a generic checklist.
+          Choose a scenario, then add or remove symptoms to see how the ranking changes.
+          The scores are fixed rules for this exercise, not measured probabilities or a diagnosis of a real system.
         </p>
         <div class="priority-strip">
-          <span class="primary">Use observed signals only</span>
-          <span class="secondary">Separate cause from symptom</span>
-          <span class="primary">Prefer next diagnostic actions</span>
+          <span class="primary">Select symptoms</span>
+          <span class="secondary">Compare scores</span>
+          <span class="primary">Read the next checks</span>
         </div>
       </div>
     </section>
@@ -262,7 +262,7 @@
         <div class="panel-head">
           <div>
             <h2>1. Incident Scenario</h2>
-            <p>Load a failure pattern and then refine it with evidence.</p>
+            <p>Start with one of the example outages.</p>
           </div>
           <button id="reset-btn" class="ghost-btn" type="button">Reset</button>
         </div>
@@ -273,24 +273,24 @@
         <div class="panel-head">
           <div>
             <h2>2. Observed Signals</h2>
-            <p>Toggle the clues that are actually present in the incident.</p>
+            <p>Select the symptoms present in the example.</p>
           </div>
         </div>
         <div id="signal-grid" class="signal-grid"></div>
-        <p id="status-line" class="status-line">Choose a scenario to preload incident evidence.</p>
+        <p id="status-line" class="status-line">Choose a scenario to load its starting symptoms.</p>
       </section>
 
       <section class="panel">
         <div class="panel-head">
           <div>
-            <h2>3. Ranked Response</h2>
-            <p>Read the highest-confidence failure family, then act from the next-step list.</p>
+            <h2>3. Possible causes</h2>
+            <p>The highest point total appears first. Read the symptoms that contributed to it.</p>
           </div>
         </div>
         <div id="hypothesis-list" class="hypothesis-list"></div>
-        <h3 style="margin-top: 1rem;">Recommended next actions</h3>
+        <h3 style="margin-top: 1rem;">Things to check next</h3>
         <div id="action-list" class="action-list"></div>
-        <p class="footer-note">The atlas is a portfolio modeling exercise, not production SRE policy.</p>
+        <p class="footer-note">This exercise uses made-up scenarios and hand-set weights. Follow your team's procedures for real outages.</p>
       </section>
     </main>
   </div>
@@ -300,41 +300,41 @@
       {
         id: 'capacity',
         label: 'Capacity Exhaustion',
-        summary: 'The system is serving work, but a constrained dependency is saturating under load.',
+        summary: 'More work is arriving than a part of the system can handle.',
         actionPlan: [
           'Check queue depth, worker saturation, and any recent traffic or batch spikes.',
-          'Protect the bottleneck with rate limits, shed non-critical work, or pause noisy backfills.',
-          'Confirm whether autoscaling, connection pools, or cache hit rate are lagging the load shape.'
+          'Consider rate limits or pausing nonessential jobs to reduce work at the bottleneck.',
+          'Check whether scaling, connection limits, or cache misses explain the slowdown.'
         ]
       },
       {
         id: 'dependency',
         label: 'Dependency Degradation',
-        summary: 'A downstream dependency is slow or failing, and upstream services are now echoing that pain.',
+        summary: 'A service you depend on is slow or failing, which delays requests to your service.',
         actionPlan: [
           'Trace the slowest dependency hop before tuning the caller.',
-          'Switch to cached, degraded, or read-only paths if the dependency is non-critical.',
+          'Check whether cached results or a read-only mode can keep essential features working.',
           'Inspect recent deploys, regional health, and provider status around the affected dependency.'
         ]
       },
       {
         id: 'config',
         label: 'Configuration Drift',
-        summary: 'A rollout, flag, or environment mismatch changed system behavior without code-level regressions.',
+        summary: 'Settings differ between working and failing parts of the system.',
         actionPlan: [
-          'Diff the last rollout, feature flags, and environment values across healthy vs failing slices.',
+          'Compare recent settings, feature flags, and environment values in working and failing instances.',
           'Roll back config before rolling back unrelated code if the timing lines up.',
-          'Check whether one region, shard, or tenant is running a divergent config surface.'
+          'Check whether one region, database shard, or customer has different settings.'
         ]
       },
       {
         id: 'data',
         label: 'Data Integrity Fault',
-        summary: 'Bad, missing, or incompatible data is flowing through a healthy service path and breaking assumptions.',
+        summary: 'Missing, malformed, or changed data is causing requests or jobs to fail.',
         actionPlan: [
-          'Inspect recently written records, schema transitions, and parsing failures on the affected entities.',
-          'Quarantine or replay malformed payloads before widening the blast radius.',
-          'Verify whether one producer, migration, or partner feed is creating the bad state.'
+          'Inspect recent records, format changes, and parsing errors in the affected data.',
+          'Identify malformed inputs and check how to isolate or safely reprocess them.',
+          'Check whether one application, migration, or partner feed is producing the bad records.'
         ]
       }
     ];
@@ -344,11 +344,11 @@
       { id: 'queue', label: 'Queue backlog', note: 'Jobs or requests are piling up.', weights: { capacity: 4, dependency: 2, config: 1 } },
       { id: 'timeouts', label: 'Timeouts increasing', note: 'Retries or deadline breaches are rising.', weights: { dependency: 4, capacity: 2 } },
       { id: 'error-burst', label: 'Error burst after deploy', note: 'Failures started right after a rollout.', weights: { config: 4, data: 2 } },
-      { id: 'regional', label: 'Single region only', note: 'Blast radius is geographically narrow.', weights: { config: 3, dependency: 2 } },
+      { id: 'regional', label: 'Single region only', note: 'Only one geographic region is affected.', weights: { config: 3, dependency: 2 } },
       { id: 'cache-drop', label: 'Cache hit rate dropped', note: 'Requests are reaching origin more often.', weights: { capacity: 3, config: 2 } },
-      { id: 'db-locks', label: 'DB lock pressure', note: 'Database contention is visible.', weights: { capacity: 2, data: 3 } },
+      { id: 'db-locks', label: 'Database locks', note: 'Queries are waiting for other database operations.', weights: { capacity: 2, data: 3 } },
       { id: 'schema', label: 'Schema mismatch', note: 'Payload or record format changed.', weights: { data: 4, config: 1 } },
-      { id: 'tenant', label: 'One tenant affected', note: 'Impact is isolated to a customer slice.', weights: { data: 3, config: 2 } },
+      { id: 'tenant', label: 'One customer affected', note: 'Other customers can still use the service.', weights: { data: 3, config: 2 } },
       { id: 'rollback-helped', label: 'Rollback helped', note: 'Recent rollback reduced the issue.', weights: { config: 4, dependency: 1 } },
       { id: 'retry-storm', label: 'Retry storm', note: 'Clients are amplifying the failure.', weights: { dependency: 3, capacity: 2 } },
       { id: 'bad-records', label: 'Malformed records found', note: 'Specific entities are broken.', weights: { data: 5 } }
@@ -369,7 +369,7 @@
       },
       {
         id: 'partner-feed',
-        label: 'Partner feed corrupts downstream jobs',
+        label: 'Partner data causes jobs to fail',
         detail: 'Specific records fail parsing and one customer segment is hit first.',
         defaults: ['schema', 'tenant', 'bad-records']
       }

@@ -92,49 +92,49 @@ function renderList(items) {
 }
 
 function buildSummaryText(state) {
-  const highestRisk = state.risks[0] || 'No explicit risk called out yet.';
+  const highestRisk = state.risks[0] || 'No risk listed yet.';
   const checksCount = state.checks.length;
   return [
     `${state.releaseName} (${state.releaseType})`,
     '',
     `Audience: ${state.audience}`,
     `Change count: ${state.changes.length}`,
-    `Highest visible risk: ${highestRisk}`,
-    `Evidence attached: ${checksCount} check${checksCount === 1 ? '' : 's'}`,
+    `First risk listed: ${highestRisk}`,
+    `Checks listed: ${checksCount} check${checksCount === 1 ? '' : 's'}`,
   ].join('\n');
 }
 
 function buildQaText(state) {
-  const qaLines = state.checks.length ? state.checks : ['List the concrete smoke tests or verification steps before sharing this brief.'];
+  const qaLines = state.checks.length ? state.checks : ['Add the tests or checks you ran before sharing these notes.'];
   return [
     `${state.releaseName} QA Checklist`,
     '',
     ...qaLines.map((line, index) => `${index + 1}. ${line}`),
     '',
-    `Focus risks: ${(state.risks[0] || 'No primary risk listed yet.')}`,
+    `First risk listed: ${(state.risks[0] || 'No risk listed yet.')}`,
   ].join('\n');
 }
 
 function buildRollbackText(state) {
-  const rollbackLines = state.rollout.length ? state.rollout : ['Define who rolls back, which artifact reverts, and which signal triggers it.'];
+  const rollbackLines = state.rollout.length ? state.rollout : ['Add who can undo the release, which version to restore, and when to do it.'];
   return [
-    `${state.releaseName} Rollback Plan`,
+    `${state.releaseName} Rollout and Rollback Notes`,
     '',
     ...rollbackLines.map((line, index) => `${index + 1}. ${line}`),
     '',
-    `Watch first: ${state.risks[0] || 'No first-watch risk listed yet.'}`,
+    `Watch first: ${state.risks[0] || 'Add the first thing to watch after deployment.'}`,
   ].join('\n');
 }
 
 function buildStakeholderText(state) {
   const firstChange = state.changes[0] || 'No release changes listed yet.';
-  const firstRisk = state.risks[0] || 'No explicit risk called out yet.';
+  const firstRisk = state.risks[0] || 'No risk listed yet.';
   const tone =
     state.audience === 'customer'
-      ? 'This update improves reliability and reduces known friction points.'
+      ? 'Customer update based on the release notes below.'
       : state.audience === 'product'
-        ? 'This release is small enough to ship quickly but still needs explicit post-deploy watching.'
-        : 'Ship summary should stay concrete and evidence-backed so reviewers know what changed and what to watch.';
+        ? 'Product and operations update based on the release notes below.'
+        : 'Engineering update based on the release notes below.';
 
   return [
     `${state.releaseName}`,
@@ -142,7 +142,7 @@ function buildStakeholderText(state) {
     tone,
     `Primary change: ${firstChange}`,
     `Primary watch item: ${firstRisk}`,
-    `Checks completed: ${state.checks.length ? state.checks.join('; ') : 'Add verification steps before sharing.'}`,
+    `Checks listed: ${state.checks.length ? state.checks.join('; ') : 'Add the checks you ran before sharing.'}`,
   ].join('\n');
 }
 
@@ -151,24 +151,24 @@ function renderBoards() {
   syncUrlState();
 
   summaryBoard.innerHTML = [
-    `<p><strong>${escapeHtml(state.releaseName)}</strong> is currently framed as a ${escapeHtml(state.releaseType)} for ${escapeHtml(state.audience)} readers.</p>`,
+    `<p><strong>${escapeHtml(state.releaseName)}</strong> (${escapeHtml(state.releaseType)}). Audience: ${escapeHtml(state.audience)}.</p>`,
     `<p><strong>Core changes:</strong></p>`,
     renderList(state.changes),
-    `<p><strong>Risk concentration:</strong> ${escapeHtml(state.risks[0] || 'Add one explicit risk so the brief has a monitoring angle.')}</p>`,
+    `<p><strong>Watch first:</strong> ${escapeHtml(state.risks[0] || 'Add the first thing to watch after deployment.')}</p>`,
   ].join('');
 
   qaBoard.innerHTML = [
-    `<p><strong>Verification posture:</strong> ${state.checks.length ? `${state.checks.length} explicit check${state.checks.length === 1 ? '' : 's'} listed.` : 'No checks listed yet.'}</p>`,
+    `<p><strong>Checks listed:</strong> ${state.checks.length ? `${state.checks.length} check${state.checks.length === 1 ? '' : 's'}.` : 'No checks listed yet.'}</p>`,
     renderList(state.checks),
   ].join('');
 
   rollbackBoard.innerHTML = [
-    `<p><strong>Rollback priority:</strong> ${escapeHtml(state.risks[0] || 'Name the first failure signal to watch after deploy.')}</p>`,
+    `<p><strong>Watch first:</strong> ${escapeHtml(state.risks[0] || 'Add the first sign of trouble to watch after deployment.')}</p>`,
     renderList(state.rollout),
   ].join('');
 
   stakeholderBoard.innerHTML = [
-    `<p><strong>Audience tone:</strong> ${escapeHtml(state.audience)} readers currently get a ${escapeHtml(state.releaseType)}-style summary.</p>`,
+    `<p><strong>For:</strong> ${escapeHtml(state.audience)} readers.</p>`,
     `<p>${escapeHtml(buildStakeholderText(state).split('\n').slice(2).join(' '))}</p>`,
   ].join('');
 }
@@ -229,8 +229,8 @@ copyLinkBtn.addEventListener('click', async () => {
 });
 copySummaryBtn.addEventListener('click', () => copyText(buildSummaryText(buildState()), 'release summary'));
 copyQaBtn.addEventListener('click', () => copyText(buildQaText(buildState()), 'QA checklist'));
-copyRollbackBtn.addEventListener('click', () => copyText(buildRollbackText(buildState()), 'rollback plan'));
-copyStakeholderBtn.addEventListener('click', () => copyText(buildStakeholderText(buildState()), 'stakeholder update'));
+copyRollbackBtn.addEventListener('click', () => copyText(buildRollbackText(buildState()), 'rollout notes'));
+copyStakeholderBtn.addEventListener('click', () => copyText(buildStakeholderText(buildState()), 'update'));
 
 hydrateFromUrl();
 renderBoards();

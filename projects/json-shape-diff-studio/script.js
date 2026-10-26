@@ -238,13 +238,13 @@ function runDiff() {
 
   const changedCount = rows.filter((row) => row.status !== 'unchanged').length;
   summaryText.textContent = changedCount
-    ? `${changedCount} path-level changes detected across ${rows.length} tracked nodes.`
-    : `No path-level changes detected across ${rows.length} tracked nodes.`;
+    ? `${changedCount} of ${rows.length} fields and containers changed.`
+    : `No changes found in the types and previews of ${rows.length} fields and containers.`;
 }
 
 async function copySummary() {
   if (!lastDiffRows.length) {
-    summaryText.textContent = 'Run a diff first so there is something useful to copy.';
+    summaryText.textContent = 'Compare the JSON first, then copy the summary.';
     return;
   }
 
@@ -253,7 +253,7 @@ async function copySummary() {
     summaryText.textContent,
     `Added: ${countEls.added.textContent}`,
     `Removed: ${countEls.removed.textContent}`,
-    `Type drift: ${countEls.type.textContent}`,
+    `Type changes: ${countEls.type.textContent}`,
     `Value changes: ${countEls.value.textContent}`,
   ];
 
@@ -261,7 +261,7 @@ async function copySummary() {
     await navigator.clipboard.writeText(lines.join('\n'));
     summaryText.textContent = 'Copied the summary counts to your clipboard.';
   } catch {
-    summaryText.textContent = 'Clipboard copy failed in this environment.';
+    summaryText.textContent = 'The browser could not copy the summary. You can select and copy the counts above.';
   }
 }
 
