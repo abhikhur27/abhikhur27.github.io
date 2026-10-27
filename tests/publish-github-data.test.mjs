@@ -5,7 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { test } from 'node:test';
-import { acquirePublisherLock, portfolioGitTransport, PORTFOLIO_SSH_URL, publishGitHubData, runProcess, snapshotFingerprint, SNAPSHOT_PATH } from '../scripts/publish-github-data.mjs';
+import { acquirePublisherLock, portfolioGitTransport, PORTFOLIO_SSH_URL, publishGitHubData, PUBLIC_DATA_PATHS, runProcess, snapshotFingerprint, SNAPSHOT_PATH } from '../scripts/publish-github-data.mjs';
+import { PROFILE_URL, LINKEDIN_PATH, WRITING_PATH } from '../scripts/refresh-writing-data.mjs';
 
 const exec = promisify(execFile);
 function snapshot(stars = 1, updatedAt = '2026-10-26T00:00:00.000Z') {
@@ -28,6 +29,8 @@ async function fixture() {
   await git('config', 'core.autocrlf', 'false');
   await mkdir(path.join(repo, 'data'));
   await writeFile(path.join(repo, SNAPSHOT_PATH), `${JSON.stringify(snapshot(), null, 2)}\n`);
+  await writeFile(path.join(repo, LINKEDIN_PATH), `${JSON.stringify({ schemaVersion: 1, updatedAt: '2026-10-26T00:00:00.000Z', profileUrl: PROFILE_URL, posts: [] }, null, 2)}\n`);
+  await writeFile(path.join(repo, WRITING_PATH), `${JSON.stringify({ schemaVersion: 1, updatedAt: '2026-10-26T00:00:00.000Z', posts: [] }, null, 2)}\n`);
   await writeFile(path.join(repo, 'index.html'), '<h1>Existing user page</h1>\n');
   await git('add', '.');
   await git('commit', '-m', 'test: initial fixture');
@@ -50,6 +53,7 @@ async function fixture() {
     journalPath: path.join(directory, 'private', 'publisher.json'), hostname: 'ABHIONEMILLION', run,
     notify: async (code, incident) => { notifications.push({ code, incident }); return true; },
     refresh: async () => { controls.refreshes++; await writeFile(path.join(repo, SNAPSHOT_PATH), `${JSON.stringify(controls.next, null, 2)}\n`); return { code: 0 }; },
+    refreshWriting: async () => ({ code: 0 }),
   };
   return { repo, remote, git, options, controls, calls, notifications,
     readSnapshot: () => readFile(path.join(repo, SNAPSHOT_PATH), 'utf8') };
@@ -135,7 +139,7 @@ test('meaningful refresh publishes only the exact snapshot and preserves user fi
 });
 
 test('unrelated tracked changes and user-edited snapshot are preserved without refresh or commit', async () => {
-  for (const filename of ['index.html', SNAPSHOT_PATH]) {
+  for (const filename of ['index.html', ...PUBLIC_DATA_PATHS]) {
     const f = await fixture();
     await writeFile(path.join(f.repo, filename), 'user work must survive');
     const result = await publishGitHubData(f.options);
@@ -154,6 +158,7 @@ test('failed push preserves the owned commit and retries a normal push without r
   const head = await f.git('rev-parse', 'HEAD');
   const journal = await readFile(f.options.journalPath, 'utf8');
   assert.equal(JSON.parse(journal).pending.hash, head);
+  assert.deepEqual(Object.keys(JSON.parse(journal).pending.paths), [SNAPSHOT_PATH]);
   assert.equal(journal.includes('secret-credential-detail'), false);
   f.controls.failPush = false;
   const retried = await publishGitHubData(f.options);
@@ -161,6 +166,76 @@ test('failed push preserves the owned commit and retries a normal push without r
   assert.equal(retried.commit, head);
   assert.equal(f.controls.refreshes, 1);
   assert.equal((await f.git('ls-remote', 'origin', 'refs/heads/main')).split(/\s+/)[0], head);
+});
+
+test('writing and GitHub changes publish together with exact per-path retry hashes', async () => {
+  const f = await fixture();
+  const post = { id: 'linkedin-7520663480509689856', source: 'linkedin', title: 'Original words',
+    publishedAt: '2026-10-26T00:00:00.000Z', url: 'https://www.linkedin.com/feed/update/urn:li:activity:7520663480509689856/', excerpt: 'Original public text.', body: 'Original public text.' };
+  let writingRefreshes = 0;
+  f.options.refreshWriting = async () => {
+    writingRefreshes++;
+    await writeFile(path.join(f.repo, LINKEDIN_PATH), JSON.stringify({ schemaVersion: 1, updatedAt: post.publishedAt, profileUrl: PROFILE_URL, posts: [post] }));
+    await writeFile(path.join(f.repo, WRITING_PATH), JSON.stringify({ schemaVersion: 1, updatedAt: post.publishedAt, posts: [post] }));
+    return { code: 0, stdout: JSON.stringify({ source: { status: 'verified', verified: 1, retained: 0, unavailable: 0 } }) };
+  };
+  f.controls.failPush = true;
+  assert.equal((await publishGitHubData(f.options)).code, 'PUSH_FAILED');
+  const journal = JSON.parse(await readFile(f.options.journalPath, 'utf8'));
+  assert.deepEqual(Object.keys(journal.pending.paths).sort(), PUBLIC_DATA_PATHS);
+  assert.equal(Object.values(journal.pending.paths).every(value => /^[a-f\d]{64}$/.test(value)), true);
+  f.controls.failPush = false;
+  const retried = await publishGitHubData(f.options);
+  assert.equal(retried.status, 'published_retry');
+  assert.deepEqual(retried.paths, PUBLIC_DATA_PATHS);
+  assert.equal(writingRefreshes, 1);
+  assert.deepEqual((await f.git('diff-tree', '--no-commit-id', '--name-only', '-r', 'HEAD')).split('\n').sort(), PUBLIC_DATA_PATHS);
+});
+
+test('failed writing import preserves verified data while GitHub publication continues', async () => {
+  const f = await fixture();
+  const before = await readFile(path.join(f.repo, WRITING_PATH), 'utf8');
+  f.options.refreshWriting = async () => ({ code: 1, stdout: 'secret-private-source-detail' });
+  const result = await publishGitHubData(f.options);
+  assert.equal(result.status, 'published');
+  assert.equal(result.writingSource.status, 'failed-previous-data-preserved');
+  assert.equal(await readFile(path.join(f.repo, WRITING_PATH), 'utf8'), before);
+  assert.equal((await readFile(f.options.journalPath, 'utf8')).includes('secret-private-source-detail'), false);
+});
+
+test('a concurrent snapshot edit before staging is not pushed and its commit remains recoverable', async () => {
+  const f = await fixture();
+  const originalRun = f.options.run;
+  f.options.run = async (command, args, options) => {
+    if (command === 'git' && args.includes('add') && args.includes(SNAPSHOT_PATH)) {
+      await writeFile(path.join(f.repo, SNAPSHOT_PATH), JSON.stringify(snapshot(99)));
+    }
+    return originalRun(command, args, options);
+  };
+  assert.equal((await publishGitHubData(f.options)).code, 'PENDING_COMMIT_UNVERIFIED');
+  assert.equal(f.calls.some(call => call.includes('push') && !call.includes('--dry-run')), false);
+  assert.equal((await f.git('rev-list', '--left-right', '--count', 'HEAD...origin/main')).split(/\s+/)[0], '1');
+  assert.equal(JSON.parse(await f.readSnapshot()).repositories['abhikhur27/example'].stars, 99);
+  assert.equal((await publishGitHubData(f.options)).code, 'UNOWNED_OR_DIVERGED_AHEAD');
+});
+
+test('timestamp-only writing changes are restored and mismatched source feeds never publish', async () => {
+  const f = await fixture();
+  const original = await readFile(path.join(f.repo, WRITING_PATH), 'utf8');
+  f.controls.next = snapshot();
+  f.options.refreshWriting = async () => {
+    const value = JSON.parse(original); value.updatedAt = '2026-10-27T00:00:00.000Z';
+    await writeFile(path.join(f.repo, WRITING_PATH), JSON.stringify(value)); return { code: 0 };
+  };
+  assert.equal((await publishGitHubData(f.options)).status, 'unchanged');
+  assert.equal(await readFile(path.join(f.repo, WRITING_PATH), 'utf8'), original);
+  f.options.refreshWriting = async () => {
+    const value = JSON.parse(original); value.posts = [{ id: 'linkedin-extra', source: 'linkedin', title: 'Different', publishedAt: value.updatedAt,
+      url: 'https://www.linkedin.com/feed/update/urn:li:activity:7520663480509689856/', excerpt: 'Unmatched source.', body: 'Unmatched source.' }];
+    await writeFile(path.join(f.repo, WRITING_PATH), JSON.stringify(value)); return { code: 0 };
+  };
+  assert.equal((await publishGitHubData(f.options)).code, 'WRITING_SOURCE_MISMATCH');
+  assert.equal(f.calls.filter(call => call.includes('push') && !call.includes('--dry-run')).length, 0);
 });
 
 test('an unrelated local commit is never published or rewritten', async () => {

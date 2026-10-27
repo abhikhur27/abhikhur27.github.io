@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog + LinkedIn | Abhi Khurana</title>
+  <meta name="description" content="Posts by Abhimanyu Khurana, from this site and LinkedIn. Newest first.">
+  <link rel="canonical" href="https://abhikhur.com/blog/">
+  <meta name="theme-color" content="#111110">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../portfolio.css">
+  <link rel="stylesheet" href="../writing-feed.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="/">abhi khurana</a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav id="site-nav" class="site-nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/#projects">Projects</a>
+        <a href="/blog/" aria-current="page">Blog + LinkedIn</a>
+        <a href="/assets/Abhimanyu_Khurana_Resume.pdf">Resume <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+  <main id="main-content" class="container writing-archive">
+    <a class="writing-archive-back" href="/blog/" data-writing-back hidden>← All posts</a>
+    <div class="writing-archive-intro" data-writing-archive-heading>
+      <h1>Blog + LinkedIn</h1>
+      <p>Posts from here and LinkedIn, newest first.</p>
+    </div>
+    <div data-writing-feed data-view="archive" data-src="../data/writing.json" aria-busy="true">
+      <p class="writing-message" data-writing-message role="status">Loading posts…</p>
+      <ol class="writing-items writing-archive-list" data-writing-items aria-label="All posts, newest first" hidden></ol>
+      <div data-writing-reader hidden></div>
+    </div>
+    <noscript><p class="writing-message">Enable JavaScript to load the posts. <a href="https://www.linkedin.com/in/abhimanyu-khurana-64821b185/recent-activity/all/">Read them on LinkedIn.</a></p></noscript>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner footer-credits">
+      <p>Abhimanyu Khurana 2026</p>
+      <a href="/">Back to the site ↗</a>
+    </div>
+  </footer>
+  <script src="../script.js"></script>
+  <script type="module" src="../writing-feed.mjs"></script>
+</body>
+</html>

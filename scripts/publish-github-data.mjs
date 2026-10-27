@@ -6,17 +6,19 @@ import { hostname as computerName, userInfo } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { validateWritingData, validateLinkedInSnapshot, writingFingerprint, LINKEDIN_PATH, WRITING_PATH } from './refresh-writing-data.mjs';
 
 export const PORTFOLIO_ROOT = String.raw`C:\Users\abhim\Desktop\abhiportfoliorepogroup\abhikhur27.github.io`;
 export const PORTABLE_NODE = String.raw`C:\Users\abhim\AppData\Local\OpenClaw\deps\portable-node\node.exe`;
 export const JOURNAL_PATH = String.raw`C:\Users\abhim\Documents\lifeorganizer\data\generated\portfolio-github-publisher.json`;
 export const SNAPSHOT_PATH = 'data/github-activity.json';
+export const PUBLIC_DATA_PATHS = Object.freeze([SNAPSHOT_PATH, LINKEDIN_PATH, WRITING_PATH].sort());
 export const DEPLOY_KEY_PATH = String.raw`C:\Users\abhim\.ssh\portfolio_github_ed25519`;
 export const GITHUB_KNOWN_HOSTS = String.raw`C:\Users\abhim\.ssh\portfolio_github_known_hosts`;
 export const PORTFOLIO_SSH_URL = 'ssh://git@ssh.github.com:443/abhikhur27/abhikhur27.github.io.git';
 const PYTHON = String.raw`C:\Users\abhim\Documents\lifeorganizer\.venv\Scripts\python.exe`;
 const NOTIFIER = String.raw`C:\Users\abhim\Documents\lifeorganizer\scripts\send_static_notification.py`;
-const COMMIT_MESSAGE = 'chore: refresh public GitHub activity';
+const COMMIT_MESSAGE = 'chore: refresh public portfolio data';
 const exec = promisify(execFile);
 
 class PublisherError extends Error {
@@ -102,7 +104,7 @@ async function saveState(filename, state) {
 }
 
 async function notifyFailure(code, incident, run) {
-  const delivery = await run(PYTHON, [NOTIFIER, '--text', `Portfolio GitHub refresh stopped: ${code}. The desktop publisher receipt has the details.`,
+  const delivery = await run(PYTHON, [NOTIFIER, '--text', `Portfolio data refresh stopped: ${code}. The desktop publisher receipt has the details.`,
     '--event-key', `portfolio-github-publisher:${incident}`], { cwd: path.dirname(NOTIFIER) });
   if (delivery.code !== 0) return false;
   try { return ['sent', 'already_sent'].includes(JSON.parse(delivery.stdout).discord); } catch { return false; }
@@ -167,22 +169,37 @@ export async function publishGitHubData(options = {}) {
     .split('\0').filter(Boolean).map(entry => ({ code: entry.slice(0, 2), path: entry.slice(3) }));
   const assertClean = async () => {
     const entries = await status();
-    if (entries.some(entry => entry.path !== SNAPSHOT_PATH)) fail('OTHER_TRACKED_CHANGES');
+    if (entries.some(entry => !PUBLIC_DATA_PATHS.includes(entry.path))) fail('OTHER_TRACKED_CHANGES');
     if (entries.length) fail('UNOWNED_SNAPSHOT_CHANGES');
   };
-  const snapshotBytes = async () => {
-    const bytes = await readFile(path.join(repo, SNAPSHOT_PATH));
+  const dataBytes = async relative => {
+    const bytes = await readFile(path.join(repo, relative));
     if (bytes.length > 2 * 1024 * 1024) fail('INVALID_SNAPSHOT');
     return bytes;
   };
+  const fingerprint = (relative, bytes) => {
+    try {
+      const value = JSON.parse(bytes.toString('utf8'));
+      return relative === SNAPSHOT_PATH ? snapshotFingerprint(value) : writingFingerprint(value, relative === LINKEDIN_PATH);
+    } catch { fail('INVALID_PUBLIC_DATA'); }
+  };
   const verifyPending = async pending => {
-    if (!pending || !/^[a-f\d]{40}$/.test(pending.baseHead ?? '') || !/^[a-f\d]{64}$/.test(pending.snapshotHash ?? '')) return false;
+    if (!pending || !/^[a-f\d]{40}$/.test(pending.baseHead ?? '')) return false;
+    const owned = pending.paths ?? (pending.snapshotHash ? { [SNAPSHOT_PATH]: pending.snapshotHash } : {});
+    const names = Object.keys(owned).sort();
+    if (!names.length || names.some(name => !PUBLIC_DATA_PATHS.includes(name) || !/^[a-f\d]{64}$/.test(owned[name]))) return false;
     const parent = await text(['rev-parse', 'HEAD^'], 'PENDING_PARENT_FAILED');
     const paths = await text(['diff-tree', '--no-commit-id', '--name-only', '-r', 'HEAD'], 'PENDING_DIFF_FAILED');
     const message = await text(['log', '-1', '--format=%s'], 'PENDING_MESSAGE_FAILED');
-    const blob = (await git(['show', `HEAD:${SNAPSHOT_PATH}`], 'PENDING_SNAPSHOT_FAILED')).stdout;
-    return parent === pending.baseHead && paths === SNAPSHOT_PATH && message === COMMIT_MESSAGE
-      && hash(blob.replaceAll('\r\n', '\n')) === pending.snapshotHash;
+    if (parent !== pending.baseHead || paths.split('\n').sort().join('\n') !== names.join('\n')
+      || (message !== COMMIT_MESSAGE && !(pending.snapshotHash && message === 'chore: refresh public GitHub activity'))
+      || (pending.hash && pending.hash !== await text(['rev-parse', 'HEAD'], 'HEAD_FAILED'))) return false;
+    for (const name of names) {
+      const blob = (await git(['show', `HEAD:${name}`], 'PENDING_SNAPSHOT_FAILED')).stdout;
+      fingerprint(name, Buffer.from(blob));
+      if (hash(blob.replaceAll('\r\n', '\n')) !== owned[name]) return false;
+    }
+    return true;
   };
   const pushPending = async () => {
     const head = await text(['rev-parse', 'HEAD'], 'HEAD_FAILED');
@@ -217,14 +234,15 @@ export async function publishGitHubData(options = {}) {
     const defaultHead = await text(['ls-remote', '--symref', 'origin', 'HEAD'], 'DEFAULT_BRANCH_FAILED');
     if (!/^ref: refs\/heads\/main\s+HEAD$/m.test(defaultHead)) fail('WRONG_DEFAULT_BRANCH');
     await assertClean();
-    await git(['ls-files', '--error-unmatch', '--', SNAPSHOT_PATH], 'SNAPSHOT_NOT_TRACKED');
+    await git(['ls-files', '--error-unmatch', '--', ...PUBLIC_DATA_PATHS], 'SNAPSHOT_NOT_TRACKED');
     const untracked = await text(['ls-files', '--others', '--exclude-standard', '-z'], 'UNTRACKED_LIST_FAILED');
     await git(['fetch', '--no-tags', 'origin', 'main'], 'FETCH_FAILED');
     const [ahead, behind] = (await text(['rev-list', '--left-right', '--count', 'HEAD...origin/main'], 'DIVERGENCE_FAILED')).split(/\s+/).map(Number);
     let result;
     if (ahead) {
       if (ahead !== 1 || behind || !(await verifyPending(state.pending))) fail('UNOWNED_OR_DIVERGED_AHEAD');
-      result = { status: 'published_retry', commit: await pushPending() };
+      const paths = Object.keys(state.pending.paths ?? { [SNAPSHOT_PATH]: state.pending.snapshotHash }).sort();
+      result = { status: 'published_retry', paths, commit: await pushPending() };
     } else {
       if (state.pending?.hash) {
         const confirmed = await git(['merge-base', '--is-ancestor', state.pending.hash, 'origin/main'], 'PENDING_CONFIRM_FAILED', true);
@@ -236,27 +254,55 @@ export async function publishGitHubData(options = {}) {
       // Refresh can use the public fallback when gh is absent. Publishing still requires
       // working existing Git credentials; this probe does not change any remote ref.
       await git(['push', '--dry-run', 'origin', 'HEAD:refs/heads/main'], 'GIT_PUBLISH_AUTH_UNAVAILABLE');
-      const original = await snapshotBytes();
-      const beforeFingerprint = snapshotFingerprint(JSON.parse(original.toString('utf8')));
+      const original = Object.fromEntries(await Promise.all(PUBLIC_DATA_PATHS.map(async name => [name, await dataBytes(name)])));
+      const beforeFingerprint = Object.fromEntries(PUBLIC_DATA_PATHS.map(name => [name, fingerprint(name, original[name])]));
       const refresh = options.refresh ?? (() => run(node, [path.join(repo, 'scripts/refresh-github-data.mjs')], { cwd: repo }));
       const refreshed = await refresh();
       if (refreshed?.code) fail('REFRESH_FAILED');
-      const updated = await snapshotBytes();
+      const refreshWriting = options.refreshWriting ?? (() => run(node, [path.join(repo, 'scripts/refresh-writing-data.mjs')], { cwd: repo }));
+      const writingResult = await refreshWriting();
+      let writingSource = { status: writingResult?.code ? 'failed-previous-data-preserved' : 'completed' };
+      let writingOutputHashes;
+      if (writingResult?.code) {
+        for (const name of [LINKEDIN_PATH, WRITING_PATH]) if (!(await dataBytes(name)).equals(original[name])) fail('WRITING_REFRESH_CHANGED_DATA_ON_FAILURE');
+      } else {
+        try {
+          const writingReceipt = JSON.parse(writingResult.stdout);
+          const source = writingReceipt.source;
+          writingOutputHashes = writingReceipt.outputHashes;
+          if (source && ['verified', 'retained-last-verified'].includes(source.status)) writingSource = {
+            status: source.status, verified: source.verified, retained: source.retained, unavailable: source.unavailable, discovery: 'curated-public-urls',
+          };
+        } catch { /* Test fixtures may use a silent successful refresh. */ }
+      }
+      const updated = Object.fromEntries(await Promise.all(PUBLIC_DATA_PATHS.map(async name => [name, await dataBytes(name)])));
+      if (writingOutputHashes) {
+        if (Object.keys(writingOutputHashes).sort().join(',') !== [LINKEDIN_PATH, WRITING_PATH].sort().join(',')) fail('WRITING_OUTPUT_UNVERIFIED');
+        for (const name of [LINKEDIN_PATH, WRITING_PATH]) if (hash(updated[name].toString('utf8').replaceAll('\r\n', '\n')) !== writingOutputHashes[name]) fail('WRITING_OUTPUT_UNVERIFIED');
+      }
+      const afterFingerprint = Object.fromEntries(PUBLIC_DATA_PATHS.map(name => [name, fingerprint(name, updated[name])]));
+      const linkedin = validateLinkedInSnapshot(JSON.parse(updated[LINKEDIN_PATH].toString('utf8')));
+      const writing = validateWritingData(JSON.parse(updated[WRITING_PATH].toString('utf8')));
+      if (stable(writing.posts.filter(post => post.source === 'linkedin')) !== stable(linkedin.posts)) fail('WRITING_SOURCE_MISMATCH');
       const entries = await status();
-      if (entries.some(entry => entry.path !== SNAPSHOT_PATH)) fail('REFRESH_CHANGED_OTHER_FILES');
-      if (beforeFingerprint === snapshotFingerprint(JSON.parse(updated.toString('utf8')))) {
-        if (!original.equals(updated)) await writeFile(path.join(repo, SNAPSHOT_PATH), original);
-        result = { status: 'unchanged', commit: await text(['rev-parse', 'HEAD'], 'HEAD_FAILED') };
+      if (entries.some(entry => !PUBLIC_DATA_PATHS.includes(entry.path))) fail('REFRESH_CHANGED_OTHER_FILES');
+      const changedPaths = PUBLIC_DATA_PATHS.filter(name => beforeFingerprint[name] !== afterFingerprint[name]);
+      for (const name of PUBLIC_DATA_PATHS.filter(name => !changedPaths.includes(name))) {
+        if (!original[name].equals(updated[name])) await writeFile(path.join(repo, name), original[name]);
+      }
+      if (!changedPaths.length) {
+        result = { status: 'unchanged', paths: [], writingSource, commit: await text(['rev-parse', 'HEAD'], 'HEAD_FAILED') };
       } else {
         if (entries.some(entry => entry.code[0] !== ' ')) fail('STAGED_CHANGES');
         const baseHead = await text(['rev-parse', 'HEAD'], 'HEAD_FAILED');
-        state.pending = { baseHead, snapshotHash: hash(updated.toString('utf8').replaceAll('\r\n', '\n')) };
+        state.pending = { baseHead, paths: Object.fromEntries(changedPaths.map(name => [name, hash(updated[name].toString('utf8').replaceAll('\r\n', '\n'))])) };
         await saveState(journal, state);
-        await git(['add', '--', SNAPSHOT_PATH], 'STAGE_FAILED');
-        if (await text(['diff', '--cached', '--name-only'], 'STAGED_LIST_FAILED') !== SNAPSHOT_PATH) fail('UNRELATED_STAGED_CHANGES');
-        if ((await status()).some(entry => entry.path !== SNAPSHOT_PATH)) fail('OTHER_TRACKED_CHANGES');
+        await git(['add', '--', ...changedPaths], 'STAGE_FAILED');
+        if ((await text(['diff', '--cached', '--name-only'], 'STAGED_LIST_FAILED')).split('\n').sort().join('\n') !== changedPaths.join('\n')) fail('UNRELATED_STAGED_CHANGES');
+        if ((await status()).some(entry => !changedPaths.includes(entry.path))) fail('OTHER_TRACKED_CHANGES');
         await git(['commit', '-m', COMMIT_MESSAGE], 'COMMIT_FAILED');
-        result = { status: 'published', commit: await pushPending() };
+        if (!(await verifyPending(state.pending))) fail('PENDING_COMMIT_UNVERIFIED');
+        result = { status: 'published', paths: changedPaths, writingSource, commit: await pushPending() };
       }
     }
     if (await text(['ls-files', '--others', '--exclude-standard', '-z'], 'UNTRACKED_LIST_FAILED') !== untracked) fail('UNTRACKED_FILES_CHANGED');

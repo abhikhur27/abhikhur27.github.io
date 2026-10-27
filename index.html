@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="portfolio.css">
   <link rel="stylesheet" href="portfolio-extras.css">
+  <link rel="stylesheet" href="writing-feed.css">
   <link rel="stylesheet" href="portrait-easter-egg.css">
 </head>
 <body>
@@ -328,43 +329,48 @@
 
     <section id="activity" class="container activity-section" aria-labelledby="activity-title">
       <div class="activity-heading">
-        <h2 id="activity-title" class="index-label">A year, on record</h2>
+        <h2 id="activity-title" class="index-label">A year of making things</h2>
         <a class="activity-source" href="https://github.com/abhikhur27?tab=overview" target="_blank" rel="noreferrer">GitHub activity ↗</a>
       </div>
       <div id="contribution-record" class="contribution-record" aria-busy="true">
-        <figure class="record-sleeve">
-          <svg id="activity-record-svg" class="activity-record-svg" viewBox="0 0 400 400" role="img" aria-labelledby="record-svg-title record-svg-desc">
-            <title id="record-svg-title">A year of GitHub contributions, etched into a record</title>
-            <desc id="record-svg-desc">Each notch is one day, from the oldest at the center to the newest at the edge. Longer notches mean more contributions. Use the date slider for exact counts.</desc>
-            <circle class="record-edge" cx="200" cy="200" r="185"/>
-            <g id="record-grooves" aria-hidden="true"></g>
-            <circle class="record-label" cx="200" cy="200" r="43"/>
-            <text class="record-label-text" x="200" y="185" text-anchor="middle">ABHI</text>
-            <text class="record-label-small" x="200" y="217" text-anchor="middle">SIDE A</text>
-            <circle class="record-spindle" cx="200" cy="200" r="4"/>
+        <figure class="activity-map">
+          <svg id="activity-record-svg" class="activity-record-svg" viewBox="0 0 800 240" role="img" aria-labelledby="record-svg-title record-svg-desc">
+            <title id="record-svg-title">A year of GitHub contributions as a star-map timeline</title>
+            <desc id="record-svg-desc">Each point is one real date. Horizontal position is chronological, from older at the left to newer at the right. Filled point area is proportional to the contribution count; hollow markers mean zero. Vertical position is only for visual spacing, not a second metric. Use the date slider for exact dates and counts.</desc>
+            <g id="activity-stars" aria-hidden="true"></g>
+            <g id="activity-months" aria-hidden="true"></g>
           </svg>
-          <figcaption>One notch per day. Longer means more activity.</figcaption>
+          <figcaption>One point per day. Bigger means more activity. Hollow means zero contributions.</figcaption>
         </figure>
-        <div class="record-notes">
-          <p class="record-total" id="activity-total">Loading the record…</p>
+        <div class="activity-summary">
+          <p class="record-total" id="activity-total">Loading contributions…</p>
           <p class="record-period" id="activity-period"></p>
-          <div class="record-readout">
+        </div>
+        <div class="activity-inspector">
+          <div class="record-readout" role="status" aria-live="off">
             <p class="record-date" id="activity-date">Pick a day</p>
             <p class="record-count" id="activity-count">Scrub through the year below.</p>
           </div>
           <label class="record-slider-label" for="activity-day">Find a day</label>
           <input id="activity-day" class="record-slider" type="range" min="0" max="0" value="0" disabled aria-describedby="activity-count">
           <div class="record-direction" aria-hidden="true"><span>older</span><span>newer</span></div>
-          <p id="activity-updated" class="activity-updated"></p>
         </div>
+        <p id="activity-updated" class="activity-updated"></p>
       </div>
-      <p class="activity-fallback" id="activity-fallback" hidden>Couldn't load the record. <a href="https://github.com/abhikhur27">The original is on GitHub.</a></p>
+      <p class="activity-fallback" id="activity-fallback" hidden>Couldn't load contributions. <a href="https://github.com/abhikhur27">The original is on GitHub.</a></p>
       <noscript><p><a href="https://github.com/abhikhur27">See my contribution history on GitHub.</a></p></noscript>
     </section>
 
     <section id="blog" class="container blog-section" aria-labelledby="blog-title">
-      <h2 id="blog-title" class="index-label">Blog</h2>
-      <p class="blog-empty">tbd. yes, i know this is empty.</p>
+      <div class="writing-heading">
+        <h2 id="blog-title" class="index-label">Blog + LinkedIn</h2>
+        <a class="writing-archive-link" href="/blog/">All posts <span aria-hidden="true">↗</span></a>
+      </div>
+      <div data-writing-feed data-view="latest" data-src="data/writing.json" aria-busy="true">
+        <p class="writing-message" data-writing-message role="status">Loading posts…</p>
+        <ol class="writing-items writing-preview-row" data-writing-items aria-label="Latest posts" hidden></ol>
+      </div>
+      <noscript><p class="writing-message">Enable JavaScript to load the posts. <a href="https://www.linkedin.com/in/abhimanyu-khurana-64821b185/recent-activity/all/">Read them on LinkedIn.</a></p></noscript>
     </section>
   </main>
 
@@ -390,5 +396,6 @@
   <script type="module" src="github-stats.mjs"></script>
   <script type="module" src="contribution-record.mjs"></script>
   <script type="module" src="portrait-easter-egg.mjs"></script>
+  <script type="module" src="writing-feed.mjs"></script>
 </body>
 </html>
