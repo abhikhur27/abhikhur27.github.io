@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { test } from 'node:test';
-import { acquirePublisherLock, publishGitHubData, runProcess, snapshotFingerprint, SNAPSHOT_PATH } from '../scripts/publish-github-data.mjs';
+import { acquirePublisherLock, portfolioGitTransport, PORTFOLIO_SSH_URL, publishGitHubData, runProcess, snapshotFingerprint, SNAPSHOT_PATH } from '../scripts/publish-github-data.mjs';
 
 const exec = promisify(execFile);
 function snapshot(stars = 1, updatedAt = '2026-10-26T00:00:00.000Z') {
@@ -34,16 +34,18 @@ async function fixture() {
   await git('push', '-u', 'origin', 'main');
   const calls = [];
   const notifications = [];
-  const controls = { auth: true, failPush: false, refreshes: 0, next: snapshot(2) };
+  const controls = { auth: true, failPush: false, refreshes: 0, next: snapshot(2),
+    pushUrls: 'https://github.com/abhikhur27/abhikhur27.github.io.git\n' };
   const run = async (command, args, options) => {
     calls.push([command, ...args]);
     const operation = args.slice(2);
     if (command === 'git' && operation.join(' ') === 'remote get-url origin') return { code: 0, stdout: 'https://github.com/abhikhur27/abhikhur27.github.io.git\n' };
+    if (command === 'git' && operation.join(' ') === 'remote get-url --push --all origin') return { code: 0, stdout: controls.pushUrls };
     if (command === 'git' && operation[0] === 'push'
       && ((!controls.auth && operation.includes('--dry-run')) || (controls.failPush && !operation.includes('--dry-run')))) return { code: 1, stdout: 'secret-credential-detail' };
     return runProcess(command, args, options);
   };
-  const options = { repoRoot: repo, expectedRepoRoot: repo, cwd: repo,
+  const options = { repoRoot: repo, expectedRepoRoot: repo, cwd: repo, gitTransport: false,
     nodeExecutable: process.execPath, expectedNodeExecutable: process.execPath,
     journalPath: path.join(directory, 'private', 'publisher.json'), hostname: 'ABHIONEMILLION', run,
     notify: async (code, incident) => { notifications.push({ code, incident }); return true; },
@@ -63,12 +65,45 @@ test('snapshot comparison ignores timestamps and object ordering, but rejects un
   assert.throws(() => snapshotFingerprint({ ...first, repositories: {} }));
 });
 
+test('deploy-key transport rewrites only the exact portfolio HTTPS origins without saving config', async () => {
+  const f = await fixture();
+  const transport = portfolioGitTransport();
+  assert.equal(transport.config.length, 4);
+  assert.match(transport.env.GIT_SSH_COMMAND, /StrictHostKeyChecking=yes/);
+  assert.match(transport.env.GIT_SSH_COMMAND, /IdentitiesOnly=yes/);
+  assert.match(transport.env.GIT_SSH_COMMAND, /portfolio_github_ed25519/);
+  assert.match(transport.env.GIT_SSH_COMMAND, /portfolio_github_known_hosts/);
+  assert.match(transport.env.GIT_SSH_COMMAND, /^"C:\/Program Files\/Git\/usr\/bin\/ssh.exe" -4 -F \/dev\/null/);
+  for (const suffix of ['', '.git']) {
+    const original = `https://github.com/abhikhur27/abhikhur27.github.io${suffix}`;
+    await f.git('remote', 'set-url', 'origin', original);
+    const { stdout } = await exec('git', ['-C', f.repo, ...transport.config, 'remote', 'get-url', 'origin'], { windowsHide: true });
+    assert.equal(stdout.trim(), PORTFOLIO_SSH_URL);
+    assert.equal(await f.git('remote', 'get-url', 'origin'), original);
+  }
+  const unrelated = 'https://github.com/abhikhur27/unrelated.git';
+  await f.git('remote', 'set-url', 'origin', unrelated);
+  const { stdout } = await exec('git', ['-C', f.repo, ...transport.config, 'remote', 'get-url', 'origin'], { windowsHide: true });
+  assert.equal(stdout.trim(), unrelated);
+});
+
 test('wrong host, runtime path, and public journal fail before invoking Git or refresh', async () => {
   const f = await fixture();
   assert.equal((await publishGitHubData({ ...f.options, hostname: 'ABHIKHUR' })).code, 'WRONG_HOST');
   assert.equal((await publishGitHubData({ ...f.options, expectedRepoRoot: path.join(f.repo, 'elsewhere') })).code, 'WRONG_RUNTIME_OR_PATH');
   assert.equal((await publishGitHubData({ ...f.options, journalPath: path.join(f.repo, 'receipt.json') })).code, 'PUBLIC_JOURNAL_FORBIDDEN');
   assert.equal(f.calls.length, 0);
+});
+
+test('unrelated or multiple push origins fail before every network call', async () => {
+  for (const pushUrls of ['https://github.com/abhikhur27/abhikhur27.github.io-other.git\n',
+    'https://github.com/abhikhur27/abhikhur27.github.io.git\nhttps://github.com/abhikhur27/another.git\n']) {
+    const f = await fixture();
+    f.controls.pushUrls = pushUrls;
+    assert.equal((await publishGitHubData(f.options)).code, 'WRONG_PUSH_ORIGIN');
+    assert.equal(f.calls.some(call => call.includes('ls-remote') || call.includes('fetch') || call.includes('push')), false);
+    assert.equal(f.controls.refreshes, 0);
+  }
 });
 
 test('timestamp-only refresh keeps the original snapshot bytes and creates no commit', async () => {

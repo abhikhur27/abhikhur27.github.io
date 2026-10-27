@@ -12,7 +12,11 @@ node --test tests/github-data.test.mjs
 
 `--check` is an alias for `--dry-run`. Both fetch and validate without writing. The normal command writes only `data/github-activity.json`, using an atomic replacement. A failed refresh leaves the previous file intact. An unchanged payload does not rewrite the timestamp. This script does not schedule itself, commit, or push.
 
-The existing desktop automation owns refreshes. Run it on `ABHIONEMILLION`, not a laptop schedule. It can use the desktop's existing GitHub CLI sign-in; it never reads credential files or prints CLI authentication output. If the CLI is unavailable, the public profile calendar works without signing in.
+For automatic publication, use `scripts/publish-github-data.mjs` on `ABHIONEMILLION` with its bundled OpenClaw Node runtime. It refuses laptop execution, checks the canonical checkout and `main` branch, preserves unrelated work, and commits only a meaningful change to `data/github-activity.json`. A failed push retains its owned commit for a safe normal retry. It never force-pushes or creates branches.
+
+Publishing uses a repository-specific desktop deploy key through Git's bundled SSH client on port 443. The private key stays on the desktop with owner-only permissions. The publisher uses a dedicated, verified GitHub host pin and process-local transport settings; it leaves the saved HTTPS origin, other repositories, and account-wide credentials alone. Public data fetching still works without a GitHub CLI sign-in.
+
+Use one model-free native OpenClaw command job at 07:15 `America/Chicago`. Activate it only after an actual scheduler-run publication receipt proves that the desktop runtime can fetch and push. Keep any laptop copy paused and preserve the separate weekly portfolio-maintenance job. Do not create duplicate refresh jobs. The publisher's journal and transition-only failure notices stay outside this public repository.
 
 The snapshot contains only linked public repository URLs, stars, forks, and public-profile contribution dates and totals. Authenticated GraphQL results are used only when no restricted activity is present. Otherwise, the script reads the unauthenticated public profile chart so the site cannot reveal activity beyond what GitHub already shows publicly. GitHub can include anonymous private activity in that public chart if the account owner has enabled it. No private repository names, commit messages, emails, or event details are requested or stored.
 

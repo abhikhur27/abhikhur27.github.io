@@ -2,7 +2,7 @@
 import { execFile } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, open, readFile, realpath, rename, unlink, writeFile } from 'node:fs/promises';
-import { hostname as computerName } from 'node:os';
+import { hostname as computerName, userInfo } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -11,6 +11,9 @@ export const PORTFOLIO_ROOT = String.raw`C:\Users\abhim\Desktop\abhiportfoliorep
 export const PORTABLE_NODE = String.raw`C:\Users\abhim\AppData\Local\OpenClaw\deps\portable-node\node.exe`;
 export const JOURNAL_PATH = String.raw`C:\Users\abhim\Documents\lifeorganizer\data\generated\portfolio-github-publisher.json`;
 export const SNAPSHOT_PATH = 'data/github-activity.json';
+export const DEPLOY_KEY_PATH = String.raw`C:\Users\abhim\.ssh\portfolio_github_ed25519`;
+export const GITHUB_KNOWN_HOSTS = String.raw`C:\Users\abhim\.ssh\portfolio_github_known_hosts`;
+export const PORTFOLIO_SSH_URL = 'ssh://git@ssh.github.com:443/abhikhur27/abhikhur27.github.io.git';
 const PYTHON = String.raw`C:\Users\abhim\Documents\lifeorganizer\.venv\Scripts\python.exe`;
 const NOTIFIER = String.raw`C:\Users\abhim\Documents\lifeorganizer\scripts\send_static_notification.py`;
 const COMMIT_MESSAGE = 'chore: refresh public GitHub activity';
@@ -26,6 +29,22 @@ const samePath = (left, right) => process.platform === 'win32'
   : path.resolve(left) === path.resolve(right);
 const stable = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
   ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
+
+export function portfolioGitTransport() {
+  const forward = value => value.replaceAll('\\', '/');
+  const ssh = '"C:/Program Files/Git/usr/bin/ssh.exe" -4 -F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes'
+    + ' -o IdentityAgent=none -o StrictHostKeyChecking=yes -o HostKeyAlgorithms=ssh-ed25519'
+    + ' -o PasswordAuthentication=no -o PreferredAuthentications=publickey -o ConnectTimeout=15'
+    + ` -o UserKnownHostsFile="${forward(GITHUB_KNOWN_HOSTS)}" -o GlobalKnownHostsFile=/dev/null`
+    + ` -i "${forward(DEPLOY_KEY_PATH)}"`;
+  return {
+    config: [
+      '-c', `url.${PORTFOLIO_SSH_URL}.insteadOf=https://github.com/abhikhur27/abhikhur27.github.io.git`,
+      '-c', `url.${PORTFOLIO_SSH_URL}.insteadOf=https://github.com/abhikhur27/abhikhur27.github.io`,
+    ],
+    env: { GIT_SSH_COMMAND: ssh, GIT_SSH_VARIANT: 'ssh' },
+  };
+}
 
 export function snapshotFingerprint(value) {
   if (!value || value.schemaVersion !== 1 || value.login !== 'abhikhur27') fail('INVALID_SNAPSHOT');
@@ -129,6 +148,9 @@ export async function publishGitHubData(options = {}) {
   const cwd = options.cwd ?? process.cwd();
   const run = options.run ?? runProcess;
   const now = options.now ?? (() => new Date().toISOString());
+  const transport = options.gitTransport === false ? { config: [], env: {} } : portfolioGitTransport();
+  const gitOptions = { cwd: repo, env: { ...process.env, GIT_TERMINAL_PROMPT: '0', GCM_INTERACTIVE: 'Never', ...transport.env } };
+  const runtime = { pid: process.pid, user: userInfo().username, executable: process.execPath, cwd: process.cwd(), host: computerName() };
   if (host.toUpperCase() !== 'ABHIONEMILLION') return { ok: false, code: 'WRONG_HOST' };
   if (!samePath(repo, expectedRepo) || !samePath(cwd, repo) || !samePath(node, expectedNode)) return { ok: false, code: 'WRONG_RUNTIME_OR_PATH' };
   const journalDirectory = path.dirname(journal);
@@ -136,7 +158,7 @@ export async function publishGitHubData(options = {}) {
   let lock;
   let state;
   const git = async (args, code, allowFailure = false) => {
-    const result = await run('git', ['-C', repo, ...args], { cwd: repo });
+    const result = await run('git', ['-C', repo, ...transport.config, ...args], gitOptions);
     if (result.code && !allowFailure) fail(code);
     return result;
   };
@@ -183,8 +205,15 @@ export async function publishGitHubData(options = {}) {
     if (!samePath(await text(['rev-parse', '--show-toplevel'], 'NOT_A_REPOSITORY'), repo)) fail('WRONG_REPOSITORY');
     if (await text(['branch', '--show-current'], 'BRANCH_FAILED') !== 'main') fail('WRONG_BRANCH');
     if (await text(['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}'], 'UPSTREAM_FAILED') !== 'origin/main') fail('WRONG_UPSTREAM');
-    const origin = await text(['remote', 'get-url', 'origin'], 'ORIGIN_FAILED');
-    if (!/^(?:https:\/\/github\.com\/|git@github\.com:)abhikhur27\/abhikhur27\.github\.io(?:\.git)?$/i.test(origin)) fail('WRONG_ORIGIN');
+    // Inspect the saved origin without the scoped rewrite; never persist auth config.
+    const originResult = await run('git', ['-C', repo, 'remote', 'get-url', 'origin'], gitOptions);
+    if (originResult.code) fail('ORIGIN_FAILED');
+    const origin = originResult.stdout.trim();
+    const canonicalOrigin = value => /^(?:https:\/\/github\.com\/|git@github\.com:)abhikhur27\/abhikhur27\.github\.io(?:\.git)?$/i.test(value);
+    if (!canonicalOrigin(origin)) fail('WRONG_ORIGIN');
+    const pushResult = await run('git', ['-C', repo, 'remote', 'get-url', '--push', '--all', 'origin'], gitOptions);
+    const pushOrigins = pushResult.stdout.trim().split(/\r?\n/);
+    if (pushResult.code || pushOrigins.length !== 1 || !canonicalOrigin(pushOrigins[0])) fail('WRONG_PUSH_ORIGIN');
     const defaultHead = await text(['ls-remote', '--symref', 'origin', 'HEAD'], 'DEFAULT_BRANCH_FAILED');
     if (!/^ref: refs\/heads\/main\s+HEAD$/m.test(defaultHead)) fail('WRONG_DEFAULT_BRANCH');
     await assertClean();
@@ -232,7 +261,7 @@ export async function publishGitHubData(options = {}) {
     }
     if (await text(['ls-files', '--others', '--exclude-standard', '-z'], 'UNTRACKED_LIST_FAILED') !== untracked) fail('UNTRACKED_FILES_CHANGED');
     await assertClean();
-    state.result = { ok: true, ...result, completedAt: now(), host, branch: 'main', snapshot: SNAPSHOT_PATH };
+    state.result = { ok: true, ...result, completedAt: now(), host, branch: 'main', snapshot: SNAPSHOT_PATH, runtime };
     delete state.failure;
     state.history = [...state.history.slice(-29), state.result];
     await saveState(journal, state);
@@ -241,7 +270,7 @@ export async function publishGitHubData(options = {}) {
     const code = error instanceof PublisherError ? error.code : 'PUBLISHER_IO_FAILED';
     if (state) {
       if (state.result.status !== 'failed' || state.failure?.code !== code) state.failure = { code, incident: randomUUID(), notified: false };
-      state.result = { ok: false, status: 'failed', code, completedAt: now(), host };
+      state.result = { ok: false, status: 'failed', code, completedAt: now(), host, runtime };
       await saveState(journal, state).catch(() => {});
       if (!state.failure.notified) {
         state.failure.notified = await (options.notify ?? ((reason, incident) => notifyFailure(reason, incident, run)))(code, state.failure.incident).catch(() => false);
