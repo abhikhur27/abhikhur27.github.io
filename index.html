@@ -17,6 +17,8 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="portfolio.css">
+  <link rel="stylesheet" href="portfolio-extras.css">
+  <link rel="stylesheet" href="portrait-easter-egg.css">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -29,6 +31,7 @@
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
+        <a href="#blog">Blog</a>
         <a href="assets/Abhimanyu_Khurana_Resume.pdf">Resume <span aria-hidden="true">↗</span></a>
         <a href="https://github.com/abhikhur27" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
@@ -38,7 +41,12 @@
   <main id="main-content">
     <section id="about" class="intro container">
       <div class="portrait-frame">
-        <img class="portrait" src="preview-image.png" alt="Portrait of Abhimanyu Khurana">
+        <button id="portrait-button" class="portrait-button" type="button" aria-label="Spin my portrait" aria-describedby="portrait-hint">
+          <span class="portrait-craft"><img class="portrait" src="preview-image.png" alt="Portrait of Abhimanyu Khurana"></span>
+        </button>
+        <p id="portrait-hint" class="portrait-hint"><svg viewBox="0 0 24 28" aria-hidden="true"><path d="M20 25C9 25 5 18 7 4M2 10l5-6 5 5"/></svg><span>dont click me really fast (or else)</span></p>
+        <p id="portrait-status" class="portrait-status" role="status" aria-live="polite"></p>
+        <button id="portrait-reset" class="portrait-reset" type="button" hidden>bring me back</button>
       </div>
       <div class="about-panel">
         <h1>Abhimanyu Khurana</h1>
@@ -317,6 +325,47 @@
       </details>
 
     </section>
+
+    <section id="activity" class="container activity-section" aria-labelledby="activity-title">
+      <div class="activity-heading">
+        <h2 id="activity-title" class="index-label">A year, on record</h2>
+        <a class="activity-source" href="https://github.com/abhikhur27?tab=overview" target="_blank" rel="noreferrer">GitHub activity ↗</a>
+      </div>
+      <div id="contribution-record" class="contribution-record" aria-busy="true">
+        <figure class="record-sleeve">
+          <svg id="activity-record-svg" class="activity-record-svg" viewBox="0 0 400 400" role="img" aria-labelledby="record-svg-title record-svg-desc">
+            <title id="record-svg-title">A year of GitHub contributions, etched into a record</title>
+            <desc id="record-svg-desc">Each notch is one day, from the oldest at the center to the newest at the edge. Longer notches mean more contributions. Use the date slider for exact counts.</desc>
+            <circle class="record-edge" cx="200" cy="200" r="185"/>
+            <g id="record-grooves" aria-hidden="true"></g>
+            <circle class="record-label" cx="200" cy="200" r="43"/>
+            <text class="record-label-text" x="200" y="185" text-anchor="middle">ABHI</text>
+            <text class="record-label-small" x="200" y="217" text-anchor="middle">SIDE A</text>
+            <circle class="record-spindle" cx="200" cy="200" r="4"/>
+          </svg>
+          <figcaption>One notch per day. Longer means more activity.</figcaption>
+        </figure>
+        <div class="record-notes">
+          <p class="record-total" id="activity-total">Loading the record…</p>
+          <p class="record-period" id="activity-period"></p>
+          <div class="record-readout">
+            <p class="record-date" id="activity-date">Pick a day</p>
+            <p class="record-count" id="activity-count">Scrub through the year below.</p>
+          </div>
+          <label class="record-slider-label" for="activity-day">Find a day</label>
+          <input id="activity-day" class="record-slider" type="range" min="0" max="0" value="0" disabled aria-describedby="activity-count">
+          <div class="record-direction" aria-hidden="true"><span>older</span><span>newer</span></div>
+          <p id="activity-updated" class="activity-updated"></p>
+        </div>
+      </div>
+      <p class="activity-fallback" id="activity-fallback" hidden>Couldn't load the record. <a href="https://github.com/abhikhur27">The original is on GitHub.</a></p>
+      <noscript><p><a href="https://github.com/abhikhur27">See my contribution history on GitHub.</a></p></noscript>
+    </section>
+
+    <section id="blog" class="container blog-section" aria-labelledby="blog-title">
+      <h2 id="blog-title" class="index-label">Blog</h2>
+      <p class="blog-empty">tbd. yes, i know this is empty.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -338,5 +387,8 @@
 
   <script src="script.js"></script>
   <script type="module" src="visitor-mark.mjs"></script>
+  <script type="module" src="github-stats.mjs"></script>
+  <script type="module" src="contribution-record.mjs"></script>
+  <script type="module" src="portrait-easter-egg.mjs"></script>
 </body>
 </html>

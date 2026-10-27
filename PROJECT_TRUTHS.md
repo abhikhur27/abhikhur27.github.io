@@ -27,10 +27,12 @@ These are the non-negotiable truths for this portfolio.
 - Do not add homepage filtering chips, tabs, or category controls unless they are clearly necessary.
 - Default homepage project browsing should be a simple list/grid of projects, not a navigation system.
 - Preserve the existing more personal bio paragraph unless I explicitly ask to change or remove it.
+- Owner-approved additions on October 26, 2026: preserve public GitHub stars/forks next to linked repositories, the contribution-history record, the small empty Blog section, and the opt-in portrait spin/rocket easter egg. Keep the original photo, lo-fi typography, narrow layout, and existing palette. Do not replace these with dashboards, green contribution squares, or autoplay effects.
+- The Blog is intentionally empty until real posts exist. Its approved placeholder is "tbd. yes, i know this is empty." This explicit exception does not permit placeholder projects or fake articles. Preserve the portrait's subtle hint and exact post-launch message, "now look what youve done"; provide a restore control and reduced-motion behavior.
 
 ## Content truths
 
-- Do not publish templates, placeholders, scaffolding, or "fill this in later" sections on `main`.
+- Do not publish templates, scaffolding, or "fill this in later" sections on `main`, except for the explicitly approved empty Blog described above. Never use that exception to publish placeholder projects or fake articles.
 - Do not ship self-referential gimmicks like pinning my own projects unless there is a very strong reason.
 - If no real physical builds are published yet, say that directly instead of hosting a fake shelf.
 - If a project is unfinished, confusing, or not portfolio-ready, it should stay off the homepage.
@@ -80,6 +82,7 @@ These are the non-negotiable truths for this portfolio.
 
 - Default to simplification, clarity, and honesty.
 - Before publishing, review changed visible copy and project listings against the latest approved plain, professional voice and the retirement rules. Check for em dashes, corporate wording, invented stories/results, and retired links or stand-ins. Do not restore rejected copy from old prompts or memory.
+- Preserve the owner-approved October 26 interactions and empty Blog. GitHub counts must be real public metadata, including honest zero counts. Contribution dates/counts must come from the public profile, never invented activity or private repository details. Keep failed loads honest and retain the last verified snapshot. Any scheduled snapshot refresh is a deterministic desktop-only command, not a model heartbeat or a laptop job.
 - Execute portfolio automation only on desktop `ABHIONEMILLION`, never on laptop `ABHIKHUR` or another laptop. Keep duplicate laptop jobs paused. Required repositories, runtimes, dependencies, fixtures, and authorized integrations must be available on the desktop; do not make laptop execution or laptop-local files a prerequisite. Report missing desktop prerequisites instead of silently falling back to the laptop.
 - The October 26, 2026 retirement and strong-project evidence gate override older project lists, incubation notes, automation memory recommendations, and generic instructions to add small utilities. Never resurrect a retired listing to satisfy a rotation or publishing quota.
 - Work directly on the current/default branch, normally `main`, unless the owner explicitly requests isolation or a pull request. Never create or push `codex/*` branches.
