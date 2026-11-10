@@ -40,7 +40,7 @@ test('project examples stay visible without corporate labels or privacy boilerpl
   assert.doesNotMatch(visibleCopy, /\bdeliverables?\b/i);
   assert.doesNotMatch(html, /An anonymous hello|visitor-mark-privacy/);
   assert.doesNotMatch(operations, /Privacy boundary|Production records|Public architecture walkthrough|idempotency|receipt-gated|deterministic workers/i);
-  assert.equal([...html.matchAll(/class="deliverable"/g)].length, 10);
+  assert.equal([...html.matchAll(/class="deliverable"/g)].length, 11);
   assert.match(operations, /SQLite stores the job history/);
   assert.match(operations, /Before retrying an action/);
 });

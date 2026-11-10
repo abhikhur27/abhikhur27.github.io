@@ -1,0 +1,13 @@
+.project-main { padding-block: 3rem; }
+.project-main > h1 { margin-top: 1.5rem; }
+.project-main .identity-line { font-size: 0.72rem; line-height: 1.8; }
+.project-main figure { margin: 1.75rem 0; }
+.project-main figure img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+.project-main figcaption { color: var(--muted); font-size: 0.78rem; line-height: 1.6; margin-top: 0.65rem; }
+.hardware-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.hardware-gallery figure { min-width: 0; }
+.project-main .card-actions { display: flex; flex-wrap: wrap; gap: 0.65rem 1.5rem; margin-block: 1.25rem; }
+@media (max-width: 460px) {
+  .project-main { padding-block: 2rem; }
+  .hardware-gallery { grid-template-columns: 1fr; gap: 0; }
+}

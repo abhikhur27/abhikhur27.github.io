@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "login": "abhikhur27",
-  "updatedAt": "2026-11-10T13:15:06.757Z",
+  "updatedAt": "2026-11-10T20:17:00.071Z",
   "repositories": {
     "abhikhur27/algorithm-visualizer": {
       "stars": 0,
@@ -32,6 +32,11 @@
       "stars": 0,
       "forks": 0,
       "url": "https://github.com/abhikhur27/ds-playground-html"
+    },
+    "abhikhur27/emergencymesh": {
+      "stars": 0,
+      "forks": 0,
+      "url": "https://github.com/abhikhur27/emergencymesh"
     },
     "abhikhur27/gridirondex": {
       "stars": 0,

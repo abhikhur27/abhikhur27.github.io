@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RescueMEsh | Abhimanyu Khurana</title>
+  <meta name="description" content="A HackUTD emergency-reporting prototype with a phone app, LoRa radios, 3D-printed cases, and a hub for reviewing reports.">
+  <link rel="canonical" href="https://abhikhur.com/projects/rescuemesh/">
+  <meta property="og:title" content="RescueMEsh | Abhimanyu Khurana">
+  <meta property="og:description" content="A phone, a small radio, and a way to get a request for help out when cell service is unavailable.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abhikhur.com/projects/rescuemesh/">
+  <meta property="og:image" content="https://abhikhur.com/projects/rescuemesh/media/demo-setup.jpg">
+  <meta name="theme-color" content="#111110">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../portfolio.css">
+  <link rel="stylesheet" href="rescuemesh.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <main id="main-content" class="container project-main">
+    <a class="evidence-link" href="../../#project-rescuemesh">← Back to portfolio</a>
+    <h1>RescueMEsh</h1>
+    <p class="identity-line">HackUTD 2026 · Swift · ESP32 / LoRa · Python · MongoDB · NVIDIA Nemotron</p>
+    <p class="lead">A phone, a small radio, and a way to get a request for help out when cell service is unavailable.</p>
+
+    <figure>
+      <img src="media/demo-setup.jpg" width="5712" height="4284" fetchpriority="high" alt="Two phone-connected LoRa companions and a tripod-mounted receiver beside the RescueMEsh laptop dashboard.">
+      <figcaption>The HackUTD demo setup: two phone companions, a receiver, and the laptop hub.</figcaption>
+    </figure>
+
+    <section class="experience-row" aria-labelledby="network-title">
+      <h2 id="network-title" class="index-label">When the network is down</h2>
+      <p>When cell service goes down, sending a simple request for help gets a lot harder. We built RescueMEsh around that problem: a phone app, small radio attachments, and a hub that brings incoming reports into one place.</p>
+      <p>The phone connects to its radio companion over Bluetooth. The companion sends encrypted messages over LoRa, so that part of the route does not need a cell tower or an internet connection. Reports carry information such as the situation, how many people need help, and location when available. Relays forward the encrypted messages rather than reading their contents.</p>
+    </section>
+
+    <section class="experience-row" aria-labelledby="build-title">
+      <h2 id="build-title" class="index-label">What we built</h2>
+      <p>The Swift app turns an SOS into a compact report. ESP32 radio boards handle the wireless link, and 3D-printed enclosures keep the hardware together. At the receiving end, a laptop hub saves reports, sends acknowledgements, and gives an operator a readable view of what has arrived.</p>
+      <p>NVIDIA Nemotron helps structure reports and suggest priorities and resource allocations. The original report stays available, and an operator can correct information or override the suggestions. A regional dashboard models coordination between hubs, including which cases still need attention.</p>
+      <div class="hardware-gallery">
+        <figure>
+          <img src="media/enclosure.jpg" width="783" height="1043" loading="lazy" alt="RescueMEsh radio enclosure with an antenna, small display, phone case and USB cable on a wooden desk.">
+          <figcaption>The printed enclosure, antenna, phone case, and cable.</figcaption>
+        </figure>
+        <figure>
+          <img src="media/handheld.jpg" width="783" height="1043" loading="lazy" alt="A handheld phone with the RescueMEsh radio attachment mounted above it.">
+          <figcaption>The phone and radio companion together.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="experience-row" aria-labelledby="demo-title">
+      <h2 id="demo-title" class="index-label">The demo</h2>
+      <p>Our HackUTD setup brought together the phone app, radio hardware, and hub dashboard. The regional demo combined the physical ECSW hub with simulated locations and dispatch resources. It was a prototype, not a connection to real emergency services. A delivery receipt means the hub received a report, not that help has been dispatched.</p>
+      <p>Built with Alex Huang, Dersh Bhakta, and Yash Chavan. RescueMEsh won at HackUTD!</p>
+      <div class="card-actions">
+        <a href="https://devpost.com/software/rescuemesh-93owy7">See the project on Devpost ↗</a>
+        <a href="https://github.com/abhikhur27/emergencymesh#readme">Code and setup instructions ↗</a>
+      </div>
+    </section>
+
+    <a class="evidence-link" href="../../assets/Abhimanyu_Khurana_Resume.pdf">Read my resume ↗</a>
+  </main>
+</body>
+</html>

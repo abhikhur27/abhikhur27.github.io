@@ -10,13 +10,15 @@ Main personal site for curated project demos.
 
 - Simpler homepage-first browsing.
 - Honest labels for browser-based work.
-- Blog and physical-build sections are disabled on the public site for now.
+- Blog + LinkedIn combines verified original posts with any local blog entries.
+- RescueMEsh documents a HackUTD hardware prototype with real photographs and explicit demo limitations.
 - No public placeholders or templates on `main`.
 - Static GitHub Pages frontend, with an isolated opt-in anonymous counter backend.
 - Future direction: substantial developer tools and AI workflows with real utility, reproducible installation, meaningful tests/evals, and clean-checkout end-to-end verification.
 
 ## Included Subprojects In This Repo
 
+- `projects/rescuemesh`
 - `projects/transit-network-lab`
 - `projects/market-regime-lab`
 - `projects/systems-decision-labs`

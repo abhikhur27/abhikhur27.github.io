@@ -38,7 +38,8 @@ test('valid counts include real zero but never absent, negative, fractional, or 
 test('discovery stays within existing cards, deduplicates links and rejects the profile', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const keys = extractRepositoryKeys(html);
-  assert.equal(keys.length, 11);
+  assert.equal(keys.length, 12);
+  assert.ok(keys.includes('abhikhur27/emergencymesh'));
   assert.equal(new Set(keys).size, keys.length);
   assert.ok(keys.includes(key));
   assert.ok(keys.includes('abhikhur27/algorithm-visualizer'));
