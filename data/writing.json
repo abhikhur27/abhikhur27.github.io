@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-10T20:16:30.944Z",
+  "updatedAt": "2026-11-13T19:23:20.984Z",
   "posts": [
     {
       "id": "linkedin-7526012930224574464",
@@ -8,8 +8,8 @@
       "title": "RescueMEsh won at HackUTD!",
       "publishedAt": "2026-11-10T20:08:29.124Z",
       "url": "https://www.linkedin.com/feed/update/urn:li:activity:7526012930224574464/",
-      "excerpt": "RescueMEsh won at HackUTD! I know this is late, but I'm still so excited about this past weekend!! Huge thank you to my teammates Alex Huang, Dersh Bhakta, and Yash Chavan for building this with me. RescueMEsh is an e...",
-      "body": "RescueMEsh won at HackUTD!\nI know this is late, but I'm still so excited about this past weekend!!\nHuge thank you to my teammates Alex Huang, Dersh Bhakta, and Yash Chavan for building this with me.\nRescueMEsh is an emergency-reporting prototype for when cell service and internet go down. Your phone connects over Bluetooth to a small radio device, which sends an encrypted SOS over LoRa to a nearby hub. The idea is to get a request for help out without depending on a working cell tower.\nAt the hub, NVIDIA Nemotron helps organize incoming reports, flag urgent cases, and suggest how resources could be allocated. An operator can still review the original reports and override those suggestions. We also built a regional dashboard to model coordination between hubs instead of treating every location as its own isolated problem.\nThat meant putting together an iPhone app, radio firmware, 3D-printed cases, and the dashboards. There were a lot of cables.\nThe event was chaotic and just about everything ran late, but I'm not going to hate on free. Unfortunately, no corporate sponsors stopped by our table. Clearly they missed out.\nAnyways, take a look at what we built:\nhttps://lnkd.in/gHqBUjZD"
+      "excerpt": "RescueMEsh won at HackUTD! I know this is late, but I'm still so excited about this past weekend!! Huge thank you to my teammates Alex S. Huang, Dersh Bhakta, and Yash Chavan for building this with me. RescueMEsh is a...",
+      "body": "RescueMEsh won at HackUTD!\nI know this is late, but I'm still so excited about this past weekend!!\nHuge thank you to my teammates Alex S. Huang, Dersh Bhakta, and Yash Chavan for building this with me.\nRescueMEsh is an emergency-reporting prototype for when cell service and internet go down. Your phone connects over Bluetooth to a small radio device, which sends an encrypted SOS over LoRa to a nearby hub. The idea is to get a request for help out without depending on a working cell tower.\nAt the hub, NVIDIA Nemotron helps organize incoming reports, flag urgent cases, and suggest how resources could be allocated. An operator can still review the original reports and override those suggestions. We also built a regional dashboard to model coordination between hubs instead of treating every location as its own isolated problem.\nThat meant putting together an iPhone app, radio firmware, 3D-printed cases, and the dashboards. There were a lot of cables.\nThe event was chaotic and just about everything ran late, but I'm not going to hate on free. Unfortunately, no corporate sponsors stopped by our table. Clearly they missed out.\nAnyways, take a look at what we built:\nhttps://lnkd.in/gHqBUjZD"
     },
     {
       "id": "linkedin-7520663480509689856",
