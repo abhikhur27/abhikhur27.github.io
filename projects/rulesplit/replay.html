@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RuleSplit replay</title><style>body{background:#111110;color:#deded8;font:16px/1.65 monospace;max-width:900px;margin:48px auto;padding:0 22px}pre{white-space:pre-wrap;overflow-wrap:anywhere}a{color:#a7b89b}</style><h1>RuleSplit replay</h1><p>A hot drop rule overlaps an earlier allow rule. Moving it first would block trusted traffic. The checked split carves that overlap out before spending table rows.</p><p>All traffic here is synthetic. These are packet counts, not measured DPU throughput.</p><pre>{
+  &quot;synthetic&quot;: true,
+  &quot;packet_count&quot;: 1080,
+  &quot;offload_path_packets&quot;: 640,
+  &quot;cpu_path_packets&quot;: 440,
+  &quot;mismatches&quot;: 0,
+  &quot;rows&quot;: 4,
+  &quot;native_check&quot;: {
+    &quot;compiler&quot;: &quot;gcc&quot;,
+    &quot;packets_compared&quot;: 1080,
+    &quot;mismatches&quot;: 0,
+    &quot;execution&quot;: &quot;compiled C on host CPU, not DPU hardware&quot;
+  },
+  &quot;naive_counterexample&quot;: {
+    &quot;ok&quot;: false,
+    &quot;packet&quot;: [
+      167772160,
+      2886729728,
+      0,
+      443,
+      6
+    ],
+    &quot;policy_action&quot;: &quot;allow&quot;,
+    &quot;offload_action&quot;: &quot;drop&quot;,
+    &quot;matched_rule&quot;: &quot;trusted-api&quot;
+  },
+  &quot;verification&quot;: {
+    &quot;ok&quot;: true,
+    &quot;rows_checked&quot;: 4,
+    &quot;method&quot;: &quot;exact integer packet-space coverage; CPU fallback retains the full ordered policy&quot;
+  }
+}</pre></html>
