@@ -1,0 +1,114 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AfterFact decision replay</title><style>
+    :root{color-scheme:dark}*{box-sizing:border-box}body{background:#111110;color:#e5e4dd;font:16px/1.7 system-ui,sans-serif;max-width:980px;margin:auto;padding:42px 22px}h1,h2,th{font-family:ui-monospace,monospace}h1{font-size:32px}h2{font-size:18px}a{color:#b5c6a8}.muted{color:#aaa99f}.plans{display:grid;grid-template-columns:1fr 1fr;gap:20px}section{border:1px solid #393934;padding:20px}table{border-collapse:collapse;width:100%}th,td{text-align:left;border-bottom:1px solid #393934;padding:12px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;padding:18px;background:#191918}details{margin-top:28px}@media(max-width:620px){.plans{grid-template-columns:1fr}th,td{padding:8px;font-size:12px}}
+    </style></head><body><p class="muted">AF / TWO CLOCKS, ONE DECISION</p><h1>What changed after the fact?</h1><p>Synthetic demonstration. No real dispatch or client data.</p><p>Effective cutoff: <strong>50</strong>. Knowledge changed from <strong>50</strong> to <strong>100</strong>.</p><div class="plans"><section><h2>What we knew then</h2><ul><li><strong>panel</strong> &rarr; crew-a</li><li><strong>pump</strong> &rarr; crew-b</li></ul><p>Covered priority: 16<br>Travel cost: 7</p><p>Unassigned: valve</p></section><section><h2>With the corrections</h2><ul><li><strong>valve</strong> &rarr; crew-b</li></ul><p>Covered priority: 8<br>Travel cost: 2</p><p>Unassigned: panel, pump</p></section></div><h2>The small explanation</h2><p>3 facts changed. 2 retained corrections reproduce the new result. Removing any single retained correction breaks that reproduction.</p><table><thead><tr><th>Fact</th><th>Earlier source</th><th>Later source</th></tr></thead><tbody><tr><td>job/valve</td><td>valve</td><td>late-priority</td></tr><tr><td>resource/crew-a</td><td>crew-a</td><td>late-outage</td></tr></tbody></table><p class="muted">This is a deletion-1-minimal explanation inside this assignment model, not proof of real-world causality or the smallest possible explanation. Priorities, travel costs and deadlines are inputs. This tool does not dispatch people or calculate routes.</p><details><summary>Inspect the replay and source records</summary><pre>{
+  &quot;schema_version&quot;: 1,
+  &quot;valid_at&quot;: 50,
+  &quot;known_before&quot;: 50,
+  &quot;known_after&quot;: 100,
+  &quot;before&quot;: {
+    &quot;assignments&quot;: {
+      &quot;panel&quot;: &quot;crew-a&quot;,
+      &quot;pump&quot;: &quot;crew-b&quot;
+    },
+    &quot;unassigned&quot;: [
+      &quot;valve&quot;
+    ],
+    &quot;covered_priority&quot;: 16,
+    &quot;travel_cost&quot;: 7
+  },
+  &quot;after&quot;: {
+    &quot;assignments&quot;: {
+      &quot;valve&quot;: &quot;crew-b&quot;
+    },
+    &quot;unassigned&quot;: [
+      &quot;panel&quot;,
+      &quot;pump&quot;
+    ],
+    &quot;covered_priority&quot;: 8,
+    &quot;travel_cost&quot;: 2
+  },
+  &quot;changed_facts&quot;: [
+    &quot;job/valve&quot;,
+    &quot;resource/crew-a&quot;,
+    &quot;resource/crew-b&quot;
+  ],
+  &quot;witness&quot;: [
+    {
+      &quot;key&quot;: &quot;job/valve&quot;,
+      &quot;before&quot;: {
+        &quot;entity&quot;: &quot;valve&quot;,
+        &quot;event_id&quot;: &quot;valve&quot;,
+        &quot;kind&quot;: &quot;job&quot;,
+        &quot;known_at&quot;: 10,
+        &quot;payload&quot;: {
+          &quot;deadline&quot;: 10,
+          &quot;priority&quot;: 3,
+          &quot;skill&quot;: &quot;mechanical&quot;
+        },
+        &quot;valid_at&quot;: 10
+      },
+      &quot;after&quot;: {
+        &quot;entity&quot;: &quot;valve&quot;,
+        &quot;event_id&quot;: &quot;late-priority&quot;,
+        &quot;kind&quot;: &quot;job&quot;,
+        &quot;known_at&quot;: 80,
+        &quot;payload&quot;: {
+          &quot;deadline&quot;: 10,
+          &quot;priority&quot;: 8,
+          &quot;skill&quot;: &quot;mechanical&quot;
+        },
+        &quot;valid_at&quot;: 20
+      }
+    },
+    {
+      &quot;key&quot;: &quot;resource/crew-a&quot;,
+      &quot;before&quot;: {
+        &quot;entity&quot;: &quot;crew-a&quot;,
+        &quot;event_id&quot;: &quot;crew-a&quot;,
+        &quot;kind&quot;: &quot;resource&quot;,
+        &quot;known_at&quot;: 10,
+        &quot;payload&quot;: {
+          &quot;available&quot;: true,
+          &quot;costs&quot;: {
+            &quot;panel&quot;: 4,
+            &quot;pump&quot;: 2,
+            &quot;valve&quot;: 1
+          },
+          &quot;skills&quot;: [
+            &quot;mechanical&quot;,
+            &quot;electrical&quot;
+          ]
+        },
+        &quot;valid_at&quot;: 10
+      },
+      &quot;after&quot;: {
+        &quot;entity&quot;: &quot;crew-a&quot;,
+        &quot;event_id&quot;: &quot;late-outage&quot;,
+        &quot;kind&quot;: &quot;resource&quot;,
+        &quot;known_at&quot;: 70,
+        &quot;payload&quot;: {
+          &quot;available&quot;: false,
+          &quot;costs&quot;: {
+            &quot;panel&quot;: 4,
+            &quot;pump&quot;: 2,
+            &quot;valve&quot;: 1
+          },
+          &quot;skills&quot;: [
+            &quot;mechanical&quot;,
+            &quot;electrical&quot;
+          ]
+        },
+        &quot;valid_at&quot;: 30
+      }
+    }
+  ],
+  &quot;deletion_1_minimal&quot;: true,
+  &quot;solver_calls&quot;: 8,
+  &quot;semantics&quot;: &quot;Full-state events; effective time, then knowledge time, then event ID. Exact bounded assignment; model-relative explanation.&quot;,
+  &quot;input_provenance&quot;: &quot;Synthetic demonstration. No real dispatch or client data.&quot;,
+  &quot;journal&quot;: {
+    &quot;events&quot;: 8,
+    &quot;newly_inserted&quot;: 8,
+    &quot;persistent&quot;: false
+  }
+}</pre></details><p><a href="https://github.com/abhikhur27/portfolio-utility-suite/tree/main/tools/afterfact">Code, input format and reproduction</a></p></body></html>
