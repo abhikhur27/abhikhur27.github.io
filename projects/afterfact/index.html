@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AfterFact | Abhimanyu Khurana</title>
+  <meta name="description" content="Replay operational decisions across two clocks and trace late corrections back to their source records.">
+  <link rel="canonical" href="https://abhikhur.com/projects/afterfact/">
+  <meta name="theme-color" content="#111110">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../../portfolio.css">
+  <style>.project-main{max-width:850px;padding:55px 24px 80px}.project-main h1{margin-top:26px}.project-main h2{margin-top:36px}.project-main p{max-width:73ch}.trace{overflow:auto;padding:20px 0;font:14px/1.8 "IBM Plex Mono",monospace;color:#b5c6a8;border-block:1px solid #343431;white-space:pre}.card-actions{margin:22px 0}.project-main pre{overflow:auto;font-size:13px}.muted{color:#99998f}</style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <main id="main-content" class="container project-main">
+    <a class="evidence-link" href="../../#project-afterfact">← Back to portfolio</a>
+    <h1>AfterFact</h1>
+    <p class="identity-line">Python · SQLite · Temporal Data · Exact Matching</p>
+    <p class="lead">The answer changed. Which late facts actually changed it?</p>
+    <p>A record can take effect on Monday and arrive on Wednesday. AfterFact keeps those two clocks separate, reproduces the assignment you could have made with Monday's information, and compares it with the corrected version.</p>
+    <pre class="trace">same effective time, different knowledge
+then: panel → crew A, pump → crew B
+now:  valve → crew B
+why:  one late outage + one priority correction</pre>
+    <div class="card-actions">
+      <a href="report.html">Follow the actual replay ↗</a>
+      <a href="https://github.com/abhikhur27/portfolio-utility-suite/tree/main/tools/afterfact">Code and setup ↗</a>
+    </div>
+    <h2 class="index-label">History with a useful answer attached</h2>
+    <p>The SQLite journal accepts identical repeated events without adding duplicates and rolls back a batch if an existing event ID changes meaning. Replay respects both effective time and knowledge time, including corrections and deletions.</p>
+    <p>An exact assignment solver covers as much job priority as possible, then minimizes travel cost. Skills, availability, and deadlines are hard constraints. The explanation removes changed facts until every retained correction is needed to reproduce the new result, with source event IDs attached.</p>
+    <h2 class="index-label">Checked, not guessed</h2>
+    <p>All 28 tests pass. The matching solver agrees with independent exhaustive enumeration on 200 seeded cases. In the synthetic example, three facts change, but only two are needed to reproduce the new assignment. The label-only update drops out.</p>
+    <p><a class="evidence-link" href="report.json">Read the replay JSON</a> · <a class="evidence-link" href="events.json">Inspect the eight source events</a></p>
+    <h2 class="index-label">Keep the scope honest</h2>
+    <p>This is a small-case investigation tool: at most 10 resources, 32 active jobs, and 12 changed facts per explanation. The result is deletion-1-minimal, not guaranteed to be the smallest possible set. It explains this model's decision, not real-world causality. Travel costs are inputs; there is no routing service or live dispatch.</p>
+    <p class="muted">Independent software project built with synthetic examples. No Palantir SDK or client data is used.</p>
+  </main>
+</body>
+</html>
