@@ -1,0 +1,32 @@
+{
+  "synthetic": true,
+  "packet_count": 1080,
+  "offload_path_packets": 640,
+  "cpu_path_packets": 440,
+  "mismatches": 0,
+  "rows": 4,
+  "native_check": {
+    "compiler": "gcc",
+    "packets_compared": 1080,
+    "mismatches": 0,
+    "execution": "compiled C on host CPU, not DPU hardware"
+  },
+  "naive_counterexample": {
+    "ok": false,
+    "packet": [
+      167772160,
+      2886729728,
+      0,
+      443,
+      6
+    ],
+    "policy_action": "allow",
+    "offload_action": "drop",
+    "matched_rule": "trusted-api"
+  },
+  "verification": {
+    "ok": true,
+    "rows_checked": 4,
+    "method": "exact integer packet-space coverage; CPU fallback retains the full ordered policy"
+  }
+}
