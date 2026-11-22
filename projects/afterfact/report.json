@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "valid_at": 50,
+  "known_before": 50,
+  "known_after": 100,
+  "before": {
+    "assignments": {
+      "panel": "crew-a",
+      "pump": "crew-b"
+    },
+    "unassigned": [
+      "valve"
+    ],
+    "covered_priority": 16,
+    "travel_cost": 7
+  },
+  "after": {
+    "assignments": {
+      "valve": "crew-b"
+    },
+    "unassigned": [
+      "panel",
+      "pump"
+    ],
+    "covered_priority": 8,
+    "travel_cost": 2
+  },
+  "changed_facts": [
+    "job/valve",
+    "resource/crew-a",
+    "resource/crew-b"
+  ],
+  "witness": [
+    {
+      "key": "job/valve",
+      "before": {
+        "entity": "valve",
+        "event_id": "valve",
+        "kind": "job",
+        "known_at": 10,
+        "payload": {
+          "deadline": 10,
+          "priority": 3,
+          "skill": "mechanical"
+        },
+        "valid_at": 10
+      },
+      "after": {
+        "entity": "valve",
+        "event_id": "late-priority",
+        "kind": "job",
+        "known_at": 80,
+        "payload": {
+          "deadline": 10,
+          "priority": 8,
+          "skill": "mechanical"
+        },
+        "valid_at": 20
+      }
+    },
+    {
+      "key": "resource/crew-a",
+      "before": {
+        "entity": "crew-a",
+        "event_id": "crew-a",
+        "kind": "resource",
+        "known_at": 10,
+        "payload": {
+          "available": true,
+          "costs": {
+            "panel": 4,
+            "pump": 2,
+            "valve": 1
+          },
+          "skills": [
+            "mechanical",
+            "electrical"
+          ]
+        },
+        "valid_at": 10
+      },
+      "after": {
+        "entity": "crew-a",
+        "event_id": "late-outage",
+        "kind": "resource",
+        "known_at": 70,
+        "payload": {
+          "available": false,
+          "costs": {
+            "panel": 4,
+            "pump": 2,
+            "valve": 1
+          },
+          "skills": [
+            "mechanical",
+            "electrical"
+          ]
+        },
+        "valid_at": 30
+      }
+    }
+  ],
+  "deletion_1_minimal": true,
+  "solver_calls": 8,
+  "semantics": "Full-state events; effective time, then knowledge time, then event ID. Exact bounded assignment; model-relative explanation.",
+  "input_provenance": "Synthetic demonstration. No real dispatch or client data.",
+  "journal": {
+    "events": 8,
+    "newly_inserted": 8,
+    "persistent": false
+  }
+}
