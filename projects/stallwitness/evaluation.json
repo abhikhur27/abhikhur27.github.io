@@ -1,0 +1,233 @@
+{
+  "environment": "Icarus Verilog + Python; RTL simulation, not hardware",
+  "seeds": 8,
+  "cases": [
+    {
+      "mutation": 0,
+      "seed": 1,
+      "detected": false,
+      "transfers": 96,
+      "violations": 0
+    },
+    {
+      "mutation": 0,
+      "seed": 2,
+      "detected": false,
+      "transfers": 96,
+      "violations": 0
+    },
+    {
+      "mutation": 0,
+      "seed": 3,
+      "detected": false,
+      "transfers": 96,
+      "violations": 0
+    },
+    {
+      "mutation": 0,
+      "seed": 4,
+      "detected": false,
+      "transfers": 96,
+      "violations": 0
+    },
+    {
+      "mutation": 0,
+      "seed": 5,
+      "detected": false,
+      "transfers": 96,
+      "violations": 0
+    },
+    {
+      "mutation": 0,
+      "seed": 6,
+      "detected": false,
+      "transfers": 96,
+      "violations": 0
+    },
+    {
+      "mutation": 0,
+      "seed": 7,
+      "detected": false,
+      "transfers": 96,
+      "violations": 0
+    },
+    {
+      "mutation": 0,
+      "seed": 8,
+      "detected": false,
+      "transfers": 96,
+      "violations": 0
+    },
+    {
+      "mutation": 1,
+      "seed": 1,
+      "detected": true,
+      "transfers": 96,
+      "violations": 88
+    },
+    {
+      "mutation": 1,
+      "seed": 2,
+      "detected": true,
+      "transfers": 96,
+      "violations": 99
+    },
+    {
+      "mutation": 1,
+      "seed": 3,
+      "detected": true,
+      "transfers": 96,
+      "violations": 89
+    },
+    {
+      "mutation": 1,
+      "seed": 4,
+      "detected": true,
+      "transfers": 96,
+      "violations": 108
+    },
+    {
+      "mutation": 1,
+      "seed": 5,
+      "detected": true,
+      "transfers": 96,
+      "violations": 114
+    },
+    {
+      "mutation": 1,
+      "seed": 6,
+      "detected": true,
+      "transfers": 96,
+      "violations": 94
+    },
+    {
+      "mutation": 1,
+      "seed": 7,
+      "detected": true,
+      "transfers": 96,
+      "violations": 85
+    },
+    {
+      "mutation": 1,
+      "seed": 8,
+      "detected": true,
+      "transfers": 96,
+      "violations": 107
+    },
+    {
+      "mutation": 2,
+      "seed": 1,
+      "detected": true,
+      "transfers": 52,
+      "violations": 44
+    },
+    {
+      "mutation": 2,
+      "seed": 2,
+      "detected": true,
+      "transfers": 45,
+      "violations": 51
+    },
+    {
+      "mutation": 2,
+      "seed": 3,
+      "detected": true,
+      "transfers": 56,
+      "violations": 40
+    },
+    {
+      "mutation": 2,
+      "seed": 4,
+      "detected": true,
+      "transfers": 44,
+      "violations": 52
+    },
+    {
+      "mutation": 2,
+      "seed": 5,
+      "detected": true,
+      "transfers": 45,
+      "violations": 51
+    },
+    {
+      "mutation": 2,
+      "seed": 6,
+      "detected": true,
+      "transfers": 54,
+      "violations": 42
+    },
+    {
+      "mutation": 2,
+      "seed": 7,
+      "detected": true,
+      "transfers": 42,
+      "violations": 54
+    },
+    {
+      "mutation": 2,
+      "seed": 8,
+      "detected": true,
+      "transfers": 51,
+      "violations": 45
+    },
+    {
+      "mutation": 3,
+      "seed": 1,
+      "detected": true,
+      "transfers": 96,
+      "violations": 12
+    },
+    {
+      "mutation": 3,
+      "seed": 2,
+      "detected": true,
+      "transfers": 96,
+      "violations": 14
+    },
+    {
+      "mutation": 3,
+      "seed": 3,
+      "detected": true,
+      "transfers": 96,
+      "violations": 11
+    },
+    {
+      "mutation": 3,
+      "seed": 4,
+      "detected": true,
+      "transfers": 96,
+      "violations": 11
+    },
+    {
+      "mutation": 3,
+      "seed": 5,
+      "detected": true,
+      "transfers": 96,
+      "violations": 9
+    },
+    {
+      "mutation": 3,
+      "seed": 6,
+      "detected": true,
+      "transfers": 96,
+      "violations": 16
+    },
+    {
+      "mutation": 3,
+      "seed": 7,
+      "detected": true,
+      "transfers": 96,
+      "violations": 16
+    },
+    {
+      "mutation": 3,
+      "seed": 8,
+      "detected": true,
+      "transfers": 96,
+      "violations": 14
+    }
+  ],
+  "correct_cases": 8,
+  "mutant_cases_detected": 24,
+  "independent_correct_fifo_scoreboard": true
+}
