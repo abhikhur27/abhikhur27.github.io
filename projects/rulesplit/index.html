@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RuleSplit | Abhimanyu Khurana</title>
+  <meta name="description" content="Check which packet rules can move to an offload path without changing first-match decisions. Exact packet-space carving, PCAP replay, and a compiled C cross-check.">
+  <link rel="canonical" href="https://abhikhur.com/projects/rulesplit/">
+  <meta name="theme-color" content="#111110">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../../portfolio.css">
+  <style>.project-main{max-width:850px;padding:55px 24px 80px}.project-main h1{margin-top:26px}.project-main h2{margin-top:36px}.project-main p{max-width:73ch}.policy{overflow:auto;padding:20px 0;font:14px/1.8 "IBM Plex Mono",monospace;color:#b5c6a8;border-block:1px solid #343431;white-space:pre}.card-actions{margin:22px 0}.project-main pre{overflow:auto;font-size:13px}.muted{color:#99998f}</style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <main id="main-content" class="container project-main">
+    <a class="evidence-link" href="../../#project-rulesplit">← Back to portfolio</a>
+    <h1>RuleSplit</h1>
+    <p class="identity-line">Python · C · Linux · Packet-policy analysis</p>
+    <p class="lead">A faster path should not quietly change who gets through.</p>
+    <p>Moving a busy firewall rule onto an offload path can skip an earlier exception. RuleSplit takes an ordered policy and packet capture, builds a split that fits a prefix-table budget, and checks that every offloaded region keeps the original decision.</p>
+    <pre class="policy" aria-label="Example of why rule order matters">1. allow trusted clients to the API
+2. drop everyone else going to the API
+
+move rule 2 first → trusted clients get dropped, too</pre>
+    <div class="card-actions">
+      <a href="replay.html">Inspect the checked replay ↗</a>
+      <a href="https://github.com/abhikhur27/portfolio-utility-suite/tree/main/tools/rulesplit">Code and setup ↗</a>
+    </div>
+    <h2 class="index-label">Keep the exception, move the rest</h2>
+    <p>The compiler subtracts earlier matches from later rules, then breaks the remaining address and port ranges into aligned prefix rows. It counts those rows against the budget. Traffic outside the selected regions still uses the full original CPU policy.</p>
+    <p>The verifier checks each row against the ordered policy using exact integer regions. If a decision differs, it returns a concrete source, destination, ports, and protocol that expose the mistake.</p>
+    <h2 class="index-label">A reproducible packet check</h2>
+    <p>The example capture contains 1,080 synthetic packets. Python reference, split-path, and compiled C decisions matched with zero mismatches. The eight-row budget selected four rows: 640 packets took the modeled offload path and 440 stayed on CPU. Those are path counts, not measured hardware speed.</p>
+    <p><a class="evidence-link" href="replay.json">Read the replay result</a> · <a class="evidence-link" href="plan.json">Inspect the selected rows</a></p>
+    <pre>python3 demo.py build/demo
+python3 -m rulesplit examples/policy.json build/demo/traffic.pcap \
+  --rows 8 --native-check --out build/plan.json</pre>
+    <h2 class="index-label">A model, not a deployed DPU</h2>
+    <p>The tool supports stateless IPv4 allow/drop policies and classic TCP/UDP captures. Fragmented packets, PCAP-NG, stateful rules, and unsupported traffic fail explicitly. Row selection is a greedy heuristic, not an optimal packing claim.</p>
+    <p class="muted">The C code runs on the host CPU. A real NIC or DPU needs its own backend and validation. No Cisco hardware or proprietary traffic is used.</p>
+  </main>
+</body>
+</html>
