@@ -1,0 +1,123 @@
+[
+  {
+    "event_id": "crew-a",
+    "kind": "resource",
+    "entity": "crew-a",
+    "valid_at": 10,
+    "known_at": 10,
+    "payload": {
+      "skills": [
+        "mechanical",
+        "electrical"
+      ],
+      "available": true,
+      "costs": {
+        "pump": 2,
+        "panel": 4,
+        "valve": 1
+      }
+    }
+  },
+  {
+    "event_id": "crew-b",
+    "kind": "resource",
+    "entity": "crew-b",
+    "valid_at": 10,
+    "known_at": 10,
+    "payload": {
+      "skills": [
+        "mechanical"
+      ],
+      "available": true,
+      "costs": {
+        "pump": 3,
+        "valve": 2
+      }
+    }
+  },
+  {
+    "event_id": "pump",
+    "kind": "job",
+    "entity": "pump",
+    "valid_at": 10,
+    "known_at": 10,
+    "payload": {
+      "priority": 6,
+      "skill": "mechanical",
+      "deadline": 10
+    }
+  },
+  {
+    "event_id": "panel",
+    "kind": "job",
+    "entity": "panel",
+    "valid_at": 10,
+    "known_at": 10,
+    "payload": {
+      "priority": 10,
+      "skill": "electrical",
+      "deadline": 10
+    }
+  },
+  {
+    "event_id": "valve",
+    "kind": "job",
+    "entity": "valve",
+    "valid_at": 10,
+    "known_at": 10,
+    "payload": {
+      "priority": 3,
+      "skill": "mechanical",
+      "deadline": 10
+    }
+  },
+  {
+    "event_id": "late-outage",
+    "kind": "resource",
+    "entity": "crew-a",
+    "valid_at": 30,
+    "known_at": 70,
+    "payload": {
+      "skills": [
+        "mechanical",
+        "electrical"
+      ],
+      "available": false,
+      "costs": {
+        "pump": 2,
+        "panel": 4,
+        "valve": 1
+      }
+    }
+  },
+  {
+    "event_id": "late-priority",
+    "kind": "job",
+    "entity": "valve",
+    "valid_at": 20,
+    "known_at": 80,
+    "payload": {
+      "priority": 8,
+      "skill": "mechanical",
+      "deadline": 10
+    }
+  },
+  {
+    "event_id": "label-only",
+    "kind": "resource",
+    "entity": "crew-b",
+    "valid_at": 30,
+    "known_at": 90,
+    "payload": {
+      "skills": [
+        "mechanical"
+      ],
+      "available": true,
+      "costs": {
+        "pump": 3,
+        "valve": 2
+      },
+      "label": "Maintenance crew B"
+    }
+  }
+]
